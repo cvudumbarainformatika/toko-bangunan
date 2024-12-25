@@ -1,65 +1,117 @@
 <template>
-  <q-layout view="lHr lpR lFr">
+  <!-- <q-layout view="lHr lpR lFr"> -->
+  <q-layout view="lHr LpR lfr">
 
-    <q-header elevated class="bg-primary text-white" height-hint="98">
+    <!-- <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          <!--  -->
-          Title
+          {{selectedTab?.label || selectedMenu?.label}} 
         </q-toolbar-title>
 
-        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
-
-      <q-tabs align="left">
-        <!-- <q-route-tab to="/page1" label="Page One" />
-        <q-route-tab to="/page2" label="Page Two" />
-        <q-route-tab to="/page3" label="Page Three" /> -->
-      </q-tabs>
-    </q-header>
+    </q-header> -->
 
     <!-- left drawer -->
-    <q-drawer show-if-above mini v-model="leftDrawerOpen" side="left" bordered>
-      <!-- drawer content -->
-       <LeftMenu />
+    <q-card v-if="leftSubOpen" class="absolute full-height" style="z-index: 9; margin-left: 56px; width: 250px;">
+      <SubLeftMenu :tab="selectedTab" :menu="selectedMenu" @menu-click="(val) => {
+        selectedMenu = val
+      }" />
+    </q-card>
+
+    <q-drawer show-if-above mini v-model="leftDrawerOpen" side="left" bordered class="z-top">
+       <LeftMenu @select-tab="(val)=> {
+        //  console.log(val)
+          selectedTab = val
+         if (val?.sub?.length) {
+            if (!leftSubOpen) {
+               leftSubOpen = true
+            }
+         } else {
+            leftSubOpen = false
+         }
+       }" />
     </q-drawer>
+    
 
     <q-drawer v-model="rightDrawerOpen" side="right" overlay bordered>
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container class="bg-grey-3">
-      <!-- <q-page class="fit bg-grey-3"> -->
-        <router-view />
-      <!-- </q-page> -->
+    <q-page-container  @click="leftSubOpen = false">
+      <q-page class="fit column">
+        
+        <div class="col-auto">
+          <q-card square  class="shadow-1">
+            <div class="row items-center justify-between q-px-md q-py-sm">
+              <div class="kiri">
+                {{ selectedMenu?.label || selectedTab?.label }}
+              </div>
+              <div class="kanan">
+                <q-btn dense :icon="heroOutline24Moon" size="sm" flat @click="()=>{
+                  app.dark = !app.dark
+                  $q.dark.set(app?.dark)
+                }"></q-btn>
+              </div>
+            </div>
+          </q-card>
+        </div>
+        <div class="col full-height relative-position scroll">
+          <div class="absolute fit q-pa-md">
+            <router-view />
+          </div>
+        </div>
+      </q-page>
     </q-page-container>
 
-    <q-footer bordered class="bg-grey-8 text-white">
+    <!-- <q-footer bordered class="bg-grey-8 text-white">
       <div class="row justify-between items-center q-px-md q-py-sm">
         <div>Kiri</div>
         <div>Kanan</div>
       </div>
-    </q-footer>
+    </q-footer> -->
 
   </q-layout>
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref } from 'vue'
+import { useQuasar } from 'quasar';
+import { useLeftDrawerStore } from 'src/stores/app/leftdrawer';
+import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { heroOutline24Moon } from 'quasar-extras-svg-icons/hero-icons-v2'
+import { useAppStore } from 'src/stores/app';
 
 const LeftMenu = defineAsyncComponent(() => import('./comp/LeftMenu.vue'))
+const SubLeftMenu = defineAsyncComponent(() => import('./comp/SubLeftMenu.vue'))
 
+
+
+
+
+const left = useLeftDrawerStore()
+const app = useAppStore()
 
 const leftDrawerOpen = ref(false)
+const leftSubOpen = ref(false)
 const rightDrawerOpen = ref(false)
 
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
+const selectedTab = ref(null)
+const selectedMenu = ref(null)
 
-function toggleRightDrawer () {
-  rightDrawerOpen.value = !rightDrawerOpen.value
-}
+// function toggleLeftDrawer () {
+//   leftDrawerOpen.value = !leftDrawerOpen.value
+// }
+
+// function toggleRightDrawer () {
+//   rightDrawerOpen.value = !rightDrawerOpen.value
+// }
+
+const $q = useQuasar()
+
+onMounted(() => {
+  selectedTab.value = left.tabs[0]
+  selectedMenu.value = null
+  $q.dark.set(app?.dark)
+})
+
 </script>

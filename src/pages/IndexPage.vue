@@ -1,11 +1,14 @@
 <template>
-  <q-page class="fit column flex-center">
-    <div>
+  <div class="">
+    <!-- <div v-for="n in 100" :key="n">
       OOOOO
+    </div> -->
+    <div>
+      <app-input label="Percobaan"/>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script setup>
-//
+import AppInput from 'src/components/app/AppInput.vue'
 </script>
