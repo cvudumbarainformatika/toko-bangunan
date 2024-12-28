@@ -16,6 +16,7 @@ export default defineConfig((ctx) => {
       'i18n',
       'axios',
       'routing',
+      'global-components',
       'MyDirective'
     ],
 

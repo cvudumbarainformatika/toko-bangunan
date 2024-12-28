@@ -10,6 +10,9 @@ const routes = [
       { path: '/admin/dashboard', 
         component: () => import('pages/admin/dashboard/IndexPage.vue') 
       },
+      { path: '/admin/master/barang', 
+        component: () => import('pages/admin/master/barang/IndexPage.vue') 
+      },
       { path: '/admin/profile', 
         component: () => import('pages/admin/profile/IndexPage.vue') 
       }

@@ -16,6 +16,7 @@
     <q-card v-if="leftSubOpen" class="absolute full-height" style="z-index: 9; margin-left: 56px; width: 250px;">
       <SubLeftMenu :tab="selectedTab" :menu="selectedMenu" @menu-click="(val) => {
         selectedMenu = val
+        toLink(val)
       }" />
     </q-card>
 
