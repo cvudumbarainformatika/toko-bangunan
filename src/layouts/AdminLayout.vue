@@ -23,7 +23,7 @@
        <LeftMenu @select-tab="(val)=> {
         //  console.log(val)
           selectedTab = val
-         if (val?.sub?.length) {
+         if (val?.subs?.length) {
             if (!leftSubOpen) {
                leftSubOpen = true
             }

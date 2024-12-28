@@ -14,7 +14,7 @@
         dense
       >
         <q-item
-          v-for="(item, i) in tab?.sub"
+          v-for="(item, i) in tab?.subs"
           :key="i"
           v-ripple
           clickable
