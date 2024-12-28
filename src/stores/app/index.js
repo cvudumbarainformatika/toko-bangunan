@@ -2,7 +2,8 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 
 export const useAppStore = defineStore('app-store', {
   state: () => ({
-    dark: false,
+    dark: true,
+    auth: false
   }),
   persist: true,
   // getters: {
@@ -10,9 +11,19 @@ export const useAppStore = defineStore('app-store', {
   // },
 
   actions: {
-    // increment() {
-    //   this.counter++
-    // }
+
+    login(){
+      return new Promise((resolve) => {
+        this.auth = true
+        resolve()
+      })
+    },
+    logout() {
+      return new Promise((resolve) => {
+        this.auth = false
+        resolve()
+      })
+    }
   }
 })
 

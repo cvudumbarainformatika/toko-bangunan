@@ -12,6 +12,7 @@ export const useLeftDrawerStore = defineStore('left-drawer', {
         name: 'dashboard',
         label: 'Dashborad',
         icon: radixDashboard,
+        link:'/admin/dashboard'
       },
       {
         name: 'master',
@@ -58,6 +59,7 @@ export const useLeftDrawerStore = defineStore('left-drawer', {
         name: 'profile',
         label: 'Profile',
         icon: tabUserEdit,
+        link:'/admin/profile'
       },
       {
         name: 'notification',

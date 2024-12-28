@@ -4,6 +4,7 @@
       OOOOO
     </div> -->
     <div>
+      <div>INI HALAMAN DASHBOARD</div>
       <app-input label="Percobaan"/>
     </div>
   </div>

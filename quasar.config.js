@@ -15,6 +15,7 @@ export default defineConfig((ctx) => {
     boot: [
       'i18n',
       'axios',
+      'routing',
       'MyDirective'
     ],
 
@@ -44,7 +45,7 @@ export default defineConfig((ctx) => {
         node: 'node20'
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -90,6 +91,9 @@ export default defineConfig((ctx) => {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
       // https: true,
+      port: ctx?.mode?.spa
+        ? 9300
+        : (ctx.mode.pwa ? 9100 : 9200),
       open: true // opens browser window automatically
     },
 

@@ -29,6 +29,7 @@
             }
          } else {
             leftSubOpen = false
+            toLink(val)
          }
        }" />
     </q-drawer>
@@ -57,7 +58,7 @@
           </q-card>
         </div>
         <div class="col full-height relative-position scroll">
-          <div class="absolute fit q-pa-md">
+          <div class="absolute fit">
             <router-view />
           </div>
         </div>
@@ -80,6 +81,7 @@ import { useLeftDrawerStore } from 'src/stores/app/leftdrawer';
 import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { heroOutline24Moon } from 'quasar-extras-svg-icons/hero-icons-v2'
 import { useAppStore } from 'src/stores/app';
+import { useRouter } from 'vue-router';
 
 const LeftMenu = defineAsyncComponent(() => import('./comp/LeftMenu.vue'))
 const SubLeftMenu = defineAsyncComponent(() => import('./comp/SubLeftMenu.vue'))
@@ -107,11 +109,28 @@ const selectedMenu = ref(null)
 // }
 
 const $q = useQuasar()
+const router = useRouter()
 
 onMounted(() => {
   selectedTab.value = left.tabs[0]
   selectedMenu.value = null
   $q.dark.set(app?.dark)
 })
+
+function toLink(val) {
+  // console.log(val);
+  const link = val?.link
+  if (link) {
+    const firstTxt = link?.charAt(0)
+    let newLink = null
+    if (firstTxt !== '/') {
+      newLink = `/${link}`
+    } else{
+      newLink = link
+    }
+    router.push(newLink)
+  }
+  
+}
 
 </script>

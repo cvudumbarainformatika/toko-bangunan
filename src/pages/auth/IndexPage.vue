@@ -35,12 +35,21 @@
 
 <script setup>
 import { heroOutline24User, heroOutline24Key } from 'quasar-extras-svg-icons/hero-icons-v2'
+import { useAppStore } from 'src/stores/app';
 import { defineAsyncComponent } from 'vue';
+import { useRouter } from 'vue-router';
 
 const AvatarLogo = defineAsyncComponent(() => import('src/components/app/AvatarLogo.vue'))
+
+const app = useAppStore()
+const router = useRouter()
 const onSubmit = () => {
-  console.log('submit');
-  
+  // console.log('submit');
+  app.login()
+  .then(() => {
+    router.push('/')
+  })
+
 }
 </script>
 
