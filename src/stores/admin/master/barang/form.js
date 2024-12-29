@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
  
 import { api } from 'src/boot/axios'
+import { useAdminMasterBarangStore } from './list'
 
 export const useAdminFormMasterBarangStore = defineStore('admin-form-master-barang-store', {
   state: () => ({
@@ -44,6 +45,11 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
 
             console.log(data);
             this.loading = false
+
+            // inject data
+            const arr = useAdminMasterBarangStore()
+            arr.items.unshift(data?.result)
+
             this.initReset()
             resolve(data)
           })

@@ -45,7 +45,7 @@
                 transition="fade"
                 class="example-item"
               >
-                <q-item clickable v-ripple>
+                <q-item clickable v-ripple @mouseover="hoveredId=item?.id" @mouseleave="hoveredId=null">
                   <q-item-section avatar>
                     <q-avatar>
                       <img src="https://cdn.quasar.dev/img/avatar2.jpg">
@@ -58,8 +58,14 @@
                       
                     </q-item-label>
                   </q-item-section>
-                  <q-item-section side top>
-                    1 min ago
+                  <q-item-section v-if="hoveredId === item?.id" side>
+                    <div class="flex q-gutter-sm">
+                      <q-btn color="secondary" icon="edit" size="sm" padding="sm" round dense />
+                    </div>
+                  </q-item-section>
+                  <q-item-section v-else side top>
+                    <q-item-label caption>{{ humanDate(item?.created_at) }}</q-item-label>
+                    <q-item-label caption>{{ jamTnpDetik(item?.created_at) }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-separator inset="item" />
@@ -86,6 +92,7 @@
 </template>
 
 <script setup>
+import { humanDate, jamTnpDetik } from 'src/modules/utils';
 import { useAdminMasterBarangStore } from 'src/stores/admin/master/barang/list';
 import {  computed, onBeforeMount, ref } from 'vue';
 
@@ -94,6 +101,7 @@ const store = useAdminMasterBarangStore()
 
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
+const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
 const emits = defineEmits(['add'])
