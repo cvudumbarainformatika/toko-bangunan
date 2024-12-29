@@ -71,6 +71,7 @@ export const useLeftDrawerStore = defineStore('left-drawer', {
       }
     ]
   }),
+  persist: true,
 
   // getters: {
   //   doubleCount: (state) => state.counter * 2
