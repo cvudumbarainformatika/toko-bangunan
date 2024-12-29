@@ -22,7 +22,7 @@
                 <app-input class="col-4" v-model="store.form.seri" label="Seri"  />
                 <app-input class="col-4" v-model="store.form.satuan_b" label="Satuan Bsr"  />
                 <app-input class="col-4" v-model="store.form.satuan_k" label="Satuan Kcl"  />
-                <app-input class="col-4" v-model="store.form.kategori" label="Kategori"  />
+                <app-input class="col-4" v-model="store.form.kategori" label="Kategori"/>
                 <app-input class="col-3" v-model="store.form.isi" label="Isi"  
                   :valid="{number: true}"
                   @update:model-value="(val)=>{
