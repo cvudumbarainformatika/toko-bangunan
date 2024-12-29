@@ -21,7 +21,7 @@
     </q-card>
 
     <q-drawer show-if-above mini v-model="leftDrawerOpen" side="left" bordered class="z-top">
-       <LeftMenu @select-tab="(val)=> {
+       <LeftMenu ref="refLeftMenu" @select-tab="(val)=> {
         //  console.log(val)
           selectedTab = val
          if (val?.subs?.length) {
@@ -79,15 +79,18 @@
 <script setup>
 import { useQuasar } from 'quasar';
 import { useLeftDrawerStore } from 'src/stores/app/leftdrawer';
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref, watchEffect } from 'vue'
 import { heroOutline24Moon } from 'quasar-extras-svg-icons/hero-icons-v2'
 import { useAppStore } from 'src/stores/app';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+// eslint-disable-next-line no-unused-vars
+import { watch } from 'vue';
 
 const LeftMenu = defineAsyncComponent(() => import('./comp/LeftMenu.vue'))
 const SubLeftMenu = defineAsyncComponent(() => import('./comp/SubLeftMenu.vue'))
 
 
+const refLeftMenu = ref(null)
 
 
 
@@ -111,12 +114,48 @@ const selectedMenu = ref(null)
 
 const $q = useQuasar()
 const router = useRouter()
+const route = useRoute()
+
 
 onMounted(() => {
-  selectedTab.value = left.tabs[0]
-  selectedMenu.value = null
-  $q.dark.set(app?.dark)
+  initMenu()
+
+  console.log('refLeftMenu',refLeftMenu.value);
+  
 })
+
+
+function initMenu() {
+  // console.log('left route',route?.fullPath);
+
+  const leftMenuInStore = left?.tabs?.map(x=> x?.link)
+  const findMenu = leftMenuInStore?.find(x=> x === route?.fullPath) ?? null // cari di menu utama
+
+  if (!findMenu) {
+    const findMenuSub = left?.tabs?.find(x=> x?.subs?.find(y=> y?.link === route?.fullPath)) ?? null // cari di menu sub
+
+    if (findMenuSub) {
+      const target = findMenuSub.subs?.find(y=> y?.link === route?.fullPath)
+      // console.log('target', target);
+      selectedMenu.value = target
+
+    }
+    // console.log('findMenuSub',findMenuSub);
+    selectedTab.value = findMenuSub
+    // console.log('selectedTab',selectedTab.value);
+    
+  } else {
+    selectedTab.value = findMenu
+    selectedMenu.value = null
+  }
+
+
+  // console.log('left menu in store',findMenu);
+
+  // selectedTab.value = left.tabs[0]
+  // selectedMenu.value = null
+  $q.dark.set(app?.dark)
+}
 
 function toLink(val) {
   // console.log(val);
@@ -133,5 +172,18 @@ function toLink(val) {
   }
   
 }
+
+// watch(() => route?.fullPath, (obj, old) => {
+//   console.log('watch route lama',old);
+//   console.log('watch route baru',obj);
+
+//   initMenu()
+// })
+
+watchEffect(() => {
+  if (route?.fullPath) {
+    initMenu()
+  }
+})
 
 </script>

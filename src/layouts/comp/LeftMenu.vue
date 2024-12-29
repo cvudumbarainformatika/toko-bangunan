@@ -7,12 +7,9 @@
     </div>
     <div class="col full-height">
       <div class="column full-height flex-center">
-        <!-- <div v-for="n in 5" :key="n" class="cursor-pointer">
-          <q-icon :name="radixDashboard" size="sm" color="primary"></q-icon>
-        </div> -->
         <div>
           <q-tabs
-            v-model="tab"
+            v-model="store.tab"
             vertical
             align="justify"
             switch-indicator
@@ -31,7 +28,7 @@
       <div class="column flex-center q-pb-lg q-gutter-lg">
         <div>
           <q-tabs
-            v-model="tab"
+            v-model="store.tab"
             vertical
             align="justify"
             switch-indicator
@@ -51,74 +48,16 @@
 
 <script setup>
 import { useLeftDrawerStore } from 'src/stores/app/leftdrawer';
-import { defineAsyncComponent, ref } from 'vue';
+import { defineAsyncComponent } from 'vue';
+// import { useRoute } from 'vue-router';
 
 
 const AvatarLogo = defineAsyncComponent(() => import('src/components/app/AvatarLogo.vue'))
 const store = useLeftDrawerStore()
 
+// const route = useRoute()
 
-const tab = ref('dashboard')
-// const tabBot = ref('profile')
-
-// const tabs = ref([
-//   {
-//     name: 'dashboard',
-//     label: 'Dashborad',
-//     icon: radixDashboard,
-//   },
-//   {
-//     name: 'master',
-//     label: 'Master',
-//     icon: tabBrandFirebase,
-//     sub: [
-//       {
-//         name: 'masterPegawai',
-//         label: 'Master Pegawai',
-//         icon: tabUsers,
-//       }
-//     ]
-//   },
-//   {
-//     name: 'trans',
-//     label: 'Transaksi',
-//     icon: tabTransformFilled,
-//     sub: [
-//       {
-//         name: 'transPembelian',
-//         label: 'Transaksi Pembelian',
-//         icon: tabShoppingCartPlus,
-//       },
-//       {
-//         name: 'transPenjualan',
-//         label: 'Transaksi Penjualan',
-//         icon: tabShoppingBag,
-//       }
-//     ]
-//   },
-//   {
-//     name: 'report',
-//     label: 'Laporan',
-//     icon: tabReportAnalytics,
-//   },
-//   {
-//     name: 'settings',
-//     label: 'Seetings',
-//     icon: tabSettings,
-//   },
-// ])
-// const tabsBottom = ref([
-//   {
-//     name: 'profile',
-//     label: 'Profile',
-//     icon: tabUserEdit,
-//   },
-//   {
-//     name: 'notification',
-//     label: 'Notification',
-//     icon: tabBell,
-//   }
-// ])
+// const tab = ref('dashboard')
 
 const emits = defineEmits(['selectTab'])
 

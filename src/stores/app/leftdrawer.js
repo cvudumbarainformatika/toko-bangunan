@@ -69,7 +69,8 @@ export const useLeftDrawerStore = defineStore('left-drawer', {
         label: 'Notification',
         icon: tabBell,
       }
-    ]
+    ],
+    tab: 'dashboard'
   }),
   persist: true,
 
