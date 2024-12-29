@@ -1,5 +1,4 @@
 const routes = [
-
   // Admin Routes
   {
     path: '/',
@@ -7,44 +6,41 @@ const routes = [
     component: () => import('layouts/AdminLayout.vue'),
     children: [
       { path: '', redirect: '/admin/dashboard' },
-      { path: '/admin/dashboard', 
-        component: () => import('pages/admin/dashboard/IndexPage.vue') 
-      },
+      { path: '/admin/dashboard', component: () => import('pages/admin/dashboard/IndexPage.vue') },
 
       // Master
-      { path: '/admin/master/barang', 
-        component: () => import('pages/admin/master/barang/IndexPage.vue') 
+      {
+        path: '/admin/master/barang',
+        component: () => import('pages/admin/master/barang/IndexPage.vue'),
       },
-      { path: '/admin/master/satuan', 
-        component: () => import('pages/admin/master/satuan/IndexPage.vue') 
+      {
+        path: '/admin/master/pegawai',
+        component: () => import('pages/admin/master/pegawai/IndexPage.vue'),
       },
-
+      {
+        path: '/admin/master/satuan',
+        component: () => import('pages/admin/master/satuan/IndexPage.vue'),
+      },
 
       // profile
-      { path: '/admin/profile', 
-        component: () => import('pages/admin/profile/IndexPage.vue') 
-      }
-    ]
+      { path: '/admin/profile', component: () => import('pages/admin/profile/IndexPage.vue') },
+    ],
   },
-
-
 
   // Auth Routes
   {
     path: '/auth',
     meta: { requireAuth: false },
     component: () => import('layouts/AuthLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/auth/IndexPage.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/auth/IndexPage.vue') }],
   },
 
   // Always leave this as last one,
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
-  }
+    component: () => import('pages/ErrorNotFound.vue'),
+  },
 ]
 
 export default routes
