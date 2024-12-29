@@ -2,7 +2,9 @@
   <q-btn 
       round
       :icon="tabArrowBack"
-      dense >
+      dense 
+      :type="type"
+    >
     <q-tooltip v-if="tooltip">{{ tooltip }}</q-tooltip>
   </q-btn>
 </template>
@@ -13,6 +15,10 @@ defineProps({
   tooltip: {
     type: String,
     default: 'Kembali'
+  },
+  type: {
+    type: String,
+    default: 'button'
   }
 })
 

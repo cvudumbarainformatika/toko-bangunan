@@ -14,6 +14,7 @@
     :rules="[requiredRule, minRule, maxRule, emailRule, isNumberRule]"
     :lazy-rules="lazyRules"
     :hide-bottom-space="true"
+    :clearable="clearable"
     :debounce="debounce"
     :error="errorFromServer?.length > 0"
     :error-message="errorFromServer?.length ? errorFromServer[0]: null"
@@ -89,6 +90,10 @@ const props = defineProps({
   debounce: {
     type: Number,
     default: 500
+  },
+  clearable: {
+    type: Boolean,
+    default: false
   }
 
 })

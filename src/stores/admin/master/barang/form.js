@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-// eslint-disable-next-line no-unused-vars
+ 
 import { api } from 'src/boot/axios'
 
 export const useAdminFormMasterBarangStore = defineStore('admin-form-master-barang-store', {
@@ -7,9 +7,18 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
     form:{
       id: null,
       namabarang: null,
-      kategori: null,
+      brand: null,
       merk: null,
-    }
+      seri: null,
+      satuan_b: null,
+      satuan_k: null,
+      isi: null,
+      kategori: null,
+      hargajual1: null,
+      hargajual2: null,
+      ukuran: null,
+    },
+    loading: false
   }),
   // persist: true,
   // getters: {
@@ -17,7 +26,33 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
   // },
 
   actions: {
-    
+    initReset() {
+      for (const key in this.form) {
+        // console.log(`${key}: ${this.form[key]}`);
+        this.form[key] = null
+      }
+      this.form.isi = 1
+      this.form.hargajual1 = 0
+      this.form.hargajual2 = 0
+    },
+
+    async save() {
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api.post('/v1/master/barang/simpanbarang', this.form)
+          .then(({data}) => {
+
+            console.log(data);
+            this.loading = false
+            this.initReset()
+            resolve(data)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    }
     
   }
 })
