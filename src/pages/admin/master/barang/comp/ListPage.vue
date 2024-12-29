@@ -60,7 +60,8 @@
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
-                      <q-btn color="secondary" icon="edit" size="sm" padding="sm" round dense />
+                      <app-btn-edit-list />
+                      <app-btn-delete-list />
                     </div>
                   </q-item-section>
                   <q-item-section v-else side top>
