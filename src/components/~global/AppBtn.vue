@@ -3,11 +3,13 @@
       :rounded="label ? true : false" 
       :round="label ? false : true"
       no-caps
-      :icon="icon"
-      dense color="primary">
-      <div v-if="label" class="flex items-center q-px-sm">
-        <q-icon v-if="prependIcon" :name="prependIcon" size="1.5em" class="q-mr-sm" />
-        <div>{{ label }}</div>
+      :color="color"
+      :dense="dense"
+      :loading="loading" 
+      >
+      <div class="flex items-center" :class="{' q-px-md': label}">
+        <div v-if="icon" :class="{'q-mr-sm': label}"><q-icon :name="icon" size="1.5em"  /></div>
+        <div v-if="label">{{ label }}</div>
       </div>
       <template v-slot:loading>
         Loading...
@@ -38,6 +40,14 @@ defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  dense: {
+    type: Boolean,
+    default: true
+  },
+  color: {
+    type: String,
+    default: 'primary'
   }
 })
 
