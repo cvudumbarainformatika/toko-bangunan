@@ -92,6 +92,7 @@
   </div>
 </template>
 <script setup>
+import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useAdminMasterPegawaiStore } from 'src/stores/admin/master/pegawai/list'
 import { computed, onBeforeMount, ref } from 'vue'
 
