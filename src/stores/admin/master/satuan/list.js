@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 
-export const useAdminMasterPegawaiStore = defineStore('admin-master-pegawai-store', {
+export const useAdminMasterSatuanStore = defineStore('admin-master-satuan-store', {
   state: () => ({
     meta: null,
     items: [],
@@ -29,8 +29,8 @@ export const useAdminMasterPegawaiStore = defineStore('admin-master-pegawai-stor
         params: this.params,
       }
       try {
-        const { data } = await api.get('/v1/master/users/getdata', params)
-        console.log('get Pegawai', data)
+        const { data } = await api.get('/v1/master/satuan/listsatuan', params)
+        console.log('get Satuan', data)
         this.meta = data
         this.items = data?.data
         this.loading = false
@@ -53,14 +53,14 @@ export const useAdminMasterPegawaiStore = defineStore('admin-master-pegawai-stor
 
       return new Promise((resolve) => {
         api
-          .get('/v1/master/users/getdata', params)
+          .get('/v1/master/satuan/listsatuan', params)
           .then(({ data }) => {
-            console.log('get master pegawai', data)
+            console.log('get master satuan', data)
             this.meta = data
             this.items.push(...data.data)
             done()
             resolve()
-            const inisial = this.items.map((x) => x.nama[0])
+            const inisial = this.items.map((x) => x.satuan[0])
             this.inisial = inisial
           })
           .catch(() => {
@@ -74,5 +74,5 @@ export const useAdminMasterPegawaiStore = defineStore('admin-master-pegawai-stor
 })
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useAdminMasterPegawaiStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useAdminMasterSatuanStore, import.meta.hot))
 }

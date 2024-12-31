@@ -18,11 +18,11 @@
               <div :class="`col-${isMobile ? 12 : 6}`" class="row q-col-gutter-md">
                 <app-input
                   class="col-12"
-                  v-model="store.form.nama"
-                  label="Nama Pegawai"
+                  v-model="store.form.satuan"
+                  label="Data Satuan"
                   :valid="{ required: false }"
                 />
-                <app-input class="col-6" v-model="store.form.username" label="Username" />
+                <!-- <app-input class="col-6" v-model="store.form.username" label="Username" />
                 <app-input class="col-6" v-model="store.form.password" label="Password" />
                 <app-input class="col-6" v-model="store.form.email" label="Email" />
                 <app-input class="col-6" v-model="store.form.jabatan" label="Jabatan" />
@@ -39,7 +39,7 @@
                       if (val > 1) store.form.isi = _removedZeros
                     }
                   "
-                />
+                /> -->
                 <!-- <app-input
                   class="col-6"
                   v-model="store.form.hargajual1"
@@ -92,7 +92,7 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { useAdminFormMasterPegawaiStore } from 'src/stores/admin/master/pegawai/form'
+import { useAdminFormMasterSatuanStore } from 'src/stores/admin/master/satuan/form'
 import { computed, onMounted } from 'vue'
 
 const emits = defineEmits(['back'])
@@ -101,7 +101,7 @@ const isMobile = computed(() => {
   return $q.screen.lt.sm // Quasar screen size helper
 })
 
-const store = useAdminFormMasterPegawaiStore()
+const store = useAdminFormMasterSatuanStore()
 
 onMounted(() => {
   store.initReset()

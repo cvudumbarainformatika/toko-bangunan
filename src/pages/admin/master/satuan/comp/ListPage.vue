@@ -57,10 +57,10 @@
                     <q-avatar color="primary" text-color="white">{{ store.inisial[i] }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1">{{ item?.nama }}</q-item-label>
-                    <q-item-label caption lines="2">
+                    <q-item-label lines="1">{{ item?.satuan }}</q-item-label>
+                    <!-- <q-item-label caption lines="2">
                       <span class="text-weight-bold">{{ item?.jabatan }} - {{ item?.nohp }} </span>
-                    </q-item-label>
+                    </q-item-label> -->
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
@@ -93,10 +93,10 @@
 </template>
 <script setup>
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
-import { useAdminMasterPegawaiStore } from 'src/stores/admin/master/pegawai/list'
+import { useAdminMasterSatuanStore } from 'src/stores/admin/master/satuan/list'
 import { computed, onBeforeMount, ref } from 'vue'
 
-const store = useAdminMasterPegawaiStore()
+const store = useAdminMasterSatuanStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
