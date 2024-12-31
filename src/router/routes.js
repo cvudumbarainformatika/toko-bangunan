@@ -21,6 +21,14 @@ const routes = [
         path: '/admin/master/satuan',
         component: () => import('pages/admin/master/satuan/IndexPage.vue'),
       },
+      {
+        path: '/admin/master/pelanggan',
+        component: () => import('pages/admin/master/pelanggan/IndexPage.vue'),
+      },
+      {
+        path: '/admin/master/supplier',
+        component: () => import('pages/admin/master/supplier/IndexPage.vue'),
+      },
 
       // profile
       { path: '/admin/profile', component: () => import('pages/admin/profile/IndexPage.vue') },
