@@ -30,6 +30,12 @@ const routes = [
         component: () => import('pages/admin/master/supplier/IndexPage.vue'),
       },
 
+      //Transaksi
+      {
+        path: '/admin/transaksi/orderbarang',
+        component: () => import('pages/admin/master/barang/IndexPage.vue'),
+      },
+
       // profile
       { path: '/admin/profile', component: () => import('pages/admin/profile/IndexPage.vue') },
     ],
