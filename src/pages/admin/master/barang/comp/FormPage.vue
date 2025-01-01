@@ -20,7 +20,7 @@
                 <app-input class="col-6" v-model="store.form.brand" label="Brand"  />
                 <app-input class="col-6" v-model="store.form.merk" label="Merk"  />
                 <app-input class="col-4" v-model="store.form.seri" label="Seri"  />
-                <!-- <app-input class="col-4" v-model="store.form.satuan_b" label="Satuan Bsr"  /> -->
+
                 <app-select class="col-4" v-model="store.form.satuan_b" 
                   label="Satuan Bsr" :options="selectSatuan.items"
                   option-label="satuan" option-value="satuan"
@@ -32,7 +32,7 @@
                   filter-by="satuan"
                   :filter-min="2"
                 />
-                <!-- <app-input class="col-4" v-model="store.form.satuan_k" label="Satuan Kcl"  /> -->
+
                 <app-input class="col-4" v-model="store.form.kategori" label="Kategori"/>
                 <app-input class="col-3" v-model="store.form.isi" label="Isi"  
                   :valid="{number: true}"
@@ -91,13 +91,20 @@ const isMobile = computed(() => {
 const store = useAdminFormMasterBarangStore()
 const selectSatuan = useAdminMasterSatuanSelectStore()
 
+const props = defineProps({
+  data: {
+    type: Object,
+    default: null
+  }
+})
+
 onMounted(() => {
-  store.initReset()
+  store.initReset(props.data)
 })
 
 function onSubmit() {
   // console.log('submit form barang');
 
-  store.save()
+  store.save(props.data)
 }
 </script>
