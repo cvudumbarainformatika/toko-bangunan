@@ -20,7 +20,11 @@
                 <app-input class="col-6" v-model="store.form.brand" label="Brand"  />
                 <app-input class="col-6" v-model="store.form.merk" label="Merk"  />
                 <app-input class="col-4" v-model="store.form.seri" label="Seri"  />
-                <app-input class="col-4" v-model="store.form.satuan_b" label="Satuan Bsr"  />
+                <!-- <app-input class="col-4" v-model="store.form.satuan_b" label="Satuan Bsr"  /> -->
+                <app-select class="col-4" v-model="store.form.satuan_b" 
+                  label="Satuan Bsr" :options="selectSatuan.items"
+                  option-label="satuan" option-value="satuan"
+                  />
                 <app-input class="col-4" v-model="store.form.satuan_k" label="Satuan Kcl"  />
                 <app-input class="col-4" v-model="store.form.kategori" label="Kategori"/>
                 <app-input class="col-3" v-model="store.form.isi" label="Isi"  
@@ -68,6 +72,7 @@
 <script setup>
 import { useQuasar } from 'quasar';
 import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form';
+import { useAdminMasterSatuanSelectStore } from 'src/stores/admin/master/satuan/select';
 import { computed, onMounted } from 'vue';
 
 const emits = defineEmits(['back'])
@@ -77,6 +82,7 @@ const isMobile = computed(() => {
 });
 
 const store = useAdminFormMasterBarangStore()
+const selectSatuan = useAdminMasterSatuanSelectStore()
 
 onMounted(() => {
   store.initReset()
