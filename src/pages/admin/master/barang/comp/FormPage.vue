@@ -24,7 +24,7 @@
                 <app-select class="col-4" v-model="store.form.satuan_b" 
                   label="Satuan Bsr" :options="selectSatuan.items"
                   option-label="satuan" option-value="satuan"
-                  />
+                />
                 <app-input class="col-4" v-model="store.form.satuan_k" label="Satuan Kcl"  />
                 <app-input class="col-4" v-model="store.form.kategori" label="Kategori"/>
                 <app-input class="col-3" v-model="store.form.isi" label="Isi"  
