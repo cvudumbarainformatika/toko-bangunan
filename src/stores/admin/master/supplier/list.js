@@ -60,8 +60,6 @@ export const useAdminMasterSupplierStore = defineStore('admin-master-supplier-st
             this.items.push(...data.data)
             done()
             resolve()
-            const inisial = this.items.map((x) => x.nama[0])
-            this.inisial = inisial
           })
           .catch(() => {
             this.isError = true

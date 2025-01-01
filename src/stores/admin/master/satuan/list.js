@@ -60,8 +60,6 @@ export const useAdminMasterSatuanStore = defineStore('admin-master-satuan-store'
             this.items.push(...data.data)
             done()
             resolve()
-            const inisial = this.items.map((x) => x.satuan[0])
-            this.inisial = inisial
           })
           .catch(() => {
             this.isError = true
