@@ -2,6 +2,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
  
 import { api } from 'src/boot/axios'
 import { useAdminMasterBarangStore } from './list'
+import { notifSuccess } from 'src/modules/notifs'
 
 export const useAdminFormMasterBarangStore = defineStore('admin-form-master-barang-store', {
   state: () => ({
@@ -49,6 +50,8 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
             // inject data
             const arr = useAdminMasterBarangStore()
             arr.items.unshift(data?.result)
+
+            notifSuccess('Data berhasil disimpan')
 
             this.initReset()
             resolve(data)

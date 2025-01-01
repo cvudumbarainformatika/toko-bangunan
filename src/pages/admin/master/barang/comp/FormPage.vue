@@ -25,7 +25,14 @@
                   label="Satuan Bsr" :options="selectSatuan.items"
                   option-label="satuan" option-value="satuan"
                 />
-                <app-input class="col-4" v-model="store.form.satuan_k" label="Satuan Kcl"  />
+                <app-select-server class="col-4" v-model="store.form.satuan_k" 
+                  label="Satuan Kcl"
+                  option-label="satuan" option-value="satuan"
+                  url="v1/master/select/master-satuan-filter"
+                  filter-by="satuan"
+                  :filter-min="2"
+                />
+                <!-- <app-input class="col-4" v-model="store.form.satuan_k" label="Satuan Kcl"  /> -->
                 <app-input class="col-4" v-model="store.form.kategori" label="Kategori"/>
                 <app-input class="col-3" v-model="store.form.isi" label="Isi"  
                   :valid="{number: true}"
