@@ -54,7 +54,7 @@
                   @mouseleave="hoveredId = null"
                 >
                   <q-item-section avatar>
-                    <q-avatar color="accent" text-color="white">{{ item.nama[0] }}</q-avatar>
+                    <q-avatar color="accent" text-color="white">{{ item.satuan[0] }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">{{ item?.satuan }}</q-item-label>
