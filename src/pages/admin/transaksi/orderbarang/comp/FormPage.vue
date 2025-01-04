@@ -23,7 +23,7 @@
                   :valid="{ required: false }"
                 /> -->
                 <div class="col-12 text-center">
-                  NO. ORDER : 00001-01-2024-OR {{ store.fixed }}
+                  NO. ORDER : 00001-01-2024-OR
                   <app-btn
                     class="1"
                     icon="add"
@@ -104,11 +104,13 @@
       </q-card>
     </div>
   </div>
+  <dialog-rinci-page />
 </template>
 
 <script setup>
 import { useQuasar } from 'quasar'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
+import DialogRinciPage from './DialogRinciPage.vue'
 import { computed } from 'vue'
 
 const store = useAdminFormTransaksiOrderBarangStore()

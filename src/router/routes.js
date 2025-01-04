@@ -33,7 +33,7 @@ const routes = [
       //Transaksi
       {
         path: '/admin/transaksi/orderbarang',
-        component: () => import('pages/admin/master/barang/IndexPage.vue'),
+        component: () => import('pages/admin/transaksi/orderbarang/IndexPage.vue'),
       },
 
       // profile
