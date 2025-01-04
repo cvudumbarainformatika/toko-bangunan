@@ -44,7 +44,7 @@
                     type="submit"
                     :dense="false"
                     label="Simpan"
-                    color="primary"
+                    color="light-green"
                   />
                 </div>
               </div>

@@ -60,8 +60,6 @@ export const useAdminMasterPegawaiStore = defineStore('admin-master-pegawai-stor
             this.items.push(...data.data)
             done()
             resolve()
-            const inisial = this.items.map((x) => x.nama[0])
-            this.inisial = inisial
           })
           .catch(() => {
             this.isError = true

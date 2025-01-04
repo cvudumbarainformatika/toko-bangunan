@@ -73,7 +73,7 @@
                     type="submit"
                     :dense="false"
                     label="Simpan"
-                    color="primary"
+                    color="accent"
                   />
                 </div>
               </div>
