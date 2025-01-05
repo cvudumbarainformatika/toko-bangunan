@@ -51,7 +51,7 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       }
 
       console.log('load more', index);
-      
+
       return new Promise((resolve) => {
         api.get('/v1/coba/barang/list', params)
           .then(({data}) => {
@@ -71,16 +71,16 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
 
     async deleteItem(id) {
       this.items = this.items.filter(item => item.id !== id)
-      const params = (id)
+      const params = {id}
       try {
         const resp = await api.post(`/v1/master/barang/deletebarang`, params)
         console.log('delete',resp);
         if (resp.status === 200) {
-          
+
           const newArr = this.items?.filter(item => item?.id !== id);
           this.items = newArr
 
-          notifSuccess('Data berhasil dihapus') 
+          notifSuccess('Data berhasil dihapus')
         }
 
 
@@ -90,7 +90,7 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       }
 
     },
-    
+
   }
 })
 
