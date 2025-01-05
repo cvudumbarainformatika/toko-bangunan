@@ -22,9 +22,24 @@
                   label="Nama Pegawai"
                   :valid="{ required: false }"
                 />
-                <app-input class="col-6" v-model="store.form.username" label="Username" />
-                <app-input class="col-6" v-model="store.form.password" label="Password" />
-                <app-input class="col-6" v-model="store.form.email" label="Email" />
+                <app-input
+                  class="col-6"
+                  v-model="store.form.username"
+                  label="Username"
+                  :valid="{ required: false }"
+                />
+                <app-input
+                  class="col-6"
+                  v-model="store.form.password"
+                  label="Password"
+                  :valid="{ required: false }"
+                />
+                <app-input
+                  class="col-6"
+                  v-model="store.form.email"
+                  :valid="{ email: true }"
+                  label="Email"
+                />
                 <app-input class="col-6" v-model="store.form.jabatan" label="Jabatan" />
                 <app-input class="col-12" v-model="store.form.alamat" label="Alamat" />
                 <app-input
@@ -93,6 +108,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { useAdminFormMasterPegawaiStore } from 'src/stores/admin/master/pegawai/form'
+// import { useAdminMasterPegawaiStore } from 'src/stores/admin/master/pegawai/list'
 import { computed, onMounted } from 'vue'
 
 const emits = defineEmits(['back'])
@@ -102,14 +118,20 @@ const isMobile = computed(() => {
 })
 
 const store = useAdminFormMasterPegawaiStore()
-
+// const selectPegawai = useAdminMasterPegawaiStore()
+const props = defineProps({
+  data: {
+    type: Object,
+    default: null,
+  },
+})
 onMounted(() => {
-  store.initReset()
+  store.initReset(props.data)
 })
 
 function onSubmit() {
   // console.log('submit form barang');
 
-  store.save()
+  store.save(props.data)
 }
 </script>

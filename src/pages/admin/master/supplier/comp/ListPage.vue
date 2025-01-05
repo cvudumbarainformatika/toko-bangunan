@@ -71,8 +71,8 @@
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
-                      <app-btn-edit-list />
-                      <app-btn-delete-list />
+                      <app-btn-edit-list @click="edit(item)" />
+                      <app-btn-delete-list @click="del(item)" />
                     </div>
                   </q-item-section>
                   <q-item-section v-else side top>
@@ -99,6 +99,7 @@
   </div>
 </template>
 <script setup>
+import { useQuasar } from 'quasar'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
 import { computed, onBeforeMount, ref } from 'vue'
@@ -109,12 +110,34 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['add'])
+const emits = defineEmits(['add', 'edit'])
+const $q = useQuasar()
 onBeforeMount(() => {
   // Promise.all([
   //   store.getList(null)
   // ])
 })
+const edit = (item) => {
+  emits('edit', item)
+}
+const del = (item) => {
+  $q.dialog({
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    // persistent: true
+  })
+    .onOk(() => {
+      // const params = { id: selected.value }
+      store.deleteItem(item?.id)
+    })
+    .onCancel(() => {
+      console.log('Cancel')
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    })
+}
 
 // eslint-disable-next-line no-unused-vars
 const next = computed(() => {

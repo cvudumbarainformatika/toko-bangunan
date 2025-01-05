@@ -74,13 +74,19 @@ const isMobile = computed(() => {
 
 const store = useAdminFormMasterSupplierStore()
 
+const props = defineProps({
+  data: {
+    type: Object,
+    default: null,
+  },
+})
 onMounted(() => {
-  store.initReset()
+  store.initReset(props.data)
 })
 
 function onSubmit() {
   // console.log('submit form barang');
 
-  store.save()
+  store.save(props.data)
 }
 </script>

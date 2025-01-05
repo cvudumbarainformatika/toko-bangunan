@@ -2,6 +2,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 
 import { api } from 'src/boot/axios'
 import { useAdminMasterPegawaiStore } from './list'
+import { notifSuccess } from 'src/modules/notifs'
 
 export const useAdminFormMasterPegawaiStore = defineStore('admin-form-master-pegawai-store', {
   state: () => ({
@@ -23,27 +24,48 @@ export const useAdminFormMasterPegawaiStore = defineStore('admin-form-master-peg
   // },
 
   actions: {
-    initReset() {
-      for (const key in this.form) {
-        // console.log(`${key}: ${this.form[key]}`);
-        this.form[key] = null
+    initReset(data) {
+      if (data) {
+        return new Promise((resolve) => {
+          for (const key in this.form) {
+            // console.log(`${key}: ${this.form[key]}`);
+            // console.log(`${key}`);
+            this.form[key] = data[key]
+          }
+          this.form.username = data?.username
+          console.log(this.form)
+
+          resolve()
+        })
+      } else {
+        for (const key in this.form) {
+          // console.log(`${key}: ${this.form[key]}`);
+          this.form[key] = null
+        }
       }
     },
 
-    async save() {
+    async save(add) {
       this.loading = true
       return new Promise((resolve, reject) => {
         api
           .post('/v1/master/users/save', this.form)
           .then(({ data }) => {
-            console.log(data)
+            console.log('saved', data)
             this.loading = false
 
             // inject data
             const arr = useAdminMasterPegawaiStore()
-            arr.items.unshift(data?.result)
+            if (!add) {
+              arr.items.unshift(data?.result)
+            } else {
+              arr?.items?.map((obj) =>
+                obj?.id === data?.result?.id ? { ...obj, ...data.result } : obj,
+              )
+            }
+            notifSuccess('Data berhasil disimpan')
 
-            this.initReset()
+            this.initReset(null)
             resolve(data)
           })
           .catch((err) => {
