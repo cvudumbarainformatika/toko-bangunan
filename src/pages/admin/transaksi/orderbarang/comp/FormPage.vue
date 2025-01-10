@@ -22,18 +22,25 @@
                   label="Nama Barang"
                   :valid="{ required: false }"
                 /> -->
-                <div class="col-12 text-center">
-                  NO. ORDER : 00001-01-2024-OR
+                <div class="col-12 text-center text-h5">FORM ORDER</div>
+                <app-input class="col-5" v-model="store.form.noorder" label="No. Order" disable />
+                <app-select
+                  class="col-6"
+                  v-model="store.form.supplier"
+                  label="Supplier"
+                  :options="storesuplier.itemsall"
+                  option-label="nama"
+                  option-value="kodesupl"
+                />
+                <div class="col-1" align="right">
                   <app-btn
-                    class="1"
+                    class="col-1"
                     icon="add"
                     tooltip="Tambah Data"
                     color="primary"
-                    @click="store.fixed = true"
+                    type="submit"
                   />
                 </div>
-                <app-input class="col-6" v-model="store.form.tglorder" label="Tanggal Order" />
-                <app-input class="col-6" v-model="store.form.supplier" label="Supplier" />
               </div>
             </div>
             <q-separator class="q-my-md" />
@@ -112,16 +119,19 @@ import { useQuasar } from 'quasar'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 import DialogRinciPage from './DialogRinciPage.vue'
 import { computed } from 'vue'
+import AppSelect from 'src/components/~global/AppSelect.vue'
+import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
 
 const store = useAdminFormTransaksiOrderBarangStore()
+const emits = defineEmits(['back'])
 
 const $q = useQuasar()
 const isMobile = computed(() => {
   return $q.screen.lt.sm // Quasar screen size helper
 })
 function onSubmit() {
-  // console.log('submit form barang');
-
-  store.save()
+  store.fixed = true
 }
+
+const storesuplier = useAdminMasterSupplierStore()
 </script>

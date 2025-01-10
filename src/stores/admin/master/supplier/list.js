@@ -5,6 +5,7 @@ export const useAdminMasterSupplierStore = defineStore('admin-master-supplier-st
   state: () => ({
     meta: null,
     items: [],
+    itemsall: [],
     inisial: [],
     isError: false,
     loading: false,
@@ -67,6 +68,19 @@ export const useAdminMasterSupplierStore = defineStore('admin-master-supplier-st
             resolve()
           })
       })
+    },
+    async getAllList() {
+      try {
+        const { data } = await api.get('/v1/master/supplier/alllist')
+        this.itemsall = data
+        console.log('sasa', this.itemsall)
+        this.loading = false
+        // this.items = data
+      } catch (error) {
+        console.log(error)
+        this.isError = true
+        this.loading = false
+      }
     },
   },
 })

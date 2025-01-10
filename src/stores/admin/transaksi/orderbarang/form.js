@@ -9,6 +9,9 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
       fixed: false,
       form: {
         id: null,
+        noorder: null,
+        tglorder: null,
+        kdbarang: null,
         namabarang: null,
         brand: null,
         merk: null,
@@ -20,6 +23,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         hargajual1: null,
         hargajual2: null,
         ukuran: null,
+        jumlah: 1,
       },
       loading: false,
     }),
@@ -29,30 +33,36 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
     // },
 
     actions: {
-      initReset() {
-        for (const key in this.form) {
-          // console.log(`${key}: ${this.form[key]}`);
-          this.form[key] = null
-        }
-        this.form.isi = 1
-        this.form.hargajual1 = 0
-        this.form.hargajual2 = 0
+      initResetRinci() {
+        this.form.kdbarang = null
+        this.form.namabarang = null
+        this.form.brand = null
+        this.form.merk = null
+        this.form.seri = null
+        this.form.satuan_b = null
+        this.form.satuan_k = null
+        this.form.isi = null
+        this.form.harga = null
+        this.form.ukuran = null
+        this.form.jumlah = null
       },
 
       async save() {
         this.loading = true
         return new Promise((resolve, reject) => {
           api
-            .post('/v1/master/barang/simpanbarang', this.form)
+            .post('/v1/transaksi/orderpembelian/simpan', this.form)
             .then(({ data }) => {
               console.log(data)
               this.loading = false
-
+              if (this.form.noorder === null) {
+                this.form.noorder = data?.notrans
+              }
+              this.initResetRinci()
               // inject data
               const arr = useAdminMasterBarangStore()
               arr.items.unshift(data?.result)
 
-              this.initReset()
               resolve(data)
             })
             .catch((err) => {
