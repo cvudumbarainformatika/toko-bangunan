@@ -44,24 +44,23 @@
               </div>
             </div>
             <q-separator class="q-my-md" />
+
             <div class="row q-col-gutter-md justify-around">
               <div class="col-12">
                 <q-list bordered class="rounded-borders">
                   <q-item v-for="(item, n) in lists" :key="n">
                     <q-item-section top>
                       <q-item-label lines="1">
-                        <span class="text-weight-medium">[quasarframework/quasar]</span>
-                        <span class="text-grey-8"> - GitHub repository</span>
-                      </q-item-label>
-                      <q-item-label caption lines="1">
-                        @rstoenescu in #3: > Generic type parameter for props
+                        <span class="text-weight-medium">[{{ item?.mbarang?.namabarang }}]</span>
+                        <span class="text-grey-8"> - {{ item?.kdbarang }}</span>
                       </q-item-label>
                       <q-item-label
+                        caption
                         lines="1"
                         class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase"
                       >
-                        <span class="cursor-pointer">Open in GitHub</span>
-                      </q-item-label>
+                        {{ item?.jumlahpo }} x {{ item?.hargapo }}</q-item-label
+                      >
                     </q-item-section>
 
                     <q-item-section top side>
@@ -109,13 +108,13 @@ const props = defineProps({
   },
 })
 
-// const lists = computed(() => {
-//   const arr = props.data
-//   // console.log('sasa', props.pasien)
-//   return arr?.sort((a, b) => {
-//     return b.id - a.id
-//   })
-// })
+const lists = computed(() => {
+  const arr = props.data?.rinci
+  console.log('arr', arr)
+  return arr?.sort((a, b) => {
+    return b.id - a.id
+  })
+})
 
 onMounted(() => {
   store.initReset(props.data)
