@@ -31,7 +31,7 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       }
       try {
         const {data} = await api.get('/v1/coba/barang/list', params)
-        console.log('get master barang',data);
+        // console.log('get master barang',data);
         this.meta = data
         this.items = data?.data
         this.loading = false
@@ -55,7 +55,7 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       return new Promise((resolve) => {
         api.get('/v1/coba/barang/list', params)
           .then(({data}) => {
-            console.log('get master barang',data);
+            // console.log('get master barang',data);
             this.meta = data
             this.items.push(...data.data)
             done()
@@ -74,7 +74,7 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       const params = {id}
       try {
         const resp = await api.post(`/v1/master/barang/deletebarang`, params)
-        console.log('delete',resp);
+        // console.log('delete',resp);
         if (resp.status === 200) {
 
           const newArr = this.items?.filter(item => item?.id !== id);

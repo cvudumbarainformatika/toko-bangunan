@@ -64,15 +64,28 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
         api.post('/v1/master/barang/simpanbarang', this.form)
           .then(({data}) => {
 
-            console.log('saved',data);
+            // console.log('saved',data);
             this.loading = false
 
             // inject data
             const arr = useAdminMasterBarangStore()
             if (!add) {
+              // console.log('tambah', add)
               arr.items.unshift(data?.result)
             } else {
-              arr?.items?.map(obj => obj?.id === data?.result?.id ? { ...obj, ...data.result } : obj);
+
+              if (arr?.items && data?.result?.id) {
+                arr.items = arr.items.map(obj => 
+                    obj?.id === data.result.id 
+                        ? { ...obj, ...data.result } 
+                        : obj
+                );
+              }
+            
+
+
+              // arr?.items?.map(obj => obj?.id === data?.result?.id ? { ...obj, ...data.result } : obj);
+              // console.log('edit', add, data, arr.items)
             }
 
             notifSuccess('Data berhasil disimpan')
