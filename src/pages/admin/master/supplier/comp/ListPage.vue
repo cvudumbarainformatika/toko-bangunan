@@ -92,9 +92,6 @@
           </div>
         </q-list>
       </div>
-      <!-- <div class="column full-height flex-center">
-        BELUM ADA DATA
-      </div> -->
     </div>
   </div>
 </template>
