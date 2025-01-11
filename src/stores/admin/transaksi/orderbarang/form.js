@@ -1,6 +1,6 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
-import { useAdminMasterBarangStore } from './list'
+import { useAdminListTransaksiOrderBarangStore } from './list'
 
 export const useAdminFormTransaksiOrderBarangStore = defineStore(
   'admin-form-transaksi-orderbarang-store',
@@ -10,6 +10,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
       form: {
         id: null,
         noorder: null,
+        kdsuplier: null,
         tglorder: null,
         kdbarang: null,
         namabarang: null,
@@ -60,7 +61,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               }
               this.initResetRinci()
               // inject data
-              const arr = useAdminMasterBarangStore()
+              const arr = useAdminListTransaksiOrderBarangStore()
               arr.items.unshift(data?.result)
 
               resolve(data)
@@ -70,6 +71,31 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               reject(err)
             })
         })
+      },
+
+      initReset(data) {
+        if (data) {
+          console.log('fafafa', data)
+          return new Promise((resolve) => {
+            for (const key in this.form) {
+              // console.log(`${key}: ${this.form[key]}`);
+              // console.log(`${key}`);
+              this.form[key] = data[key]
+            }
+            // this.form.kodebarang = data?.kodebarang
+            console.log(this.form)
+
+            resolve()
+          })
+        } else {
+          for (const key in this.form) {
+            // console.log(`${key}: ${this.form[key]}`);
+            this.form[key] = null
+          }
+          // this.form.isi = 1
+          // this.form.hargajual1 = 0
+          // this.form.hargajual2 = 0
+        }
       },
     },
   },

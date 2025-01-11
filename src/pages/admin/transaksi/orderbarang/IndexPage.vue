@@ -16,7 +16,7 @@
       "
     />
 
-    <FormPage v-else @back="isList = true" />
+    <FormPage v-else :data="item" @back="isList = true" />
   </div>
 </template>
 

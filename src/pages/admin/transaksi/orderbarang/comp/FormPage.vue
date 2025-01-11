@@ -26,7 +26,7 @@
                 <app-input class="col-5" v-model="store.form.noorder" label="No. Order" disable />
                 <app-select
                   class="col-6"
-                  v-model="store.form.supplier"
+                  v-model="store.form.kdsuplier"
                   label="Supplier"
                   :options="storesuplier.itemsall"
                   option-label="nama"
@@ -47,38 +47,7 @@
             <div class="row q-col-gutter-md justify-around">
               <div class="col-12">
                 <q-list bordered class="rounded-borders">
-                  <q-item>
-                    <q-item-section top>
-                      <q-item-label lines="1">
-                        <span class="text-weight-medium">[quasarframework/quasar]</span>
-                        <span class="text-grey-8"> - GitHub repository</span>
-                      </q-item-label>
-                      <q-item-label caption lines="1">
-                        @rstoenescu in #3: > Generic type parameter for props
-                      </q-item-label>
-                      <q-item-label
-                        lines="1"
-                        class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase"
-                      >
-                        <span class="cursor-pointer">Open in GitHub</span>
-                      </q-item-label>
-                    </q-item-section>
-
-                    <q-item-section top side>
-                      <div class="text-grey-8 q-gutter-xs">
-                        <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
-                        <q-btn class="gt-xs" size="12px" flat dense round icon="done" />
-                        <q-btn size="12px" flat dense round icon="more_vert" />
-                      </div>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </div>
-            </div>
-            <div class="row q-col-gutter-md justify-around">
-              <div class="col-12">
-                <q-list bordered class="rounded-borders">
-                  <q-item>
+                  <q-item v-for="(item, n) in lists" :key="n">
                     <q-item-section top>
                       <q-item-label lines="1">
                         <span class="text-weight-medium">[quasarframework/quasar]</span>
@@ -118,7 +87,7 @@
 import { useQuasar } from 'quasar'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 import DialogRinciPage from './DialogRinciPage.vue'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import AppSelect from 'src/components/~global/AppSelect.vue'
 import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
 
@@ -132,6 +101,25 @@ const isMobile = computed(() => {
 function onSubmit() {
   store.fixed = true
 }
+
+const props = defineProps({
+  data: {
+    type: Object,
+    default: null,
+  },
+})
+
+// const lists = computed(() => {
+//   const arr = props.data
+//   // console.log('sasa', props.pasien)
+//   return arr?.sort((a, b) => {
+//     return b.id - a.id
+//   })
+// })
+
+onMounted(() => {
+  store.initReset(props.data)
+})
 
 const storesuplier = useAdminMasterSupplierStore()
 </script>

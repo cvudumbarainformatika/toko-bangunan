@@ -106,7 +106,7 @@ const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 
-const emits = defineEmits(['add'])
+const emits = defineEmits(['add', 'edit'])
 
 // onMounted(() => {
 //   Promise.all([storeOrderH.getList()])
@@ -115,6 +115,10 @@ const emits = defineEmits(['add'])
 const lihatdetail = (item) => {
   emits('edit', item)
 }
+
+// function lihatdetail(val) {
+//   storeOrderH.getallbynoorder(val)
+// }
 
 // eslint-disable-next-line no-unused-vars
 const next = computed(() => {

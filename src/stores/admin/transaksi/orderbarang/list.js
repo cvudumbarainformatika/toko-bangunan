@@ -14,6 +14,10 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
         page: 0,
         per_page: 15,
       },
+      getorderan: {
+        noorder: null,
+      },
+      getorderhasil: [],
     }),
     // persist: true,
     // getters: {
@@ -65,6 +69,28 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             .catch(() => {
               this.isError = true
               done(true)
+              resolve()
+            })
+        })
+      },
+      async getallbynoorder(val) {
+        this.getorderan.noorder = val
+        const params = {
+          params: this.getorderan,
+        }
+        return new Promise((resolve) => {
+          api
+            .get('/v1/transaksi/orderpembelian/getallbynoorder', params)
+            .then(({ data }) => {
+              console.log('wewewewe', data)
+              this.getorderhasil = data
+              this.items.push(...data.data)
+
+              resolve()
+            })
+            .catch(() => {
+              this.isError = true
+
               resolve()
             })
         })
