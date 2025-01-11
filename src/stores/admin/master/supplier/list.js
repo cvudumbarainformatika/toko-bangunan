@@ -85,6 +85,19 @@ export const useAdminMasterSupplierStore = defineStore('admin-master-supplier-st
         notifError('Terjadi Kesalahan')
       }
     },
+    async getAllList() {
+      try {
+        const { data } = await api.get('/v1/master/supplier/alllist')
+        this.itemsall = data
+        console.log('sasa', this.itemsall)
+        this.loading = false
+        // this.items = data
+      } catch (error) {
+        console.log(error)
+        this.isError = true
+        this.loading = false
+      }
+    },
   },
 })
 
