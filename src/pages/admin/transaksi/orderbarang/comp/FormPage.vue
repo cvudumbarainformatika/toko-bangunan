@@ -81,7 +81,6 @@
   </div>
   <dialog-rinci-page />
 </template>
-
 <script setup>
 import { useQuasar } from 'quasar'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
