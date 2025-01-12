@@ -45,7 +45,7 @@
                 transition="fade"
                 class="example-item"
               >
-                <q-item clickable v-ripple @mouseover="hoveredId=item?.id" @mouseleave="hoveredId=null">
+                <q-item clickable v-ripple @mouseover="hoveredId=item?.id" @mouseleave="hoveredId=null" :class="{'bg-grey-8 text-white': hoveredId === item?.id}">
                   <q-item-section avatar>
                     <q-avatar>
                       <img src="https://cdn.quasar.dev/img/avatar2.jpg">

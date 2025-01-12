@@ -20,7 +20,7 @@
       }" />
     </q-card>
 
-    <q-drawer show-if-above mini v-model="leftDrawerOpen" side="left" bordered class="z-top">
+    <q-drawer show-if-above behavior="desktop" no-swipe-open mini v-model="leftDrawerOpen" side="left" bordered class="z-top">
        <LeftMenu ref="refLeftMenu" @select-tab="(val)=> {
         //  console.log(val)
           selectedTab = val
