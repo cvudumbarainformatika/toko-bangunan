@@ -24,11 +24,13 @@
        <LeftMenu ref="refLeftMenu" @select-tab="(val)=> {
         //  console.log(val)
           selectedTab = val
+
          if (val?.subs?.length) {
             if (!leftSubOpen) {
                leftSubOpen = true
             }
          } else {
+            selectedMenu = null
             leftSubOpen = false
             toLink(val)
          }
