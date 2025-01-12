@@ -1,16 +1,16 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
- 
+
 import { api } from 'src/boot/axios'
 import { useAdminMasterBarangStore } from './list'
 import { notifSuccess } from 'src/modules/notifs'
 
 export const useAdminFormMasterBarangStore = defineStore('admin-form-master-barang-store', {
   state: () => ({
-    form:{
+    form: {
       id: null,
       namabarang: null,
       brand: null,
-      merk: null,
+      kualitas: null,
       seri: null,
       satuan_b: null,
       satuan_k: null,
@@ -20,7 +20,8 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
       hargajual2: null,
       ukuran: null,
     },
-    loading: false
+    loading: false,
+    pilihkategori: [{ keterangan: 'Keramik' }, { keterangan: 'Non Keramik' }],
   }),
   // persist: true,
   // getters: {
@@ -29,7 +30,6 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
 
   actions: {
     initReset(data) {
-
       if (data) {
         return new Promise((resolve) => {
           for (const key in this.form) {
@@ -37,14 +37,12 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
             // console.log(`${key}`);
             this.form[key] = data[key]
           }
-            this.form.kodebarang = data?.kodebarang
-          console.log(this.form);
-          
-  
+          this.form.kodebarang = data?.kodebarang
+          console.log(this.form)
+
           resolve()
         })
       } else {
-
         for (const key in this.form) {
           // console.log(`${key}: ${this.form[key]}`);
           this.form[key] = null
@@ -53,17 +51,14 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
         this.form.hargajual1 = 0
         this.form.hargajual2 = 0
       }
-
-
-      
     },
 
     async save(add) {
       this.loading = true
       return new Promise((resolve, reject) => {
-        api.post('/v1/master/barang/simpanbarang', this.form)
-          .then(({data}) => {
-
+        api
+          .post('/v1/master/barang/simpanbarang', this.form)
+          .then(({ data }) => {
             // console.log('saved',data);
             this.loading = false
 
@@ -73,16 +68,11 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
               // console.log('tambah', add)
               arr.items.unshift(data?.result)
             } else {
-
               if (arr?.items && data?.result?.id) {
-                arr.items = arr.items.map(obj => 
-                    obj?.id === data.result.id 
-                        ? { ...obj, ...data.result } 
-                        : obj
-                );
+                arr.items = arr.items.map((obj) =>
+                  obj?.id === data.result.id ? { ...obj, ...data.result } : obj,
+                )
               }
-            
-
 
               // arr?.items?.map(obj => obj?.id === data?.result?.id ? { ...obj, ...data.result } : obj);
               // console.log('edit', add, data, arr.items)
@@ -99,10 +89,7 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
           })
       })
     },
-
-   
-    
-  }
+  },
 })
 
 if (import.meta.hot) {

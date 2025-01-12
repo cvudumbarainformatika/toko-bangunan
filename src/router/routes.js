@@ -10,24 +10,28 @@ const routes = [
 
       // Master
       {
-        path: '/admin/master/barang',
-        component: () => import('pages/admin/master/barang/IndexPage.vue'),
-      },
-      {
         path: '/admin/master/pegawai',
         component: () => import('pages/admin/master/pegawai/IndexPage.vue'),
       },
       {
-        path: '/admin/master/satuan',
-        component: () => import('pages/admin/master/satuan/IndexPage.vue'),
+        path: '/admin/master/supplier',
+        component: () => import('pages/admin/master/supplier/IndexPage.vue'),
       },
       {
         path: '/admin/master/pelanggan',
         component: () => import('pages/admin/master/pelanggan/IndexPage.vue'),
       },
       {
-        path: '/admin/master/supplier',
-        component: () => import('pages/admin/master/supplier/IndexPage.vue'),
+        path: '/admin/master/brand',
+        component: () => import('pages/admin/master/brand/IndexPage.vue'),
+      },
+      {
+        path: '/admin/master/satuan',
+        component: () => import('pages/admin/master/satuan/IndexPage.vue'),
+      },
+      {
+        path: '/admin/master/barang',
+        component: () => import('pages/admin/master/barang/IndexPage.vue'),
       },
 
       //Transaksi
