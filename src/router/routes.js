@@ -48,6 +48,12 @@ const routes = [
     component: () => import('layouts/AuthLayout.vue'),
     children: [{ path: '', component: () => import('pages/auth/IndexPage.vue') }],
   },
+  {
+    path: '/percobaan',
+    meta: { requireAuth: false },
+    component: () => import('layouts/AuthLayout.vue'),
+    children: [{ path: '', component: () => import('pages/percobaan/IndexPage.vue') }],
+  },
 
   // Always leave this as last one,
   // but you can also remove it
