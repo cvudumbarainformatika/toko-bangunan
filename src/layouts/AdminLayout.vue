@@ -79,6 +79,7 @@
 <script setup>
 import { useQuasar } from 'quasar';
 import { useLeftDrawerStore } from 'src/stores/app/leftdrawer';
+// eslint-disable-next-line no-unused-vars
 import { defineAsyncComponent, onMounted, ref, watchEffect } from 'vue'
 import { heroOutline24Moon } from 'quasar-extras-svg-icons/hero-icons-v2'
 import { useAppStore } from 'src/stores/app';
@@ -118,9 +119,11 @@ const route = useRoute()
 
 
 onMounted(() => {
+  // left.tab = 'dashboard'
+  selectedTab.value = left.tabs[0]
   initMenu()
 
-  console.log('refLeftMenu',refLeftMenu.value);
+  // console.log('refLeftMenu',refLeftMenu.value);
   
 })
 
@@ -130,6 +133,7 @@ function initMenu() {
 
   const leftMenuInStore = left?.tabs?.map(x=> x?.link)
   const findMenu = leftMenuInStore?.find(x=> x === route?.fullPath) ?? null // cari di menu utama
+  left.setTab(route?.fullPath)
 
   if (!findMenu) {
     const findMenuSub = left?.tabs?.find(x=> x?.subs?.find(y=> y?.link === route?.fullPath)) ?? null // cari di menu sub
@@ -180,10 +184,10 @@ function toLink(val) {
 //   initMenu()
 // })
 
-watchEffect(() => {
-  if (route?.fullPath) {
-    initMenu()
-  }
-})
+// watchEffect(() => {
+//   if (route?.fullPath) {
+//     initMenu()
+//   }
+// })
 
 </script>
