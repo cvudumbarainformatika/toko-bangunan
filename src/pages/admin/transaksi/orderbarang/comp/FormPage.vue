@@ -45,33 +45,37 @@
             </div>
             <q-separator class="q-my-md" />
 
-            <div class="row q-col-gutter-md justify-around">
-              <div class="col-12">
-                <q-list bordered class="rounded-borders">
-                  <q-item v-for="(item, n) in lists" :key="n">
-                    <q-item-section top>
-                      <q-item-label lines="1">
-                        <span class="text-weight-medium">[{{ item?.mbarang?.namabarang }}]</span>
-                        <span class="text-grey-8"> - {{ item?.kdbarang }}</span>
-                      </q-item-label>
-                      <q-item-label
-                        caption
-                        lines="1"
-                        class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase"
-                      >
-                        {{ item?.jumlahpo }} x {{ item?.hargapo }}</q-item-label
-                      >
-                    </q-item-section>
+            <div class="q-pa-md full-width">
+              <q-list v-for="(item, n) in lists" :key="n">
+                <q-item>
+                  <q-item-section>
+                    <q-item-label lines="1">
+                      <span class="text-weight-medium">- {{ item?.mbarang?.namabarang }}</span>
+                      <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
+                    </q-item-label>
+                    <q-item-label
+                      caption
+                      lines="2"
+                      class="q-mt-xs text-body2 text-weight-bold text-primary"
+                    >
+                      {{ item?.jumlahpo }} x {{ formatRpDouble(item?.hargapo) }} =
+                      {{ formatRpDouble(item?.subtotal) }}</q-item-label
+                    >
+                  </q-item-section>
 
-                    <q-item-section top side>
-                      <div class="text-grey-8 q-gutter-xs">
-                        <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
-                        <q-btn class="gt-xs" size="12px" flat dense round icon="done" />
-                        <q-btn size="12px" flat dense round icon="more_vert" />
-                      </div>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
+                  <q-item-section side top>
+                    <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
+                  </q-item-section>
+                </q-item>
+                <q-separator spaced inset />
+              </q-list>
+            </div>
+            <div class="q-pa-md full-width">
+              <div class="text-right">
+                <span class="text-red">Total : </span>
+                <q-badge outline color="red">
+                  {{ formatRpDouble(props?.data?.total) }}
+                </q-badge>
               </div>
             </div>
           </q-card-section>
@@ -79,7 +83,8 @@
       </q-card>
     </div>
   </div>
-  <dialog-rinci-page />
+
+  <dialog-rinci-page :data="props.data" />
 </template>
 <script setup>
 import { useQuasar } from 'quasar'
@@ -88,6 +93,7 @@ import DialogRinciPage from './DialogRinciPage.vue'
 import { computed, onMounted } from 'vue'
 import AppSelect from 'src/components/~global/AppSelect.vue'
 import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
+import { formatRpDouble } from 'src/modules/utils'
 
 const store = useAdminFormTransaksiOrderBarangStore()
 const emits = defineEmits(['back'])
@@ -109,7 +115,6 @@ const props = defineProps({
 
 const lists = computed(() => {
   const arr = props.data?.rinci
-  console.log('arr', arr)
   return arr?.sort((a, b) => {
     return b.id - a.id
   })

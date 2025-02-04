@@ -9,7 +9,6 @@
           </div>
         </div>
       </q-card-section>
-
       <q-separator />
       <q-form class="full-height" @submit="onSubmit">
         <q-card-section style="max-height: 50vh" class="scroll">
@@ -139,8 +138,15 @@ function isiform(val) {
   store.form.isi = val?.isi ?? '-'
 }
 
+const props = defineProps({
+  data: {
+    type: Object,
+    default: null,
+  },
+})
+
 function onSubmit() {
   console.log('submit form barang')
-  store.save()
+  store.save(props.data)
 }
 </script>

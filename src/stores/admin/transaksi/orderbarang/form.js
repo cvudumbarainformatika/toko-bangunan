@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useAdminListTransaksiOrderBarangStore } from './list'
+import { notifSuccess } from 'src/modules/notifs'
 
 export const useAdminFormTransaksiOrderBarangStore = defineStore(
   'admin-form-transaksi-orderbarang-store',
@@ -48,7 +49,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         this.form.jumlah = null
       },
 
-      async save() {
+      async save(add) {
         this.loading = true
         return new Promise((resolve, reject) => {
           api
@@ -56,14 +57,23 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
             .then(({ data }) => {
               console.log(data)
               this.loading = false
+              const arr = useAdminListTransaksiOrderBarangStore()
+              if (!add) {
+                arr.items.unshift(data?.result)
+              } else {
+                arr?.items?.map((obj) =>
+                  obj?.id === data?.result?.id ? { ...obj, ...data.result } : obj,
+                )
+              }
               if (this.form.noorder === null) {
                 this.form.noorder = data?.notrans
               }
+              notifSuccess('Data berhasil disimpan')
               this.initResetRinci()
               // inject data
-              const arr = useAdminListTransaksiOrderBarangStore()
-              arr.items.unshift(data?.result)
 
+              arr.items.unshift(data?.result)
+              this.initReset(null)
               resolve(data)
             })
             .catch((err) => {
@@ -82,8 +92,8 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               // console.log(`${key}`);
               this.form[key] = data[key]
             }
-            // this.form.kodebarang = data?.kodebarang
-            console.log(this.form)
+            this.form.noorder = data?.noorder
+            console.log('aaaaaaaaaaaa', this.form)
 
             resolve()
           })

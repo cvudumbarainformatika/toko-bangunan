@@ -62,6 +62,8 @@
                     <q-item-label lines="1">{{ item?.noorder }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold">-- {{ item?.suplier?.nama }}</span>
+                      <span class="text-weight-bold text-red"> || TOTAL ORDERAN : </span
+                      ><q-badge outline color="red">{{ formatRpDouble(item?.total) }}</q-badge>
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
@@ -95,7 +97,7 @@
 </template>
 
 <script setup>
-import { humanDate, jamTnpDetik } from 'src/modules/utils'
+import { formatRpDouble, humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
 import { computed, ref } from 'vue'
 
@@ -111,6 +113,10 @@ const emits = defineEmits(['add', 'edit'])
 // onMounted(() => {
 //   Promise.all([storeOrderH.getList()])
 // })
+
+// function lihatdetail(item) {
+//   emits('edit', item)
+// }
 
 const lihatdetail = (item) => {
   emits('edit', item)
@@ -130,6 +136,8 @@ const next = computed(() => {
 
   return page
 })
+
+defineExpose({ lihatdetail })
 
 // function loadMore(index, done) {
 //   store.params.page = index

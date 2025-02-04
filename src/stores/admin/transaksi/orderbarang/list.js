@@ -37,7 +37,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
           const { data } = await api.get('/v1/transaksi/orderpembelian/getlistorder', params)
           console.log('get master barang', data)
           this.meta = data
-          this.items = data?.data
+          this.olahdata(data?.data)
           this.loading = false
           // this.items = data
         } catch (error) {
@@ -62,7 +62,8 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             .then(({ data }) => {
               console.log('heder order barang', data)
               this.meta = data
-              this.items.push(...data.data)
+              this.olahdata(data?.data)
+              //this.items.push(...data.data)
               done()
               resolve()
             })
@@ -75,6 +76,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
       },
       async getallbynoorder(val) {
         this.getorderan.noorder = val
+
         const params = {
           params: this.getorderan,
         }
@@ -82,7 +84,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
           api
             .get('/v1/transaksi/orderpembelian/getallbynoorder', params)
             .then(({ data }) => {
-              console.log('wewewewe', data)
+              // console.log('wewewewe', data)
               this.getorderhasil = data
               this.items.push(...data.data)
 
@@ -94,6 +96,26 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
               resolve()
             })
         })
+      },
+      async olahdata(val) {
+        // console.log('asli', val)
+        const hasilglobal = []
+        val?.forEach((x) => {
+          const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+          const hasil = {
+            id: x?.id,
+            noorder: x?.noorder,
+            tglorder: x?.tglorder,
+            kdsuplier: x?.kdsuplier,
+            flaging: x?.flaging,
+            suplier: x?.suplier,
+            total: total,
+            rinci: x?.rinci,
+          }
+          // console.log('hasil', hasil)
+          hasilglobal.push(hasil)
+        })
+        this.items = hasilglobal.sort(({ tgl: a }, { tgl: b }) => b - a)
       },
     },
   },
