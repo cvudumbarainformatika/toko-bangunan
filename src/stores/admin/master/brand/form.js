@@ -1,18 +1,14 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 
 import { api } from 'src/boot/axios'
-import { useAdminMasterPelangganStore } from './list'
+import { useAdminMasterBrandStore } from './list'
 import { notifSuccess } from 'src/modules/notifs'
 
-export const useAdminFormMasterPelangganStore = defineStore('admin-form-master-pelanggan-store', {
+export const useAdminFormMasterBrandStore = defineStore('admin-form-master-bran-store', {
   state: () => ({
     form: {
       id: null,
-      nama: null,
-      alamat: null,
-      telepon: null,
-      namabank: null,
-      norek: null,
+      brand: null,
       flaging: null,
     },
     loading: false,
@@ -31,7 +27,7 @@ export const useAdminFormMasterPelangganStore = defineStore('admin-form-master-p
             // console.log(`${key}`);
             this.form[key] = data[key]
           }
-          this.form.kodeplgn = data?.kodeplgn
+          this.form.kodebrand = data?.kodebrand
           console.log(this.form)
 
           resolve()
@@ -48,13 +44,13 @@ export const useAdminFormMasterPelangganStore = defineStore('admin-form-master-p
       this.loading = true
       return new Promise((resolve, reject) => {
         api
-          .post('/v1/master/pelanggan/simpan', this.form)
+          .post('/v1/master/brand/savedata', this.form)
           .then(({ data }) => {
             console.log('saved', data)
             this.loading = false
 
             // inject data
-            const arr = useAdminMasterPelangganStore()
+            const arr = useAdminMasterBrandStore()
             if (!add) {
               arr.items.unshift(data?.result)
             } else {
@@ -64,6 +60,7 @@ export const useAdminFormMasterPelangganStore = defineStore('admin-form-master-p
                 )
               }
             }
+            // arr.items.unshift(data?.result)
             notifSuccess('Data berhasil disimpan')
             this.initReset(null)
             resolve(data)
@@ -78,5 +75,5 @@ export const useAdminFormMasterPelangganStore = defineStore('admin-form-master-p
 })
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useAdminFormMasterPelangganStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useAdminFormMasterBrandStore, import.meta.hot))
 }

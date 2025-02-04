@@ -5,6 +5,7 @@ import { tabUserEdit, tabBell, tabBrandFirebase, tabTransformFilled, tabReportAn
   tabShoppingCartPlus,tabShoppingBag
  } from 'quasar-extras-svg-icons/tabler-icons-v2'
 import { api } from 'src/boot/axios'
+import { useRoute } from 'vue-router'
  
 
 export const useLeftDrawerStore = defineStore('left-drawer', {
@@ -84,6 +85,26 @@ export const useLeftDrawerStore = defineStore('left-drawer', {
       // console.log(data);
       this.tabs = data
       
+    },
+
+    setTab(route) {
+      console.log('tab from page');
+      console.log('route', route);
+
+      if (route) {
+        const ketemu = this.tabs?.find(x=> x?.link === route)?.name ?? null
+        if (ketemu) {
+          this.tab = ketemu
+        } else {
+          console.log('gak ketemu', route);
+          const caridikedalaman = this?.tabs?.find(x=> x?.subs?.find(y=> y?.link === route)) ?? null
+          console.log('caridikedalaman', caridikedalaman);
+          this.tab = caridikedalaman ? caridikedalaman?.name : 'dashboard'
+          
+        }
+        
+      }
+        
     }
   }
 })

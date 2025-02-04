@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="col-auto">
-                  <app-btn icon="add" tooltip="Tambah Data" color="primary" @click="emits('add')" />
+                  <app-btn icon="add" tooltip="Tambah Data" color="accent" @click="emits('add')" />
                 </div>
               </div>
             </q-item-label>
@@ -52,21 +52,15 @@
                   v-ripple
                   @mouseover="hoveredId = item?.id"
                   @mouseleave="hoveredId = null"
-                  :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }"
                 >
                   <q-item-section avatar>
-                    <q-avatar>
-                      <img src="https://cdn.quasar.dev/img/avatar2.jpg" />
-                    </q-avatar>
+                    <q-avatar color="accent" text-color="white">{{ item.brand[0] }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1"
-                      >{{ item?.namabarang }} || {{ item?.brand }}</q-item-label
-                    >
-                    <q-item-label caption lines="2">
-                      <span class="text-weight-bold">Grade: {{ item?.kualitas }}</span> |
-                      <span class="text-weight-bold">Size: {{ item?.ukuran }}</span>
-                    </q-item-label>
+                    <q-item-label lines="1">{{ item?.brand }}</q-item-label>
+                    <!-- <q-item-label caption lines="2">
+                      <span class="text-weight-bold">{{ item?.jabatan }} - {{ item?.nohp }} </span>
+                    </q-item-label> -->
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
@@ -84,7 +78,7 @@
 
               <template v-slot:loading>
                 <div v-if="!store.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="primary" size="40px" />
+                  <q-spinner-dots color="accent" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>
@@ -97,32 +91,25 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { useQuasar } from 'quasar'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
-// import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form';
-import { useAdminMasterBarangStore } from 'src/stores/admin/master/barang/list'
+import { useAdminMasterBrandStore } from 'src/stores/admin/master/brand/list'
 import { computed, onBeforeMount, ref } from 'vue'
 
-// const search = ref(null)
-const store = useAdminMasterBarangStore()
-// const form = useAdminFormMasterBarangStore()
-
+const store = useAdminMasterBrandStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
 const emits = defineEmits(['add', 'edit'])
-
 const $q = useQuasar()
 onBeforeMount(() => {
   // Promise.all([
   //   store.getList(null)
   // ])
 })
-
 const edit = (item) => {
   emits('edit', item)
 }
@@ -144,7 +131,6 @@ const del = (item) => {
       // console.log('I am triggered on both OK and Cancel')
     })
 }
-
 // eslint-disable-next-line no-unused-vars
 const next = computed(() => {
   let page = false

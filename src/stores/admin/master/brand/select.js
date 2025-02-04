@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 
-export const useAdminMasterSatuanSelectStore = defineStore('admin-master-satuan-select-store', {
+export const useAdminMasterBrandSelectStore = defineStore('admin-master-brand-select-store', {
   state: () => ({
     items: [],
     isError: false,
@@ -14,12 +14,11 @@ export const useAdminMasterSatuanSelectStore = defineStore('admin-master-satuan-
 
   actions: {
     async getDataAll() {
-
       this.loading = true
 
       try {
-        const { data } = await api.get('/v1/master/select/master-satuan-all')
-        // console.log('get Satuan all', data)
+        const { data } = await api.get('/v1/master/select/master-get-brand')
+        console.log('get Satuan all', data)
         if (data) {
           this.items = data
         }
@@ -29,11 +28,10 @@ export const useAdminMasterSatuanSelectStore = defineStore('admin-master-satuan-
         this.isError = true
         this.loading = false
       }
-
     },
-  }
+  },
 })
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useAdminMasterSatuanSelectStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useAdminMasterBrandSelectStore, import.meta.hot))
 }
