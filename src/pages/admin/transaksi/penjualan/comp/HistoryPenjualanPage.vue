@@ -30,7 +30,7 @@
 
               </div>
             </q-item-label>
-            <q-separator inset="item" />
+            <q-separator  />
           </div>
 
           <div ref="scrollTarget" class="col full-height scroll">
@@ -46,41 +46,59 @@
                 v-for="(item, i) in store.items"
                 :key="i"
                 transition="fade"
-                class="example-item"
-              >
-                <q-item
+                >
+                <q-expansion-item
+                  v-model="item.expand"
                   clickable
                   v-ripple
                   @mouseover="hoveredId = item?.id"
                   @mouseleave="hoveredId = null"
-                  :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }"
+                  :class="{ 'bg-grey-8 text-white': hoveredId === item?.id } "
                 >
-                  <q-item-section avatar>
-                    <q-avatar>
-                      <img src="https://cdn.quasar.dev/img/avatar2.jpg" />
-                    </q-avatar>
-                  </q-item-section>
+                <template v-slot:header>
                   <q-item-section>
-                    <q-item-label lines="1"
-                      >{{ item?.namabarang }} || {{ item?.brand }}</q-item-label
-                    >
+                    <q-item-label lines="1">
+                      <div class="row">
+                        <div class="col-3">{{ item?.no_penjualan }}</div>
+                        <div class="col-2 q-ml-sm">{{ item?.total }}</div>
+                        <div class="col-2 q-ml-sm">{{ item?.total_diskon }}</div>
+                        <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
+
+                      </div>
+                      </q-item-label>
                     <q-item-label caption lines="2">
-                      <span class="text-weight-bold">Grade: {{ item?.kualitas }}</span> |
-                      <span class="text-weight-bold">Size: {{ item?.ukuran }}</span>
+                      <span class="text-weight-bold">Pelanggan: {{ item?.pelanggan?.nama }}</span>
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
-                      <app-btn-edit-list @click="edit(item)" />
-                      <app-btn-delete-list @click="del(item)" />
+                      <app-btn v-if="item?.flag == null" icon="input" color="orange" tooltip="Gunakan Nomor Penjualan" @click="emits('useNota', item)"/>
                     </div>
                   </q-item-section>
                   <q-item-section v-else side top>
-                    <q-item-label caption>{{ humanDate(item?.created_at) }}</q-item-label>
-                    <q-item-label caption>{{ jamTnpDetik(item?.created_at) }}</q-item-label>
+                    <q-item-label caption>{{ humanDate(item?.tgl) }}</q-item-label>
+                    <q-item-label caption>{{ jamTnpDetik(item?.tgl) }}</q-item-label>
                   </q-item-section>
-                </q-item>
-                <q-separator inset="item" />
+                </template>
+                <q-separator  />
+                <div class="row q-pa-sm">
+                  <div class="col-6">Barang</div>
+                  <div class="col-1 text-right">Jumlah</div>
+                  <div class="col-2 text-right">Harga</div>
+                  <div class="col-1 text-right">Diskon</div>
+                  <div class="col-2 text-right">Subtotal</div>
+                </div>
+                <div v-for="detail in item?.detail" :key="detail?.id">
+                  <div class="row q-px-sm">
+                    <div class="col-6">{{detail?.master_barang?.namabarang + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand)+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri)+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran)}}</div>
+                    <div class="col-1 text-right">{{detail?.jumlah}}</div>
+                    <div class="col-2 text-right">{{detail?.harga_jual}}</div>
+                    <div class="col-1 text-right">{{detail?.diskon}}</div>
+                    <div class="col-2 text-right">{{detail?.subtotal}}</div>
+                </div>
+                </div>
+                </q-expansion-item>
+                <q-separator  />
               </q-intersection>
 
               <template v-slot:loading>
@@ -100,14 +118,13 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
+// import { useQuasar } from 'quasar'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
-// import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form';
-import { useAdminMasterBarangStore } from 'src/stores/admin/master/barang/list'
+import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
 import { computed, onBeforeMount, ref } from 'vue'
 
 // const search = ref(null)
-const store = useAdminMasterBarangStore()
+const store = useListPenjualanStore()
 // const form = useAdminFormMasterBarangStore()
 
 const scrollTarget = ref(null)
@@ -115,35 +132,33 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['add', 'edit','back'])
+const emits = defineEmits(['add', 'edit','back','useNota'])
 
-const $q = useQuasar()
+// const $q = useQuasar()
 onBeforeMount(() => {
   // Promise.all([
   //   store.getList(null)
   // ])
 })
+function statusFlag(flag) {
+  let status=''
+  switch (flag) {
+    case null:
+      status = 'Draft';
+      break;
+    case '1':
+      status = 'Pesanan';
+      break;
+    case '2':
+      status = 'Selesai';
+      break;
 
-const edit = (item) => {
-  emits('edit', item)
-}
-const del = (item) => {
-  $q.dialog({
-    title: 'Peringatan',
-    message: 'Apakah Data ini akan dihapus?',
-    cancel: true,
-    // persistent: true
-  })
-    .onOk(() => {
-      // const params = { id: selected.value }
-      store.deleteItem(item?.id)
-    })
-    .onCancel(() => {
-      console.log('Cancel')
-    })
-    .onDismiss(() => {
-      // console.log('I am triggered on both OK and Cancel')
-    })
+    default:
+      break;
+  }
+  // console.log('status', status, flag);
+
+  return status
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -162,4 +177,5 @@ const next = computed(() => {
 .example-item {
   height: 56px;
 }
+
 </style>

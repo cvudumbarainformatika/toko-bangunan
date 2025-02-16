@@ -1,6 +1,6 @@
 <template>
   <div v-if="isList">
-    <HistoryPenjualanPage @back="isList=false"/>
+    <HistoryPenjualanPage @back="isList=false" @use-nota="useNota"/>
   </div>
   <div v-else class="q-pa-md">
     <div class="row items-center">
@@ -16,6 +16,11 @@
         </div>
       </div>
       <div class="col-1 text-center">
+        <app-btn class="q-mr-xs" icon="restore" tooltip="Nota Baru" color="green" @click="()=>{
+          store.noNota=null
+          store.resetForm()
+          store.item=null
+        }" />
         <app-btn icon="open_in_new" tooltip="Buka History Penjualan" color="primary" @click="isList=true" />
       </div>
     </div>
@@ -56,6 +61,7 @@
 </template>
 <script setup>
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
+import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
 
 
@@ -67,4 +73,13 @@ const isList=ref(false)
 
 
 const store=useFromPenjualanStore()
+const list=useListPenjualanStore()
+list.getList()
+function useNota(val){
+    console.log('use nota',  val);
+  isList.value=false
+  store.noNota=val?.no_penjualan
+  store.item=val
+}
+
 </script>

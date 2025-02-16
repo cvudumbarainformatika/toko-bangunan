@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-parsing-error -->
 <template>
   <div class="row items-center q-col-gutter-sm">
     <div class="col-6">
@@ -16,12 +17,12 @@
       />
     </div>
     <div class="col-2">
-      <AppInput ref="refJumlah" v-model="store.form.jumlah" label="Jumlah" :autofocus="false" @keyup.enter.stop="onEnterinput()"
-      :rules="[(val) => parseFloat(val)>0 || 'Jumlah barang harus lebih besar dari 0']"
+      <app-input ref="refJumlah" v-model="store.form.jumlah" label="Jumlah" :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      :rules="[(val) => parseFloat(val)>0 || 'Jumlah barang harus lebih besar dari 0']" @clear=setNol(strJumlah)
       />
     </div>
     <div class="col-2 text-center">{{store?.form?.harga_jual}}</div>
-    <div class="col-2"><AppInput v-model="store.form.diskon" label="Diskon (Rp)" :autofocus="false" @keyup.enter.stop="onEnterinput()" /></div>
+    <div class="col-2"><app-input v-model="store.form.diskon" label="Diskon (Rp)" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear=setNol(strDsikon) /></div>
   </div>
 </template>
 <script setup>
@@ -29,11 +30,13 @@ import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
 
 const AppSelect=shallowRef(defineAsyncComponent(() => import('./AppSelect.vue')))
-const AppInput=shallowRef(defineAsyncComponent(() => import('src/components/app/AppInput.vue')))
+// const AppInput=shallowRef(defineAsyncComponent(() => import('src/components/app/AppInput.vue')))
 const store=useFromPenjualanStore()
 
 const refSelectBarang=ref(null)
 const refJumlah=ref(null)
+const strJumlah=ref('jumlah')
+const strDsikon=ref('diskon')
 function selected(val){
   // console.log('ref', refSelectBarang.value?.refAuto);
   // console.log('store', store.barang);
@@ -72,5 +75,10 @@ function onEnterinput(){
   if(validasi()) store.simpanDetail()
 
 
+}
+function setNol(val){
+  console.log('nol',val);
+
+  store.setForm(val,0)
 }
 </script>
