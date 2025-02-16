@@ -5,14 +5,14 @@
       <AsyncComp />
       <!-- loading state -->
       <template #fallback>
-        <app-loading />
+        <Loading />
       </template>
     </Suspense>
   </q-page>
 </template>
 <script setup>
 import { defineAsyncComponent } from 'vue'
-
+const Loading=defineAsyncComponent(() => import('src/components/app/AppLoading.vue'))
 const AsyncComp = defineAsyncComponent(() =>
   import('./FrontPage.vue')
 )
