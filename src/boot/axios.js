@@ -4,7 +4,6 @@ import axios from 'axios'
 const SERV = 'http://localhost:8182'
 const base = SERV
 
-
 // let api = null
 let token = null
 
@@ -21,20 +20,18 @@ const api = axios.create({ baseURL: base + '/api' })
 api.defaults.headers.get.Accepts = 'application/json'
 api.defaults.headers.common.Authorization = `Bearer ${token}`
 
-function setToken (tokentok) {
+function setToken(tokentok) {
   api.defaults.headers.common.Authorization = `Bearer ${tokentok}`
 }
 
 const deleteToken = () => delete api.defaults.headers.common.Authorization
 
-
+const pathImg = SERV + '/storage/'
 export default defineBoot(({ app }) => {
-
-
   app.config.globalProperties.$SERV = SERV
   app.config.globalProperties.$axios = axios
-
+  app.config.globalProperties.$pathImg = pathImg
   app.config.globalProperties.$api = api
 })
 
-export { api, axios, setToken, deleteToken, SERV }
+export { api, pathImg, axios, setToken, deleteToken, SERV }

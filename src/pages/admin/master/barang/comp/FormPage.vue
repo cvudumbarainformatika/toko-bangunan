@@ -16,37 +16,66 @@
           <q-card-section class="full-height q-pa-lg scroll">
             <div class="row q-col-gutter-md justify-around">
               <div :class="`col-${isMobile ? 12 : 6}`" class="row q-col-gutter-md">
-                <div>
+                <div class="full-width">
                   Pilih Kategori :
                   <q-radio
+                    v-model="store.form.kategori"
                     class="q-pl-sm q-pr-lg"
                     v-for="item in store.pilihkategori"
-                    :key="item"
-                    v-model="store.form.kategori"
+                    :key="item.keterangan"
                     :label="item.keterangan"
                     :val="item.keterangan"
                     dense
                     size="sm"
-                  ></q-radio>
+                  />
                 </div>
 
                 <template v-if="store.form.kategori">
+                  <div class="col-12">
+                    <div class="row items-center q-gutter-sm">
+                      <q-btn color="primary" icon="photo" label="Pilih Foto" @click="imgClick" />
+                      <q-file
+                        ref="fileRef"
+                        v-model="newImages"
+                        filled
+                        dense
+                        multiple
+                        style="display: none"
+                        accept="image/*"
+                        @update:model-value="tambahGambar"
+                      />
+                    </div>
+                    <div class="row q-mt-md q-gutter-sm">
+                      <div
+                        v-for="(image, index) in store.form.rincians"
+                        :key="index"
+                        class="relative-position"
+                      >
+                        <q-img
+                          :src="getImageUrl(image.gambar)"
+                          class="cursor-pointer"
+                          style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px"
+                        />
+                        <q-btn
+                          round
+                          dense
+                          color="red"
+                          icon="close"
+                          class="absolute-top-right"
+                          size="sm"
+                          @click="hapusGambar(index)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   <app-input
                     class="col-12"
                     v-model="store.form.namabarang"
                     label="Nama Barang"
                     :valid="{ required: false }"
                   />
-                  <!-- <app-input
-                  class="col-6"
-                  v-model="store.form.brand"
-                  label="Brand"
-                  :rules="
-                    store.form.kategori === 'Keramik'
-                      ? [(val) => !!val || 'Brand/Merek Wajib Diisi!']
-                      : []
-                  "
-                /> -->
+
                   <app-select
                     class="col-6"
                     v-model="store.form.brand"
@@ -107,21 +136,11 @@
                     option-value="satuan"
                     :valid="{ required: store.form.kategori !== 'Keramik' }"
                   />
-                  <!-- <app-select-server
-                  class="col-4"
-                  v-model="store.form.satuan_k"
-                  label="Satuan Kcl"
-                  option-label="satuan"
-                  option-value="satuan"
-                  url="v1/master/select/master-satuan-filter"
-                  filter-by="satuan"
-                  :filter-min="2"
-                /> -->
 
                   <app-input
                     class="col-6"
                     v-model="store.form.hargajual1"
-                    label="Harga Jual 1"
+                    label="Harga Pengguna"
                     :valid="{ number: true }"
                     @update:model-value="
                       (val) => {
@@ -134,13 +153,26 @@
                   <app-input
                     class="col-6"
                     v-model="store.form.hargajual2"
-                    label="Harga Jual 2"
+                    label="Harga untuk Toko"
                     :valid="{ number: true }"
                     @update:model-value="
                       (val) => {
                         //untuk hapus o dipean angka pake ini yaa
                         const _removedZeros = val?.replace(/^0+/, '')
                         if (val > 1) store.form.hargajual2 = _removedZeros
+                      }
+                    "
+                  />
+                  <app-input
+                    class="col-6"
+                    v-model="store.form.hargabeli"
+                    label="Harga Beli Barang"
+                    :valid="{ number: true }"
+                    @update:model-value="
+                      (val) => {
+                        //untuk hapus o dipean angka pake ini yaa
+                        const _removedZeros = val?.replace(/^0+/, '')
+                        if (val > 1) store.form.hargabeli = _removedZeros
                       }
                     "
                   />
@@ -164,11 +196,6 @@
                   </div>
                 </template>
               </div>
-              <!-- <div :class="`col-${isMobile ? 12 : 6}`" class="row q-col-gutter-md">
-                <div>
-                  <app-btn type="submit" :dense="false" label="Simpan" color="primary" />
-                </div>
-              </div> -->
             </div>
           </q-card-section>
         </q-form>
@@ -182,7 +209,8 @@ import { useQuasar } from 'quasar'
 import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form'
 import { useAdminMasterBrandSelectStore } from 'src/stores/admin/master/brand/select'
 import { useAdminMasterSatuanSelectStore } from 'src/stores/admin/master/satuan/select'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { pathImg } from 'src/boot/axios'
 
 const emits = defineEmits(['back'])
 const $q = useQuasar()
@@ -205,9 +233,51 @@ onMounted(() => {
   store.initReset(props.data)
 })
 
-function onSubmit() {
-  // console.log('submit form barang');
+const fileRef = ref([])
+function imgClick() {
+  fileRef.value.pickFiles()
+}
 
-  store.save(props.data)
+const newImages = ref([])
+
+// Fungsi untuk menangani upload gambar
+const tambahGambar = (files) => {
+  const newRincians = files.map((file) => ({
+    gambar: file,
+    // Untuk edit mode: jika ada properti lain dari server
+    ...(file.id ? { id: file.id } : {}),
+  }))
+  store.form.rincians = [...store.form.rincians, ...newRincians]
+}
+
+// Fungsi untuk menghapus gambar
+const hapusGambar = (index) => {
+  store.form.rincians.splice(index, 1)
+}
+
+// Fungsi untuk mendapatkan URL gambar (preview)
+const getImageUrl = (image) => {
+  if (image instanceof File || image instanceof Blob) {
+    return URL.createObjectURL(image)
+  }
+  return pathImg + image // Jika gambar sudah ada di server
+}
+
+// Fungsi untuk submit form
+function onSubmit() {
+  // Pastikan kodebarang ada di form
+  if (!store.form.kodebarang) {
+    store.form.kodebarang = null // Atau '', sesuai backend
+  }
+
+  // Kirim data ke backend
+  store
+    .save(props.data)
+    .then(() => {
+      console.log('Data berhasil disimpan')
+    })
+    .catch((error) => {
+      console.error('Error:', error)
+    })
 }
 </script>

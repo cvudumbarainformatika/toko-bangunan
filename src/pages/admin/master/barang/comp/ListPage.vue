@@ -56,7 +56,11 @@
                 >
                   <q-item-section avatar>
                     <q-avatar>
-                      <img src="https://cdn.quasar.dev/img/avatar2.jpg" />
+                      <q-img
+                        v-if="item.image"
+                        :src="pathImg + item.image"
+                        @click="imgClick(pathImg + item.image)"
+                      />
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
@@ -104,6 +108,7 @@ import { humanDate, jamTnpDetik } from 'src/modules/utils'
 // import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form';
 import { useAdminMasterBarangStore } from 'src/stores/admin/master/barang/list'
 import { computed, onBeforeMount, ref } from 'vue'
+import { pathImg } from 'src/boot/axios'
 
 // const search = ref(null)
 const store = useAdminMasterBarangStore()
@@ -122,6 +127,12 @@ onBeforeMount(() => {
   //   store.getList(null)
   // ])
 })
+
+const imgClick = (val) => {
+  console.log('img', val)
+  store.image = val
+  store.setExpand()
+}
 
 const edit = (item) => {
   emits('edit', item)
