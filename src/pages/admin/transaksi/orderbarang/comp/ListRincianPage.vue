@@ -1,0 +1,74 @@
+<template>
+  <div class="fit column absolute">
+    <div class="col full-height">
+      <q-card flat bordered square class="full-height" style="overflow: hidden">
+        <q-avatar size="33px" color="dark" text-color="white">-</q-avatar>
+
+        <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
+          <div class="row items-center justify-between">
+            <div class="f-12 text-weight-bold">Form Order</div>
+          </div>
+        </q-card-section>
+        <q-card-section style="padding: 0" class="full-height">
+          <q-scroll-area style="height: calc(100% - 32px)">
+            <q-list separator>
+              <transition-group name="list">
+                <q-item v-for="(item, n) in lists" :key="n" class="list-move">
+                  <q-item-section>
+                    <div class="row full-width">
+                      <div class="col-12">
+                        <span class="text-weight-medium">{{ item?.mbarang?.namabarang }}</span>
+                        <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
+                      </div>
+                      <div class="col-2">
+                        <span class="text-weight-medium"> {{ item?.jumlahpo }}</span>
+                      </div>
+                      <div class="col-1">
+                        <span> X </span>
+                      </div>
+                      <div class="col-3">
+                        <span class="text-weight-medium"> {{ formatRpDouble(item?.hargapo) }}</span>
+                      </div>
+                      <div class="col-1">
+                        <span class="text-weight-medium"> = </span>
+                      </div>
+                      <div class="col-5">
+                        <span class="text-weight-medium">
+                          {{ formatRpDouble(item?.subtotal) }}</span
+                        >
+                      </div>
+                    </div>
+                  </q-item-section>
+                  <q-item-section top side>
+                    <div class="text-grey-8">
+                      <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
+                    </div>
+                  </q-item-section>
+                </q-item>
+              </transition-group>
+            </q-list>
+          </q-scroll-area>
+        </q-card-section>
+      </q-card>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { formatRpDouble } from 'src/modules/formatter'
+import { computed } from 'vue'
+
+const props = defineProps({
+  data: {
+    type: Object,
+    default: null,
+  },
+})
+
+const lists = computed(() => {
+  const arr = props.data?.rinci
+  return arr?.sort((a, b) => {
+    return b.id - a.id
+  })
+})
+</script>

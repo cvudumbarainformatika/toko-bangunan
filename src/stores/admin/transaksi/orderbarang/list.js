@@ -74,7 +74,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             })
         })
       },
-      async getallbynoorder(val) {
+      getallbynoorder(val) {
         this.getorderan.noorder = val
 
         const params = {
@@ -97,9 +97,9 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             })
         })
       },
-      async olahdata(val) {
-        // console.log('asli', val)
-        const hasilglobal = []
+      olahdata(val) {
+        console.log('asli', val)
+        // const hasilglobal = []
         val?.forEach((x) => {
           const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
           const hasil = {
@@ -112,10 +112,13 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             total: total,
             rinci: x?.rinci,
           }
-          // console.log('hasil', hasil)
-          hasilglobal.push(hasil)
+          console.log('hasil', hasil)
+          // hasilglobal.push(hasil)
+          const index = this.items.findIndex((q) => q.id === x?.id)
+          if (index >= 0) this.items[index] = hasil
+          else this.items.unshift(hasil)
         })
-        this.items = hasilglobal.sort(({ tgl: a }, { tgl: b }) => b - a)
+        // this.items = hasilglobal.sort(({ tgl: a }, { tgl: b }) => b - a)
       },
     },
   },
