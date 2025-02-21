@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useAdminListTransaksiOrderBarangStore } from './list'
-import { notifSuccess } from 'src/modules/notifs'
+import { notifError, notifSuccess } from 'src/modules/notifs'
 
 export const useAdminFormTransaksiOrderBarangStore = defineStore(
   'admin-form-transaksi-orderbarang-store',
@@ -104,7 +104,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
 
       initReset(data) {
         if (data) {
-          console.log('fafafa', data)
+          // console.log('fafafa', data)
           return new Promise((resolve) => {
             for (const key in this.form) {
               // console.log(`${key}: ${this.form[key]}`);
@@ -112,7 +112,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               this.form[key] = data[key]
             }
             // this.form.noorder = data?.noorder
-            console.log('aaaaaaaaaaaa', this.form)
+            // console.log('aaaaaaaaaaaa', this.form)
 
             resolve()
           })
@@ -124,6 +124,28 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
           // this.form.isi = 1
           // this.form.hargajual1 = 0
           // this.form.hargajual2 = 0
+        }
+      },
+      async deleteData(id, noorder) {
+        const payload = { id, noorder }
+        try {
+          const resp = await api.post('v1/transaksi/orderpembelian/hapusrincian', payload)
+          // console.log(resp)
+          if (resp.status === 200) {
+            // console.log('sasasa', resp?.data?.result)
+            const arr = useAdminListTransaksiOrderBarangStore()
+            arr.olahdata(resp?.data?.result, id)
+
+            const hasil = resp?.data?.result[0]
+            // console.log('ccc', hasil)
+            const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+            hasil.total = total
+
+            this.item = hasil
+            notifSuccess('Data berhasil dihapus')
+          }
+        } catch (error) {
+          notifError(error)
         }
       },
     },

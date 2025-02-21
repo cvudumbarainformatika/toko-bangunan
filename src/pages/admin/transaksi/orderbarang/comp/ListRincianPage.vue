@@ -6,7 +6,9 @@
 
         <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
           <div class="row items-center justify-between">
-            <div class="f-12 text-weight-bold">Form Order</div>
+            <div class="f-12 text-weight-bold">
+              List Order || No.Order : {{ data?.noorder ?? '-' }}
+            </div>
           </div>
         </q-card-section>
         <q-card-section style="padding: 0" class="full-height">
@@ -41,7 +43,15 @@
                   </q-item-section>
                   <q-item-section top side>
                     <div class="text-grey-8">
-                      <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
+                      <q-btn
+                        class="gt-xs"
+                        size="12px"
+                        flat
+                        dense
+                        round
+                        icon="delete"
+                        @click="hapusrincian(item?.id, data?.noorder)"
+                      />
                     </div>
                   </q-item-section>
                 </q-item>
@@ -55,15 +65,39 @@
 </template>
 
 <script setup>
+import { useQuasar } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
+import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 import { computed } from 'vue'
 
+const $q = useQuasar()
+const storeform = useAdminFormTransaksiOrderBarangStore()
 const props = defineProps({
   data: {
     type: Object,
     default: null,
   },
 })
+
+function hapusrincian(id, noorder) {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true,
+  })
+    .onOk(() => {
+      // console.log('OK')
+      storeform.deleteData(id, noorder)
+    })
+    .onCancel(() => {
+      // console.log('Cancel')
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    })
+}
 
 const lists = computed(() => {
   const arr = props.data?.rinci

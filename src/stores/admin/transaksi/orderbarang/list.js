@@ -54,13 +54,13 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
           params: this.params,
         }
 
-        console.log('load more', index)
+        // console.log('load more', index)
 
         return new Promise((resolve) => {
           api
             .get('/v1/transaksi/orderpembelian/getlistorder', params)
             .then(({ data }) => {
-              console.log('heder order barang', data)
+              // console.log('heder order barang', data)
               this.meta = data
               this.olahdata(data?.data)
               //this.items.push(...data.data)
@@ -98,7 +98,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
         })
       },
       olahdata(val) {
-        console.log('asli', val)
+        // console.log('asli', val)
         // const hasilglobal = []
         val?.forEach((x) => {
           const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
@@ -112,7 +112,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             total: total,
             rinci: x?.rinci,
           }
-          console.log('hasil', hasil)
+          // console.log('hasil', hasil)
           // hasilglobal.push(hasil)
           const index = this.items.findIndex((q) => q.id === x?.id)
           if (index >= 0) this.items[index] = hasil

@@ -20,7 +20,7 @@
             <div class="row q-gutter-sm">
               <div class="col-11"></div>
               <div class="col-6">
-                <app-input v-model="store.form.noorder" label="No. Orderan" />
+                <app-input v-model="store.form.noorder" label="No. Orderan" disable />
               </div>
               <div class="col-5">
                 <app-select
