@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useAdminMasterBarangStore } from './list'
-import { notifSuccess } from 'src/modules/notifs'
+import { notifError, notifSuccess } from 'src/modules/notifs'
 
 export const useAdminFormMasterBarangStore = defineStore('admin-form-master-barang-store', {
   state: () => ({
@@ -106,6 +106,35 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
             reject(err)
           })
       })
+    },
+    async setthumbnail(id) {
+      console.log('id image', id)
+      const params = { id }
+      try {
+        const resp = await api.post(`/v1/master/barang/setthumbnail`, params)
+        if (resp.status === 200) {
+          notifSuccess('Berhasil Memilih Thumbnail')
+          return true
+        }
+      } catch (error) {
+        console.log('Gagal Memilih Thumbnail:', error)
+        notifError('Terjadi Kesalahan')
+      }
+    },
+    async deleteImage(id) {
+      console.log('id image', id)
+      const params = { id }
+      try {
+        const resp = await api.post(`/v1/master/barang/deleteimage`, params)
+        if (resp.status === 200) {
+          const newArr = this.form.rincians?.filter((item) => item?.id !== id)
+          this.form.rincians = newArr
+          notifSuccess('Data berhasil dihapus')
+        }
+      } catch (error) {
+        console.log('Gagal menghapus gambar:', error)
+        notifError('Terjadi Kesalahan')
+      }
     },
   },
 })
