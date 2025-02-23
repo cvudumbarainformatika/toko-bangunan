@@ -73,6 +73,7 @@
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
                       <app-btn v-if="item?.flag == null" icon="input" color="orange" tooltip="Gunakan Nomor Penjualan" @click="emits('useNota', item)"/>
+                      <app-btn v-if="item?.flag == null" class="q-mr-xs" icon="attach_money" tooltip="Pembayaran" color="blue" @click="emits('bayar', item)" />
                     </div>
                   </q-item-section>
                   <q-item-section v-else side top>
@@ -90,7 +91,7 @@
                 </div>
                 <div v-for="detail in item?.detail" :key="detail?.id">
                   <div class="row q-px-sm">
-                    <div class="col-6">{{detail?.master_barang?.namabarang + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand)+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri)+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran)}}</div>
+                    <div class="col-6">{{detail?.master_barang?.namabarang??'' + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand??'')+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri??'')+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran??'')}}</div>
                     <div class="col-1 text-right">{{detail?.jumlah}}</div>
                     <div class="col-2 text-right">{{detail?.harga_jual}}</div>
                     <div class="col-1 text-right">{{detail?.diskon}}</div>
@@ -132,7 +133,7 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['add', 'edit','back','useNota'])
+const emits = defineEmits(['add', 'edit','back','useNota','bayar'])
 
 // const $q = useQuasar()
 onBeforeMount(() => {
@@ -150,7 +151,16 @@ function statusFlag(flag) {
       status = 'Pesanan';
       break;
     case '2':
-      status = 'Selesai';
+      status = 'Belum Ada Cicilan';
+      break;
+    case '3':
+      status = 'Proses Cicilan';
+      break;
+    case '4':
+      status = 'Batal';
+      break;
+    case '5':
+      status = 'Lunas';
       break;
 
     default:

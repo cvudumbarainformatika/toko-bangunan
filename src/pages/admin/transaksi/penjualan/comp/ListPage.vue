@@ -1,6 +1,9 @@
 <template>
-
-  <div class="row q-pa-sm">
+  <div v-if="store.item==null">
+    <noData/>
+  </div>
+  <div v-else>
+    <div class="row q-pa-sm">
     <div class="col-4">Produk</div>
     <div class="col-1 text-right">Jumlah</div>
     <div class="col-2 text-right">Harga</div>
@@ -10,10 +13,6 @@
       <div class="q-mr-sm">#</div>
     </div>
   </div>
-  <div v-if="store.item==null">
-    <noData/>
-  </div>
-  <div v-else>
     <div v-for="detail in store.item?.detail" :key="detail?.id">
       <div class="row items-center q-pa-sm">
         <div class="col-4">{{detail?.master_barang?.namabarang + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand)+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri)+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran)}}</div>
@@ -31,6 +30,7 @@
           </div>
       </div>
     </div>
+
   </div>
 </template>
 <script setup>

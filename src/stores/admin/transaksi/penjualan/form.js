@@ -6,7 +6,10 @@ import { useListPenjualanStore } from "./list"
 export const useFromPenjualanStore=defineStore('from-penjualan-store',{
   state: () => ({
     loading: false,
+    loadingPembayaran: false,
+    openPembayaran: false,
     barang:null,
+    barangs:[],
     form: {
       kodebarang:'',
       jumlah:0,
@@ -15,9 +18,18 @@ export const useFromPenjualanStore=defineStore('from-penjualan-store',{
       diskon:0,
       subtotal:0,
       pelanggan_id:null,
+      sales_id:null, //reset ketika nota baru atau setelah bayar atau ambil dari history
+    },
+    formPembayaran: {
+      no_penjualan:null,
+      cara_bayar:'5', // tunai atau kredit, tunai flag 5, kredit 2
+      bayar:0,
+      total:0,
+      kembali:0
     },
     noNota: null,
     item:null,
+    sales:[],
     list:useListPenjualanStore()
   }),
   actions: {
@@ -26,6 +38,8 @@ export const useFromPenjualanStore=defineStore('from-penjualan-store',{
     },
     resetForm(){
       this.barang=null
+      const salesId=this.form.sales_id
+
       this.form = {
         kodebarang:'',
         jumlah:0,
@@ -33,7 +47,23 @@ export const useFromPenjualanStore=defineStore('from-penjualan-store',{
         harga_jual:0,
         diskon:0,
         subtotal:0,
-        pelanggan_id:null
+        sales_id:salesId
+      }
+
+    },
+    resetPembayaran(){
+
+      this.openPembayaran=false
+      this.item=null
+      this.noNota=null
+      this.resetForm()
+      this.form.sales_id=null
+      this.formPembayaran= {
+        no_penjualan:null,
+        cara_bayar:'5', // tunai atau kredit, tunai flag 5, kredit 2
+        bayar:0,
+        total:0,
+        kembali:0
       }
 
     },
@@ -79,6 +109,54 @@ export const useFromPenjualanStore=defineStore('from-penjualan-store',{
         console.log('error cak',err?.response,msg);
         notifError(msg)
         item.loading=false
+      })
+    },
+    async getBarang(val){
+      const param={
+        params:{q:val}
+      }
+        await api.get('v1/transaksi/penjualan/list-barang',param)
+        .then(resp=>{
+          console.log('barang', resp?.data);
+          this.barangs=resp?.data
+
+        })
+
+    },
+    async getSales(){
+      // const param={
+      //   params:{q:val}
+      // }
+
+        await api.get('v1/transaksi/penjualan/list-sales')
+        .then(resp=>{
+          console.log('sales', resp);
+          this.sales=resp?.data
+
+        })
+
+    },
+    simpanPembayaran(){
+      this.loadingPembayaran=true
+      return new Promise(resolve=>{
+        api.post('v1/transaksi/penjualan/simpan-pembayaran',this.formPembayaran)
+        .then(resp=>{
+          this.loadingPembayaran=false
+          const item=resp?.data?.data
+          console.log('item', item);
+
+          const index=this.list?.items?.findIndex(obj=>obj.id===item.id)
+          if(index>=0) this.list.items[index]=item
+          else this.list.items.unshift(item)
+          this.resetPembayaran()
+          notifSuccess(resp?.data?.message)
+          resolve(resp)
+        })
+        .catch(err=>{
+          this.loadingPembayaran=false
+          const msg=err?.response?.data?.message
+          notifError(msg)
+        })
       })
     }
   }
