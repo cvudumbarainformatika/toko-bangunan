@@ -1,0 +1,68 @@
+import { defineStore } from "pinia"
+import { api } from "src/boot/axios"
+
+export const useListCicilanPenjualanStore = defineStore('list-cicilan-penjualan-store', {
+  state: () => ({
+    isError: false,
+    loading: false,
+    params: {
+      q:null,
+      page: 0,
+      per_page: 15,
+      flag: 'semua',
+    },
+    flagOptions:[
+      {label:'Semua',value:'semua'},
+      {label:'Belum ada Cicilan',value:'2'},
+      {label:'Proses Cicilan',value:'3'},
+      {label:'Dibawa Sales',value:'6'},
+    ]
+  }),
+  actions: {
+    async getList() {
+      this.params.page = 1
+      this.isError = false
+      this.loading = true
+      const params = {
+        params: this.params
+      }
+      this.loading = true
+      try {
+        const { data } = await api.get('/v1/transaksi/cicilan/list',params)
+        console.log('list ciclan', data);
+
+        this.meta = data?.meta
+        this.items = data?.data
+        this.loading = false
+      } catch (error) {
+        console.log(error)
+        this.loading = false
+      }
+    },
+    loadMore(index, done) {
+      this.isError = false
+      this.params.page = index
+      const params = {
+        params: this.params
+      }
+
+      console.log('load more', index);
+
+      return new Promise((resolve) => {
+        api.get('/v1/transaksi/cicilan/list', params)
+          .then(({data}) => {
+            console.log('list ciclan',data);
+            this.meta = data?.meta
+            this.items.push(...data.data)
+            done()
+            resolve()
+        })
+        .catch(() => {
+          this.isError = true
+          done(true)
+          resolve()
+        })
+      })
+    },
+  }
+})

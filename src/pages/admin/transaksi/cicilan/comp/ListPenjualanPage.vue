@@ -6,9 +6,9 @@
           <div class="col-auto">
             <q-item-label header>
               <div class="row full-width items-center">
-                <div class="col-grow">
+                <!-- <div class="col-grow">
                   <app-btn-back @click="emits('back')" />
-                </div>
+                </div> -->
                 <div class="col-auto">
                   <div class="flex items-center">
                     <app-input
@@ -25,6 +25,12 @@
                       "
                     />
                   </div>
+                </div>
+                <div class="col-auto">
+                  option flag
+                </div>
+                <div class="col-auto">
+                  cari sales
                 </div>
 
 
@@ -121,11 +127,11 @@
 <script setup>
 // import { useQuasar } from 'quasar'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
-import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
+import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
 import { computed, onBeforeMount, ref } from 'vue'
 
 // const search = ref(null)
-const store = useListPenjualanStore()
+const store = useListCicilanPenjualanStore()
 // const form = useAdminFormMasterBarangStore()
 
 const scrollTarget = ref(null)

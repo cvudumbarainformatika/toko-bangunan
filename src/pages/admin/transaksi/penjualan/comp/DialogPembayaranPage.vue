@@ -24,6 +24,7 @@
                         <div class="col-auto text-weight-bold text-right f-20">{{store?.item?.total}}</div>
                       </div>
                     </div>
+
                     <app-select
                     class="col-12"
                     v-model="store.formPembayaran.cara_bayar"
@@ -32,7 +33,7 @@
                     option-label="label"
                     option-value="value"
                     @update:model-value="selectCaraBayar"
-                    :disable="store.loadingPembayaran"
+                    :disable="store.loadingPembayaran || !store?.item?.sales_id "
                     />
                     <app-select-server
                       ref="refPelanggan"
