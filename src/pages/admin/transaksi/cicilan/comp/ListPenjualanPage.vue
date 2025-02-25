@@ -14,7 +14,7 @@
                     <app-input
                       v-model="store.params.q"
                       prepend-icon="search"
-                      label="Telusuri"
+                      label="Telusuri nomor nota"
                       style="min-width: 250px"
                       :debounce="300"
                       @update:model-value="
@@ -27,10 +27,34 @@
                   </div>
                 </div>
                 <div class="col-auto">
-                  option flag
+                  <app-select
+                    v-model="store.params.flag"
+                    label="Pilih Status"
+                    option-label="label"
+                    option-value="value"
+                    :options="store.flagOptions"
+                    @update:model-value="
+                        (e) => {
+                          infiniteScroll.reset()
+                          store.getList()
+                        }
+                      "
+                  />
                 </div>
                 <div class="col-auto">
-                  cari sales
+                  <app-input
+                      v-model="store.params.sales"
+                      prepend-icon="search"
+                      label="Telusuri Nama sales"
+                      style="min-width: 250px"
+                      :debounce="300"
+                      @update:model-value="
+                        (e) => {
+                          infiniteScroll.reset()
+                          store.getList()
+                        }
+                      "
+                    />
                 </div>
 
 
@@ -69,17 +93,28 @@
                         <div class="col-2 q-ml-sm">{{ item?.total }}</div>
                         <div class="col-2 q-ml-sm">{{ item?.total_diskon }}</div>
                         <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
-
                       </div>
+
                       </q-item-label>
-                    <q-item-label caption lines="2">
-                      <span class="text-weight-bold">Pelanggan: {{ item?.pelanggan?.nama }}</span>
+                    <q-item-label lines="1">
+                      <div class="row">
+                        <div class="col-3 text-weight-bold">Pelanggan: {{ item?.pelanggan?.nama }}</div>
+                        <div class="col-2 q-ml-sm">Sales : {{ item?.sales?.nama }}</div>
+                      </div>
+                      <!-- <span class="text-weight-bold">Pelanggan: {{ item?.pelanggan?.nama }}</span> -->
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
-                      <app-btn v-if="item?.flag == null || item?.flag == '1'" icon="input" color="orange" tooltip="Gunakan Nomor Penjualan" @click="emits('useNota', item)"/>
-                      <app-btn v-if="item?.flag == null" class="q-mr-xs" icon="attach_money" tooltip="Pembayaran" color="blue" @click="emits('bayar', item)" />
+                      <app-btn v-if="item?.flag == '2' || item?.flag == '3'" icon="card_travel" color="orange" tooltip="Di bawa Sales" @click="()=>{
+                        emits('bawa', item)
+                        item.expand = !item.expand
+                        }" :loading="item?.loading" :disable="item?.loading"/>
+                      <app-btn v-if="item?.flag == '4'" class="q-mr-xs" icon="price_check" tooltip="Bayar Cililn" color="green" @click="emits('cicil', item)" :loading="item?.loading" :disable="item?.loading"/>
+                      <app-btn v-if="item?.flag == '4'" class="q-mr-xs" icon="money_off_csred" tooltip="Kembali tanpa bayar cicilan" color="secondary" @click="emits('kembali', item)" :loading="item?.loading" :disable="item?.loading"/>
+                      <!-- <app-btn  icon="card_travel" color="orange" tooltip="Di bawa Sales" @click="emits('bawa', item)"/>
+                      <app-btn  class="q-mr-xs" icon="price_check" tooltip="Bayar Cililn" color="green" @click="emits('cicil', item)"/>
+                      <app-btn  class="q-mr-xs" icon="money_off_csred" tooltip="Kembali tanpa bayar cicilan" color="secondary" @click="emits('kembali', item)" /> -->
                     </div>
                   </q-item-section>
                   <q-item-section v-else side top>
@@ -128,7 +163,7 @@
 // import { useQuasar } from 'quasar'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 // const search = ref(null)
 const store = useListCicilanPenjualanStore()
@@ -139,14 +174,9 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['add', 'edit','back','useNota','bayar'])
+const emits = defineEmits(['bawa', 'cicil','kembali'])
 
-// const $q = useQuasar()
-onBeforeMount(() => {
-  // Promise.all([
-  //   store.getList(null)
-  // ])
-})
+
 function statusFlag(flag) {
   let status=''
   switch (flag) {

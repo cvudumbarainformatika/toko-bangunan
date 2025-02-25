@@ -1,6 +1,6 @@
 <template>
   <div v-if="isList">
-    <ListPenjualanPage @back="isList=false" @use-nota="useNota" @bayar="bayar"/>
+    <ListPenjualanPage @back="isList=false" @bawa="bawaNota" @cicil="cicilNota" @kembali="kembaliTanpaBayar"/>
   </div>
   <div v-else class="q-pa-md">
     <div class="row items-center">
@@ -70,21 +70,18 @@ const store=useFromPenjualanStore()
 const list=useListCicilanPenjualanStore()
 list.getList()
 store.getSales()
-function useNota(val){
-    // console.log('use nota',  val);
+
+function bawaNota(val){
+  console.log('bawa nota', val);
+  list.BawaNota(val)
+  // isList.value=false
+}
+function cicilNota(val){
+  console.log('cicil nota', val);
   isList.value=false
-  store.form.sales_id=val?.sales_id
-  store.noNota=val?.no_penjualan
-  store.item=val
 }
-function bayar(item){
-  // console.log('bayar', item);
-  store.noNota=item?.no_penjualan
-  store.item=item
-  store.openPembayaran=true
-  store.formPembayaran.total=item?.total
-  store.formPembayaran.no_penjualan=item?.no_penjualan
-
+function kembaliTanpaBayar(val){
+  console.log('kembaliTanpaBayar nota', val);
+  isList.value=false
 }
-
 </script>

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import { api } from "src/boot/axios"
+import { notifError, notifSuccess } from "src/modules/notifs"
 
 export const useListCicilanPenjualanStore = defineStore('list-cicilan-penjualan-store', {
   state: () => ({
@@ -10,6 +11,7 @@ export const useListCicilanPenjualanStore = defineStore('list-cicilan-penjualan-
       page: 0,
       per_page: 15,
       flag: 'semua',
+      sales:null
     },
     flagOptions:[
       {label:'Semua',value:'semua'},
@@ -64,5 +66,24 @@ export const useListCicilanPenjualanStore = defineStore('list-cicilan-penjualan-
         })
       })
     },
+    async BawaNota(item){
+      item.loading=true
+      const form={
+        id:item?.id,
+      }
+      await api.post('/v1/transaksi/cicilan/bawa-nota',form).then(({data})=>{
+        item.loading=false
+        console.log('bawa nota', data)
+        const index=this.items?.findIndex(obj=>obj.id===data?.data.id)
+        if(index>=0) this.items[index]=data?.data
+        notifSuccess(data?.message)
+
+      }).catch((err)=>{
+        item.loading=false
+        const msg=err?.response?.data?.message
+        notifError(msg)
+      })
+
+    }
   }
 })
