@@ -52,13 +52,11 @@ export const useAdminFormMasterSatuanStore = defineStore('admin-form-master-satu
             // inject data
             const arr = useAdminMasterSatuanStore()
             if (!add) {
-              arr.items.unshift(data?.result)
+              arr.items.unshift(data?.result) // Sesuaikan dengan response backend
             } else {
-              if (arr?.items && data?.result?.id) {
-                arr.items = arr.items.map((obj) =>
-                  obj?.id === data.result.id ? { ...obj, ...data.result } : obj,
-                )
-              }
+              arr.items = arr.items.map((obj) =>
+                obj?.id === data.result.id ? { ...obj, ...data.result } : obj,
+              )
             }
             // arr.items.unshift(data?.result)
             notifSuccess('Data berhasil disimpan')

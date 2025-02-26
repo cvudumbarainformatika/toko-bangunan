@@ -9,7 +9,7 @@
         option-value="id"
         label="Cari Sales"
         :options="store.sales"
-        :disable="store?.item?.detail?.length>0"
+
       />
       </div>
       <div class="col-6 text-right">
@@ -29,7 +29,7 @@
     </div>
   <q-separator />
   <div class="row items-center q-col-gutter-sm">
-    <div class="col-6">
+    <!-- <div class="col-6">
       <AppSelectLocal
         ref="refSelectBarang"
         v-model="store.barang"
@@ -43,7 +43,7 @@
         @selected="selected($event)"
         @on-input="onInput($event)"
       />
-    </div>
+    </div> -->
     <div class="col-2">
       <app-input ref="refJumlah" v-model="store.form.jumlah" label="Jumlah" :autofocus="false" @keyup.enter.stop="onEnterinput()"
       :rules="[(val) => parseFloat(val)>0 || 'Jumlah barang harus lebih besar dari 0']" @clear=setNol(strJumlah)
@@ -57,9 +57,8 @@
 </template>
 <script setup>
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
-import { defineAsyncComponent, ref, shallowRef } from 'vue'
+import { ref } from 'vue'
 
-const AppSelectLocal=shallowRef(defineAsyncComponent(() => import('./AppSelect.vue')))
 // const AppInput=shallowRef(defineAsyncComponent(() => import('src/components/app/AppInput.vue')))
 const store=useFromPenjualanStore()
 
@@ -67,25 +66,7 @@ const refSelectBarang=ref(null)
 const refJumlah=ref(null)
 const strJumlah=ref('jumlah')
 const strDsikon=ref('diskon')
-function selected(val){
-  // console.log('ref', refSelectBarang.value?.refAuto);
-  // console.log('store', store.barang);
-  const keys=Object.keys(val)
-  if(keys?.length>0){
-    store.barang=val
-    store.setForm('kodebarang',store?.barang?.kodebarang)
-    if(!store.form.sales_id) store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
-    else store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual2))
-    store.setForm('harga_beli',isNaN(store?.barang?.hargabeli)?0:parseFloat(store?.barang?.hargabeli))
-    console.log('form', store.form);
-  }
-  setTimeout(() => {
-    refSelectBarang.value?.refAuto?.validate()
-    console.log('ref', refSelectBarang.value?.refAuto?.validate());
 
-  },100)
-
-}
 function validasi(){
   const jumlah=refJumlah.value?.appInput?.validate()
   const barang=refSelectBarang.value?.refAuto?.validate()
@@ -94,13 +75,6 @@ function validasi(){
   else return false
 
 }
-function onInput(){
-  // console.log('on input', val);
-  // console.log('input', store.barang);
-  // if(val?.length<3) store.resetForm()
-  store.resetForm()
-}
-
 function onEnterinput(){
   console.log('on enter input');
   if(validasi()) store.simpanDetail()

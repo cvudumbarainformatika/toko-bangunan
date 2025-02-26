@@ -58,8 +58,8 @@
                     <q-avatar>
                       <q-img
                         v-if="item.image"
-                        :src="pathImg + item.image"
-                        @click="imgClick(pathImg + item.image)"
+                        :src="getImageUrl(item.image)"
+                        @click="imgClick(getImageUrl(item.image))"
                       />
                     </q-avatar>
                   </q-item-section>
@@ -100,15 +100,17 @@
       </div> -->
     </div>
   </div>
+  <DialogImage ref="dialogImage" />
 </template>
 
 <script setup>
 import { useQuasar } from 'quasar'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
-// import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form';
+// import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form'
 import { useAdminMasterBarangStore } from 'src/stores/admin/master/barang/list'
 import { computed, onBeforeMount, ref } from 'vue'
 import { pathImg } from 'src/boot/axios'
+import DialogImage from './DialogImage.vue'
 
 // const search = ref(null)
 const store = useAdminMasterBarangStore()
@@ -120,21 +122,31 @@ const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
 const emits = defineEmits(['add', 'edit'])
+const dialogImage = ref(null)
 
 const $q = useQuasar()
 onBeforeMount(() => {
+  store.getList()
   // Promise.all([
   //   store.getList(null)
   // ])
 })
-
+// Fungsi untuk mendapatkan URL gambar
+const getImageUrl = (image) => {
+  if (image instanceof File || image instanceof Blob) {
+    return URL.createObjectURL(image)
+  }
+  return pathImg + image // Jika gambar sudah ada di server
+}
 const imgClick = (val) => {
   console.log('img', val)
-  store.image = val
-  store.setExpand()
+  // store.image = val
+  // store.setExpand()
+  dialogImage.value.openDialog(val)
 }
 
 const edit = (item) => {
+  console.log('ediitx', item.rincians)
   emits('edit', item)
 }
 const del = (item) => {

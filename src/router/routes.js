@@ -48,6 +48,10 @@ const routes = [
         path: '/admin/transaksi/penjualan',
         component: () => import('pages/admin/transaksi/penjualan/IndexPage.vue'),
       },
+      {
+        path: '/admin/transaksi/cicilan',
+        component: () => import('pages/admin/transaksi/cicilan/IndexPage.vue'),
+      },
 
       // profile
       { path: '/admin/profile', component: () => import('pages/admin/profile/IndexPage.vue') },

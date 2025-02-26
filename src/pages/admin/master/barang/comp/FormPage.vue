@@ -45,7 +45,10 @@
                         @update:model-value="tambahGambar"
                       />
                     </div>
-                    <div class="row q-mt-md q-gutter-sm">
+                    <div
+                      class="row q-mt-md q-gutter-sm custom-scrollbar"
+                      style="height: 105px; overflow-y: auto; white-space: nowrap"
+                    >
                       <div
                         v-for="(image, index) in store.form.rincians"
                         :key="index"
@@ -63,7 +66,16 @@
                           icon="close"
                           class="absolute-top-right"
                           size="sm"
-                          @click="hapusGambar(index)"
+                          @click="hapusGambar(index, image.id)"
+                        />
+                        <q-btn
+                          round
+                          dense
+                          :color="image.flag_thumbnail === '1' ? 'green' : 'grey-5'"
+                          icon="task_alt"
+                          class="absolute-center"
+                          size="sm"
+                          @click="setThumbnail(image.id)"
                         />
                       </div>
                     </div>
@@ -251,8 +263,37 @@ const tambahGambar = (files) => {
 }
 
 // Fungsi untuk menghapus gambar
-const hapusGambar = (index) => {
-  store.form.rincians.splice(index, 1)
+const hapusGambar = async (index, id) => {
+  console.log('imageId', id)
+  try {
+    if (id) {
+      const success = await store.deleteImage(id)
+      if (success) {
+        store.form.rincians.splice(index, 1)
+      }
+    } else {
+      store.form.rincians.splice(index, 1)
+    }
+  } catch (error) {
+    console.error('Gagal menghapus gambar:', error)
+  }
+}
+const setThumbnail = async (id) => {
+  console.log('id image', id)
+  if (id) {
+    try {
+      const success = await store.setthumbnail(id)
+      if (success) {
+        // Perbarui flag_thumbnail di store.form.rincians
+        store.form.rincians = store.form.rincians.map((image) => ({
+          ...image,
+          flag_thumbnail: image.id === id ? '1' : null,
+        }))
+      }
+    } catch (error) {
+      console.error('Gagal memilih thumbnail:', error)
+    }
+  }
 }
 
 // Fungsi untuk mendapatkan URL gambar (preview)
@@ -281,3 +322,22 @@ function onSubmit() {
     })
 }
 </script>
+<style scoped>
+.custom-scrollbar::-webkit-scrollbar {
+  height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>

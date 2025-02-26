@@ -1,6 +1,6 @@
 <template>
   <div v-if="isList">
-    <HistoryPenjualanPage @back="isList=false" @use-nota="useNota" @bayar="bayar"/>
+    <ListPenjualanPage @back="isList=false" @bawa="bawaNota" @cicil="cicilNota" @kembali="kembaliTanpaBayar"/>
   </div>
   <div v-else class="q-pa-md">
     <div class="row items-center">
@@ -45,9 +45,6 @@
       <FormPage v-else/>
     </div>
     <q-separator />
-    <div class="q-my-xs">
-      <ListPage />
-    </div>
     <q-separator v-if="store?.item!=null"/>
     <div v-if="store?.item!=null" class="row q-py-md">
       <div class="col-4"></div>
@@ -56,41 +53,35 @@
     </div>
     <q-separator v-if="store?.item!=null"/>
   </div>
-  <DialogPembayaranPage v-model="store.openPembayaran"/>
 </template>
 <script setup>
+import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
-import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
 
 
 const FormPage=shallowRef(defineAsyncComponent(()=>import('./comp/FormPage.vue')))
-const ListPage=shallowRef(defineAsyncComponent(()=>import('./comp/ListPage.vue')))
-const HistoryPenjualanPage=shallowRef(defineAsyncComponent(()=>import('./comp/HistoryPenjualanPage.vue')))
-const DialogPembayaranPage=shallowRef(defineAsyncComponent(()=>import('./comp/DialogPembayaranPage.vue')))
+const ListPenjualanPage=shallowRef(defineAsyncComponent(()=>import('./comp/ListPenjualanPage.vue')))
 
-const isList=ref(false)
+const isList=ref(true)
 
 
 const store=useFromPenjualanStore()
-const list=useListPenjualanStore()
+const list=useListCicilanPenjualanStore()
 list.getList()
 store.getSales()
-function useNota(val){
-    // console.log('use nota',  val);
+
+function bawaNota(val){
+  console.log('bawa nota', val);
+  list.BawaNota(val)
+  // isList.value=false
+}
+function cicilNota(val){
+  console.log('cicil nota', val);
   isList.value=false
-  store.form.sales_id=val?.sales_id
-  store.noNota=val?.no_penjualan
-  store.item=val
 }
-function bayar(item){
-  // console.log('bayar', item);
-  store.noNota=item?.no_penjualan
-  store.item=item
-  store.openPembayaran=true
-  store.formPembayaran.total=item?.total
-  store.formPembayaran.no_penjualan=item?.no_penjualan
-
+function kembaliTanpaBayar(val){
+  console.log('kembaliTanpaBayar nota', val);
+  isList.value=false
 }
-
 </script>

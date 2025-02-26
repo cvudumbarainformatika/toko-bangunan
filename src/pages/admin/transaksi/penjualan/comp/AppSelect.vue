@@ -7,7 +7,7 @@
     :outlined="outlined"
     hide-bottom-space
     no-error-icon
-    :input-debounce="500"
+    :input-debounce="800"
     emit-value
     use-input
     fill-input
