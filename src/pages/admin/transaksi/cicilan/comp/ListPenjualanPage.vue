@@ -101,7 +101,6 @@
                         <div class="col-3 text-weight-bold">Pelanggan: {{ item?.pelanggan?.nama }}</div>
                         <div class="col-2 q-ml-sm">Sales : {{ item?.sales?.nama }}</div>
                       </div>
-                      <!-- <span class="text-weight-bold">Pelanggan: {{ item?.pelanggan?.nama }}</span> -->
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
@@ -193,10 +192,13 @@ function statusFlag(flag) {
       status = 'Proses Cicilan';
       break;
     case '4':
-      status = 'Batal';
+      status = 'Dibawa Sales';
       break;
     case '5':
       status = 'Lunas';
+      break;
+    case '6':
+      status = 'Batal';
       break;
 
     default:
