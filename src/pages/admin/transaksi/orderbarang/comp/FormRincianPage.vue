@@ -2,13 +2,15 @@
   <div class="fit column absolute">
     <div class="col full-height">
       <q-card flat bordered square class="full-height" style="overflow: hidden">
-        <app-btn-back @click="emits('back')" class="bg-dark" />
         <q-form ref="refForm" @submit="onSubmit" class="column full-height">
           <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
             <div class="row items-center justify-between">
-              <div class="f-12 text-weight-bold">Form Order</div>
+              <div class="f-12 text-weight-bold">
+                <app-btn-back size="sm" @click="emits('back')" class="bg-dark" />
+                Form Order
+              </div>
               <!-- <div>
-                <q-btn flat dense size="md" icon="icon-mat-history" @click="historyOpen">
+                <q-btn flat dense size="sm" icon="key" @click="historyOpen">
                   <q-tooltip class="bg-dark text-white">
                     {{ tooltip }}
                   </q-tooltip>
@@ -30,6 +32,30 @@
                   option-label="nama"
                   option-value="kodesupl"
                 />
+              </div>
+              <div v-if="data?.flaging === null || data?.flaging === ''">
+                <q-btn
+                  flat
+                  color="red"
+                  size="sm"
+                  icon="lock_open"
+                  @click="kuncitrans('1')"
+                  :loading="store.lock"
+                >
+                  <q-tooltip class="bg-teal text-white"> KUNCI TRANSAKSI </q-tooltip>
+                </q-btn>
+              </div>
+              <div v-else>
+                <q-btn
+                  flat
+                  size="sm"
+                  color="red"
+                  icon="lock"
+                  @click="kuncitrans()"
+                  :loading="store.lock"
+                >
+                  <q-tooltip class="bg-teal text-white"> BUKA KUNCI TRANSAKSI </q-tooltip>
+                </q-btn>
               </div>
             </div>
             <q-separator class="q-my-md" />
@@ -134,6 +160,7 @@
 
 <script setup>
 import AppSelectServer from 'src/components/~global/AppSelectServer.vue'
+
 import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 
@@ -166,5 +193,9 @@ function isiform(val) {
 function onSubmit() {
   console.log('submit form barang')
   store.save(props.data)
+}
+
+function kuncitrans(val) {
+  store.kunci(val, props?.data?.noorder)
 }
 </script>

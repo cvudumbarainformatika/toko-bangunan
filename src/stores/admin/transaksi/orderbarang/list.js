@@ -115,6 +115,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
           // console.log('hasil', hasil)
           // hasilglobal.push(hasil)
           const index = this.items.findIndex((q) => q.id === x?.id)
+
           if (index >= 0) this.items[index] = hasil
           else this.items.unshift(hasil)
         })

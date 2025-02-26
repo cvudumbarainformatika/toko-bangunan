@@ -29,6 +29,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         jumlah: 1,
       },
       loading: false,
+      lock: false,
     }),
     // persist: true,
     // getters: {
@@ -56,7 +57,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
           api
             .post('/v1/transaksi/orderpembelian/simpan', this.form)
             .then(({ data }) => {
-              console.log('sasa', data?.result)
+              //console.log('sasa', data?.result)
               this.loading = false
               const arr = useAdminListTransaksiOrderBarangStore()
               // const itemnya = [...arr.items]
@@ -75,7 +76,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               //   console.log('sasasasasasasasa', itemnya)
               // }
               if (!this.form.noorder) {
-                console.log('weweweweww', data?.notrans)
+                //console.log('weweweweww', data?.notrans)
                 this.form.noorder = data?.notrans
               }
               arr.olahdata(data?.result)
@@ -86,7 +87,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
 
               this.item = hasil
 
-              console.log('addd', this.item)
+              //console.log('addd', this.item)
               notifSuccess('Data berhasil disimpan')
               this.initResetRinci()
               // inject data
@@ -96,6 +97,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               resolve(data)
             })
             .catch((err) => {
+              console.log('sasasx', err)
               this.loading = false
               reject(err)
             })
@@ -147,6 +149,33 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         } catch (error) {
           notifError(error)
         }
+      },
+      async kunci(val, noorder) {
+        this.lock = true
+        const payload = { val, noorder }
+        return new Promise((resolve, reject) => {
+          api
+            .post('/v1/transaksi/orderpembelian/kunci', payload)
+            .then(({ data }) => {
+              this.lock = false
+
+              const arr = useAdminListTransaksiOrderBarangStore()
+              arr.olahdata(data?.result)
+
+              const hasil = data?.result[0]
+              // console.log('ccc', hasil)
+              const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+              hasil.total = total
+
+              this.item = hasil
+              notifSuccess('Data berhasil disimpan')
+              resolve(data)
+            })
+            .catch((err) => {
+              this.lock = false
+              reject(err)
+            })
+        })
       },
     },
   },

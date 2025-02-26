@@ -2,7 +2,7 @@
   <div class="fit column absolute">
     <div class="col full-height">
       <q-card flat bordered square class="full-height" style="overflow: hidden">
-        <q-avatar size="33px" color="dark" text-color="white">-</q-avatar>
+        <!-- <q-avatar size="33px" color="dark" text-color="white">-</q-avatar> -->
 
         <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
           <div class="row items-center justify-between">
