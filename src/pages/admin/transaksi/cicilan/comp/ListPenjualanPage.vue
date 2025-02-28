@@ -96,9 +96,9 @@
                     <q-item-label lines="1">
                       <div class="row">
                         <div class="col-2">{{ item?.no_penjualan }}</div>
-                        <div class="col-2 q-ml-sm">{{ item?.total }}</div>
-                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ item?.total_diskon }}</span> </div>
-                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ item?.total - item?.total_diskon}}</span> </div>
+                        <div class="col-2 q-ml-sm">{{ formatDouble(item?.total) }}</div>
+                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }}</span> </div>
+                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total - item?.total_diskon) }}</span> </div>
                         <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
                       </div>
 
@@ -107,7 +107,7 @@
                       <div class="row">
                         <div class="col-3 text-weight-bold">Pelanggan: {{ item?.pelanggan?.nama }}</div>
                         <div class="col-2 q-ml-sm">Sales : {{ item?.sales?.nama }}</div>
-                        <div v-if="item?.cicilan?.length > 0" class="col-2 q-ml-sm">Total cicilan : {{ item?.cicilan?.reduce((total, item) => total + item?.jumlah, 0) }}</div>
+                        <div v-if="item?.cicilan?.length > 0" class="col-2 q-ml-sm">Total cicilan : {{ formatDouble(item?.cicilan?.reduce((total, item) => total + item?.jumlah, 0)) }}</div>
                       </div>
                     </q-item-label>
                   </q-item-section>
@@ -178,6 +178,7 @@
 
 <script setup>
 // import { useQuasar } from 'quasar'
+import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
 import { computed, ref } from 'vue'

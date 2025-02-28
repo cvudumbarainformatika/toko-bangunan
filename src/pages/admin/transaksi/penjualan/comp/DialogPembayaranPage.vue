@@ -21,7 +21,11 @@
                     <div v-if="store?.item!=null" class="col-12 q-py-md">
                       <div class="row justify-between f-16">
                         <div class="col-auto text-weight-bold">Total Nota Nomor : {{ store.formPembayaran.no_penjualan }}</div>
-                        <div class="col-auto text-weight-bold text-right f-20">{{store?.item?.total}}</div>
+                        <div class="col-auto text-weight-bold text-right f-20">
+                          <div class="row justify-end">{{formatDouble(store?.item?.total)}}</div>
+                          <div v-if="store?.item?.total_diskon>0" class="row justify-end">{{formatDouble(store?.item?.total_diskon)}}</div>
+                          <div v-if="store?.item?.total_diskon>0" class="row justify-end">{{formatDouble(store?.item?.total-store?.item?.total_diskon)}}</div>
+                        </div>
                       </div>
                     </div>
 
@@ -48,20 +52,20 @@
                       :rules="[val=>(store.formPembayaran.cara_bayar == '2' ? !!val:true) || 'Harap di isi']"
                       :disable="store.loadingPembayaran"
                     />
-                    <template v-if="store.formPembayaran.cara_bayar=='5'">
+                    <template v-if="store.formPembayaran.cara_bayar=='5'" >
                       <app-input
                       ref="refBayar"
                       class="col-6"
                       v-model="store.formPembayaran.bayar"
                       label="Bayar"
-                      :rules="[val=> parseInt(val)>=store.formPembayaran.total || 'nominal pembayaran kurang']"
+                      :rules="[val=> parseInt(val)>=(parseInt(store.formPembayaran.total) - store.formPembayaran?.total_diskon) || 'nominal pembayaran kurang']"
                       @update:model-value="updateBayar"
                       :disable="store.loadingPembayaran"
                     />
-                    <div class="col-3" :class="parseInt(store.formPembayaran.total)>parseInt(store.formPembayaran.bayar)?'text-negative':''">
-                      {{ store.formPembayaran.kembali }}
+                    <div class="col-3" :class="(parseInt((parseInt(store.formPembayaran.total)-store.formPembayaran?.total_diskon))>parseInt(store.formPembayaran.bayar)) || !store.formPembayaran?.bayar?'text-negative':''">
+                      {{ formatDouble(store.formPembayaran.kembali) }}
                     </div>
-                    <div v-if="parseInt(store.formPembayaran.total)>parseInt(store.formPembayaran.bayar)" class="col-3 text-negative"> Kurang bayar</div>
+                    <div v-if="(parseInt((parseInt(store.formPembayaran.total) - store.formPembayaran?.total_diskon)) > parseInt(store.formPembayaran.bayar)) " class="col-3 text-negative text-center"> Kurang bayar</div>
 
 
                     </template>
@@ -93,6 +97,7 @@
 </template>
 <script setup>
 import { useQuasar } from 'quasar'
+import { formatDouble } from 'src/modules/formatter'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { computed, ref } from 'vue'
 
@@ -127,7 +132,7 @@ function updateBayar(val){
   const _removedZeros = val?.replace(/^0+/, '')
   if (val > 1) {
     store.formPembayaran.bayar = _removedZeros
-    store.formPembayaran.kembali=store.formPembayaran.bayar-store.formPembayaran.total
+    store.formPembayaran.kembali = store.formPembayaran.bayar - (store.formPembayaran.total - store?.formPembayaran?.total_diskon)
   }
   setTimeout(()=>{
     refBayar.value?.appInput.validate()

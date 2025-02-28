@@ -14,8 +14,8 @@
               <q-item-label >Cicilan ke-{{ index + 1 }}</q-item-label>
               <q-item-label caption lines="1">
                 <div class="row">
-                  <div class="col-6">Rp. {{ item.jumlah }}</div>
-                  <div class="col-6 text-right">Tanggal Input {{ item.tgl_bayar }}</div>
+                  <div class="col-6">Rp. {{ formatDouble(item.jumlah) }}</div>
+                  <div class="col-6 text-right">Tanggal Input {{ humanDate(item.tgl_bayar) }}</div>
                 </div>
 
               </q-item-label>
@@ -40,6 +40,9 @@
 </template>
 
 <script setup>
+import { formatDouble } from 'src/modules/formatter'
+
+import { humanDate } from 'src/modules/utils'
 import { useCicilanPenjualanFormStore } from 'src/stores/admin/transaksi/cicilan/form'
 const store = useCicilanPenjualanFormStore()
 </script>
