@@ -1,4 +1,4 @@
-import { defineStore } from "pinia"
+import { acceptHMRUpdate, defineStore } from "pinia"
 import { api } from "src/boot/axios"
 import { notifError, notifSuccess } from "src/modules/notifs"
 
@@ -17,7 +17,7 @@ export const useListCicilanPenjualanStore = defineStore('list-cicilan-penjualan-
       {label:'Semua',value:'semua'},
       {label:'Belum ada Cicilan',value:'2'},
       {label:'Proses Cicilan',value:'3'},
-      {label:'Dibawa Sales',value:'6'},
+      {label:'Dibawa Sales',value:'4'},
     ]
   }),
   actions: {
@@ -84,6 +84,30 @@ export const useListCicilanPenjualanStore = defineStore('list-cicilan-penjualan-
         notifError(msg)
       })
 
-    }
+    },
+    async tidakNyicil(item){
+      item.loading=true
+      const form={
+        id:item?.id,
+      }
+      await
+      api.post('/v1/transaksi/cicilan/tidak-nyicil',form).then(({data})=>{
+        item.loading=false
+        console.log('tidak nyicil', data)
+        const index=this.items?.findIndex(obj=>obj.id===data?.data.id)
+        if(index>=0) this.items[index]=data?.data
+        notifSuccess(data?.message)
+
+      }).catch((err)=>{
+        item.loading=false
+        const msg=err?.response?.data?.message
+        notifError(msg)
+      })
+
+    },
   }
 })
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useListCicilanPenjualanStore, import.meta.hot))
+}
+

@@ -1,18 +1,19 @@
 <template>
-  <q-btn class="glossy" 
-      :rounded="label ? true : false" 
+  <q-btn class="glossy"
+      :rounded="label ? true : false"
       :round="label ? false : true"
       no-caps
       :color="color"
       :dense="dense"
-      :loading="loading" 
+      :loading="loading"
       >
       <div class="flex items-center" :class="{' q-px-md': label}">
         <div v-if="icon" :class="{'q-mr-sm': label}"><q-icon :name="icon" size="1.5em"  /></div>
         <div v-if="label">{{ label }}</div>
       </div>
       <template v-slot:loading>
-        Loading...
+        <!-- Loading... -->
+        <q-spinner-hourglass/>
       </template>
     <q-tooltip v-if="tooltip">{{ tooltip }}</q-tooltip>
   </q-btn>

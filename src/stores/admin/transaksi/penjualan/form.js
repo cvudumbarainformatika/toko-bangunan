@@ -1,4 +1,4 @@
-import { defineStore } from "pinia"
+import { acceptHMRUpdate, defineStore } from "pinia"
 import { api } from "src/boot/axios"
 import { notifError, notifSuccess } from "src/modules/notifs"
 import { useListPenjualanStore } from "./list"
@@ -161,3 +161,7 @@ export const useFromPenjualanStore=defineStore('from-penjualan-store',{
     }
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useFromPenjualanStore, import.meta.hot))
+}
