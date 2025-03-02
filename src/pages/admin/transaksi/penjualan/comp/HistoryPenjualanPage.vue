@@ -60,8 +60,8 @@
                     <q-item-label lines="1">
                       <div class="row">
                         <div class="col-3">{{ item?.no_penjualan }}</div>
-                        <div class="col-2 q-ml-sm">{{ item?.total }}</div>
-                        <div class="col-2 q-ml-sm">{{ item?.total_diskon }}</div>
+                        <div class="col-2 q-ml-sm">{{ formatDouble(item?.total) }}</div>
+                        <div class="col-2 q-ml-sm">{{ formatDouble(item?.total_diskon) }}</div>
                         <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
 
                       </div>
@@ -123,6 +123,7 @@
 
 <script setup>
 // import { useQuasar } from 'quasar'
+import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
 import { computed, onBeforeMount, ref } from 'vue'

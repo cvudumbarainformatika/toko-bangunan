@@ -1,4 +1,4 @@
-import { defineStore } from "pinia"
+import { acceptHMRUpdate, defineStore } from "pinia"
 import { api } from "src/boot/axios"
 
 export const useListPenjualanStore = defineStore('list-penjualan-store', {
@@ -59,3 +59,7 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
     },
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useListPenjualanStore, import.meta.hot))
+}

@@ -19,6 +19,7 @@
         <app-btn v-if="store?.noNota" class="q-mr-xs" icon="attach_money" tooltip="Pembayaran" color="blue" @click="()=>{
           store.openPembayaran=true
           store.formPembayaran.total=store.item?.total
+          store.formPembayaran.total_diskon=store.item?.total_diskon
           store.formPembayaran.no_penjualan=store.noNota
         }" />
         <app-btn icon="open_in_new" tooltip="Buka History Penjualan" color="primary" @click="isList=true" />
@@ -51,14 +52,16 @@
     <q-separator v-if="store?.item!=null"/>
     <div v-if="store?.item!=null" class="row q-py-md">
       <div class="col-4"></div>
-      <div class="col-5 text-weight-bold">Total</div>
-      <div class="col-2 text-weight-bold text-right">{{store?.item?.total}}</div>
+      <div class="col-3 text-weight-bold">Total</div>
+      <div class="col-2 text-weight-bold text-right">{{formatDouble(store?.item?.total_diskon)}}</div>
+      <div class="col-2 text-weight-bold text-right">{{formatDouble(store?.item?.total)}}</div>
     </div>
     <q-separator v-if="store?.item!=null"/>
   </div>
   <DialogPembayaranPage v-model="store.openPembayaran"/>
 </template>
 <script setup>
+import {formatDouble} from 'src/modules/formatter'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
@@ -89,6 +92,7 @@ function bayar(item){
   store.item=item
   store.openPembayaran=true
   store.formPembayaran.total=item?.total
+  store.formPembayaran.total_diskon=item?.total_diskon
   store.formPembayaran.no_penjualan=item?.no_penjualan
 
 }
