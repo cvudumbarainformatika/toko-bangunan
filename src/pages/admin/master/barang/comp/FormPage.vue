@@ -95,7 +95,7 @@
                     :options="selectBrand?.items"
                     option-label="brand"
                     option-value="brand"
-                    :valid="{ required: store.form.kategori !== 'Keramik' }"
+                    :valid="store.form.kategori !== 'Keramik'"
                   />
                   <app-input
                     class="col-6"
@@ -123,7 +123,7 @@
                     :options="selectSatuan.items"
                     option-label="satuan"
                     option-value="satuan"
-                    :valid="{ required: store.form.kategori !== 'Keramik' }"
+                    :valid="store.form.kategori !== 'Keramik'"
                   />
 
                   <app-input
@@ -146,7 +146,7 @@
                     :options="selectSatuan.items"
                     option-label="satuan"
                     option-value="satuan"
-                    :valid="{ required: store.form.kategori !== 'Keramik' }"
+                    :valid="store.form.kategori !== 'Keramik'"
                   />
 
                   <app-input
@@ -223,6 +223,7 @@ import { useAdminMasterBrandSelectStore } from 'src/stores/admin/master/brand/se
 import { useAdminMasterSatuanSelectStore } from 'src/stores/admin/master/satuan/select'
 import { computed, onMounted, ref } from 'vue'
 import { pathImg } from 'src/boot/axios'
+import { notifError } from 'src/modules/notifs'
 
 const emits = defineEmits(['back'])
 const $q = useQuasar()
@@ -239,11 +240,17 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  valid: { type: Boolean, default: false },
 })
 
 onMounted(() => {
   store.initReset(props.data)
 })
+// function validKeterangan() {
+//   if (props.valid) {
+//     return store.form.kategori !== 'Keramik'
+//   }
+// }
 
 const fileRef = ref([])
 function imgClick() {
@@ -254,6 +261,13 @@ const newImages = ref([])
 
 // Fungsi untuk menangani upload gambar
 const tambahGambar = (files) => {
+  const maxSize = 2 * 1024 * 1024 // 2MB dalam bytes
+  const invalidFiles = files.filter((file) => file.size > maxSize)
+
+  if (invalidFiles.length > 0) {
+    notifError('Ukuran Foto Tidak Boleh Lebih dari 2MB')
+    return
+  }
   const newRincians = files.map((file) => ({
     gambar: file,
     // Untuk edit mode: jika ada properti lain dari server
@@ -318,7 +332,15 @@ function onSubmit() {
       console.log('Data berhasil disimpan')
     })
     .catch((error) => {
-      console.error('Error:', error)
+      if (error.response && error.response.status === 422) {
+        // Handle validation errors
+        const errors = error.response.data.errors
+        for (const key in errors) {
+          notifError(errors[key][0]) // Tampilkan pesan error ke pengguna
+        }
+      } else {
+        console.error('Error:', error)
+      }
     })
 }
 </script>
