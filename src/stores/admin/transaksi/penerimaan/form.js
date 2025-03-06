@@ -1,9 +1,9 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
-import { useAdminListTransaksiOrderBarangStore } from './list'
+import { useAdminListTransaksiPenerimaanBarangStore } from './list'
 import { notifError, notifSuccess } from 'src/modules/notifs'
 
-export const useAdminFormTransaksiOrderBarangStore = defineStore(
+export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
   'admin-form-transaksi-orderbarang-store',
   {
     state: () => ({
@@ -59,7 +59,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
             .then(({ data }) => {
               //console.log('sasa', data?.result)
               this.loading = false
-              const arr = useAdminListTransaksiOrderBarangStore()
+              const arr = useAdminListTransaksiPenerimaanBarangStore()
               // const itemnya = [...arr.items]
               //arr.items.unshift(data?.result?.original[0])
               // if (!add) {
@@ -135,7 +135,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
           // console.log(resp)
           if (resp.status === 200) {
             // console.log('sasasa', resp?.data?.result)
-            const arr = useAdminListTransaksiOrderBarangStore()
+            const arr = useAdminListTransaksiPenerimaanBarangStore()
             arr.olahdata(resp?.data?.result, id)
 
             const hasil = resp?.data?.result[0]
@@ -159,7 +159,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
             .then(({ data }) => {
               this.lock = false
 
-              const arr = useAdminListTransaksiOrderBarangStore()
+              const arr = useAdminListTransaksiPenerimaanBarangStore()
               arr.olahdata(data?.result)
 
               const hasil = data?.result[0]
@@ -182,5 +182,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
 )
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useAdminFormTransaksiOrderBarangStore, import.meta.hot))
+  import.meta.hot.accept(
+    acceptHMRUpdate(useAdminFormTransaksiPenerimaanBarangStore, import.meta.hot),
+  )
 }

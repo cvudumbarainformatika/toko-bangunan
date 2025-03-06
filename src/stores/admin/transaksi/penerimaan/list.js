@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 
-export const useAdminListTransaksiOrderBarangStore = defineStore(
+export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
   'admin-list-transaksi-orderbarang-store',
   {
     state: () => ({
@@ -9,11 +9,6 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
       items: [],
       isError: false,
       loading: false,
-      fixed: false,
-      itemorderan: [],
-      cariorderan: {
-        noorder: null,
-      },
       params: {
         q: null,
         page: 0,
@@ -39,7 +34,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
           params: this.params,
         }
         try {
-          const { data } = await api.get('/v1/transaksi/orderpembelian/getlistorder', params)
+          const { data } = await api.get('/v1/transaksi/penerimaan/getpenerimaan', params)
           console.log('get master barang', data)
           this.meta = data
           this.olahdata(data?.data)
@@ -126,56 +121,12 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
         })
         // this.items = hasilglobal.sort(({ tgl: a }, { tgl: b }) => b - a)
       },
-      // async getbyhedernoorder() {
-      //   console.log('sasa')
-      //   const params = { params: this.cariorderan }
-      //   await api
-      //     .get('/v1/transaksi/orderpembelian/gethederbynoorder', params)
-      //     .then((resp) => {
-      //       this.loading = false
-      //       if (resp.status === 200) {
-      //         this.meta = resp?.data
-      //         this.items = resp?.data?.data
-      //         this.meta.total = resp?.data?.total
-      //         console.log('wew', this.items)
-      //       }
-      //     })
-      //     .catch((err) => {
-      //       console.log(err)
-      //       this.loading = false
-      //     })
-      // },
-      async getorderanfix() {
-        try {
-          const { data } = await api.get('/v1/transaksi/orderpembelian/getlistorderfixheder')
-          this.loading = false
-          const hasilglobal = []
-          data?.forEach((x) => {
-            const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
-            const hasil = {
-              id: x?.id,
-              noorder: x?.noorder,
-              tglorder: x?.tglorder,
-              kdsuplier: x?.kdsuplier,
-              flaging: x?.flaging,
-              suplier: x?.suplier,
-              total: total,
-              rinci: x?.rinci,
-            }
-            console.log('hasil', hasil)
-            hasilglobal.push(hasil)
-            this.itemorderan = hasilglobal
-          })
-        } catch (error) {
-          console.log(error)
-          this.isError = true
-          this.loading = false
-        }
-      },
     },
   },
 )
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useAdminListTransaksiOrderBarangStore, import.meta.hot))
+  import.meta.hot.accept(
+    acceptHMRUpdate(useAdminListTransaksiPenerimaanBarangStore, import.meta.hot),
+  )
 }
