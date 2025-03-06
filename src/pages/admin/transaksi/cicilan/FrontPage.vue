@@ -1,23 +1,23 @@
 <template>
   <div v-if="isList">
-    <ListPenjualanPage @back="isList=false" @bawa="bawaNota" @cicil="cicilNota" @kembali="kembaliTanpaBayar"/>
+    <ListPenjualanPage @back="isList=false" @bawa="bawaNota" @cicil="cicilNota" @kembali="kembaliTanpaBayar" @buka="bukaCicilan"/>
   </div>
   <div v-else class="q-pa-md">
     <div class="row items-center">
       <div class="col-10">
-        <div class="row justify-center text-weight-bold text-h5 q-my-xs">Penjualan</div>
+        <div class="row justify-center text-weight-bold text-h5 q-my-xs">Pembayaran Cicilan</div>
         <div class="row justify-center text-weight-bold q-my-xs">
           <div class="col-6">
             <div class="row justify-between">
               <div class="col-5 text-right">Nota : </div>
-              <div class="col-6">{{store.noNota??'nota tersedia setelah diisimpan satu data'}} </div>
+              <div class="col-6">{{store?.item?.no_penjualan??''}} </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-2 text-right">
         <app-btn v-if="store?.noNota" class="q-mr-xs" icon="attach_money" tooltip="Pembayaran" color="blue" @click="()=>{
-          store.openPembayaran=true
+
           store.formPembayaran.total=store.item?.total
           store.formPembayaran.no_penjualan=store.noNota
         }" />
@@ -53,23 +53,26 @@
     </div>
     <q-separator v-if="store?.item!=null"/>
   </div>
+  <DialogCicilan/>
+  <DialogListCicilan/>
 </template>
 <script setup>
+import { useCicilanPenjualanFormStore } from 'src/stores/admin/transaksi/cicilan/form'
 import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
-import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
 
 
 const FormPage=shallowRef(defineAsyncComponent(()=>import('./comp/FormPage.vue')))
 const ListPenjualanPage=shallowRef(defineAsyncComponent(()=>import('./comp/ListPenjualanPage.vue')))
+const DialogCicilan=shallowRef(defineAsyncComponent(()=>import('./comp/DialogCicilanPage.vue')))
+const DialogListCicilan=shallowRef(defineAsyncComponent(()=>import('./comp/DialogListCicilan.vue')))
 
 const isList=ref(true)
 
 
-const store=useFromPenjualanStore()
+const store=useCicilanPenjualanFormStore()
 const list=useListCicilanPenjualanStore()
 list.getList()
-store.getSales()
 
 function bawaNota(val){
   console.log('bawa nota', val);
@@ -78,10 +81,19 @@ function bawaNota(val){
 }
 function cicilNota(val){
   console.log('cicil nota', val);
-  isList.value=false
+  store.item=val
+  store.setForm('id',val.id)
+  store.isOpen=true
+  // isList.value=false
+}
+function bukaCicilan(val){
+  console.log('cicil nota', val);
+  store.item=val
+  store.isOpenList=true
+  // isList.value=false
 }
 function kembaliTanpaBayar(val){
   console.log('kembaliTanpaBayar nota', val);
-  isList.value=false
+  list.tidakNyicil(val)
 }
 </script>

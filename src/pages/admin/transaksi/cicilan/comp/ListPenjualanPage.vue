@@ -57,11 +57,17 @@
                     />
                 </div>
 
+                <q-space />
+                <div class="col-auto">
+                  <app-btn icon="refresh" tooltip="refresh" flat @click="store.getList" />
+                </div>
+
 
               </div>
             </q-item-label>
             <q-separator  />
           </div>
+
 
           <div ref="scrollTarget" class="col full-height scroll">
             <q-infinite-scroll
@@ -89,9 +95,10 @@
                   <q-item-section>
                     <q-item-label lines="1">
                       <div class="row">
-                        <div class="col-3">{{ item?.no_penjualan }}</div>
-                        <div class="col-2 q-ml-sm">{{ item?.total }}</div>
-                        <div class="col-2 q-ml-sm">{{ item?.total_diskon }}</div>
+                        <div class="col-2">{{ item?.no_penjualan }}</div>
+                        <div class="col-2 q-ml-sm">{{ formatDouble(item?.total) }}</div>
+                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }}</span> </div>
+                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total - item?.total_diskon) }}</span> </div>
                         <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
                       </div>
 
@@ -100,6 +107,7 @@
                       <div class="row">
                         <div class="col-3 text-weight-bold">Pelanggan: {{ item?.pelanggan?.nama }}</div>
                         <div class="col-2 q-ml-sm">Sales : {{ item?.sales?.nama }}</div>
+                        <div v-if="item?.cicilan?.length > 0" class="col-2 q-ml-sm">Total cicilan : {{ formatDouble(item?.cicilan?.reduce((total, item) => total + item?.jumlah, 0)) }}</div>
                       </div>
                     </q-item-label>
                   </q-item-section>
@@ -109,8 +117,18 @@
                         emits('bawa', item)
                         item.expand = !item.expand
                         }" :loading="item?.loading" :disable="item?.loading"/>
-                      <app-btn v-if="item?.flag == '4'" class="q-mr-xs" icon="price_check" tooltip="Bayar Cililn" color="green" @click="emits('cicil', item)" :loading="item?.loading" :disable="item?.loading"/>
-                      <app-btn v-if="item?.flag == '4'" class="q-mr-xs" icon="money_off_csred" tooltip="Kembali tanpa bayar cicilan" color="secondary" @click="emits('kembali', item)" :loading="item?.loading" :disable="item?.loading"/>
+                      <app-btn v-if="item?.flag == '4'" class="q-mr-xs" icon="price_check" tooltip="Bayar Cililan" color="green" @click="()=>{
+                        emits('cicil', item)
+                        item.expand = !item.expand
+                        }" :loading="item?.loading" :disable="item?.loading"/>
+                      <app-btn v-if="item?.flag == '4'" class="q-mr-xs" icon="money_off_csred" tooltip="Kembali tanpa bayar cicilan" color="secondary" @click="()=>{
+                        emits('kembali', item)
+                        item.expand = !item.expand
+                        }" :loading="item?.loading" :disable="item?.loading"/>
+                      <app-btn v-if="['3','5']?.includes(item?.flag)" class="q-mr-xs" icon="view_list" tooltip="List Cicilan" color="secondary" @click="()=>{
+                        emits('buka', item)
+                        item.expand = !item.expand
+                        }" :loading="item?.loading" :disable="item?.loading"/>
                       <!-- <app-btn  icon="card_travel" color="orange" tooltip="Di bawa Sales" @click="emits('bawa', item)"/>
                       <app-btn  class="q-mr-xs" icon="price_check" tooltip="Bayar Cililn" color="green" @click="emits('cicil', item)"/>
                       <app-btn  class="q-mr-xs" icon="money_off_csred" tooltip="Kembali tanpa bayar cicilan" color="secondary" @click="emits('kembali', item)" /> -->
@@ -160,6 +178,7 @@
 
 <script setup>
 // import { useQuasar } from 'quasar'
+import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
 import { computed, ref } from 'vue'
@@ -173,7 +192,7 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['bawa', 'cicil','kembali'])
+const emits = defineEmits(['bawa', 'cicil','kembali','buka'])
 
 
 function statusFlag(flag) {

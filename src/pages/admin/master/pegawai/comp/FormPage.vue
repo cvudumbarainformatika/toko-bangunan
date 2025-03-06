@@ -40,7 +40,14 @@
                   :valid="{ email: true }"
                   label="Email"
                 />
-                <app-input class="col-6" v-model="store.form.jabatan" label="Jabatan" />
+                <app-select
+                  class="col-6"
+                  v-model="store.form.jabatan"
+                  label="Jabatan"
+                  :options="store?.jabatan"
+                  option-label="keterangan"
+                  @update:model-value="(val) => isiJabatan(val)"
+                />
                 <app-input class="col-12" v-model="store.form.alamat" label="Alamat" />
                 <app-input
                   class="col-5"
@@ -128,6 +135,12 @@ const props = defineProps({
 onMounted(() => {
   store.initReset(props.data)
 })
+
+function isiJabatan(val) {
+  store.form.jabatan = val?.keterangan
+  store.form.kodejabatan = val?.kode
+  console.log('val', store.form)
+}
 
 function onSubmit() {
   // console.log('submit form barang');

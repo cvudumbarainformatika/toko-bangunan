@@ -13,10 +13,16 @@ export const useAdminFormMasterPegawaiStore = defineStore('admin-form-master-peg
       email: null,
       password: null,
       jabatan: null,
+      kodejabatan: null,
       nohp: null,
       alamat: null,
     },
     loading: false,
+    jabatan: [
+      { keterangan: 'Admin', kode: 1 },
+      { keterangan: 'Pegawai', kode: 2 },
+      { keterangan: 'Sales', kode: 3 },
+    ],
   }),
   // persist: true,
   // getters: {
