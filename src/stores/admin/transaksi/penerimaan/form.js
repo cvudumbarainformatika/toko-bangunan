@@ -28,6 +28,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         ukuran: null,
         jumlah: 1,
       },
+      rinci: [],
       loading: false,
       lock: false,
     }),

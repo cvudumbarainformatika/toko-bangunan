@@ -10,7 +10,7 @@
       <q-card-section style="max-height: 50vh" class="scroll">
         <q-list separator>
           <transition-group name="list">
-            <q-item v-for="(item, n) in storeorder.items" :key="n" class="list-move">
+            <q-item v-for="(item, n) in storeorder.itemorderan" :key="n" class="list-move">
               <q-item-section>
                 <q-item-label>
                   <span class="text-weight-bold">No. Order</span> :
@@ -45,7 +45,7 @@
                     size="lg"
                     color="primary"
                     icon="fact_check"
-                    @click="store.pilih(item)"
+                    @click="pilih(item)"
                   />
                 </div>
               </q-item-section>
@@ -66,6 +66,15 @@
 <script setup>
 import { formatRpDouble } from 'src/modules/formatter'
 import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
+import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
 
 const storeorder = useAdminListTransaksiOrderBarangStore()
+const storepenerimaan = useAdminFormTransaksiPenerimaanBarangStore()
+
+function pilih(item) {
+  console.log('item', item)
+  storepenerimaan.form.noorder = item?.noorder
+  storepenerimaan.form.suplier = item?.suplier?.nama
+  storepenerimaan.rinci = item?.rinci
+}
 </script>

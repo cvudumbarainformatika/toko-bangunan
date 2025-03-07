@@ -7,6 +7,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
     state: () => ({
       meta: null,
       items: [],
+      itemsdialog: [],
       isError: false,
       loading: false,
       fixed: false,

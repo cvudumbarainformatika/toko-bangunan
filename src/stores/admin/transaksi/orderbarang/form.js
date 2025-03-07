@@ -98,6 +98,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
             })
             .catch((err) => {
               console.log('sasasx', err)
+              notifError(err?.response?.data?.message)
               this.loading = false
               reject(err?.data)
             })
@@ -168,7 +169,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               hasil.total = total
 
               this.item = hasil
-              notifSuccess('Data berhasil disimpan')
+              notifSuccess(data?.message)
               resolve(data)
             })
             .catch((err) => {
