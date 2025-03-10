@@ -27,6 +27,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         hargajual2: null,
         ukuran: null,
         jumlah: 1,
+        hargaasli: [],
       },
       rinci: [],
       loading: false,
