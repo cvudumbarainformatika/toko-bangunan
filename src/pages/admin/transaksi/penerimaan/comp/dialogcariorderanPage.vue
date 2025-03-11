@@ -72,9 +72,11 @@ const storeorder = useAdminListTransaksiOrderBarangStore()
 const storepenerimaan = useAdminFormTransaksiPenerimaanBarangStore()
 
 function pilih(item) {
-  console.log('item', item)
+  // console.log('item', item)
+  // storepenerimaan.form.id = item?.id
   storepenerimaan.form.noorder = item?.noorder
   storepenerimaan.form.suplier = item?.suplier?.nama
+  storepenerimaan.form.kdsuplier = item?.kdsuplier
   storepenerimaan.rinci = item?.rinci
 }
 </script>

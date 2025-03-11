@@ -10,24 +10,12 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
       fixed: false,
       item: null,
       form: {
-        id: null,
-        noorder: null,
-        kdsuplier: null,
-        tglorder: null,
-        kdbarang: null,
-        namabarang: null,
-        brand: null,
-        merk: null,
-        seri: null,
-        satuan_b: null,
-        satuan_k: null,
-        isi: null,
-        kategori: null,
-        hargajual1: null,
-        hargajual2: null,
-        ukuran: null,
-        jumlah: 1,
-        hargaasli: [],
+        nopenerimaan: '',
+        noorder: '',
+        kdsuplier: '',
+        jumlahpo: 0,
+        hargaasli: 0,
+        id: '',
       },
       rinci: [],
       loading: false,
@@ -57,26 +45,11 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         this.loading = true
         return new Promise((resolve, reject) => {
           api
-            .post('/v1/transaksi/orderpembelian/simpan', this.form)
+            .post('/v1/transaksi/penerimaan/simpan', this.form)
             .then(({ data }) => {
               //console.log('sasa', data?.result)
               this.loading = false
               const arr = useAdminListTransaksiPenerimaanBarangStore()
-              // const itemnya = [...arr.items]
-              //arr.items.unshift(data?.result?.original[0])
-              // if (!add) {
-              //   itemnya.unshift(data?.result?.original[0])
-              // } else {
-              //   // arr?.items?.map((obj) =>
-              //   //   obj?.id === data?.result?.original[0]?.id
-              //   //     ? { ...obj, ...data?.result?.original[0] }
-              //   //     : obj,
-              //   // )
-              //   const desah = itemnya.findIndex((f) => f.id === add.id)
-              //   if (desah >= 0) itemnya[desah] = data?.result?.original[0]
-              //   // desah = data?.result?.original[0]
-              //   console.log('sasasasasasasasa', itemnya)
-              // }
               if (!this.form.noorder) {
                 //console.log('weweweweww', data?.notrans)
                 this.form.noorder = data?.notrans
@@ -99,8 +72,8 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
               resolve(data)
             })
             .catch((err) => {
-              console.log('sasasx', err)
-              this.loading = false
+              // console.log('sasasx', err)
+              // this.loading = false
               reject(err?.data)
             })
         })
