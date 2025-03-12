@@ -18,6 +18,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
         noorder: null,
       },
       getorderhasil: [],
+      opendialogCetak: false,
     }),
     // persist: true,
     // getters: {
