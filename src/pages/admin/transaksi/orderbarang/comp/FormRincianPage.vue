@@ -33,7 +33,7 @@
                   option-value="kodesupl"
                 />
               </div>
-              <div v-if="data?.flaging === null || data?.flaging === ''">
+              <div v-if="data?.flaging !== '1'">
                 <q-btn
                   flat
                   color="red"

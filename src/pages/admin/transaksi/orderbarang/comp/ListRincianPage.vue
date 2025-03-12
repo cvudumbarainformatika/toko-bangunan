@@ -6,7 +6,7 @@
 
         <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
           <div class="row items-center justify-between">
-            <div class="f-12 text-weight-bold">
+            <div class="f-12 text-weight-bold" style="height: 23px">
               List Order || No.Order : {{ data?.noorder ?? '-' }}
             </div>
           </div>
@@ -23,7 +23,12 @@
                         <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
                       </div>
                       <div class="col-2">
-                        <span class="text-weight-medium"> {{ item?.jumlahpo }}</span>
+                        <span class="text-weight-medium">
+                          {{ item?.jumlahpo }} {{ item?.satuan_b }}</span
+                        >
+                        <span class="text-grey-8" v-if="item?.isi !== '1'">
+                          ({{ item?.jumlahpo_k }} {{ item?.satuan_k }})</span
+                        >
                       </div>
                       <div class="col-1">
                         <span> X </span>

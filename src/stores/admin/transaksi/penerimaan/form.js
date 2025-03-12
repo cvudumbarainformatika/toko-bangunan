@@ -1,33 +1,23 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
-import { useAdminListTransaksiOrderBarangStore } from './list'
+import { useAdminListTransaksiPenerimaanBarangStore } from './list'
 import { notifError, notifSuccess } from 'src/modules/notifs'
 
-export const useAdminFormTransaksiOrderBarangStore = defineStore(
+export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
   'admin-form-transaksi-orderbarang-store',
   {
     state: () => ({
       fixed: false,
       item: null,
       form: {
-        id: null,
-        noorder: null,
-        kdsuplier: null,
-        tglorder: null,
-        kdbarang: null,
-        namabarang: null,
-        brand: null,
-        merk: null,
-        seri: null,
-        satuan_b: null,
-        satuan_k: null,
-        isi: null,
-        kategori: null,
-        hargajual1: null,
-        hargajual2: null,
-        ukuran: null,
-        jumlah: 1,
+        nopenerimaan: '',
+        noorder: '',
+        kdsuplier: '',
+        jumlahpo: 0,
+        hargaasli: 0,
+        id: '',
       },
+      rinci: [],
       loading: false,
       lock: false,
     }),
@@ -55,26 +45,11 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         this.loading = true
         return new Promise((resolve, reject) => {
           api
-            .post('/v1/transaksi/orderpembelian/simpan', this.form)
+            .post('/v1/transaksi/penerimaan/simpan', this.form)
             .then(({ data }) => {
               //console.log('sasa', data?.result)
               this.loading = false
-              const arr = useAdminListTransaksiOrderBarangStore()
-              // const itemnya = [...arr.items]
-              //arr.items.unshift(data?.result?.original[0])
-              // if (!add) {
-              //   itemnya.unshift(data?.result?.original[0])
-              // } else {
-              //   // arr?.items?.map((obj) =>
-              //   //   obj?.id === data?.result?.original[0]?.id
-              //   //     ? { ...obj, ...data?.result?.original[0] }
-              //   //     : obj,
-              //   // )
-              //   const desah = itemnya.findIndex((f) => f.id === add.id)
-              //   if (desah >= 0) itemnya[desah] = data?.result?.original[0]
-              //   // desah = data?.result?.original[0]
-              //   console.log('sasasasasasasasa', itemnya)
-              // }
+              const arr = useAdminListTransaksiPenerimaanBarangStore()
               if (!this.form.noorder) {
                 //console.log('weweweweww', data?.notrans)
                 this.form.noorder = data?.notrans
@@ -97,9 +72,8 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               resolve(data)
             })
             .catch((err) => {
-              console.log('sasasx', err)
-              notifError(err?.response?.data?.message)
-              this.loading = false
+              // console.log('sasasx', err)
+              // this.loading = false
               reject(err?.data)
             })
         })
@@ -136,7 +110,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
           // console.log(resp)
           if (resp.status === 200) {
             // console.log('sasasa', resp?.data?.result)
-            const arr = useAdminListTransaksiOrderBarangStore()
+            const arr = useAdminListTransaksiPenerimaanBarangStore()
             arr.olahdata(resp?.data?.result, id)
 
             const hasil = resp?.data?.result[0]
@@ -160,7 +134,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
             .then(({ data }) => {
               this.lock = false
 
-              const arr = useAdminListTransaksiOrderBarangStore()
+              const arr = useAdminListTransaksiPenerimaanBarangStore()
               arr.olahdata(data?.result)
 
               const hasil = data?.result[0]
@@ -169,7 +143,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               hasil.total = total
 
               this.item = hasil
-              notifSuccess(data?.message)
+              notifSuccess('Data berhasil disimpan')
               resolve(data)
             })
             .catch((err) => {
@@ -183,5 +157,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
 )
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useAdminFormTransaksiOrderBarangStore, import.meta.hot))
+  import.meta.hot.accept(
+    acceptHMRUpdate(useAdminFormTransaksiPenerimaanBarangStore, import.meta.hot),
+  )
 }
