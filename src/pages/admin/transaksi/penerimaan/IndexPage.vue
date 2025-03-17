@@ -4,35 +4,35 @@
       v-if="isList"
       @add="
         () => {
-          store.item = null
+          storepenerimaan.itemPenerimaan = null
           isList = false
         }
       "
       @edit="
         (data) => {
-          store.item = data
+          storepenerimaan.itemPenerimaan = data
           isList = false
         }
       "
     />
 
-    <FormPage v-else :data="store.item" @back="isList = true" />
+    <FormPage v-else :data="storepenerimaan.itemPenerimaan" @back="isList = true" :flaging="1" />
   </div>
 </template>
 
 <script setup>
+import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
-import { useAdminListTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/list'
 import { defineAsyncComponent, ref } from 'vue'
 const ListPage = defineAsyncComponent(() => import('./comp/ListPage.vue'))
 const FormPage = defineAsyncComponent(() => import('./comp/FormPage.vue'))
 
 const isList = ref(true)
 
-const store = useAdminFormTransaksiPenerimaanBarangStore()
-const storelist = useAdminListTransaksiPenerimaanBarangStore()
+const storepenerimaan = useAdminFormTransaksiPenerimaanBarangStore()
+const soterorder = useAdminListTransaksiOrderBarangStore()
 
-storelist.getList()
+soterorder.getorderanfix()
 </script>
 
 <style scoped></style>

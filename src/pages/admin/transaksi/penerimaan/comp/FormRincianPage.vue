@@ -12,6 +12,21 @@
           </div>
         </q-card-section>
         <q-card-section style="max-height: 50vh" class="scroll">
+          <!-- <div v-if="props?.flaging === '1'">
+            <div class="row q-gutter-sm">
+              <div class="col-6">
+                <app-input label="No. order" disable :v-model="props?.data" />
+              </div>
+              <div class="col-1">
+                <q-btn round color="primary" icon="find_in_page" @click="cariorderan()" />
+              </div>
+              <div class="col-6">
+                <app-input label="Supllier" disable v-model="store.form.suplier" />
+              </div>
+            </div>
+            <q-separator class="q-mt-sm" />
+          </div>
+          <div v-else> -->
           <div class="row q-gutter-sm">
             <div class="col-6">
               <app-input label="No. order" disable v-model="store.form.noorder" />
@@ -57,7 +72,6 @@
                           v-model="store.form.jumlahpo"
                           :model-value="item?.jumlahpo"
                           type="number"
-                          mask="###.###.###.###"
                         />
                       </div>
                       <div class="col-2">
@@ -84,6 +98,7 @@
               </q-item>
             </transition-group>
           </q-list>
+          <!-- </div> -->
         </q-card-section>
       </q-card>
     </div>
@@ -111,10 +126,10 @@ function cariorderan() {
 }
 
 function onSubmit(val) {
-  console.log('val', val)
+  console.log('val', val?.jumlahpo)
   store.form.id = val?.id
   store.form.kdbarang = val?.kdbarang
-  store.form.jumlahpo = val?.jumlahpo
+  // store.form.jumlahpo = val?.jumlahpo
   store.form.jumlahpo_k = val?.jumlahpo_k
   store.form.satuan_b = val?.satuan_b
   store.form.satuan_k = val?.satuan_k
@@ -132,10 +147,15 @@ function onSubmit(val) {
 //   })
 // })
 
-// const props = defineProps({
-//   data: {
-//     type: Object,
-//     default: null,
-//   },
-// })
+// eslint-disable-next-line no-unused-vars
+const props = defineProps({
+  data: {
+    type: Object,
+    default: null,
+  },
+  flaging: {
+    type: String,
+    default: '',
+  },
+})
 </script>

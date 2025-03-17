@@ -42,8 +42,8 @@
               :initial-index="storePenerimaanH.params.page"
             >
               <q-intersection
-                v-for="(item, i) in storePenerimaanH.items"
-                :key="i"
+                v-for="(item, x) in storePenerimaanH.items"
+                :key="x"
                 transition="fade"
                 class="example-item"
               >
@@ -59,22 +59,33 @@
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1">{{ item?.noorder }}</q-item-label>
+                    <q-item-label lines="1">
+                      <span class="text-weight-bold text-primary"
+                        >No. Penerimaan : {{ item?.nopenerimaan }}</span
+                      >
+                      <span class="text-weight-bold"> || Supplier : {{ item?.suplier?.nama }}</span>
+                    </q-item-label>
                     <q-item-label caption lines="2">
-                      <span class="text-weight-bold">-- {{ item?.tgl }}</span>
-                      <span class="text-weight-bold text-red"> || TOTAL ORDERAN : </span>
+                      <span class="text-weight-bold"
+                        ><q-badge rounded outline color="yellow">
+                          No. Order : {{ item?.noorder }}
+                        </q-badge></span
+                      >
+                      <span class="text-weight-bold text-red">
+                        || TOTAL BARANG DATANG : {{ item?.total }}</span
+                      >
                     </q-item-label>
                   </q-item-section>
-                  <!-- <q-item-section v-if="hoveredId === item?.id" side>
+                  <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
                       <app-btn-edit-list @click="lihatdetail(item)" />
                       <app-btn-delete-list />
                     </div>
                   </q-item-section>
                   <q-item-section v-else side top>
-                    <q-item-label caption>{{ humanDate(item?.tglorder) }}</q-item-label>
-                    <q-item-label caption>{{ jamTnpDetik(item?.tglorder) }}</q-item-label>
-                  </q-item-section> -->
+                    <q-item-label caption>{{ humanDate(item?.tgl) }}</q-item-label>
+                    <q-item-label caption>{{ jamTnpDetik(item?.tgl) }}</q-item-label>
+                  </q-item-section>
                 </q-item>
                 <q-separator inset="item" />
               </q-intersection>
@@ -88,14 +99,13 @@
           </div>
         </q-list>
       </div>
-      <!-- <div class="column full-height flex-center">
-        BELUM ADA DATA
-      </div> -->
+      <div class="column full-height flex-center">BELUM ADA DATA</div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { humanDate, jamTnpDetik } from 'src/modules/formatter'
 import { useAdminListTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/list'
 import { computed, ref } from 'vue'
 

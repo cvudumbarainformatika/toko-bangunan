@@ -3,7 +3,7 @@
     <div class="full-height full-width">
       <div class="row full-height">
         <q-card flat bordered square class="col-6 full-height">
-          <FormRincianPage @back="emits('back')" :data="data" />
+          <FormRincianPage @back="emits('back')" :data="data" :flaging="1" />
         </q-card>
         <q-card flat bordered square class="col-6 full-height">
           <!-- <ListAnamnesis :key="props.pasien" :pasien="props.pasien" :loadingaja="loadingaja" /> -->
@@ -20,12 +20,17 @@ import ListRincianPage from './ListRincianPage.vue'
 
 const emits = defineEmits(['back'])
 
-defineProps({
+const props = defineProps({
   data: {
     type: Object,
     default: null,
   },
+  flaging: {
+    type: String,
+    default: '',
+  },
 })
+console.log('get', props?.data)
 
 // const lists = computed(() => {
 //   const arr = props.data?.rinci

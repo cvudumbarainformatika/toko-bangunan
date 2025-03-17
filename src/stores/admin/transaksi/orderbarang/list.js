@@ -33,6 +33,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
 
     actions: {
       async getList() {
+        this.items = []
         // console.log('get master barang page', this.params.page);
         this.params.page = 1
         this.isError = false

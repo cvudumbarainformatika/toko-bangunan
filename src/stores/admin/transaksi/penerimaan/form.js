@@ -8,13 +8,13 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
   {
     state: () => ({
       fixed: false,
-      item: null,
+      itemPenerimaan: null,
       form: {
         nopenerimaan: '',
         noorder: '',
         kdsuplier: '',
-        jumlahpo: 0,
-        hargaasli: 0,
+        // jumlahpo: 0,
+        // hargaasli: 0,
         id: '',
       },
       rinci: [],
@@ -47,12 +47,13 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
           api
             .post('/v1/transaksi/penerimaan/simpan', this.form)
             .then(({ data }) => {
-              //console.log('sasa', data?.result)
+              console.log('sasa', data?.result)
               this.loading = false
               const arr = useAdminListTransaksiPenerimaanBarangStore()
-              if (!this.form.noorder) {
-                //console.log('weweweweww', data?.notrans)
-                this.form.noorder = data?.notrans
+              if (!this.form.nopenerimaan) {
+                console.log('weweweweww', data?.result[0]?.nopenerimaan)
+                this.form.nopenerimaan = data?.result[0]?.nopenerimaan
+                console.log('sasas', this.form.nopenerimaan)
               }
               arr.olahdata(data?.result)
 
@@ -60,7 +61,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
               const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
               hasil.total = total
 
-              this.item = hasil
+              this.itemPenerimaan = hasil
 
               //console.log('addd', this.item)
               notifSuccess('Data berhasil disimpan')
@@ -118,7 +119,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
             const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
             hasil.total = total
 
-            this.item = hasil
+            this.itemPenerimaan = hasil
             notifSuccess('Data berhasil dihapus')
           }
         } catch (error) {
@@ -142,7 +143,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
               const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
               hasil.total = total
 
-              this.item = hasil
+              this.itemPenerimaan = hasil
               notifSuccess('Data berhasil disimpan')
               resolve(data)
             })

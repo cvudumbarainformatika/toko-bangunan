@@ -2,7 +2,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 
 export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
-  'admin-list-transaksi-orderbarang-store',
+  'admin-list-transaksi-penerimaanbarang-store',
   {
     state: () => ({
       meta: null,
@@ -26,7 +26,8 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
 
     actions: {
       async getList() {
-        // console.log('get master barang page', this.params.page);
+        this.items = []
+        console.log('ini penerimaan')
         this.params.page = 1
         this.isError = false
         this.loading = true
@@ -58,7 +59,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
 
         return new Promise((resolve) => {
           api
-            .get('/v1/transaksi/orderpembelian/getlistorder', params)
+            .get('/v1/transaksi/penerimaan/getpenerimaan', params)
             .then(({ data }) => {
               // console.log('heder order barang', data)
               this.meta = data
@@ -104,13 +105,15 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
           const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
           const hasil = {
             id: x?.id,
+            nopenerimaan: x?.nopenerimaan,
             noorder: x?.noorder,
-            tglorder: x?.tglorder,
-            kdsuplier: x?.kdsuplier,
+            tgl: x?.tgl,
+            kdsuplier: x?.kdsupllier,
             flaging: x?.flaging,
             suplier: x?.suplier,
             total: total,
             rinci: x?.rinci,
+            orderan_h: x?.orderheder,
           }
           // console.log('hasil', hasil)
           // hasilglobal.push(hasil)

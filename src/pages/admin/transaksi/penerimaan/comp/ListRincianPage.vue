@@ -3,44 +3,90 @@
     <div class="col full-height">
       <q-card flat bordered square class="full-height" style="overflow: hidden">
         <!-- <q-avatar size="33px" color="dark" text-color="white">-</q-avatar> -->
-        <q-form ref="refForm" class="column full-height">
-          <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
-            <div class="row items-center justify-between">
-              <div class="f-12 text-weight-bold" style="height: 23px">
-                <span> Data Order || No.Order : 00000</span>
-              </div>
+
+        <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
+          <div class="row items-center justify-between">
+            <div class="f-12 text-weight-bold" style="height: 23px">
+              <span> Data Penerimaan || No. Penerimaan : {{ props?.data?.nopenerimaan }}</span>
             </div>
-          </q-card-section>
-          <q-card-section style="max-height: 50vh" class="scroll">
-            <div class="row q-gutter-sm">
-              <div class="col-6">
-                <app-input label="No. Orderan" />
-              </div>
-              <div class="col-5">
-                <app-input label="No. Orderan" />
-              </div>
-            </div>
-          </q-card-section>
-        </q-form>
+          </div>
+        </q-card-section>
+        <q-card-section style="padding: 0" class="full-height">
+          <q-scroll-area style="height: calc(100% - 32px)">
+            <q-list separator>
+              <transition-group name="list">
+                <q-item v-for="(item, n) in lists" :key="n" class="list-move">
+                  <q-item-section>
+                    <div class="row full-width">
+                      <div class="col-12">
+                        <span class="text-weight-medium">{{ item?.mbarang?.namabarang }}</span>
+                        <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
+                      </div>
+                      <div class="col-2">
+                        <span class="text-weight-medium">
+                          {{ item?.jumlah_b }} {{ item?.satuan_b }}</span
+                        >
+                        <span class="text-grey-8" v-if="item?.isi !== '1'">
+                          ({{ item?.jumlah_k }} {{ item?.satuan_k }})</span
+                        >
+                      </div>
+                      <div class="col-1">
+                        <span> X </span>
+                      </div>
+                      <div class="col-3">
+                        <span class="text-weight-medium">
+                          {{ formatRpDouble(item?.harga_beli_b) }}</span
+                        >
+                      </div>
+                      <div class="col-1">
+                        <span class="text-weight-medium"> = </span>
+                      </div>
+                      <div class="col-5">
+                        <span class="text-weight-medium">
+                          {{ formatRpDouble(item?.subtotal) }}</span
+                        >
+                      </div>
+                    </div>
+                  </q-item-section>
+                  <!-- <q-item-section top side>
+                      <div class="text-grey-8">
+                        <q-btn
+                          class="gt-xs"
+                          size="12px"
+                          flat
+                          dense
+                          round
+                          icon="delete"
+                          @click="hapusrincian(item?.id, data?.noorder)"
+                        />
+                      </div>
+                    </q-item-section> -->
+                </q-item>
+              </transition-group>
+            </q-list>
+          </q-scroll-area>
+        </q-card-section>
       </q-card>
     </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+
 // import { useQuasar } from 'quasar'
-// import { formatRpDouble } from 'src/modules/formatter'
+import { formatRpDouble } from 'src/modules/formatter'
 // import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 // import { computed } from 'vue'
 
 // const $q = useQuasar()
 // const storeform = useAdminFormTransaksiOrderBarangStore()
-// const props = defineProps({
-//   data: {
-//     type: Object,
-//     default: null,
-//   },
-// })
+const props = defineProps({
+  data: {
+    type: Object,
+    default: null,
+  },
+})
 
 // function hapusrincian(id, noorder) {
 //   $q.dialog({
@@ -62,10 +108,11 @@
 //     })
 // }
 
-// const lists = computed(() => {
-//   const arr = props.data?.rinci
-//   return arr?.sort((a, b) => {
-//     return b.id - a.id
-//   })
-// })
+const lists = computed(() => {
+  const arr = props.data?.rinci
+  console.log('arr', arr)
+  return arr?.sort((a, b) => {
+    return b.id - a.id
+  })
+})
 </script>
