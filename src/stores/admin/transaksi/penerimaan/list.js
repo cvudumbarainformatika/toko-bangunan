@@ -98,7 +98,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
         })
       },
       olahdata(val) {
-        // console.log('asli', val)
+        console.log('asli', val)
         // const hasilglobal = []
         val?.forEach((x) => {
           const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)

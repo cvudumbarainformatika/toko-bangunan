@@ -60,11 +60,10 @@
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">{{ item?.noorder }}</q-item-label>
-                    <!-- <q-item-label caption lines="2">
-                      <span class="text-weight-bold">-- {{ item?.suplier?.nama }}</span>
-                      <span class="text-weight-bold text-red"> || TOTAL ORDERAN : </span
-                      ><q-badge outline color="red">{{ formatRpDouble(item?.total) }}</q-badge>
-                    </q-item-label> -->
+                    <q-item-label caption lines="2">
+                      <span class="text-weight-bold">-- {{ item?.tgl }}</span>
+                      <span class="text-weight-bold text-red"> || TOTAL ORDERAN : </span>
+                    </q-item-label>
                   </q-item-section>
                   <!-- <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
