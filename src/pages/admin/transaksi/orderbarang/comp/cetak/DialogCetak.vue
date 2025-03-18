@@ -12,7 +12,7 @@
             </q-btn>
           </q-bar>
         </q-header>
-        <q-page-container>
+        <q-page-container id="printMe">
           <q-card-section class="q-pt-sm full-width">
             <!-- Tambahkan class atau style untuk memastikan gambar tampil -->
             <div class="full-width q-px-md q-py-sm">
@@ -21,9 +21,9 @@
                   <img style="height: 80px" src="~assets/icon.svg" />
                 </div>
                 <div class="col-auto">
-                  <div class="text-h6 text-left">Jangur Toko Bangunan</div>
-                  <div class="text-h8 text-left">Jalan Jangur xxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
-                  <div class="text-h8 text-left">Telp. (0335) xx-xx-xxx</div>
+                  <div class="text-h6 text-left">{{ profil?.items?.namatoko }}</div>
+                  <div class="text-h8 text-left">{{ profil?.items?.alamat }}</div>
+                  <div class="text-h8 text-left">Telp. {{ profil?.items?.telepon }}</div>
                 </div>
               </div>
 
@@ -51,7 +51,7 @@
                 </div>
               </div>
             </div>
-            <q-markup-table flat bordered wrap-cells :separator="separator">
+            <table class="full-width" flat bordered wrap-cells>
               <thead>
                 <tr>
                   <th class="text-center" style="width: 20px">No.</th>
@@ -63,7 +63,7 @@
               </thead>
               <tbody>
                 <tr v-for="(list, n) in listOrder?.rinci" :key="n">
-                  <td>{{ n + 1 }}</td>
+                  <td class="text-right">{{ n + 1 }}.</td>
                   <td>{{ list.kdbarang }} - {{ list.mbarang?.namabarang }}</td>
                   <td>{{ list.jumlahpo }} {{ list.mbarang?.satuan_b }}</td>
                   <td class="text-right">
@@ -78,16 +78,16 @@
                   <td class="text-right text-bold">{{ formatRpDouble(listOrder?.total) }}</td>
                 </tr>
               </tbody>
-            </q-markup-table>
+            </table>
           </q-card-section>
           <q-card-section>
             <div class="row justify-between full-width">
               <div class="col-6 text-center flex-start"></div>
               <div class="col-6 text-center flex-end">
                 <div>Probolinggo,</div>
-                <div>Jangur Toko Bangunan</div>
+                <div>{{ profil?.items?.namatoko }}</div>
                 <div class="q-pt-xl"></div>
-                <div>Nama xxxx</div>
+                <div>{{ profil?.items?.pemilik }}</div>
               </div>
             </div>
           </q-card-section>
@@ -115,7 +115,6 @@ import { useProfilStore } from 'src/stores/admin/profil'
 import { onMounted, ref } from 'vue'
 // import { usePrint } from 'vue3-print-nb'
 
-const separator = ref('cell')
 const isDialogOpen = ref(false)
 const listOrder = ref(null)
 // Fungsi untuk membuka dialog
@@ -125,10 +124,10 @@ const openDialog = (item) => {
   isDialogOpen.value = true
 }
 
-const storeprofil = useProfilStore()
+const profil = useProfilStore()
 
 onMounted(() => {
-  storeprofil.getList()
+  profil.getList()
 })
 
 // Fungsi untuk menutup dialog
@@ -140,13 +139,16 @@ const printed = ref(false)
 const printObj = {
   id: 'printMe',
   popTitle: 'Nota Order Barang',
+
   beforeOpenCallback() {
     printed.value = true
     console.log('wait...')
   },
+
   openCallback() {
     console.log('opened')
   },
+
   closeCallback() {
     printed.value = false
     console.log('closePrint')
@@ -159,3 +161,13 @@ defineExpose({
   openDialog,
 })
 </script>
+
+<style>
+/* Tambahkan border pada setiap td dan th */
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
