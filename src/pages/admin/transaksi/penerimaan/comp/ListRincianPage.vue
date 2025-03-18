@@ -35,7 +35,7 @@
                       </div>
                       <div class="col-3">
                         <span class="text-weight-medium">
-                          {{ formatRpDouble(item?.harga_beli_b) }}</span
+                          {{ formatRpDouble(item?.hargafaktur) }}</span
                         >
                       </div>
                       <div class="col-1">
@@ -48,19 +48,19 @@
                       </div>
                     </div>
                   </q-item-section>
-                  <!-- <q-item-section top side>
-                      <div class="text-grey-8">
-                        <q-btn
-                          class="gt-xs"
-                          size="12px"
-                          flat
-                          dense
-                          round
-                          icon="delete"
-                          @click="hapusrincian(item?.id, data?.noorder)"
-                        />
-                      </div>
-                    </q-item-section> -->
+                  <q-item-section top side>
+                    <div class="text-grey-8">
+                      <q-btn
+                        class="gt-xs"
+                        size="12px"
+                        flat
+                        dense
+                        round
+                        icon="delete"
+                        @click="hapusrincian(item?.id, storeform.form.nopenerimaan)"
+                      />
+                    </div>
+                  </q-item-section>
                 </q-item>
               </transition-group>
             </q-list>
@@ -76,11 +76,13 @@ import { computed } from 'vue'
 
 // import { useQuasar } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
+import { useQuasar } from 'quasar'
+import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
 // import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 // import { computed } from 'vue'
 
-// const $q = useQuasar()
-// const storeform = useAdminFormTransaksiOrderBarangStore()
+const $q = useQuasar()
+const storeform = useAdminFormTransaksiPenerimaanBarangStore()
 const props = defineProps({
   data: {
     type: Object,
@@ -88,25 +90,25 @@ const props = defineProps({
   },
 })
 
-// function hapusrincian(id, noorder) {
-//   $q.dialog({
-//     dark: true,
-//     title: 'Peringatan',
-//     message: 'Apakah Data ini akan dihapus?',
-//     cancel: true,
-//     persistent: true,
-//   })
-//     .onOk(() => {
-//       // console.log('OK')
-//       storeform.deleteData(id, noorder)
-//     })
-//     .onCancel(() => {
-//       // console.log('Cancel')
-//     })
-//     .onDismiss(() => {
-//       // console.log('I am triggered on both OK and Cancel')
-//     })
-// }
+function hapusrincian(id, nopenerimaan) {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true,
+  })
+    .onOk(() => {
+      // console.log('OK')
+      storeform.deleteData(id, nopenerimaan)
+    })
+    .onCancel(() => {
+      // console.log('Cancel')
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    })
+}
 
 const lists = computed(() => {
   const arr = props.data?.rinci

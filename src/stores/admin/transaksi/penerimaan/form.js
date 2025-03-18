@@ -13,8 +13,8 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         nopenerimaan: '',
         noorder: '',
         kdsuplier: '',
-        // jumlahpo: 0,
-        // hargaasli: 0,
+        jumlahpo: 0,
+        hargaasli: 0,
         id: '',
       },
       rinci: [],
@@ -104,10 +104,10 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
           // this.form.hargajual2 = 0
         }
       },
-      async deleteData(id, noorder) {
-        const payload = { id, noorder }
+      async deleteData(id, nopenerimaan) {
+        const payload = { id, nopenerimaan }
         try {
-          const resp = await api.post('v1/transaksi/orderpembelian/hapusrincian', payload)
+          const resp = await api.post('v1/transaksi/penerimaan/hapusrincian', payload)
           // console.log(resp)
           if (resp.status === 200) {
             // console.log('sasasa', resp?.data?.result)
@@ -125,33 +125,6 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         } catch (error) {
           notifError(error)
         }
-      },
-      async kunci(val, noorder) {
-        this.lock = true
-        const payload = { val, noorder }
-        return new Promise((resolve, reject) => {
-          api
-            .post('/v1/transaksi/orderpembelian/kunci', payload)
-            .then(({ data }) => {
-              this.lock = false
-
-              const arr = useAdminListTransaksiPenerimaanBarangStore()
-              arr.olahdata(data?.result)
-
-              const hasil = data?.result[0]
-              // console.log('ccc', hasil)
-              const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
-              hasil.total = total
-
-              this.itemPenerimaan = hasil
-              notifSuccess('Data berhasil disimpan')
-              resolve(data)
-            })
-            .catch((err) => {
-              this.lock = false
-              reject(err)
-            })
-        })
       },
     },
   },

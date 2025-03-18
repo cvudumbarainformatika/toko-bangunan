@@ -84,7 +84,7 @@
                           type="number"
                         />
                       </div>
-                      <div class="col-2">
+                      <div class="col-2" v-if="item?.flaging !== '1'">
                         <app-btn
                           :loading="store.loading && store.form.id === item.id"
                           type="submit"
@@ -129,7 +129,7 @@ function onSubmit(val) {
   console.log('val', val?.jumlahpo)
   store.form.id = val?.id
   store.form.kdbarang = val?.kdbarang
-  // store.form.jumlahpo = val?.jumlahpo
+  store.form.jumlahpo = store.form.jumlahpo === 0 ? val?.jumlahpo : store.form.jumlahpo
   store.form.jumlahpo_k = val?.jumlahpo_k
   store.form.satuan_b = val?.satuan_b
   store.form.satuan_k = val?.satuan_k
