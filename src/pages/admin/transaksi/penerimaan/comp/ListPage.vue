@@ -63,7 +63,7 @@
                       <span class="text-weight-bold text-primary"
                         >No. Penerimaan : {{ item?.nopenerimaan }}</span
                       >
-                      <span class="text-weight-bold"> || Supplier : {{ item?.suplier?.nama }}</span>
+                      <span class="text-weight-bold"> || Supplier : {{ item?.suplier }}</span>
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
@@ -72,7 +72,7 @@
                         </q-badge></span
                       >
                       <span class="text-weight-bold text-red">
-                        || TOTAL BARANG DATANG : {{ item?.total }}</span
+                        || TOTAL BARANG DATANG : {{ formatRpDouble(item?.total) }}</span
                       >
                     </q-item-label>
                   </q-item-section>
@@ -99,13 +99,13 @@
           </div>
         </q-list>
       </div>
-      <div class="column full-height flex-center">BELUM ADA DATA</div>
+      <!-- <div class="column full-height flex-center">BELUM ADA DATA</div> -->
     </div>
   </div>
 </template>
 
 <script setup>
-import { humanDate, jamTnpDetik } from 'src/modules/formatter'
+import { formatRpDouble, humanDate, jamTnpDetik } from 'src/modules/formatter'
 import { useAdminListTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/list'
 import { computed, ref } from 'vue'
 

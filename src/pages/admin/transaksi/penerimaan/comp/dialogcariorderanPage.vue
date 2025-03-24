@@ -38,7 +38,7 @@
               </q-item-section>
 
               <q-item-section side>
-                <div class="q-gutter-sm" v-if="item?.flaging === '1'">
+                <div class="q-gutter-sm">
                   <q-btn
                     flat
                     round
@@ -71,12 +71,17 @@ import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/tra
 const storeorder = useAdminListTransaksiOrderBarangStore()
 const storepenerimaan = useAdminFormTransaksiPenerimaanBarangStore()
 
+storeorder.getorderanfix()
+
 function pilih(item) {
-  // console.log('item', item)
+  console.log('item', item)
   // storepenerimaan.form.id = item?.id
   storepenerimaan.form.noorder = item?.noorder
   storepenerimaan.form.suplier = item?.suplier?.nama
   storepenerimaan.form.kdsuplier = item?.kdsuplier
-  storepenerimaan.rinci = item?.rinci
+  storepenerimaan.rinci = [...item.rinci]
+  // storepenerimaan.form.jumlahpo = item?.rinci?.jumlahpo
+  storeorder.fixed = false
+  storepenerimaan.hiden = false
 }
 </script>

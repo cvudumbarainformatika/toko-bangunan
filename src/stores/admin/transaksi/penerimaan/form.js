@@ -13,13 +13,16 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         nopenerimaan: '',
         noorder: '',
         kdsuplier: '',
+        suplier: '',
         jumlahpo: 0,
         hargaasli: 0,
         id: '',
+        kunci: null,
       },
       rinci: [],
       loading: false,
       lock: false,
+      hiden: false,
     }),
     // persist: true,
     // getters: {
@@ -47,13 +50,10 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
           api
             .post('/v1/transaksi/penerimaan/simpan', this.form)
             .then(({ data }) => {
-              console.log('sasa', data?.result)
               this.loading = false
               const arr = useAdminListTransaksiPenerimaanBarangStore()
               if (!this.form.nopenerimaan) {
-                console.log('weweweweww', data?.result[0]?.nopenerimaan)
                 this.form.nopenerimaan = data?.result[0]?.nopenerimaan
-                console.log('sasas', this.form.nopenerimaan)
               }
               arr.olahdata(data?.result)
 
@@ -74,7 +74,9 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
             })
             .catch((err) => {
               // console.log('sasasx', err)
-              // this.loading = false
+              this.loading = false
+              const msg = err?.response?.data?.message
+              notifError(msg)
               reject(err?.data)
             })
         })

@@ -27,13 +27,20 @@
             <q-separator class="q-mt-sm" />
           </div>
           <div v-else> -->
+
           <div class="row q-gutter-sm">
             <div class="col-6">
               <app-input label="No. order" disable v-model="store.form.noorder" />
             </div>
-            <div class="col-1">
+            <div class="col-1" v-if="store.form.nopenerimaan === undefined">
               <q-btn round color="primary" icon="find_in_page" @click="cariorderan()" />
             </div>
+            <div class="col-1" v-else-if="store.form.nopenerimaan !== undefined">
+              <q-btn round color="primary" icon="lock_open" />
+            </div>
+            <!-- <div class="col-1" v-else-if="store.form.kunci === '1'">
+              <q-btn round color="primary" icon="lock" />
+            </div> -->
             <div class="col-6">
               <app-input label="Supllier" disable v-model="store.form.suplier" />
             </div>
@@ -65,26 +72,24 @@
                         <span class="text-weight-medium"> {{ formatRpDouble(item?.hargapo) }}</span>
                       </div>
                       <div class="col-2">
-                        <q-input
+                        <AppInputRp
                           label="Barang Datang"
                           dense
                           outlined
-                          v-model="store.form.jumlahpo"
-                          :model-value="item?.jumlahpo"
-                          type="number"
+                          v-model="item.jumlahpox"
+                          currency
                         />
                       </div>
                       <div class="col-2">
-                        <q-input
+                        <app-input-rp
                           label="harga fix"
                           dense
                           outlined
-                          v-model="store.form.hargaasli"
-                          :model-value="item?.hargapo"
-                          type="number"
+                          v-model="item.hargafix"
+                          currency
                         />
                       </div>
-                      <div class="col-2" v-if="item?.flaging !== '1'">
+                      <div class="col-2">
                         <app-btn
                           :loading="store.loading && store.form.id === item.id"
                           type="submit"
@@ -94,6 +99,7 @@
                       </div>
                     </div>
                   </q-item-section>
+                  <q-separator class="q-mt-sm" />
                 </q-form>
               </q-item>
             </transition-group>
@@ -111,11 +117,13 @@ import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaks
 import dialogcariorderanPage from './dialogcariorderanPage.vue'
 // import { computed } from 'vue'
 
-import { formatRpDouble } from 'src/modules/formatter'
+import { formatRpDouble, olahUang } from 'src/modules/formatter'
 // import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
 
 // import AppSelectServer from 'src/components/~global/AppSelectServer.vue'
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
+import AppInputRp from 'src/components/~global/AppInputRp.vue'
+import { notifError } from 'src/modules/notifs'
 
 const store = useAdminFormTransaksiPenerimaanBarangStore()
 const storeorder = useAdminListTransaksiOrderBarangStore()
@@ -126,17 +134,22 @@ function cariorderan() {
 }
 
 function onSubmit(val) {
-  console.log('val', val?.jumlahpo)
+  console.log('val', val)
   store.form.id = val?.id
   store.form.kdbarang = val?.kdbarang
-  store.form.jumlahpo = store.form.jumlahpo === 0 ? val?.jumlahpo : store.form.jumlahpo
+  store.form.jumlahorder = val?.jumlahpo
+  store.form.jumlahpo = olahUang(val?.jumlahpox)
   store.form.jumlahpo_k = val?.jumlahpo_k
   store.form.satuan_b = val?.satuan_b
   store.form.satuan_k = val?.satuan_k
   store.form.isi = val?.isi
   store.form.hargafaktur = val?.hargapo
-  store.form.hargaasli = store.form.hargaasli === 0 ? val?.hargapo : store.form.hargaasli
-  store.save()
+  store.form.hargaasli = olahUang(val?.hargafix)
+  if (parseFloat(store.form.jumlahorder) < parseFloat(store.form.jumlahpo)) {
+    notifError('Jumlah yang Anda Masukkan Melebihi jumlah pesanan...!!!')
+  } else {
+    store.save()
+  }
 }
 
 // const lists = computed(() => {

@@ -16,12 +16,12 @@
       "
     />
 
-    <FormPage v-else :data="storepenerimaan.itemPenerimaan" @back="isList = true" :flaging="1" />
+    <FormPage v-else :data="storepenerimaan.itemPenerimaan" @back="isList = true" />
   </div>
 </template>
 
 <script setup>
-import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
+// import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
 import { defineAsyncComponent, ref } from 'vue'
 const ListPage = defineAsyncComponent(() => import('./comp/ListPage.vue'))
@@ -30,9 +30,9 @@ const FormPage = defineAsyncComponent(() => import('./comp/FormPage.vue'))
 const isList = ref(true)
 
 const storepenerimaan = useAdminFormTransaksiPenerimaanBarangStore()
-const soterorder = useAdminListTransaksiOrderBarangStore()
+// const soterorder = useAdminListTransaksiOrderBarangStore()
 
-soterorder.getorderanfix()
+// soterorder.getorderanfix()
 </script>
 
 <style scoped></style>

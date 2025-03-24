@@ -3,10 +3,9 @@
     <div class="full-height full-width">
       <div class="row full-height">
         <q-card flat bordered square class="col-6 full-height">
-          <FormRincianPage @back="emits('back')" :data="data" :flaging="1" />
+          <FormRincianPage @back="emits('back')" :data="data" />
         </q-card>
         <q-card flat bordered square class="col-6 full-height">
-          <!-- <ListAnamnesis :key="props.pasien" :pasien="props.pasien" :loadingaja="loadingaja" /> -->
           <ListRincianPage :data="data" />
         </q-card>
       </div>
@@ -14,10 +13,12 @@
   </div>
 </template>
 <script setup>
+import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
 import FormRincianPage from './FormRincianPage.vue'
 import ListRincianPage from './ListRincianPage.vue'
 // import { formatRpDouble } from 'src/modules/utils'
 
+const store = useAdminFormTransaksiPenerimaanBarangStore()
 const emits = defineEmits(['back'])
 
 const props = defineProps({
@@ -25,12 +26,14 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-  flaging: {
-    type: String,
-    default: '',
-  },
 })
 console.log('get', props?.data)
+store.form.noorder = props?.data?.noorder
+store.form.suplier = props?.data?.suplier
+store.form.nopenerimaan = props?.data?.nopenerimaan
+store.rinci = props?.data?.orderan_h?.rinci
+store.form.kunci = props?.data?.kunci
+store.hiden = true
 
 // const lists = computed(() => {
 //   const arr = props.data?.rinci
