@@ -53,6 +53,12 @@ const routes = [
         component: () => import('pages/admin/transaksi/cicilan/IndexPage.vue'),
       },
 
+      // Settings
+      {
+        path: '/admin/settings/profiltoko',
+        component: () => import('pages/admin/settings/profiltoko/IndexPage.vue'),
+      },
+
       // profile
       { path: '/admin/profile', component: () => import('pages/admin/profile/IndexPage.vue') },
     ],
