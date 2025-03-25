@@ -75,7 +75,7 @@
                           icon="task_alt"
                           class="absolute-center"
                           size="sm"
-                          @click="setThumbnail(image.id)"
+                          @click="setThumbnail(image.tempId)"
                         />
                       </div>
                     </div>
@@ -101,12 +101,6 @@
                     class="col-6"
                     v-model="store.form.kualitas"
                     label="Kualitas"
-                    :valid="{ required: store.form.kategori !== 'Keramik' }"
-                  />
-                  <app-input
-                    class="col-6"
-                    v-model="store.form.seri"
-                    label="Seri"
                     :valid="{ required: store.form.kategori !== 'Keramik' }"
                   />
                   <app-input
@@ -259,6 +253,9 @@ function imgClick() {
 
 const newImages = ref([])
 
+const generateRandomId = () => {
+  return Math.random().toString(36).substring(2, 15) // Random string
+}
 // Fungsi untuk menangani upload gambar
 const tambahGambar = (files) => {
   const maxSize = 2 * 1024 * 1024 // 2MB dalam bytes
@@ -270,8 +267,8 @@ const tambahGambar = (files) => {
   }
   const newRincians = files.map((file) => ({
     gambar: file,
-    // Untuk edit mode: jika ada properti lain dari server
-    ...(file.id ? { id: file.id } : {}),
+    tempId: generateRandomId(), // Gunakan timestamp sebagai identifier sementara
+    flag_thumbnail: null, // Default thumbnail tidak dipilih
   }))
   store.form.rincians = [...store.form.rincians, ...newRincians]
 }
@@ -292,22 +289,32 @@ const hapusGambar = async (index, id) => {
     console.error('Gagal menghapus gambar:', error)
   }
 }
-const setThumbnail = async (id) => {
-  console.log('id image', id)
-  if (id) {
-    try {
-      const success = await store.setthumbnail(id)
-      if (success) {
-        // Perbarui flag_thumbnail di store.form.rincians
-        store.form.rincians = store.form.rincians.map((image) => ({
-          ...image,
-          flag_thumbnail: image.id === id ? '1' : null,
-        }))
-      }
-    } catch (error) {
-      console.error('Gagal memilih thumbnail:', error)
-    }
-  }
+// const setThumbnail = async (id) => {
+//   console.log('id image', id)
+//   if (id) {
+//     try {
+//       const success = await store.setthumbnail(id)
+//       if (success) {
+//         // Perbarui flag_thumbnail di store.form.rincians
+//         store.form.rincians = store.form.rincians.map((image) => ({
+//           ...image,
+//           flag_thumbnail: image.id === id ? '1' : null,
+//         }))
+//       }
+//     } catch (error) {
+//       console.error('Gagal memilih thumbnail:', error)
+//     }
+//   }
+// }
+const setThumbnail = async (tempId) => {
+  console.log('tempId image', tempId)
+
+  // Perbarui flag_thumbnail di store.form.rincians
+  store.form.rincians = store.form.rincians.map((image) => ({
+    ...image,
+    flag_thumbnail: image.tempId === tempId ? '1' : null,
+  }))
+  console.log('store form', store.form.rincians)
 }
 
 // Fungsi untuk mendapatkan URL gambar (preview)
@@ -327,7 +334,13 @@ function onSubmit() {
 
   // Kirim data ke backend
   store
-    .save(props.data)
+    .save({
+      ...store.form, // Kirim semua data form
+      rincians: store.form.rincians.map((image) => ({
+        gambar: image.gambar,
+        flag_thumbnail: image.flag_thumbnail, // Pastikan flag_thumbnail dikirim
+      })),
+    })
     .then(() => {
       console.log('Data berhasil disimpan')
     })

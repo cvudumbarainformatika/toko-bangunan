@@ -9,9 +9,9 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
       id: null,
       kodebarang: null,
       namabarang: null,
+      namagabung: null,
       brand: null,
       kualitas: null,
-      seri: null,
       satuan_b: null,
       satuan_k: null,
       isi: 1,
@@ -34,6 +34,7 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
             this.form[key] = data[key]
           }
           this.form.kodebarang = data?.kodebarang
+          this.form.rincians = data.rincians || []
           console.log(this.form)
           resolve()
         })
@@ -65,11 +66,12 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
         formData.append('kodebarang', '') // Atau null, sesuai backend
       }
 
-      // Tambahkan file gambar ke FormData
+      // Tambahkan file gambar dan flag_thumbnail ke FormData
       this.form.rincians.forEach((rincian, index) => {
         if (rincian.gambar instanceof File) {
           formData.append(`rincians[${index}][gambar]`, rincian.gambar)
         }
+        formData.append(`rincians[${index}][flag_thumbnail]`, rincian.flag_thumbnail || null) // Kirim flag_thumbnail
       })
 
       console.log('Data yang dikirim:', this.form)
@@ -113,6 +115,10 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
       try {
         const resp = await api.post(`/v1/master/barang/setthumbnail`, params)
         if (resp.status === 200) {
+          this.form.rincians = this.form.rincians.map((image) => ({
+            ...image,
+            flag_thumbnail: image.id === id ? '1' : '0', // Set flag_thumbnail
+          }))
           notifSuccess('Berhasil Memilih Thumbnail')
           return true
         }

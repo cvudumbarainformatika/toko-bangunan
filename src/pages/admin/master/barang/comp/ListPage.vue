@@ -64,12 +64,12 @@
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1"
-                      >{{ item?.namabarang }} || {{ item?.brand }}</q-item-label
-                    >
+                    <q-item-label lines="1">{{ item?.namagabung }}</q-item-label>
                     <q-item-label caption lines="2">
-                      <span class="text-weight-bold">Grade: {{ item?.kualitas }}</span> |
-                      <span class="text-weight-bold">Size: {{ item?.ukuran }}</span>
+                      <span class="text-weight-bold">Kategori: {{ item?.kategori }}</span> |
+                      <span class="text-weight-bold"
+                        >Isi: {{ item?.isi }} {{ item?.satuan_k }}</span
+                      >
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
