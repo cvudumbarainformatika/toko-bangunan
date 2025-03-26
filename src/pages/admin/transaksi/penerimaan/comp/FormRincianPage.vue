@@ -35,12 +35,18 @@
             <div class="col-1" v-if="store.form.nopenerimaan === undefined">
               <q-btn round color="primary" icon="find_in_page" @click="cariorderan()" />
             </div>
-            <div class="col-1" v-else-if="store.form.nopenerimaan !== undefined">
-              <q-btn round color="primary" icon="lock_open" />
+            <div class="col-1" v-else-if="props?.data?.kunci === null">
+              <q-btn
+                round
+                color="primary"
+                icon="lock_open"
+                @click="store.kirimstok(lists, store.form.nopenerimaan)"
+                :loading="store.loadingstok"
+              />
             </div>
-            <!-- <div class="col-1" v-else-if="store.form.kunci === '1'">
+            <div class="col-1" v-else-if="props?.data?.kunci === '1'">
               <q-btn round color="primary" icon="lock" />
-            </div> -->
+            </div>
             <div class="col-6">
               <app-input label="Supllier" disable v-model="store.form.suplier" />
             </div>
@@ -124,6 +130,7 @@ import { formatRpDouble, olahUang } from 'src/modules/formatter'
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
 import AppInputRp from 'src/components/~global/AppInputRp.vue'
 import { notifError } from 'src/modules/notifs'
+import { computed } from 'vue'
 
 const store = useAdminFormTransaksiPenerimaanBarangStore()
 const storeorder = useAdminListTransaksiOrderBarangStore()
@@ -160,7 +167,6 @@ function onSubmit(val) {
 //   })
 // })
 
-// eslint-disable-next-line no-unused-vars
 const props = defineProps({
   data: {
     type: Object,
@@ -170,5 +176,13 @@ const props = defineProps({
     type: String,
     default: '',
   },
+})
+
+const lists = computed(() => {
+  const arr = props.data?.rinci
+  console.log('arr', arr)
+  return arr?.sort((a, b) => {
+    return b.id - a.id
+  })
 })
 </script>

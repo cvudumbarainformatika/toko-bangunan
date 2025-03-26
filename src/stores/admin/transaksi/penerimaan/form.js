@@ -4,7 +4,7 @@ import { useAdminListTransaksiPenerimaanBarangStore } from './list'
 import { notifError, notifSuccess } from 'src/modules/notifs'
 
 export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
-  'admin-form-transaksi-orderbarang-store',
+  'admin-form-transaksi-penerimaanbarang-store',
   {
     state: () => ({
       fixed: false,
@@ -21,8 +21,10 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
       },
       rinci: [],
       loading: false,
+      loadingstok: false,
       lock: false,
       hiden: false,
+      kunci: null,
     }),
     // persist: true,
     // getters: {
@@ -106,8 +108,8 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
           // this.form.hargajual2 = 0
         }
       },
-      async deleteData(id, nopenerimaan) {
-        const payload = { id, nopenerimaan }
+      async deleteData(id, nopenerimaan, noorder, kdbarang) {
+        const payload = { id, nopenerimaan, noorder, kdbarang }
         try {
           const resp = await api.post('v1/transaksi/penerimaan/hapusrincian', payload)
           // console.log(resp)
@@ -127,6 +129,35 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         } catch (error) {
           notifError(error)
         }
+      },
+      async kirimstok(list, nopenerimaan) {
+        this.loadingstok = true
+        const payload = { list, nopenerimaan }
+        return new Promise((resolve, reject) => {
+          api
+            .post('/v1/transaksi/penerimaan/kirimstok', payload)
+            .then(({ data }) => {
+              this.loadingstok = false
+
+              const arr = useAdminListTransaksiPenerimaanBarangStore()
+              arr.olahdata(data?.result)
+
+              const hasil = data?.result[0]
+              const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+              hasil.total = total
+
+              this.itemPenerimaan = hasil
+              notifSuccess('Data berhasil Ditambahkan ke stok...!!!')
+              resolve(data)
+            })
+            .catch((err) => {
+              // console.log('sasasx', err)
+              this.loadingstok = false
+              const msg = err?.response?.data?.message
+              notifError(msg)
+              reject(err?.data)
+            })
+        })
       },
     },
   },

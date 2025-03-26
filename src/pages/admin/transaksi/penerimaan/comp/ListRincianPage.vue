@@ -57,7 +57,14 @@
                         dense
                         round
                         icon="delete"
-                        @click="hapusrincian(item?.id, storeform.form.nopenerimaan)"
+                        @click="
+                          hapusrincian(
+                            item?.id,
+                            storeform.form.nopenerimaan,
+                            item?.noorder,
+                            item?.kdbarang,
+                          )
+                        "
                       />
                     </div>
                   </q-item-section>
@@ -90,7 +97,7 @@ const props = defineProps({
   },
 })
 
-function hapusrincian(id, nopenerimaan) {
+function hapusrincian(id, nopenerimaan, noorder, kdbarang) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -100,7 +107,7 @@ function hapusrincian(id, nopenerimaan) {
   })
     .onOk(() => {
       // console.log('OK')
-      storeform.deleteData(id, nopenerimaan)
+      storeform.deleteData(id, nopenerimaan, noorder, kdbarang)
     })
     .onCancel(() => {
       // console.log('Cancel')
