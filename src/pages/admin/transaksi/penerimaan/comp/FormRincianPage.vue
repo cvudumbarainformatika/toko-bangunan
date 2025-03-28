@@ -95,7 +95,8 @@
                           currency
                         />
                       </div>
-                      <div class="col-2">
+                      <div class="col-2" v-if="props?.data?.kunci === '1'"></div>
+                      <div class="col-2" v-else>
                         <app-btn
                           :loading="store.loading && store.form.id === item.id"
                           type="submit"
@@ -180,7 +181,7 @@ const props = defineProps({
 
 const lists = computed(() => {
   const arr = props.data?.rinci
-  console.log('arr', arr)
+  // console.log('arr', arr)
   return arr?.sort((a, b) => {
     return b.id - a.id
   })

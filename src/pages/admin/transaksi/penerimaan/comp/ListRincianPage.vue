@@ -7,7 +7,20 @@
         <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
           <div class="row items-center justify-between">
             <div class="f-12 text-weight-bold" style="height: 23px">
-              <span> Data Penerimaan || No. Penerimaan : {{ props?.data?.nopenerimaan }}</span>
+              <span> Data Penerimaan || No. Penerimaan : {{ props?.data?.nopenerimaan }} || </span>
+              <span
+                ><q-toggle
+                  v-model="value"
+                  label="Lihat Harga Asli"
+                  color="red"
+                  size="25px"
+                  right-label
+              /></span>
+            </div>
+            <div>
+              <q-badge color="red-5" outline class="text-bold"
+                >Total : {{ formatRpDouble(props?.data?.total) }}</q-badge
+              >
             </div>
           </div>
         </q-card-section>
@@ -35,7 +48,11 @@
                       </div>
                       <div class="col-3">
                         <span class="text-weight-medium">
-                          {{ formatRpDouble(item?.hargafaktur) }}</span
+                          {{
+                            value === true
+                              ? formatRpDouble(item?.harga_beli_b)
+                              : formatRpDouble(item?.hargafaktur)
+                          }}</span
                         >
                       </div>
                       <div class="col-1">
@@ -43,12 +60,16 @@
                       </div>
                       <div class="col-5">
                         <span class="text-weight-medium">
-                          {{ formatRpDouble(item?.subtotal) }}</span
+                          {{
+                            value === true
+                              ? formatRpDouble(item?.subtotalfix)
+                              : formatRpDouble(item?.subtotal)
+                          }}</span
                         >
                       </div>
                     </div>
                   </q-item-section>
-                  <q-item-section top side>
+                  <q-item-section top side v-if="props?.data?.kunci != '1'">
                     <div class="text-grey-8">
                       <q-btn
                         class="gt-xs"
@@ -79,7 +100,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 // import { useQuasar } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
@@ -96,7 +117,7 @@ const props = defineProps({
     default: null,
   },
 })
-
+const value = ref(false)
 function hapusrincian(id, nopenerimaan, noorder, kdbarang) {
   $q.dialog({
     dark: true,
@@ -119,7 +140,7 @@ function hapusrincian(id, nopenerimaan, noorder, kdbarang) {
 
 const lists = computed(() => {
   const arr = props.data?.rinci
-  console.log('arr', arr)
+  //console.log('arr', arr)
   return arr?.sort((a, b) => {
     return b.id - a.id
   })
