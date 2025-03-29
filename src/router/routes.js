@@ -52,6 +52,10 @@ const routes = [
         path: '/admin/transaksi/cicilan',
         component: () => import('pages/admin/transaksi/cicilan/IndexPage.vue'),
       },
+      {
+        path: '/admin/transaksi/stok',
+        component: () => import('pages/admin/transaksi/stok/IndexPage.vue'),
+      },
 
       // Settings
       {
