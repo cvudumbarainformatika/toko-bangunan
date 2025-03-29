@@ -10,7 +10,7 @@
             </div>
           </div>
         </q-card-section>
-        <q-card-section style="max-height: 50vh" class="scroll">
+        <q-card-section>
           <div class="row q-gutter-sm">
             <div class="col-6">
               <app-input label="No. order" disable v-model="store.form.noorder" />
@@ -35,7 +35,8 @@
             </div>
           </div>
           <q-separator class="q-mt-sm" />
-
+        </q-card-section>
+        <q-card-section style="max-height: 80%" class="scroll">
           <q-list>
             <transition-group>
               <q-item v-for="(item, n) in store.rinci" :key="n" class="list-move">
