@@ -125,7 +125,6 @@ const lihatdetail = (item) => {
   emits('edit', item)
 }
 const lihatCetak = (val) => {
-  console.log('img', val)
   // store.image = val
   // store.setExpand()
   dialogLihatcetak.value.openDialog(val)

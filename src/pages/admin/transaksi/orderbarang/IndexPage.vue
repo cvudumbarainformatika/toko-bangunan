@@ -16,7 +16,7 @@
       "
     />
 
-    <FormPage v-else :data="store.item" @back="isList = true" />
+    <FormPage v-else :data="store?.item" @back="isList = true" />
   </div>
 </template>
 
@@ -31,6 +31,7 @@ const isList = ref(true)
 const storesuplier = useAdminMasterSupplierStore()
 
 const store = useAdminFormTransaksiOrderBarangStore()
+store.item = []
 
 storesuplier.getAllList()
 </script>

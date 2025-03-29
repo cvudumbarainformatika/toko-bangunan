@@ -30,6 +30,7 @@ const FormPage = defineAsyncComponent(() => import('./comp/FormPage.vue'))
 const isList = ref(true)
 
 const storepenerimaan = useAdminFormTransaksiPenerimaanBarangStore()
+storepenerimaan.itemPenerimaan = []
 // const soterorder = useAdminListTransaksiOrderBarangStore()
 
 // soterorder.getorderanfix()
