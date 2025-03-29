@@ -64,7 +64,7 @@
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1">{{ item?.namagabung }}</q-item-label>
+                    <q-item-label lines="1">{{ item?.namabarang }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold">Kategori: {{ item?.kategori }}</span> |
                       <span class="text-weight-bold"
