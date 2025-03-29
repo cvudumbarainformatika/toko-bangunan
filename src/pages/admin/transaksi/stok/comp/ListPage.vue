@@ -50,9 +50,9 @@
                   @mouseleave="hoveredId = null"
                 >
                   <q-item-section avatar>
-                    <q-avatar>
+                    <!-- <q-avatar>
                       <img src="https://cdn.quasar.dev/img/avatar2.jpg" />
-                    </q-avatar>
+                    </q-avatar> -->
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">

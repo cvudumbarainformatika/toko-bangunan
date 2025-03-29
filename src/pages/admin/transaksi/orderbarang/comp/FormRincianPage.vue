@@ -123,7 +123,7 @@
                   outlined
                   v-model="store.form.jumlahx"
                   label="Jumlah Yang Di Pesan"
-                  :valid="{ required: false }"
+                  valid
                   currency
                 />
               </div>
@@ -134,7 +134,7 @@
                   class="col-6"
                   v-model="store.form.hargax"
                   label="Harga Beli"
-                  :valid="{ required: false }"
+                  valid
                   currency
                 />
               </div>
