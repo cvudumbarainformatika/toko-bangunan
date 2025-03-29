@@ -32,12 +32,12 @@ export const useAdminSettingProfilTokoStore = defineStore('admin-setting-profil-
 
       // Handle foto dengan sangat eksplisit
       if (this.form.foto instanceof File) {
-        // Jika ada file baru
         formData.append('foto', this.form.foto)
-        formData.append('is_new_foto', '1') // Flag untuk backend
+        formData.append('is_new_foto', '1')
       } else if (this.form.foto) {
-        // Jika ada path foto lama
-        formData.append('foto_path', this.form.foto)
+        // Pastikan tidak ada /storage/ yang dikirim ke backend
+        const cleanPath = this.form.foto.replace(/^\/?storage\//, '')
+        formData.append('foto_path', cleanPath)
         formData.append('is_new_foto', '0')
       }
 
@@ -47,9 +47,8 @@ export const useAdminSettingProfilTokoStore = defineStore('admin-setting-profil-
             'Content-Type': 'multipart/form-data',
           },
         })
-
-        // Update state dengan data terbaru
-        this.form.foto = data.result.foto || null
+        const cleanFotoPath = data.result.foto ? data.result.foto.replace('/storage/', '') : null
+        this.form.foto = cleanFotoPath
         notifSuccess('Data berhasil disimpan')
         return data
       } catch (error) {

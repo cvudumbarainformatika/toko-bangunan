@@ -1,40 +1,46 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { pathImg } from 'src/boot/axios'
 
 export const useProfilStore = defineStore('profil-toko-store', {
   state: () => ({
-    meta: null,
-    isError: false,
+    profilData: null, // Simpan data profil utama di sini
     loading: false,
-    params: {
-      q: null,
-      page: 0,
-      per_page: 15,
-    },
-    items: {},
-    itemsx: {},
   }),
-  actions: {
-    async getList() {
-      this.params.page = 1
-      this.isError = false
-      this.loading = true
-      const params = {
-        params: this.params,
+
+  getters: {
+    fotoProfil: (state) => {
+      if (!state.profilData?.foto) return null
+
+      // Format 1: Jika foto sudah mengandung full URL (http://...)
+      if (state.profilData.foto.startsWith('http')) {
+        return state.profilData.foto
       }
+
+      // Format 2: Jika foto dimulai dengan /storage/
+      if (state.profilData.foto.startsWith('/storage/')) {
+        return `${pathImg}${state.profilData.foto.replace('/storage/', '')}`
+      }
+      console.log('foto', `${pathImg}${state.profilData.foto}`)
+      // Format 3: Jika foto hanya berisi path relatif
+      return `${pathImg}${state.profilData.foto}`
+    },
+  },
+
+  actions: {
+    async getProfil() {
       this.loading = true
       try {
-        const { data } = await api.get('/v1/master/users/getprofil', params)
-        console.log('list profil', data)
-        const profil = {
-          namatoko: data[0]?.namatoko,
-          alamat: data[0]?.alamat,
-          telepon: data[0]?.telepon,
-        }
-        this.items = profil
-        this.loading = false
+        const { data } = await api.get('/v1/settings/profiltoko/getprofil')
+        this.profilData = data.result || data
+
+        // Debugging
+        console.log('Data profil:', this.profilData)
+        console.log('Foto path:', this.profilData?.foto)
+        console.log('Foto URL:', this.fotoProfil)
       } catch (error) {
-        console.log(error)
+        console.error('Error fetching profil:', error)
+      } finally {
         this.loading = false
       }
     },

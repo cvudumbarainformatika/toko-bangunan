@@ -96,6 +96,9 @@ const handleFileUpload = (event) => {
     notifError('File harus berupa gambar')
     return
   }
+  if (store.form.foto instanceof File) {
+    URL.revokeObjectURL(store.form.foto)
+  }
 
   store.form.foto = file
   previewFoto.value = URL.createObjectURL(file)
@@ -121,8 +124,10 @@ const fotoUrl = computed(() => {
   if (store.form.foto instanceof File) {
     return URL.createObjectURL(store.form.foto)
   }
-  if (typeof store.form.foto === 'string') {
-    return `${pathImg}${store.form.foto.replace('/storage/', '')}`
+  if (typeof store.form.foto === 'string' && store.form.foto) {
+    // Pastikan pathImg sudah termasuk /storage/
+    // Contoh pathImg: 'http://localhost:8000/storage/'
+    return `${pathImg}${store.form.foto}`
   }
   return null
 })

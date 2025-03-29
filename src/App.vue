@@ -26,7 +26,7 @@ onBeforeMount(() => {
     adminLeftMenu.getMenu(),
     selectSatuan.getDataAll(),
     selectBrands.getDataAll(),
-    profiltoko.getList(),
+    profiltoko.getProfil(),
   ])
 })
 </script>
