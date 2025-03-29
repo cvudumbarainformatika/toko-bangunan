@@ -9,6 +9,9 @@
             <div class="f-12 text-weight-bold" style="height: 23px">
               List Order || No.Order : {{ data?.noorder ?? '-' }}
             </div>
+            <div class="f-12 text-weight-bold" style="height: 23px">
+              Total : {{ formatRpDouble(data?.total ?? 0) }}
+            </div>
           </div>
         </q-card-section>
         <q-card-section style="padding: 0" class="full-height">
@@ -55,7 +58,7 @@
                         dense
                         round
                         icon="delete"
-                        @click="hapusrincian(item?.id, data?.noorder)"
+                        @click="hapusrincian(item?.id, data?.noorder, data?.flaging)"
                       />
                     </div>
                   </q-item-section>
@@ -72,6 +75,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
+import { notifError } from 'src/modules/notifs'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 import { computed } from 'vue'
 
@@ -84,24 +88,28 @@ const props = defineProps({
   },
 })
 
-function hapusrincian(id, noorder) {
-  $q.dialog({
-    dark: true,
-    title: 'Peringatan',
-    message: 'Apakah Data ini akan dihapus?',
-    cancel: true,
-    persistent: true,
-  })
-    .onOk(() => {
-      // console.log('OK')
-      storeform.deleteData(id, noorder)
+function hapusrincian(id, noorder, kunci) {
+  if (kunci === null || kunci === undefined) {
+    $q.dialog({
+      dark: true,
+      title: 'Peringatan',
+      message: 'Apakah Data ini akan dihapus?',
+      cancel: true,
+      persistent: true,
     })
-    .onCancel(() => {
-      // console.log('Cancel')
-    })
-    .onDismiss(() => {
-      // console.log('I am triggered on both OK and Cancel')
-    })
+      .onOk(() => {
+        // console.log('OK')
+        storeform.deleteData(id, noorder)
+      })
+      .onCancel(() => {
+        // console.log('Cancel')
+      })
+      .onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+  } else {
+    notifError('Maaf Data Sudah Dikunci...!!')
+  }
 }
 
 const lists = computed(() => {

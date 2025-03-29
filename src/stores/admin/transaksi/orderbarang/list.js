@@ -109,7 +109,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
         // console.log('asli', val)
         // const hasilglobal = []
         val?.forEach((x) => {
-          //const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+          const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
           const hasil = {
             id: x?.id,
             noorder: x?.noorder,
@@ -117,7 +117,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             kdsuplier: x?.kdsuplier,
             flaging: x?.flaging,
             suplier: x?.suplier,
-            total: x?.total,
+            total: total,
             rinci: x?.rinci,
           }
           // console.log('hasil', hasil)

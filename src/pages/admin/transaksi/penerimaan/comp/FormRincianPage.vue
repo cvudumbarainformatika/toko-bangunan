@@ -1,4 +1,3 @@
-<!-- eslint-disable no-undef -->
 <template>
   <div class="fit column absolute">
     <div class="col full-height">
@@ -12,22 +11,6 @@
           </div>
         </q-card-section>
         <q-card-section style="max-height: 50vh" class="scroll">
-          <!-- <div v-if="props?.flaging === '1'">
-            <div class="row q-gutter-sm">
-              <div class="col-6">
-                <app-input label="No. order" disable :v-model="props?.data" />
-              </div>
-              <div class="col-1">
-                <q-btn round color="primary" icon="find_in_page" @click="cariorderan()" />
-              </div>
-              <div class="col-6">
-                <app-input label="Supllier" disable v-model="store.form.suplier" />
-              </div>
-            </div>
-            <q-separator class="q-mt-sm" />
-          </div>
-          <div v-else> -->
-
           <div class="row q-gutter-sm">
             <div class="col-6">
               <app-input label="No. order" disable v-model="store.form.noorder" />
@@ -111,7 +94,6 @@
               </q-item>
             </transition-group>
           </q-list>
-          <!-- </div> -->
         </q-card-section>
       </q-card>
     </div>

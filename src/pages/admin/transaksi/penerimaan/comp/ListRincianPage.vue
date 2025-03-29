@@ -19,7 +19,12 @@
             </div>
             <div>
               <q-badge color="red-5" outline class="text-bold"
-                >Total : {{ formatRpDouble(props?.data?.total) }}</q-badge
+                >Total :
+                {{
+                  value === true
+                    ? formatRpDouble(props?.data?.totalfix)
+                    : formatRpDouble(props?.data?.total)
+                }}</q-badge
               >
             </div>
           </div>

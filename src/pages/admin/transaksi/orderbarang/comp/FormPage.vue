@@ -6,7 +6,6 @@
           <FormRincianPage @back="emits('back')" :data="data" />
         </q-card>
         <q-card flat bordered square class="col-6 full-height">
-          <!-- <ListAnamnesis :key="props.pasien" :pasien="props.pasien" :loadingaja="loadingaja" /> -->
           <ListRincianPage :data="data" />
         </q-card>
       </div>

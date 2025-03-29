@@ -103,6 +103,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
         // const hasilglobal = []
         val?.forEach((x) => {
           const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+          const totalfix = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotalfix), 0)
           const hasil = {
             id: x?.id,
             nopenerimaan: x?.nopenerimaan,
@@ -112,6 +113,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
             kunci: x?.kunci,
             suplier: x?.suplier?.nama,
             total: total,
+            totalfix: totalfix,
             rinci: x?.rinci,
             orderan_h: x?.orderheder,
           }

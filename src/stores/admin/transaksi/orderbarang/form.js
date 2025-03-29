@@ -2,6 +2,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useAdminListTransaksiOrderBarangStore } from './list'
 import { notifError, notifSuccess } from 'src/modules/notifs'
+import { olahUang } from 'src/modules/formatter'
 
 export const useAdminFormTransaksiOrderBarangStore = defineStore(
   'admin-form-transaksi-orderbarang-store',
@@ -26,7 +27,8 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         hargajual1: null,
         hargajual2: null,
         ukuran: null,
-        jumlah: 1,
+        jumlahx: 1,
+        harga: null,
       },
       loading: false,
       lock: false,
@@ -47,12 +49,16 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         this.form.satuan_k = null
         this.form.isi = null
         this.form.harga = null
+        this.form.hargax = null
         this.form.ukuran = null
-        this.form.jumlah = 1
+        this.form.jumlah = null
+        this.form.jumlahx = 1
       },
 
       async save() {
         this.loading = true
+        this.form.harga = olahUang(this.form.hargax)
+        this.form.jumlah = olahUang(this.form.jumlahx)
         return new Promise((resolve, reject) => {
           api
             .post('/v1/transaksi/orderpembelian/simpan', this.form)

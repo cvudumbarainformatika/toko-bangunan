@@ -61,7 +61,13 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
 
               const hasil = data?.result[0]
               const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+              const totalfix = hasil?.rinci.reduce(
+                (a, b) => parseFloat(a) + parseFloat(b.subtotalfix),
+                0,
+              )
+
               hasil.total = total
+              hasil.totalfix = totalfix
 
               this.itemPenerimaan = hasil
 
@@ -121,7 +127,13 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
             const hasil = resp?.data?.result[0]
             // console.log('ccc', hasil)
             const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+            const totalfix = hasil?.rinci.reduce(
+              (a, b) => parseFloat(a) + parseFloat(b.subtotalfix),
+              0,
+            )
+
             hasil.total = total
+            hasil.totalfix = totalfix
 
             this.itemPenerimaan = hasil
             notifSuccess('Data berhasil dihapus')
@@ -144,7 +156,12 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
 
               const hasil = data?.result[0]
               const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+              const totalfix = hasil?.rinci.reduce(
+                (a, b) => parseFloat(a) + parseFloat(b.subtotalfix),
+                0,
+              )
               hasil.total = total
+              hasil.totalfix = totalfix
 
               this.itemPenerimaan = hasil
               notifSuccess('Data berhasil Ditambahkan ke stok...!!!')

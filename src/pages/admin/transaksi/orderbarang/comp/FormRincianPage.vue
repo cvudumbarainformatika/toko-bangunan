@@ -2,26 +2,18 @@
   <div class="fit column absolute">
     <div class="col full-height">
       <q-card flat bordered square class="full-height" style="overflow: hidden">
-        <q-form ref="refForm" @submit="onSubmit" class="column full-height">
+        <q-form ref="refForm" @submit="onSubmit(data?.flaging)">
           <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
             <div class="row items-center justify-between">
               <div class="f-12 text-weight-bold">
                 <app-btn-back size="sm" @click="emits('back')" class="bg-dark" />
                 Form Order
               </div>
-              <!-- <div>
-                <q-btn flat dense size="sm" icon="key" @click="historyOpen">
-                  <q-tooltip class="bg-dark text-white">
-                    {{ tooltip }}
-                  </q-tooltip>
-                </q-btn>
-              </div> -->
             </div>
           </q-card-section>
           <q-card-section style="max-height: 50vh" class="scroll">
             <div class="row q-gutter-sm">
-              <div class="col-11"></div>
-              <div class="col-6">
+              <div class="col-5">
                 <app-input v-model="store.form.noorder" label="No. Orderan" disable />
               </div>
               <div class="col-5">
@@ -33,10 +25,10 @@
                   option-value="kodesupl"
                 />
               </div>
-              <div v-if="data?.flaging !== '1'">
+              <div class="col-1" v-if="data?.flaging === undefined || data?.flaging === null">
                 <q-btn
-                  flat
-                  color="red"
+                  round
+                  color="primary"
                   size="sm"
                   icon="lock_open"
                   @click="kuncitrans('1')"
@@ -45,11 +37,11 @@
                   <q-tooltip class="bg-teal text-white"> KUNCI TRANSAKSI </q-tooltip>
                 </q-btn>
               </div>
-              <div v-else>
+              <div class="col-1" v-else>
                 <q-btn
-                  flat
+                  round
                   size="sm"
-                  color="red"
+                  color="primary"
                   icon="lock"
                   @click="kuncitrans()"
                   :loading="store.lock"
@@ -59,7 +51,9 @@
               </div>
             </div>
             <q-separator class="q-my-md" />
-            <div class="row q-gutter-sm">
+          </q-card-section>
+          <q-card-section>
+            <div class="row full-width q-gutter-sm">
               <div class="col-6">
                 <AppSelectServer
                   v-model="store.form.namabarang"
@@ -124,20 +118,24 @@
                 />
               </div>
               <div class="col-5">
-                <app-input
-                  v-model="store.form.jumlah"
+                <AppInputRp
+                  dense
+                  outlined
+                  v-model="store.form.jumlahx"
                   label="Jumlah Yang Di Pesan"
                   :valid="{ required: false }"
-                  type="number"
+                  currency
                 />
               </div>
               <div class="col-6">
-                <app-input
+                <AppInputRp
+                  dense
+                  outlined
                   class="col-6"
-                  v-model="store.form.harga"
+                  v-model="store.form.hargax"
                   label="Harga Beli"
                   :valid="{ required: false }"
-                  type="number"
+                  currency
                 />
               </div>
               <div class="col-12">
@@ -160,6 +158,8 @@
 
 <script setup>
 import AppSelectServer from 'src/components/~global/AppSelectServer.vue'
+// import { olahUang } from 'src/modules/formatter'
+import { notifError } from 'src/modules/notifs'
 
 import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
@@ -190,12 +190,24 @@ function isiform(val) {
   store.form.isi = val?.isi ?? '-'
 }
 
-function onSubmit() {
-  console.log('submit form barang')
-  store.save(props.data)
+function onSubmit(kunci) {
+  console.log('kunci', kunci)
+  if (kunci === undefined || kunci === null) {
+    store.save(props.data)
+  } else {
+    notifError('Maaf Data ini Sudah Dikunci...!!')
+  }
 }
 
 function kuncitrans(val) {
-  store.kunci(val, props?.data?.noorder)
+  if (props?.data?.flaging === '2') {
+    notifError('Maaf Data ini Sudah Ditransaksikan Di Penerimaan...!!')
+  } else {
+    if (props?.data?.noorder === undefined || props?.data?.noorder === null) {
+      notifError('Maaf Belum Ada Orderan Sama Sekali...!!!')
+    } else {
+      store.kunci(val, props?.data?.noorder)
+    }
+  }
 }
 </script>
