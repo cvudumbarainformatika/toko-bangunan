@@ -70,7 +70,7 @@
                     <div class="flex q-gutter-sm">
                       <app-btn-edit-list @click="lihatdetail(item)" />
                       <app-btn-delete-list />
-                      <app-btn-cetak @click="lihatCetak(item)" />
+                      <!-- <app-btn-cetak @click="lihatCetak(item)" /> -->
                     </div>
                   </q-item-section>
                   <q-item-section v-else side top>
@@ -95,14 +95,12 @@
       </div> -->
     </div>
   </div>
-  <DialogCetak ref="dialogLihatcetak" />
 </template>
 
 <script setup>
 import { formatRpDouble, humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
 import { computed, ref } from 'vue'
-import DialogCetak from './cetak/DialogCetak.vue'
 
 // const search = ref(null)
 const storeOrderH = useAdminListTransaksiOrderBarangStore()
@@ -110,7 +108,6 @@ const storeOrderH = useAdminListTransaksiOrderBarangStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
-const dialogLihatcetak = ref(null)
 const emits = defineEmits(['add', 'edit'])
 
 // onMounted(() => {
@@ -123,11 +120,6 @@ const emits = defineEmits(['add', 'edit'])
 
 const lihatdetail = (item) => {
   emits('edit', item)
-}
-const lihatCetak = (val) => {
-  // store.image = val
-  // store.setExpand()
-  dialogLihatcetak.value.openDialog(val)
 }
 
 // function lihatdetail(val) {

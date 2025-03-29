@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="isDialogOpen" persistent backdrop-filter="blur(4px)">
+  <q-dialog persistent backdrop-filter="blur(4px)">
     <q-card style="min-width: 80vw; max-width: 180vw; height: 600px">
       <q-layout view="lHh Lpr lFf" container class="rounded-borders">
         <q-header>
@@ -12,85 +12,111 @@
             </q-btn>
           </q-bar>
         </q-header>
-        <q-page-container id="printMe">
-          <q-card-section class="q-pt-sm full-width">
-            <!-- Tambahkan class atau style untuk memastikan gambar tampil -->
-            <div class="full-width q-px-md q-py-sm">
-              <div class="row full-width">
-                <div class="content-center flex-center q-pr-md">
-                  <img style="height: 80px" src="~assets/icon.svg" />
-                </div>
-                <div class="col-auto">
-                  <div class="text-h6 text-left">{{ profil?.items?.namatoko }}</div>
-                  <div class="text-h8 text-left">{{ profil?.items?.alamat }}</div>
-                  <div class="text-h8 text-left">Telp. {{ profil?.items?.telepon }}</div>
-                </div>
-              </div>
-
-              <div class="q-py-sm"><q-separator /></div>
-              <div class="text-h8 q-pt-xs text-center">NOTA PEMESANAN BARANG</div>
-              <div class="text-center">{{ listOrder.noorder }}</div>
-
-              <div class="row flex-start q-pt-md items-center">
-                <div class="col-2 col-md-2 text-left">Kepada</div>
-                <span class="col-auto">:</span>
-                <div class="col-auto q-pl-sm text-left">{{ listOrder.suplier?.nama }}</div>
-              </div>
-              <div class="row flex-start q-pt-xs items-center">
-                <div class="col-2 col-md-2 text-left">Alamat</div>
-                <span class="col-auto">:</span>
-                <div class="col-auto q-pl-sm text-left">
-                  {{ listOrder.suplier?.alamat }}
+        <q-page-container>
+          <div id="printMe">
+            <div class="row full-width justify-between">
+              <div class="flex-start" style="width: 60%">
+                <div class="row q-px-md q-py-md">
+                  <div class="q-pr-md" v-if="profil.fotoProfil">
+                    <q-img
+                      :src="profil.fotoProfil"
+                      style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover"
+                      spinner-color="primary"
+                    />
+                  </div>
+                  <div class="col content-center">
+                    <div class="text-bold" style="font-size: x-large">
+                      {{ profil.profilData.namatoko }}
+                    </div>
+                    <div>
+                      {{ profil.profilData.alamat }}
+                    </div>
+                    <div>
+                      <span class="q-pr-sm">Telp : {{ profil.profilData.telepon }}</span>
+                      <span>Email : {{ profil.profilData.email }} </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="row flex-start q-pt-xs items-center">
-                <div class="col-2 col-md-2 text-left">Telepon</div>
-                <span class="col-auto">:</span>
-                <div class="col-auto q-pl-sm text-left">
-                  {{ listOrder.suplier?.telepon }}
+              <div class="col flex-end q-pl-xl q-py-md">
+                <div class="row full-width">
+                  <span class="col-3">Nomor Order</span>
+                  <span>: {{ store.dataorder?.noorder }}</span>
+                </div>
+                <div class="row full-width">
+                  <span class="col-3">Tanggal</span>
+                  <span>: {{ dateDbFormat(store.dataorder?.tglorder) }}</span>
+                </div>
+                <div class="row full-width">
+                  <span class="col-3">Supplier</span>
+                  <span>: {{ store.dataorder?.suplier?.nama }}</span>
+                </div>
+                <div class="row full-width">
+                  <span class="col-3">Alamat</span>
+                  <span>: {{ store.dataorder?.suplier?.alamat }}</span>
+                </div>
+                <div class="row full-width">
+                  <span class="col-3">Telepon</span>
+                  <span>: {{ store.dataorder?.suplier?.telepon }}</span>
                 </div>
               </div>
             </div>
-            <table class="full-width" flat bordered wrap-cells>
-              <thead>
-                <tr>
-                  <th class="text-center" style="width: 20px">No.</th>
-                  <th class="text-center">Nama Barang</th>
-                  <th class="text-center" style="width: 10%">Jumlah Barang</th>
-                  <th class="text-center">Harga</th>
-                  <th class="text-center">Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(list, n) in listOrder?.rinci" :key="n">
-                  <td class="text-right">{{ n + 1 }}.</td>
-                  <td>{{ list.kdbarang }} - {{ list.mbarang?.namabarang }}</td>
-                  <td>{{ list.jumlahpo }} {{ list.mbarang?.satuan_b }}</td>
-                  <td class="text-right">
-                    {{ formatRpDouble(list.hargapo) }}
-                  </td>
-                  <td class="text-right">
-                    {{ formatRpDouble(list.subtotal) }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-center text-bold" colspan="4">TOTAL ORDERAN</td>
-                  <td class="text-right text-bold">{{ formatRpDouble(listOrder?.total) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </q-card-section>
-          <q-card-section>
-            <div class="row justify-between full-width">
-              <div class="col-6 text-center flex-start"></div>
-              <div class="col-6 text-center flex-end">
-                <div>Probolinggo,</div>
-                <div>{{ profil?.items?.namatoko }}</div>
-                <div class="q-pt-xl"></div>
-                <div>{{ profil?.items?.pemilik }}</div>
+            <div class="full-width justify-center">
+              <q-separator />
+              <div class="text-center text-bold q-pt-sm" style="font-size: medium">
+                NOTA ORDER BARANG
+              </div>
+              <div class="q-px-md q-pt-sm">
+                <table class="full-width">
+                  <thead>
+                    <tr class="text-center">
+                      <th>NO</th>
+                      <th>NAMA BARANG</th>
+                      <th>QTY</th>
+                      <th>HARGA BELI</th>
+                      <th>JUMLAH</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, n) in store.dataorder?.rinci" :key="n">
+                      <td class="text-center">{{ n + 1 }}</td>
+                      <td>{{ item.mbarang?.namabarang }}</td>
+                      <td class="text-center">{{ item.jumlahpo }}</td>
+                      <td class="text-right">{{ formatRpDouble(item.hargapo) }}</td>
+                      <td class="text-right">{{ formatRpDouble(item.total) }}</td>
+                    </tr>
+                    <tr>
+                      <td colspan="4">
+                        <div class="row justify-between">
+                          <div class="flex-start">
+                            Terbilang : {{ terbilangRupiah(store.dataorder?.total) }} Rupiah,
+                          </div>
+                          <div class="text-bold flex-end q-pl-sm">TOTAL</div>
+                        </div>
+                      </td>
+                      <td class="text-bold text-right">
+                        {{ formatRpDouble(store.dataorder?.total) }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-          </q-card-section>
+            <div class="row justify-between full-width q-pt-md">
+              <div class="col flex-start content-center text-center">
+                <div class="invisible">.</div>
+                <div>Supplier</div>
+                <div style="height: 50px"></div>
+                <div>{{ store.dataorder?.suplier?.nama }}</div>
+              </div>
+              <div class="col flex-end content-center text-center">
+                <div>Probolinggo, {{ dateFullFormat(store.dataorder?.tglorder) }}</div>
+                <div>{{ profil.profilData.namatoko }}</div>
+                <div style="height: 50px"></div>
+                <div>{{ profil.profilData.pemilik }}</div>
+              </div>
+            </div>
+          </div>
         </q-page-container>
 
         <q-footer>
@@ -110,35 +136,27 @@
 </template>
 
 <script setup>
-import { formatRpDouble } from 'src/modules/formatter'
+import { dateDbFormat, dateFullFormat, formatRpDouble } from 'src/modules/formatter'
+import { terbilangRupiah } from 'src/modules/utils'
 import { useProfilStore } from 'src/stores/admin/profil'
+import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 import { onMounted, ref } from 'vue'
 // import { usePrint } from 'vue3-print-nb'
 
-const isDialogOpen = ref(false)
-const listOrder = ref(null)
-// Fungsi untuk membuka dialog
-const openDialog = (item) => {
-  console.log('itemxx', item)
-  listOrder.value = item
-  isDialogOpen.value = true
-}
-
 const profil = useProfilStore()
+const store = useAdminFormTransaksiOrderBarangStore()
 
-onMounted(() => {
-  profil.getList()
+onMounted(async () => {
+  if (!profil.profilData) {
+    await profil.getProfil()
+  }
+  console.log('dataxxx', store.dataorder)
 })
-
-// Fungsi untuk menutup dialog
-// const closeDialog = () => {
-//   isDialogOpen.value = false
-// }
 
 const printed = ref(false)
 const printObj = {
   id: 'printMe',
-  popTitle: 'Nota Order Barang',
+  popTitle: 'Printed from ' + profil.profilData?.namatoko + ' app',
 
   beforeOpenCallback() {
     printed.value = true
@@ -154,12 +172,6 @@ const printObj = {
     console.log('closePrint')
   },
 }
-
-// const { print } = usePrint(printObj)
-// Ekspos fungsi openDialog agar bisa dipanggil dari luar
-defineExpose({
-  openDialog,
-})
 </script>
 
 <style>
@@ -169,5 +181,6 @@ th,
 td {
   border: 1px solid black;
   border-collapse: collapse;
+  padding: 5px;
 }
 </style>

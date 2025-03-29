@@ -30,8 +30,10 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         jumlahx: 1,
         harga: null,
       },
+      dataorder: [],
       loading: false,
       lock: false,
+      dialogCetak: false,
     }),
     // persist: true,
     // getters: {

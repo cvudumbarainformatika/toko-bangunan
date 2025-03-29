@@ -37,17 +37,31 @@
                   <q-tooltip class="bg-teal text-white"> KUNCI TRANSAKSI </q-tooltip>
                 </q-btn>
               </div>
-              <div class="col-1" v-else>
-                <q-btn
-                  round
-                  size="sm"
-                  color="primary"
-                  icon="lock"
-                  @click="kuncitrans()"
-                  :loading="store.lock"
-                >
-                  <q-tooltip class="bg-teal text-white"> BUKA KUNCI TRANSAKSI </q-tooltip>
-                </q-btn>
+              <div class="row" v-else>
+                <div>
+                  <q-btn
+                    round
+                    size="sm"
+                    color="primary"
+                    icon="lock"
+                    @click="kuncitrans()"
+                    :loading="store.lock"
+                  >
+                    <q-tooltip class="bg-teal text-white"> BUKA KUNCI TRANSAKSI </q-tooltip>
+                  </q-btn>
+                </div>
+                <div class="q-pl-xs">
+                  <q-btn
+                    icon="print"
+                    color="orange"
+                    round
+                    size="sm"
+                    :loading="store.loading"
+                    @click="cetakData()"
+                  >
+                    <q-tooltip class="bg-orange" :offset="[10, 10]"> Cetak </q-tooltip>
+                  </q-btn>
+                </div>
               </div>
             </div>
             <q-separator class="q-my-md" />
@@ -154,6 +168,7 @@
       </q-card>
     </div>
   </div>
+  <dialog-cetakdata v-model="store.dialogCetak" :printdata="printdata" />
 </template>
 
 <script setup>
@@ -163,10 +178,13 @@ import { notifError } from 'src/modules/notifs'
 
 import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
+import { defineAsyncComponent, ref } from 'vue'
+
+const DialogCetakdata = defineAsyncComponent(() => import('./cetak/DialogCetak.vue'))
 
 const storesupllier = useAdminMasterSupplierStore()
 const store = useAdminFormTransaksiOrderBarangStore()
-
+const printdata = ref(null)
 const emits = defineEmits(['back'])
 
 const props = defineProps({
@@ -209,5 +227,9 @@ function kuncitrans(val) {
       store.kunci(val, props?.data?.noorder)
     }
   }
+}
+
+function cetakData() {
+  store.dialogCetak = true
 }
 </script>
