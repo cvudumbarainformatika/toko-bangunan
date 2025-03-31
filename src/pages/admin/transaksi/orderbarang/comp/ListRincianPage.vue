@@ -118,5 +118,4 @@ const lists = computed(() => {
     return b.id - a.id
   })
 })
-storeform.dataorder = props.data
 </script>

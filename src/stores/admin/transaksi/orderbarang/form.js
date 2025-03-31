@@ -30,7 +30,6 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         jumlahx: 1,
         harga: null,
       },
-      dataorder: [],
       loading: false,
       lock: false,
       dialogCetak: false,
@@ -94,7 +93,6 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               hasil.total = total
 
               this.item = hasil
-
               //console.log('addd', this.item)
               notifSuccess('Data berhasil disimpan')
               this.initResetRinci()

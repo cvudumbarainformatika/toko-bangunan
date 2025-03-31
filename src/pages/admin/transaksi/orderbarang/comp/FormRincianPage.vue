@@ -40,8 +40,10 @@
               <div class="row" v-else>
                 <div>
                   <q-btn
-                    round
                     size="sm"
+                    padding="sm"
+                    round
+                    dense
                     color="primary"
                     icon="lock"
                     @click="kuncitrans()"
@@ -51,16 +53,7 @@
                   </q-btn>
                 </div>
                 <div class="q-pl-xs">
-                  <q-btn
-                    icon="print"
-                    color="orange"
-                    round
-                    size="sm"
-                    :loading="store.loading"
-                    @click="cetakData()"
-                  >
-                    <q-tooltip class="bg-orange" :offset="[10, 10]"> Cetak </q-tooltip>
-                  </q-btn>
+                  <app-btn-cetak @click="cetakData()" />
                 </div>
               </div>
             </div>

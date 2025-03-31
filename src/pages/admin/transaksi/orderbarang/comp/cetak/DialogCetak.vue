@@ -41,23 +41,23 @@
               <div class="col flex-end q-pl-xl q-py-md">
                 <div class="row full-width">
                   <span class="col-3">Nomor Order</span>
-                  <span>: {{ store.dataorder?.noorder }}</span>
+                  <span>: {{ store.item?.noorder }}</span>
                 </div>
                 <div class="row full-width">
                   <span class="col-3">Tanggal</span>
-                  <span>: {{ dateDbFormat(store.dataorder?.tglorder) }}</span>
+                  <span>: {{ dateDbFormat(store.item?.tglorder) }}</span>
                 </div>
                 <div class="row full-width">
                   <span class="col-3">Supplier</span>
-                  <span>: {{ store.dataorder?.suplier?.nama }}</span>
+                  <span>: {{ store.item?.suplier?.nama }}</span>
                 </div>
                 <div class="row full-width">
                   <span class="col-3">Alamat</span>
-                  <span>: {{ store.dataorder?.suplier?.alamat }}</span>
+                  <span>: {{ store.item?.suplier?.alamat }}</span>
                 </div>
                 <div class="row full-width">
                   <span class="col-3">Telepon</span>
-                  <span>: {{ store.dataorder?.suplier?.telepon }}</span>
+                  <span>: {{ store.item?.suplier?.telepon }}</span>
                 </div>
               </div>
             </div>
@@ -78,7 +78,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item, n) in store.dataorder?.rinci" :key="n">
+                    <tr v-for="(item, n) in store.item?.rinci" :key="n">
                       <td class="text-center">{{ n + 1 }}</td>
                       <td>{{ item.mbarang?.namabarang }}</td>
                       <td class="text-center">{{ item.jumlahpo }}</td>
@@ -89,13 +89,13 @@
                       <td colspan="4">
                         <div class="row justify-between">
                           <div class="flex-start">
-                            Terbilang : {{ terbilangRupiah(store.dataorder?.total) }} Rupiah,
+                            Terbilang : {{ terbilangRupiah(store.item?.total) }} Rupiah,
                           </div>
                           <div class="text-bold flex-end q-pl-sm">TOTAL</div>
                         </div>
                       </td>
                       <td class="text-bold text-right">
-                        {{ formatRpDouble(store.dataorder?.total) }}
+                        {{ formatRpDouble(store.item?.total) }}
                       </td>
                     </tr>
                   </tbody>
@@ -107,10 +107,10 @@
                 <div class="invisible">.</div>
                 <div>Supplier</div>
                 <div style="height: 50px"></div>
-                <div>{{ store.dataorder?.suplier?.nama }}</div>
+                <div>{{ store.item?.suplier?.nama }}</div>
               </div>
               <div class="col flex-end content-center text-center">
-                <div>Probolinggo, {{ dateFullFormat(store.dataorder?.tglorder) }}</div>
+                <div>Probolinggo, {{ dateFullFormat(store.item?.tglorder) }}</div>
                 <div>{{ profil.profilData.namatoko }}</div>
                 <div style="height: 50px"></div>
                 <div>{{ profil.profilData.pemilik }}</div>
@@ -150,7 +150,6 @@ onMounted(async () => {
   if (!profil.profilData) {
     await profil.getProfil()
   }
-  console.log('dataxxx', store.dataorder)
 })
 
 const printed = ref(false)
