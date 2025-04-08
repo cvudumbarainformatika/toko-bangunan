@@ -102,33 +102,22 @@
                   </template>
                   <q-separator />
                   <div class="row q-pa-sm">
-                    <div class="col-6">Barang</div>
+                    <div class="col-5">Barang</div>
                     <div class="col-1 text-right">Jumlah</div>
+                    <div class="col-1 text-right">Satuan</div>
                     <div class="col-2 text-right">Harga</div>
                     <div class="col-1 text-right">Diskon</div>
                     <div class="col-2 text-right">Subtotal</div>
                   </div>
                   <div v-for="detail in item?.detail" :key="detail?.id">
                     <div class="row q-px-sm">
-                      <div class="col-6">
+                      <div class="col-5">
                         {{
-                          detail?.master_barang?.namabarang ??
-                          '' +
-                            ' ' +
-                            (detail?.master_barang?.brand === null
-                              ? ''
-                              : (detail?.master_barang?.brand ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.seri === null
-                              ? ''
-                              : (detail?.master_barang?.seri ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.ukuran === null
-                              ? ''
-                              : (detail?.master_barang?.ukuran ?? ''))
+                          detail?.master_barang?.namabarang
                         }}
                       </div>
                       <div class="col-1 text-right">{{ detail?.jumlah }}</div>
+                      <div class="col-1 text-right">{{ detail?.master_barang?.satuan_k }}</div>
                       <div class="col-2 text-right">{{ detail?.harga_jual }}</div>
                       <div class="col-1 text-right">{{ detail?.diskon }}</div>
                       <div class="col-2 text-right">{{ detail?.subtotal }}</div>

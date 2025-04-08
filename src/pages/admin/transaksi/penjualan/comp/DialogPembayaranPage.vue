@@ -53,19 +53,21 @@
                       :disable="store.loadingPembayaran"
                     />
                     <template v-if="store.formPembayaran.cara_bayar=='5'" >
-                      <app-input
+                      <app-input-rp
                       ref="refBayar"
                       class="col-6"
                       v-model="store.formPembayaran.bayar"
+                      outlined
+                      currency
                       label="Bayar"
-                      :rules="[val=> parseInt(val)>=(parseInt(store.formPembayaran.total) - store.formPembayaran?.total_diskon) || 'nominal pembayaran kurang']"
+                      :rules="[val=> parseInt(olahUang(val))>=(parseInt(store.formPembayaran.total) - store.formPembayaran?.total_diskon) || 'nominal pembayaran kurang']"
                       @update:model-value="updateBayar"
                       :disable="store.loadingPembayaran"
                     />
-                    <div class="col-3" :class="(parseInt((parseInt(store.formPembayaran.total)-store.formPembayaran?.total_diskon))>parseInt(store.formPembayaran.bayar)) || !store.formPembayaran?.bayar?'text-negative':''">
+                    <div class="col-3" :class="(parseInt((parseInt(store.formPembayaran.total)-store.formPembayaran?.total_diskon))>parseInt(olahUang(store.formPembayaran.bayar))) || !parseInt(olahUang(store.formPembayaran?.bayar))?'text-negative':''">
                       {{ formatDouble(store.formPembayaran.kembali) }}
                     </div>
-                    <div v-if="(parseInt((parseInt(store.formPembayaran.total) - store.formPembayaran?.total_diskon)) > parseInt(store.formPembayaran.bayar)) " class="col-3 text-negative text-center"> Kurang bayar</div>
+                    <div v-if="(parseInt((parseInt(store.formPembayaran.total) - store.formPembayaran?.total_diskon)) > parseInt(olahUang(store.formPembayaran.bayar))) " class="col-3 text-negative text-center"> Kurang bayar</div>
 
 
                     </template>
@@ -97,7 +99,7 @@
 </template>
 <script setup>
 import { useQuasar } from 'quasar'
-import { formatDouble } from 'src/modules/formatter'
+import { formatDouble, olahUang } from 'src/modules/formatter'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { computed, ref } from 'vue'
 
@@ -127,12 +129,12 @@ function selectCaraBayar(val){
 const refBayar=ref(null)
 function updateBayar(val){
   // console.log('upda ba', val,refBayar.value?.appInput.validate());
-
-  //untuk hapus o dipean angka pake ini yaa
   const _removedZeros = val?.replace(/^0+/, '')
-  if (val > 1) {
-    store.formPembayaran.bayar = _removedZeros
-    store.formPembayaran.kembali = store.formPembayaran.bayar - (store.formPembayaran.total - store?.formPembayaran?.total_diskon)
+  const normalAngka=olahUang(_removedZeros)
+  //untuk hapus o dipean angka pake ini yaa
+  if (normalAngka > 1) {
+    // store.formPembayaran.bayar = normalAngka
+    store.formPembayaran.kembali = parseInt(normalAngka) - (store.formPembayaran.total - store?.formPembayaran?.total_diskon)
   }
   setTimeout(()=>{
     refBayar.value?.appInput.validate()

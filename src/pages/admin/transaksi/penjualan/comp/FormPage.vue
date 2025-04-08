@@ -22,19 +22,20 @@
       </div>
     </div>
     <div class="row q-mb-sm">
-      <div class="col-6">Produk</div>
+      <div class="col-4">Produk</div>
       <div class="col-2 ">Jumlah</div>
-      <div class="col-2 ">Harga</div>
+      <div class="col-2 ">Harga Jual</div>
       <div class="col-2">Diskon (Rp)</div>
+      <div class="col-2 ">Harga Beli</div>
     </div>
   <q-separator />
   <div class="row items-center q-col-gutter-sm">
-    <div class="col-6">
+    <div class="col-4">
       <AppSelectLocal
         ref="refSelectBarang"
         v-model="store.barang"
         url="v1/transaksi/penjualan/list-barang"
-        :option-label="opt=> opt.namabarang + ' ' + (opt?.brand===null ? '' : opt?.brand) + ' ' + (opt?.seri===null ? '' : opt?.seri)+ ' ' + (opt?.ukuran===null ? '' : opt?.ukuran)"
+        :option-label="opt=> opt.namabarang + ' ' + (opt?.stok===null ? '' : '(stok '+opt?.stok.jumlah_k+' )') "
         :option-value="opt=> opt"
         label="Cari barang"
         :filter-min="3"
@@ -45,14 +46,17 @@
       />
     </div>
     <div class="col-2">
-      <app-input ref="refJumlah" v-model="store.form.jumlah" label="Jumlah" :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      <app-input ref="refJumlah" v-model="store.form.jumlah" :label="'Jumlah '+ (store?.barang?.stok?.jumlah_k??0)" :autofocus="false" @keyup.enter.stop="onEnterinput()"
       :rules="[(val) => parseFloat(val)>0 || 'Jumlah barang harus lebih besar dari 0']" @clear=setNol(strJumlah)
       />
     </div>
-    <div class="col-2"><app-input v-model="store.form.harga_jual" label="Harga" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear="()=>{
+    <div class="col-2">
+      <app-input v-model="store.form.harga_jual" label="Harga Jual" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear="()=>{
       store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
-    }" /></div>
+    }" />
+    </div>
     <div class="col-2"><app-input v-model="store.form.diskon" label="Diskon (Rp)" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear=setNol(strDsikon) /></div>
+    <div class="col-2"><app-input v-model="store.form.harga_beli" label="Harga Beli" :autofocus="false" readonly  /></div>
   </div>
 </template>
 <script setup>
@@ -76,7 +80,7 @@ function selected(val){
     store.setForm('kodebarang',store?.barang?.kodebarang)
     if(!store.form.sales_id) store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
     else store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual2))
-    store.setForm('harga_beli',isNaN(store?.barang?.hargabeli)?0:parseFloat(store?.barang?.hargabeli))
+    store.setForm('harga_beli',isNaN(store?.barang?.stok?.harga_beli_k)?0:parseFloat(store?.barang?.stok?.harga_beli_k))
     console.log('form', store.form);
   }
   setTimeout(() => {
