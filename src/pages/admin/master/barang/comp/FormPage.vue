@@ -83,7 +83,7 @@
 
                   <app-input
                     class="col-12"
-                    v-model="store.form.namagabung"
+                    v-model="store.form.namabarang"
                     label="Nama Barang"
                     :valid="{ required: false }"
                   />
