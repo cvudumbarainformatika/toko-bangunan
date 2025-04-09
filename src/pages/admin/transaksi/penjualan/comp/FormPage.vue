@@ -47,16 +47,20 @@
     </div>
     <div class="col-2">
       <app-input ref="refJumlah" v-model="store.form.jumlah" :label="'Jumlah '+ (store?.barang?.stok?.jumlah_k??0)" :autofocus="false" @keyup.enter.stop="onEnterinput()"
-      :rules="[(val) => parseFloat(val)>0 || 'Jumlah barang harus lebih besar dari 0']" @clear=setNol(strJumlah)
+      :rules="[(val) => parseFloat(val)>0 || 'Jumlah barang harus lebih besar dari 0']" @clear=setNol(strJumlah) @update:model-value="(val)=>{
+
+        const _removedZeros = val?.replace(/^0+/, '')
+        store.setForm('jumlah',parseFloat(_removedZeros))
+      }"
       />
     </div>
     <div class="col-2">
-      <app-input v-model="store.form.harga_jual" label="Harga Jual" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear="()=>{
+      <app-input-rp currency v-model="store.form.harga_jual" label="Harga Jual" outlined :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear="()=>{
       store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
     }" />
     </div>
-    <div class="col-2"><app-input v-model="store.form.diskon" label="Diskon (Rp)" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear=setNol(strDsikon) /></div>
-    <div class="col-2"><app-input v-model="store.form.harga_beli" label="Harga Beli" :autofocus="false" readonly  /></div>
+    <div class="col-2"><app-input-rp currency outlined v-model="store.form.diskon" label="Diskon (Rp)" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear=setNol(strDsikon) /></div>
+    <div class="col-2"><app-input-rp currency outlined v-model="store.form.harga_beli" label="Harga Beli" :autofocus="false" readonly  /></div>
   </div>
 </template>
 <script setup>

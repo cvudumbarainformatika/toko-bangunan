@@ -2,6 +2,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifError, notifSuccess } from 'src/modules/notifs'
 import { useListPenjualanStore } from './list'
+import { olahUang } from 'src/modules/formatter'
 
 export const useFromPenjualanStore = defineStore('from-penjualan-store', {
   state: () => ({
@@ -68,8 +69,16 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
     async simpanDetail() {
       this.loading = true
       if (this.noNota !== null) this.setForm('nota', this.noNota)
+        const keys = Object.keys(this.form)
+      const form={}
+      keys.forEach((key) => {
+        if (key=='harga_jual') form[key] = olahUang(this.form[key])
+        else if (key=='diskon') form[key] = olahUang(this.form[key])
+        else if (key=='harga_beli') form[key] = olahUang(this.form[key])
+          else form[key] = this.form[key]
+      })
       await api
-        .post('/v1/transaksi/penjualan/simpan-detail', this.form)
+        .post('/v1/transaksi/penjualan/simpan-detail', form)
         .then(({ data }) => {
           this.loading = false
           console.log('data', data)
