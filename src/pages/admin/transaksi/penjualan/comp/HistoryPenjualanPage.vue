@@ -113,7 +113,7 @@
                     <div class="row q-px-sm">
                       <div class="col-5">
                         {{
-                          detail?.master_barang?.namabarang
+                          detail?.master_barang?.namabarang + ' ' + (item?.flag!=null ? '' : (detail?.master_barang?.stok === null ? '' : '(stok ' + detail?.master_barang?.stok.jumlah_k + '  ' + detail?.master_barang?.stok.satuan_k + ' )'))
                         }}
                       </div>
                       <div class="col-1 text-right">{{ detail?.jumlah }}</div>

@@ -35,7 +35,7 @@
         ref="refSelectBarang"
         v-model="store.barang"
         url="v1/transaksi/penjualan/list-barang"
-        :option-label="opt=> opt.namabarang + ' ' + (opt?.stok===null ? '' : '(stok '+opt?.stok.jumlah_k+' )') "
+        :option-label="opt=> opt.namabarang + ' ' + (opt?.stok===null ? '' : '(stok '+opt?.stok.jumlah_k+ '  '+ opt?.stok.satuan_k+' )') "
         :option-value="opt=> opt"
         label="Cari barang"
         :filter-min="3"
