@@ -33,6 +33,30 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
         this.loading = false
       }
     },
+    async getListNull() {
+      this.params.page = 1
+      this.isError = false
+      this.loading = true
+      const params = {
+        params: this.params,
+      }
+      this.loading = true
+      try {
+        const { data } = await api.get('/v1/transaksi/penjualan/list-null', params)
+
+        console.log('list penjualan null', data);
+        data.forEach(item=>{
+          const index = this.items?.findIndex((obj) => obj.id === item.id)
+          if (index >= 0) this.items[index] = item
+          else this.items.unshift(item)
+        })
+
+        this.loading = false
+      } catch (error) {
+        console.log(error)
+        this.loading = false
+      }
+    },
     loadMore(index, done) {
       this.isError = false
       this.params.page = index

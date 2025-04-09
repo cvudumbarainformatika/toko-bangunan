@@ -137,9 +137,9 @@ function updateBayar(val){
     store.formPembayaran.kembali = parseInt(normalAngka) - (store.formPembayaran.total - store?.formPembayaran?.total_diskon)
   }
   setTimeout(()=>{
-    refBayar.value?.appInput.validate()
+    refBayar.value?.appInput?.validate()
 
-  },100)
+  },50)
 
 
 }

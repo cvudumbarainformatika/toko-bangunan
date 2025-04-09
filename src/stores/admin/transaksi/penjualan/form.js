@@ -152,6 +152,8 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
             if (index >= 0) this.list.items[index] = item
             else this.list.items.unshift(item)
             this.resetPembayaran()
+            const list=useListPenjualanStore()
+            list.getListNull()
             notifSuccess(resp?.data?.message)
             resolve(resp)
           })
