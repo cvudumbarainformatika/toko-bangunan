@@ -47,8 +47,8 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
         console.log('list penjualan null', data);
         data.forEach(item=>{
           const index = this.items?.findIndex((obj) => obj.id === item.id)
-          if (index >= 0) this.items[index] = item
-          else this.items.unshift(item)
+          if (index >= 0) this.items.splice(index, 1)
+           this.items.unshift(item)
         })
 
         this.loading = false
