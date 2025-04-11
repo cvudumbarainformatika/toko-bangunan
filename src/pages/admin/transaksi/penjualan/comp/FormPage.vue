@@ -46,7 +46,7 @@
       />
     </div>
     <div class="col-2">
-      <app-input ref="refJumlah" v-model="store.form.jumlah" :label="'Jumlah '+ (store?.barang?.stok?.jumlah_k??0)" :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      <app-input ref="refJumlah" v-model="store.form.jumlah" :label="'Jumlah (Stok'+ (store?.barang?.stok?.jumlah_k??0)+')'" :autofocus="false" @keyup.enter.stop="onEnterinput()"
       :rules="[(val) => parseFloat(val)>0 || 'Jumlah barang harus lebih besar dari 0']" @clear=setNol(strJumlah) @update:model-value="(val)=>{
 
         const _removedZeros = val?.replace(/^0+/, '')
