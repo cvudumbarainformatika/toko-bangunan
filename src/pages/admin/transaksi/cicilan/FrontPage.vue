@@ -57,6 +57,7 @@
   <DialogListCicilan/>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { useCicilanPenjualanFormStore } from 'src/stores/admin/transaksi/cicilan/form'
 import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
@@ -81,9 +82,36 @@ function bawaNota(val){
 }
 function cicilNota(val){
   console.log('cicil nota', val);
-  store.item=val
-  store.setForm('id',val.id)
-  store.isOpen=true
+  // console.log('list', list.params);
+  if(list.params?.flag=="semua"){
+    store.item=val
+    store.setForm('pelanggan_id',val.pelanggan_id)
+    store.setForm('sales_id',val.sales_id)
+    store.setForm('id',val.id)
+    store.isOpen=true
+
+  }else{
+
+    Dialog.create({
+      title: 'Peringatan',
+      message: 'Jumlah Total HUTANG dan CICILAN munkin tidak akan akurat karena tidak semua nota ditampilkan',
+      ok: {
+        label: 'Lanjutkan',
+        color: 'primary'
+      },
+      cancel: {
+        label: 'Batal',
+        color: 'negative'
+      },
+      persistent: true
+    }).onOk(() => {
+      store.item=val
+        store.setForm('pelanggan_id',val.pelanggan_id)
+        store.setForm('sales_id',val.sales_id)
+        store.setForm('id',val.id)
+        store.isOpen=true
+    })
+  }
   // isList.value=false
 }
 function bukaCicilan(val){

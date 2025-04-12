@@ -2,12 +2,14 @@ import { acceptHMRUpdate, defineStore } from "pinia"
 import { api } from "src/boot/axios"
 import { notifError, notifSuccess } from "src/modules/notifs"
 import { useListCicilanPenjualanStore } from "./list"
+import { olahUang } from "src/modules/formatter"
 
 export const useCicilanPenjualanFormStore=defineStore('form_cicilan_penjualan',{
   state:()=>({
     loading:false,
     isOpen:false,
     isOpenList:false,
+    isOpenDetail:false,
     form:{},
     item:{},
   }),
@@ -17,14 +19,23 @@ export const useCicilanPenjualanFormStore=defineStore('form_cicilan_penjualan',{
     },
     async simpanCicilan(){
       this.loading=true
-      await api.post('v1/transaksi/cicilan/simpan-cicilan',this.form)
+
+      const form={}
+      const keys=Object.keys(this.form)
+      keys.forEach((key)=>{
+        if(key==='jumlah') form[key]= olahUang (this.form[key])
+          else form[key]=this.form[key]
+        })
+        console.log('form cicilan', form);
+      await api.post('v1/transaksi/cicilan/simpan-cicilan',form)
       .then(({data})=>{
         console.log('simpan cicilan', data);
         this.loading=false
         this.isOpen=false
+        this.isOpenDetail=false
+
         const list=useListCicilanPenjualanStore()
-        const index=list.items?.findIndex(obj=>obj.id===data?.data.id)
-        if(index>=0) list.items[index]=data?.data
+        list.getList()
         notifSuccess(data?.message)
       }).catch((err)=>{
         this.loading=false

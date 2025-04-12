@@ -6,9 +6,7 @@
           <div class="col-auto">
             <q-item-label header>
               <div class="row full-width items-center">
-                <!-- <div class="col-grow">
-                  <app-btn-back @click="emits('back')" />
-                </div> -->
+
                 <div class="col-auto">
                   <div class="flex items-center">
                     <app-input
@@ -56,6 +54,21 @@
                       "
                     />
                 </div>
+                <div class="col-auto">
+                  <app-input
+                      v-model="store.params.pelanggan"
+                      prepend-icon="search"
+                      label="Telusuri Nama planggan"
+                      style="min-width: 250px"
+                      :debounce="300"
+                      @update:model-value="
+                        (e) => {
+                          infiniteScroll.reset()
+                          store.getList()
+                        }
+                      "
+                    />
+                </div>
 
                 <q-space />
                 <div class="col-auto">
@@ -78,6 +91,32 @@
               :offset="150"
               :initial-index="store.params.page"
             >
+            <q-item>
+              <q-item-section>
+                    <q-item-label lines="1">
+                      <div class="row text-weight-bold">
+                        <div class="col-2">No Penjualan</div>
+                        <div class="col-2 q-ml-sm">Total</div>
+                        <div class="col-2 q-ml-sm">Total Diskon<span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                        <div class="col-2 q-ml-sm">Total - Diskon <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                        <div class="col-2 q-ml-sm">Status</div>
+                      </div>
+
+                      </q-item-label>
+                    <q-item-label lines="1">
+                      <div class="row text-weight-bold">
+                        <div class="col-3 text-weight-bold">Nama Pelanggan</div>
+                        <div class="col-2 q-ml-sm">Nama Sales </div>
+                        <div  class="col-2 q-ml-sm">Total cicilan <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                      </div>
+                    </q-item-label>
+                  </q-item-section>
+                  <q-item-section  side top>
+                    <q-item-label caption>Tanngal</q-item-label>
+                    <q-item-label caption>Jam</q-item-label>
+                  </q-item-section>
+            </q-item>
+            <q-separator  />
               <q-intersection
                 v-for="(item, i) in store.items"
                 :key="i"
@@ -96,9 +135,9 @@
                     <q-item-label lines="1">
                       <div class="row">
                         <div class="col-2">{{ item?.no_penjualan }}</div>
-                        <div class="col-2 q-ml-sm">{{ formatDouble(item?.total) }}</div>
-                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }}</span> </div>
-                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total - item?.total_diskon) }}</span> </div>
+                        <div class="col-2 q-ml-sm">{{ formatDouble(item?.total) }}<span class="text-italic f-10 q-ml-xs">(total)</span></div>
+                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }} <span class="text-italic f-10 q-ml-xs">(diskon)</span></span> </div>
+                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total - item?.total_diskon) }}<span class="text-italic f-10 q-ml-xs">(total - diskon)</span></span> </div>
                         <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
                       </div>
 
