@@ -47,7 +47,12 @@ export default defineConfig((ctx) => {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        API: ctx?.dev 
+          // ? 'https://api.jangurkeramik.my.id'
+          ? 'http://localhost:8182'
+          : 'https://api.jangurkeramik.my.id',
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,

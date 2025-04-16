@@ -1,7 +1,8 @@
 import { defineBoot } from '#q-app/wrappers'
 import axios from 'axios'
 
-const SERV = 'http://localhost:8182'
+// const SERV = 'http://localhost:8182'
+const SERV = process.env.API
 const base = SERV
 
 // let api = null
