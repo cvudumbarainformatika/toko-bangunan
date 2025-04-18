@@ -27,8 +27,13 @@
                 :loading="store.loadingstok"
               />
             </div>
-            <div class="col-1" v-else-if="props?.data?.kunci === '1'">
-              <q-btn round color="primary" icon="lock" />
+            <div class="row" v-else-if="props?.data?.kunci === '1'">
+              <div>
+                <q-btn size="sm" padding="sm" round dense color="primary" icon="lock" />
+              </div>
+              <div class="q-pl-xs">
+                <app-btn-cetak @click="cetakData()" />
+              </div>
             </div>
             <div class="col-6">
               <app-input label="Supllier" disable v-model="store.form.suplier" />
@@ -100,6 +105,7 @@
     </div>
   </div>
   <dialogcariorderan-page />
+  <dialog-cetakdata v-model="store.dialogCetak" :printdata="printdata" />
 </template>
 
 <script setup>
@@ -114,11 +120,14 @@ import { formatRpDouble, olahUang } from 'src/modules/formatter'
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
 import AppInputRp from 'src/components/~global/AppInputRp.vue'
 import { notifError } from 'src/modules/notifs'
-import { computed } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
+
+const DialogCetakdata = defineAsyncComponent(() => import('./cetak/DialogCetak.vue'))
 
 const store = useAdminFormTransaksiPenerimaanBarangStore()
 const storeorder = useAdminListTransaksiOrderBarangStore()
 const emits = defineEmits(['back'])
+const printdata = ref(null)
 
 function cariorderan() {
   storeorder.fixed = true
@@ -169,4 +178,43 @@ const lists = computed(() => {
     return b.id - a.id
   })
 })
+
+function cetakData() {
+  store.dialogCetak = true
+}
+
+if (props?.data) {
+  const rinciterima = props?.data?.rinci
+  const rinciorder = store.rinci?.filter((x) => x.noorder === props?.data?.noorder)
+
+  const kodebarang = rinciterima?.map((x) => x.kdbarang)
+  const newset = kodebarang?.length ? [...new Set(kodebarang)] : []
+  const rincians = []
+  for (let i = 0; i < newset.length; i++) {
+    const el = newset[i]
+    const obterima = rinciterima.filter((x) => x.kdbarang === el)
+
+    const obj = {
+      kdbarang: rinciorder.filter((x) => x.kdbarang === el)[0].kdbarang,
+      namabarang: rinciorder.filter((x) => x.kdbarang === el)[0].mbarang?.namabarang,
+      jumlahorder: rinciorder.filter((x) => x.kdbarang === el)[0].jumlahpo,
+      jumlahterima: obterima?.map((x) => parseInt(x.jumlah_b)).reduce((a, b) => a + b, 0),
+      hargafaktur: obterima?.map((x) => parseInt(x.hargafaktur)).reduce((a, b) => a + b, 0),
+      subtotalfix: obterima?.map((x) => parseInt(x.subtotalfix)).reduce((a, b) => a + b, 0),
+    }
+    rincians.push(obj)
+  }
+
+  const penerimaan = {
+    nopenerimaan: props?.data?.nopenerimaan,
+    noorder: props?.data?.noorder,
+    suplier: props?.data?.suplier,
+    tanggal: props?.data?.tgl,
+    total: props?.data?.total,
+    totalfix: props?.data?.totalfix,
+    rincians: rincians,
+  }
+  store.dataprops = penerimaan
+  console.log('penerimaan', store.dataprops)
+}
 </script>

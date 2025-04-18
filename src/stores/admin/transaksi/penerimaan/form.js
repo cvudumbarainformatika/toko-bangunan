@@ -25,6 +25,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
       lock: false,
       hiden: false,
       kunci: null,
+      dataprops: [],
     }),
     // persist: true,
     // getters: {
