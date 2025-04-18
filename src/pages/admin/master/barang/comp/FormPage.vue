@@ -83,9 +83,14 @@
 
                   <app-input
                     class="col-12"
-                    v-model="store.form.namabarang"
+                    v-model="store.form.namagabung"
                     label="Nama Barang"
                     :valid="{ required: false }"
+                    @update:model-value="
+                      (val) => {
+                        store.form.namabarang = val
+                      }
+                    "
                   />
 
                   <app-select
