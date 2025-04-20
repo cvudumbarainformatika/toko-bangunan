@@ -5,7 +5,7 @@
       <q-form @submit="onSubmit">
         <div class="column flex-center">
           <avatar-logo size="xl" />
-          <div class="text-h5 text-center q-mt-md">LOGINX</div>
+          <div class="text-h5 text-center q-mt-md">LOGINXXX</div>
         </div>
         <div class="input-box q-my-md">
           <q-input
