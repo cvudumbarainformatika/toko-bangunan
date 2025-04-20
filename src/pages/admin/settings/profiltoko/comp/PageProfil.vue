@@ -3,7 +3,7 @@
     <div class="row full-width justify-between q-px-md">
       <div class="col flex-start q-py-sm">
         <div class="" style="width: 70%">
-          <div class="q-pl-sm">Nama Toko</div>
+          <div class="q-pl-sm">Nama PERUSAHAAN</div>
           <q-input dense filled v-model="store.form.namatoko" class="q-pa-sm" />
         </div>
         <div class="" style="width: 70%">
