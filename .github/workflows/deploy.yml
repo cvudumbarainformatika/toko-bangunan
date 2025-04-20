@@ -1,4 +1,4 @@
-name: Deploy Simrs SPA
+name: Deploy Frontend SPA
 
 on:
   push:
