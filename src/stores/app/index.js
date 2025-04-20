@@ -19,13 +19,6 @@ export const useAppStore = defineStore('app-store', {
     titleLoading: '',
   }),
   persist: true,
-  // getters: {
-  //   isAuth(state) {
-  //     return state.token !== null || state.token !== undefined
-  //   },
-  //   getToken: () => storage.getLocalToken(),
-  //   userGetter: () => storage.getUser(),
-  // },
 
   // getters: {
   //   doubleCount: (state) => state.counter * 2
