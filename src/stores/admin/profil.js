@@ -29,7 +29,7 @@ export const useProfilStore = defineStore('profil-toko-store', {
 
   actions: {
     async getProfil() {
-      this.loading = true
+      //this.loading = true
       try {
         const { data } = await api.get('/v1/settings/profiltoko/getprofil')
         this.profilData = data.result || data
@@ -41,7 +41,7 @@ export const useProfilStore = defineStore('profil-toko-store', {
       } catch (error) {
         console.error('Error fetching profil:', error)
       } finally {
-        this.loading = false
+        // this.loading = false
       }
     },
   },

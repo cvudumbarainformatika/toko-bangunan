@@ -6,11 +6,12 @@ const SERV = process.env.API
 const base = SERV
 
 // let api = null
-let token = null
+// let token = null
 
 // console.log('boot', base);
 // base = storage.getApp('app-store') ? storage.getApp('app-store').ipserver : ''
-// token = storage.getApp('auth-store') ? storage.getApp('auth-store').token : ''
+const token = JSON.parse(localStorage.getItem('token')) ?? null
+console.log('token', token)
 
 const api = axios.create({ baseURL: base + '/api' })
 
@@ -20,12 +21,15 @@ const api = axios.create({ baseURL: base + '/api' })
 
 api.defaults.headers.get.Accepts = 'application/json'
 api.defaults.headers.common.Authorization = `Bearer ${token}`
+//......................asli....//
+// function setToken(tokentok) {
+//   api.defaults.headers.common.Authorization = `Bearer ${tokentok}`
+// }
 
-function setToken(tokentok) {
-  api.defaults.headers.common.Authorization = `Bearer ${tokentok}`
+const setToken = (token) => {
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
-
-const deleteToken = () => delete api.defaults.headers.common.Authorization
+const deleteToken = () => delete api.defaults.headers.common['Authorization']
 
 const pathImg = SERV + '/storage/'
 export default defineBoot(({ app }) => {

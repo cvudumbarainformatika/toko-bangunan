@@ -1,4 +1,18 @@
-import { date } from 'quasar'
+import { date, Loading, QSpinnerCube } from 'quasar'
+
+const waitLoad = (cond) => {
+  if (cond === 'show') {
+    Loading.show({
+      message: 'Harap bersabar. Menunggu...',
+      boxClass: 'bg-dark text-white',
+      spinner: QSpinnerCube,
+      // spinnerColor: 'yellow',
+      spinnerSize: 30,
+    })
+  } else {
+    Loading.hide()
+  }
+}
 
 const dateDbFormat = (val) => {
   return date.formatDate(val, 'YYYY-MM-DD')
@@ -243,4 +257,5 @@ export {
   formatDoubleKoma,
   getNewLine,
   terbilangRupiah,
+  waitLoad,
 }

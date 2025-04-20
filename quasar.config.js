@@ -12,7 +12,15 @@ export default defineConfig((ctx) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['i18n', 'axios', 'routing', 'global-components', 'other-components', 'MyDirective'],
+    boot: [
+      'i18n',
+      'axios',
+      'routing',
+      'global-components',
+      'other-components',
+      'MyDirective',
+      'router',
+    ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: ['app.scss'],
@@ -48,9 +56,9 @@ export default defineConfig((ctx) => {
       // publicPath: '/',
       // analyze: true,
       env: {
-        API: ctx?.dev 
-          // ? 'https://api.jangurkeramik.my.id'
-          ? 'http://localhost:8182'
+        API: ctx?.dev
+          ? // ? 'https://api.jangurkeramik.my.id'
+            'http://localhost/newtokobangunan/belakang-toko/public'
           : 'https://api.jangurkeramik.my.id',
       },
       // rawDefine: {}
