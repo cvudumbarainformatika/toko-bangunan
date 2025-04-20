@@ -1,18 +1,14 @@
 import { defineBoot } from '#q-app/wrappers'
 import axios from 'axios'
+import { useAppStore } from 'src/stores/app'
 
 // const SERV = 'http://localhost:8182'
 const SERV = process.env.API
 const base = SERV
 
-// let api = null
-// let token = null
-
 // console.log('boot', base);
 // base = storage.getApp('app-store') ? storage.getApp('app-store').ipserver : ''
 const token = JSON.parse(localStorage.getItem('token')) ?? null
-console.log('token', token)
-
 const api = axios.create({ baseURL: base + '/api' })
 
 // function setBase(url) {
@@ -25,6 +21,23 @@ api.defaults.headers.common.Authorization = `Bearer ${token}`
 // function setToken(tokentok) {
 //   api.defaults.headers.common.Authorization = `Bearer ${tokentok}`
 // }
+
+api.interceptors.response.use(
+  (response) => {
+    // Update last active time on successful requests
+    localStorage.setItem('activeTime', new Date().toString())
+    return response
+  },
+  async (error) => {
+    // Handle 401 Unauthorized errors
+    if (error.response?.status === 401) {
+      const app = useAppStore()
+      await app.logout()
+      return Promise.reject(new Error('Session expired. Please login again.'))
+    }
+    return Promise.reject(error)
+  },
+)
 
 const setToken = (token) => {
   api.defaults.headers.common['Authorization'] = `Bearer ${token}`

@@ -4,7 +4,7 @@ import * as storage from 'src/modules/storage'
 
 export default defineBoot(({ router, store }) => {
   console.groupCollapsed('[boot routing]')
-  console.log('router', router)
+  // console.log('router', router)
   const app = useAppStore(store)
 
   router.beforeEach((to, from, next) => {
@@ -13,20 +13,30 @@ export default defineBoot(({ router, store }) => {
     const token = storage.getLocalToken()
     const user = storage.getUser()
     const requireAuth = to.matched.some((route) => route.meta.requireAuth)
-    console.log('requireAuthauth from store', requireAuth)
+    // console.log('requireAuthauth from store', requireAuth)
+
+    // Check token expiration
+    const checkTokenExpiration = () => {
+      const activeTime = localStorage.getItem('activeTime')
+      if (activeTime) {
+        const lastActive = new Date(activeTime)
+        const now = new Date()
+        const hoursDiff = (now - lastActive) / (1000 * 60 * 60)
+
+        // Token expired after 24 hours of inactivity
+        if (hoursDiff > 24) {
+          app.logout()
+          next({ path: '/auth' })
+          return false
+        }
+      }
+      return true
+    }
 
     if (token && user && !app.auth) {
       app.restoreSession(token, user)
     }
-    // Now you need to add your authentication logic here, like calling an API endpoint
-    // console.log('beforeEach',to, from, next);
-    // if (requireAuth && !isAuth) {
-    //   next({ path: '/auth' })
-    // } else if (!requireAuth && isAuth) {
-    //   next({ path: '/' })
-    // } else {
-    //   next()
-    // }
+
     if (requireAuth) {
       if (!token || !user) {
         // No token or user, redirect to login
@@ -35,18 +45,8 @@ export default defineBoot(({ router, store }) => {
       }
 
       // Check token expiration if you have expiry data
-      const activeTime = localStorage.getItem('activeTime')
-      if (activeTime) {
-        const lastActive = new Date(activeTime)
-        const now = new Date()
-        const hoursDiff = (now - lastActive) / (1000 * 60 * 60)
-
-        if (hoursDiff > 24) {
-          // Expire after 24 hours
-          app.logout()
-          next({ path: '/auth' })
-          return
-        }
+      if (!checkTokenExpiration()) {
+        return
       }
     } else if (token && to.path === '/auth') {
       // If authenticated and trying to access login page

@@ -62,6 +62,10 @@ const routes = [
         path: '/admin/settings/profiltoko',
         component: () => import('pages/admin/settings/profiltoko/IndexPage.vue'),
       },
+      {
+        path: '/admin/settings/hakakses',
+        component: () => import('pages/admin/settings/hakakses/IndexPage.vue'),
+      },
 
       // profile
       { path: '/admin/profile', component: () => import('pages/admin/profile/IndexPage.vue') },

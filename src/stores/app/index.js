@@ -25,6 +25,39 @@ export const useAppStore = defineStore('app-store', {
   // },
 
   actions: {
+    checkTokenExpiration() {
+      const activeTime = localStorage.getItem('activeTime')
+      if (activeTime) {
+        const lastActive = new Date(activeTime)
+        const now = new Date()
+        const hoursDiff = (now - lastActive) / (1000 * 60 * 60)
+
+        if (hoursDiff > 24) {
+          this.logout()
+          notifError('Session expired. Please login again.')
+          return false
+        }
+      }
+      return true
+    },
+
+    restoreSession(token, user) {
+      if (!this.checkTokenExpiration()) {
+        return false
+      }
+
+      storage.setHeaderToken(token)
+      this.token = token
+      this.user = user
+      this.auth = true
+      this.updateLastActive()
+      return true
+    },
+
+    updateLastActive() {
+      localStorage.setItem('activeTime', new Date().toString())
+    },
+
     login(payload) {
       this.loading = true
       this.titleLoading = 'SEDANG SINKRON DATA'
@@ -50,7 +83,12 @@ export const useAppStore = defineStore('app-store', {
               selectSatuan.getDataAll(),
               selectBrands.getDataAll(),
               profiltoko.getProfil(),
-            ])
+            ]).finally(() => {
+              setTimeout(() => {
+                routerInstance.push('/')
+                this.loading = false
+              }, 500)
+            })
             resolve(resp)
           })
           .catch((error) => {
@@ -84,19 +122,20 @@ export const useAppStore = defineStore('app-store', {
 
     logout() {
       return new Promise((resolve) => {
-        // Clear storage
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
-        localStorage.removeItem('activeTime')
+        api.post('/logout').finally(() => {
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+          localStorage.removeItem('activeTime')
 
-        // Reset state
-        this.auth = false
-        this.user = null
-        this.token = null
+          // Reset state
+          this.auth = false
+          this.user = null
+          this.token = null
 
-        // Redirect to login
-        routerInstance.push('/auth')
-        resolve()
+          // Redirect to login
+          routerInstance.push('/auth')
+          resolve()
+        })
       })
     },
   },
