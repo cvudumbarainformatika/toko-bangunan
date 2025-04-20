@@ -14,6 +14,7 @@ import {
 } from 'quasar-extras-svg-icons/tabler-icons-v2'
 import { api } from 'src/boot/axios'
 import { useRoute } from 'vue-router'
+import { useAppStore } from '.'
 
 export const useLeftDrawerStore = defineStore('left-drawer', {
   state: () => ({
@@ -88,9 +89,29 @@ export const useLeftDrawerStore = defineStore('left-drawer', {
 
   actions: {
     async getMenu() {
+      this.tabs = []
       const { data } = await api.get('/v1/admin/menu/list')
-      console.log(data)
-      this.tabs = data
+      console.log('hasil', data)
+      const apps = useAppStore()
+      console.log('user', apps.user)
+      if (apps.user.username === 'sa') {
+        this.tabs = data
+      } else {
+        const rowmenu = data.hakakses.map((menu) => menu.menu_id)
+        console.log('rowmenu', rowmenu)
+
+        const menu = [...new Set(rowmenu)]
+          .map((x) => data.hakakses.find((f) => f.menu_id === x)?.menus)
+          .sort((a, b) => a.urut - b.urut)
+
+        if (menu.length > 0) {
+          menu.forEach((x) => {
+            x.subs = data.hakakses.filter((f) => f.menu_id === x.id).flatMap((menu) => menu.subs)
+          })
+        }
+        console.log('menu', menu)
+        this.tabs = menu
+      }
     },
 
     setTab(route) {
