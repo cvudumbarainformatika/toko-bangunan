@@ -106,7 +106,17 @@ export const useLeftDrawerStore = defineStore('left-drawer', {
 
         if (menu.length > 0) {
           menu.forEach((x) => {
-            x.subs = data.hakakses.filter((f) => f.menu_id === x.id).flatMap((menu) => menu.subs)
+            const subs = data.hakakses
+              .filter((f) => f.menu_id === x.id)
+              .flatMap((menu) => menu.subs)
+
+            console.log('subs', subs)
+
+            if (subs.length > 0 && subs[0] !== null) {
+              x.subs = subs
+            } else {
+              x.subs = []
+            }
           })
         }
         console.log('menu', menu)
