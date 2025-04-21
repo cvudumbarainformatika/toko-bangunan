@@ -6,13 +6,20 @@ export const useAdminMasterPegawaiStore = defineStore('admin-master-pegawai-stor
   state: () => ({
     meta: null,
     items: [],
+    itemsset: [],
     isError: false,
     loading: false,
+    loadingsetting: false,
     params: {
       q: null,
       page: 0,
       per_page: 15,
     },
+    payload: {
+      q: '',
+    },
+    hakakses: [],
+    itemssubmenu: [],
   }),
   // persist: true,
   // getters: {
@@ -49,8 +56,6 @@ export const useAdminMasterPegawaiStore = defineStore('admin-master-pegawai-stor
         params: this.params,
       }
 
-      console.log('load more', index)
-
       return new Promise((resolve) => {
         api
           .get('/v1/master/users/getdata', params)
@@ -83,6 +88,57 @@ export const useAdminMasterPegawaiStore = defineStore('admin-master-pegawai-stor
       } catch (error) {
         console.log('del Pegawai error', error)
         notifError('Terjadi Kesalahan')
+      }
+    },
+
+    async getListsetting() {
+      this.loadingsetting = true
+      // const params = {
+      //   params: this.payload,
+      // }
+      try {
+        const { data } = await api.get('/v1/master/users/getdatasetiing')
+        this.itemsset = data
+        this.loadingsetting = false
+      } catch (error) {
+        console.log(error)
+        this.isError = true
+        this.loadingsetting = false
+      }
+    },
+
+    async olah(val) {
+      console.log('val', val)
+      this.hakakses = []
+      const rowmenu = val.hakakses.map((menu) => menu.menu_id)
+      console.log('rowmenu', rowmenu)
+      const menu = [...new Set(rowmenu)]
+        .map((x) => val.hakakses.find((f) => f.menu_id === x)?.menus)
+        .sort((a, b) => a.urut - b.urut)
+      console.log('menu', menu)
+      if (menu.length > 0) {
+        menu.forEach((x) => {
+          const subs = val.hakakses.filter((f) => f.menu_id === x.id).flatMap((menu) => menu.subs)
+
+          if (subs.length > 0 && subs[0] !== null) {
+            x.subs = subs
+          } else {
+            x.subs = []
+          }
+        })
+      }
+
+      this.hakakses = menu
+      console.log('hakakses', this.hakakses)
+    },
+
+    async submenu() {
+      try {
+        const { data } = await api.get('/v1/master/users/getmenu')
+        this.itemssubmenu = data
+      } catch (error) {
+        console.log(error)
+        this.isError = true
       }
     },
   },

@@ -1,9 +1,7 @@
 <template>
-  <q-page>
-    <div class="fit q-pa-md">
-      <AsyncComp />
-    </div>
-  </q-page>
+  <div class="fit">
+    <AsyncComp />
+  </div>
 </template>
 <script setup>
 import { defineAsyncComponent } from 'vue'

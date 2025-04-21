@@ -2,10 +2,11 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 
 import { api } from 'src/boot/axios'
 import { useAdminMasterPegawaiStore } from './list'
-import { notifSuccess } from 'src/modules/notifs'
+import { notifError, notifSuccess } from 'src/modules/notifs'
 
 export const useAdminFormMasterPegawaiStore = defineStore('admin-form-master-pegawai-store', {
   state: () => ({
+    dialog: false,
     form: {
       id: null,
       nama: null,
@@ -23,6 +24,10 @@ export const useAdminFormMasterPegawaiStore = defineStore('admin-form-master-peg
       { keterangan: 'Pegawai', kode: 2 },
       { keterangan: 'Sales', kode: 3 },
     ],
+    payload: {
+      submenu: '',
+      menu: '',
+    },
   }),
   // persist: true,
   // getters: {
@@ -78,6 +83,30 @@ export const useAdminFormMasterPegawaiStore = defineStore('admin-form-master-peg
           })
           .catch((err) => {
             this.loading = false
+            reject(err)
+          })
+      })
+    },
+
+    async tambahhakakses() {
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api
+          .post('/v1/master/users/savehakakses', this.payload)
+          .then(({ data }) => {
+            this.loading = false
+            console.log('saved', data)
+            const datax = data?.result[0]
+            const arr = useAdminMasterPegawaiStore()
+            arr.olah(datax)
+            notifSuccess('Data berhasil disimpan')
+
+            this.initReset(null)
+            resolve(data)
+          })
+          .catch((err) => {
+            this.loading = false
+            notifError(err?.response?.data?.message)
             reject(err)
           })
       })
