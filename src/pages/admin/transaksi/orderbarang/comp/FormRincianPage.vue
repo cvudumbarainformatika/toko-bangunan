@@ -2,7 +2,7 @@
   <div class="fit column absolute">
     <div class="col full-height">
       <q-card flat bordered square class="full-height" style="overflow: hidden">
-        <q-form ref="refForm" @submit="onSubmit(data?.flaging)">
+        <q-form ref="formRef" @submit="onSubmit(data?.flaging)">
           <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
             <div class="row items-center justify-between">
               <div class="f-12 text-weight-bold">
@@ -23,6 +23,7 @@
                   :options="storesupllier.itemsall"
                   option-label="nama"
                   option-value="kodesupl"
+                  :valid="store.form.kdsuplier !== null"
                 />
               </div>
               <div class="col-1" v-if="data?.flaging === undefined || data?.flaging === null">
@@ -72,8 +73,8 @@
                   :filter-min="1"
                   :limit="25"
                   @update:model-value="(val) => isiform(val)"
+                  :valid="store.form.namabarang !== null"
                   clearable
-                  valid
                 />
               </div>
               <div class="col-5">
@@ -130,7 +131,7 @@
                   outlined
                   v-model="store.form.jumlahx"
                   label="Jumlah Yang Di Pesan"
-                  valid
+                  :valid="store.form.jumlahx !== null"
                   currency
                 />
               </div>
@@ -141,7 +142,7 @@
                   class="col-6"
                   v-model="store.form.hargax"
                   label="Harga Beli"
-                  valid
+                  :valid="store.form.hargax !== null"
                   currency
                 />
               </div>
@@ -186,6 +187,8 @@ const props = defineProps({
     default: null,
   },
 })
+
+const formRef = ref(null)
 
 store.form.noorder = props?.data?.noorder
 store.form.kdsuplier = props?.data?.kdsuplier
