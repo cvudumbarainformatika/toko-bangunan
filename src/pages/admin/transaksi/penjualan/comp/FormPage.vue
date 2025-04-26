@@ -48,7 +48,7 @@
       />
     </div>
     <div class="col-auto" style="width: 15%;">
-      <app-input ref="refJumlahB" v-model="store.form.jumlahB" label="Jumlah Satuan Besar" :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      <app-input ref="refJumlahB" v-model="store.form.jumlahB" :label="'Jumlah ('+ (store?.barang?.stok?.satuan_b??'')+')'"  :autofocus="false" @keyup.enter.stop="onEnterinput()"
       @clear=setNol(strJumlahB) @update:model-value="(val)=>{
         const _removedZeros = val?.replace(/^0+/, '')
 
@@ -58,7 +58,7 @@
       />
     </div>
     <div class="col-auto" style="width: 15%;">
-      <app-input ref="refJumlah" v-model="store.form.jumlahK" label="Jumlah satuan kecil" :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      <app-input ref="refJumlah" v-model="store.form.jumlahK" :label="'Jumlah ('+ (store?.barang?.stok?.satuan_k??'')+')'"  :autofocus="false" @keyup.enter.stop="onEnterinput()"
        @clear=setNol(strJumlah) @update:model-value="(val)=>{
         const _removedZeros = val?.replace(/^0+/, '')
         store.setForm('jumlahK',_removedZeros)
