@@ -25,9 +25,10 @@
       <div class="col-auto" style="width: 25%;">Produk</div>
       <div class="col-auto" style="width: 15%;">Jumlah (SB)</div>
       <div class="col-auto" style="width: 15%;">Jumlah (SK)</div>
-      <div class="col-auto" style="width: 15%;">Jumlah (allSK)</div>
+      <div class="col-auto" style="width: 10%;">isi</div>
+      <div class="col-auto" style="width: 10%;">Jumlah (allSK)</div>
       <div class="col-auto" style="width: 15%;">Harga Jual</div>
-      <div class="col-auto" style="width: 15%;">Diskon (Rp)</div>
+      <div class="col-auto" style="width: 10%;">Diskon (Rp)</div>
     </div>
   <q-separator />
   <div class="row items-center q-col-gutter-x-sm">
@@ -50,13 +51,9 @@
       <app-input ref="refJumlahB" v-model="store.form.jumlahB" label="Jumlah Satuan Besar" :autofocus="false" @keyup.enter.stop="onEnterinput()"
       @clear=setNol(strJumlahB) @update:model-value="(val)=>{
         const _removedZeros = val?.replace(/^0+/, '')
-        const isi= parseFloat(store.barang?.stok?.isi) ?? 1
-        const jumlah= (isi*parseFloat(_removedZeros))+parseFloat(store.form.jumlahK)
-
-        console.log('barang', store.barang);
 
         store.setForm('jumlahB',_removedZeros)
-        store.setForm('jumlah',jumlah)
+        setJumlah()
       }"
       />
     </div>
@@ -64,16 +61,15 @@
       <app-input ref="refJumlah" v-model="store.form.jumlahK" label="Jumlah satuan kecil" :autofocus="false" @keyup.enter.stop="onEnterinput()"
        @clear=setNol(strJumlah) @update:model-value="(val)=>{
         const _removedZeros = val?.replace(/^0+/, '')
-
-        const isi= parseFloat(store.barang?.stok?.isi) ?? 1
-        const jumlah= parseFloat(_removedZeros)+(parseFloat(store.form.jumlahB)*isi)
-
         store.setForm('jumlahK',_removedZeros)
-        store.setForm('jumlah',jumlah)
+        setJumlah()
       }"
       />
     </div>
-    <div class="col-auto" style="width: 15%;">
+    <div class="col-auto" style="width: 10%;">
+      <app-input-rp currency outlined v-model="store.form.isi" label="isi" :autofocus="false" readonly  />
+    </div>
+    <div class="col-auto" style="width: 10%;">
       <app-input-rp currency outlined v-model="store.form.jumlah" :label="'(Stok'+ (store?.barang?.stok?.jumlah_k??0)+')'" :autofocus="false" readonly  />
     </div>
     <div class="col-auto" style="width: 15%;">
@@ -81,7 +77,7 @@
       store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
     }" />
     </div>
-    <div class="col-auto" style="width: 15%;"><app-input-rp currency outlined v-model="store.form.diskon" label="Diskon (Rp)" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear=setNol(strDsikon) /></div>
+    <div class="col-auto" style="width: 10%;"><app-input-rp currency outlined v-model="store.form.diskon" label="Diskon (Rp)" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear=setNol(strDsikon) /></div>
 
   </div>
 </template>
@@ -105,10 +101,13 @@ function selected(val){
   const keys=Object.keys(val)
   if(keys?.length>0){
     store.barang=val
+    console.log('store', store.barang);
+
     store.setForm('kodebarang',store?.barang?.kodebarang)
     if(!store.form.sales_id) store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
     else store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual2))
     store.setForm('harga_beli',isNaN(store?.barang?.stok?.harga_beli_k)?0:parseFloat(store?.barang?.stok?.harga_beli_k))
+    store.setForm('isi',isNaN(store?.barang?.stok?.isi)?(parseFloat(store?.barang?.isi)):parseFloat(store?.barang?.stok?.isi))
     console.log('form', store.form);
   }
   setTimeout(() => {
@@ -117,6 +116,14 @@ function selected(val){
 
   },100)
 
+}
+function setJumlah(){
+  const isi= parseFloat(store.form.isi) ?? 1
+  const jumB=((isNaN(parseFloat(store.form.jumlahB))?0:parseFloat(store.form.jumlahB)) * isi)
+  const jumK= (isNaN(parseFloat(store.form.jumlahK))?0:parseFloat(store.form.jumlahK))
+  const jumlah= jumB + jumK
+
+  store.setForm('jumlah',jumlah)
 }
 function validasi(){
   const jumlah=refJumlah.value?.appInput?.validate()

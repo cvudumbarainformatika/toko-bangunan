@@ -17,6 +17,7 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
       jumlah: 0,
       jumlahB: 0,
       jumlahK: 0,
+      isi: 0,
       harga_beli: 0,
       harga_jual: 0,
       diskon: 0,
