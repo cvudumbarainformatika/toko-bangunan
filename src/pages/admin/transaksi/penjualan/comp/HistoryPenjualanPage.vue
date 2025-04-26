@@ -17,13 +17,16 @@
                       style="min-width: 150px"
                       outlined
                       :debounce="300"
-                      @set-model="(val) => {
-                        store.dateDisplay.from = val
-                      }"
-                      @db-model="(val)=>{
-                        store.params.from=val
-
-                      }"
+                      @set-model="
+                        (val) => {
+                          store.dateDisplay.from = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          store.params.from = val
+                        }
+                      "
                     />
                     <app-input-date
                       :model="store.dateDisplay.to"
@@ -31,13 +34,16 @@
                       style="min-width: 150px"
                       outlined
                       :debounce="300"
-                      @set-model="(val) => {
-                        store.dateDisplay.to = val
-                      }"
-                      @db-model="(val)=>{
-                        store.params.to=val
-
-                      }"
+                      @set-model="
+                        (val) => {
+                          store.dateDisplay.to = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          store.params.to = val
+                        }
+                      "
                     />
                     <app-input
                       v-model="store.params.q"
@@ -59,10 +65,11 @@
                       dense
                       @click="
                         () => {
-                        store.getList()
-                      }"
+                          store.getList()
+                        }
+                      "
                     >
-                    <q-tooltip >Rerfresh</q-tooltip>
+                      <q-tooltip>Rerfresh</q-tooltip>
                     </q-btn>
                   </div>
                 </div>
@@ -113,10 +120,10 @@
                           <div class="col-3 text-weight-bold">
                             {{ item?.keterangan?.nama }}
                           </div>
-                          <div  class="col-2 q-ml-sm">
+                          <div class="col-2 q-ml-sm">
                             {{ item?.keterangan?.tlp }}
                           </div>
-                          <div  class="col-5 q-ml-sm">
+                          <div class="col-5 q-ml-sm">
                             {{ item?.keterangan?.alamat }}
                           </div>
                         </div>
@@ -146,6 +153,7 @@
                         ></app-btn-cetak>
                       </div>
                     </q-item-section>
+
                     <q-item-section v-else side top>
                       <q-item-label caption>{{ humanDate(item?.tgl) }}</q-item-label>
                       <q-item-label caption>{{ jamTnpDetik(item?.tgl) }}</q-item-label>
@@ -161,12 +169,27 @@
                     <div class="col-2 text-right">Subtotal</div>
                   </div>
                   <q-separator />
-                  <div v-if="item?.flag != null" class="row q-pa-sm text-weight-bold f-10 text-italic">(Detail Penjualan )</div>
+                  <div
+                    v-if="item?.flag != null"
+                    class="row q-pa-sm text-weight-bold f-10 text-italic"
+                  >
+                    (Detail Penjualan )
+                  </div>
                   <div v-for="detail in item?.detail" :key="detail?.id">
                     <div class="row q-px-sm">
                       <div class="col-5">
                         {{
-                          detail?.master_barang?.namabarang + ' ' + (item?.flag!=null ? '' : (detail?.master_barang?.stok === null ? '' : '(stok ' + detail?.master_barang?.stok?.jumlah_k + '  ' + detail?.master_barang?.stok?.satuan_k + ' )'))
+                          detail?.master_barang?.namabarang +
+                          ' ' +
+                          (item?.flag != null
+                            ? ''
+                            : detail?.master_barang?.stok === null
+                              ? ''
+                              : '(stok ' +
+                                detail?.master_barang?.stok.jumlah_k +
+                                '  ' +
+                                detail?.master_barang?.stok.satuan_k +
+                                ' )')
                         }}
                       </div>
                       <div class="col-1 text-right">{{ detail?.jumlah }}</div>
@@ -178,12 +201,24 @@
                   </div>
                   <template v-if="item?.flag != null">
                     <q-separator />
-                    <div class="row q-pa-sm text-weight-bold f-10 text-italic">(Detail Penjualan Fifo)</div>
+                    <div class="row q-pa-sm text-weight-bold f-10 text-italic">
+                      (Detail Penjualan Fifo)
+                    </div>
                     <div v-for="detail in item?.detail_fifo" :key="detail?.id">
                       <div class="row q-px-sm">
                         <div class="col-5">
                           {{
-                            detail?.master_barang?.namabarang + ' ' + (item?.flag!=null ? '' : (detail?.master_barang?.stok === null ? '' : '(stok ' + detail?.master_barang?.stok.jumlah_k + '  ' + detail?.master_barang?.stok.satuan_k + ' )'))
+                            detail?.master_barang?.namabarang +
+                            ' ' +
+                            (item?.flag != null
+                              ? ''
+                              : detail?.master_barang?.stok === null
+                                ? ''
+                                : '(stok ' +
+                                  detail?.master_barang?.stok.jumlah_k +
+                                  '  ' +
+                                  detail?.master_barang?.stok.satuan_k +
+                                  ' )')
                           }}
                         </div>
                         <div class="col-1 text-right">{{ detail?.jumlah }}</div>
@@ -193,7 +228,6 @@
                         <div class="col-2 text-right">{{ formatDouble(detail?.subtotal) }}</div>
                       </div>
                     </div>
-
                   </template>
                 </q-expansion-item>
                 <q-separator />
@@ -213,6 +247,7 @@
       </div> -->
     </div>
   </div>
+  <DialogCetak v-model="store.opendialogCetak" />
 </template>
 
 <script setup>
@@ -220,12 +255,12 @@
 import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, defineAsyncComponent, onBeforeMount, ref, shallowRef } from 'vue'
 
 // const search = ref(null)
 const store = useListPenjualanStore()
 // const form = useAdminFormMasterBarangStore()
-
+const DialogCetak = shallowRef(defineAsyncComponent(() => import('./cetak/DialogCetak.vue')))
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
@@ -240,8 +275,9 @@ onBeforeMount(() => {
   // ])
 })
 function lihatCetak(item) {
-  console.log('item', item)
+  store.itemCetak = item
   store.opendialogCetak = true
+  console.log('itemCetak', store.itemCetak)
 }
 
 function statusFlag(flag) {
