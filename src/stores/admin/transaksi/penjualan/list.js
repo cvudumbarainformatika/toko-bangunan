@@ -11,6 +11,7 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
       page: 0,
       per_page: 15,
     },
+    itemCetak: [],
   }),
   actions: {
     async getList() {
@@ -44,11 +45,11 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
       try {
         const { data } = await api.get('/v1/transaksi/penjualan/list-null', params)
 
-        console.log('list penjualan null', data);
-        data.forEach(item=>{
+        console.log('list penjualan null', data)
+        data.forEach((item) => {
           const index = this.items?.findIndex((obj) => obj.id === item.id)
           if (index >= 0) this.items.splice(index, 1)
-           this.items.unshift(item)
+          this.items.unshift(item)
         })
 
         this.loading = false
