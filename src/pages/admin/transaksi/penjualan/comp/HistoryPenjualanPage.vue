@@ -10,19 +10,34 @@
                   <app-btn-back @click="emits('back')" />
                 </div>
                 <div class="col-auto">
-                  <div class="flex items-center">
-                    <app-input
-                      v-model="store.params.q"
-                      prepend-icon="search"
-                      label="Telusuri"
-                      style="min-width: 250px"
+                  <div class="flex items-center q-col-gutter-x-xs">
+                    <app-input-date
+                      :model="store.dateDisplay.from"
+                      label="Dari"
+                      style="min-width: 150px"
+                      outlined
                       :debounce="300"
-                      @update:model-value="
-                        (e) => {
-                          infiniteScroll.reset()
-                          store.getList()
-                        }
-                      "
+                      @set-model="(val) => {
+                        store.dateDisplay.from = val
+                      }"
+                      @db-model="(val)=>{
+                        store.params.from=val
+
+                      }"
+                    />
+                    <app-input-date
+                      :model="store.dateDisplay.to"
+                      label="Sampai"
+                      style="min-width: 150px"
+                      outlined
+                      :debounce="300"
+                      @set-model="(val) => {
+                        store.dateDisplay.to = val
+                      }"
+                      @db-model="(val)=>{
+                        store.params.to=val
+
+                      }"
                     />
                     <app-input
                       v-model="store.params.q"
