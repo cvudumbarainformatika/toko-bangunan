@@ -83,7 +83,7 @@ import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/tra
 const storeorder = useAdminListTransaksiOrderBarangStore()
 const storepenerimaan = useAdminFormTransaksiPenerimaanBarangStore()
 
-storeorder.getorderanfix()
+// storeorder.getorderanfix()
 
 function pilih(item) {
   console.log('item', item)

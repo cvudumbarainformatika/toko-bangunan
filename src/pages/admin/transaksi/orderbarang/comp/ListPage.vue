@@ -67,7 +67,30 @@
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
                       <app-btn-edit-list @click="lihatdetail(item)" />
-                      <app-btn-delete-list />
+                      <q-btn
+                        v-if="item?.flaging === '1'"
+                        color="teal"
+                        icon="vpn_key"
+                        size="sm"
+                        padding="sm"
+                        round
+                        dense
+                      >
+                        <q-tooltip>Kunci Data</q-tooltip>
+                      </q-btn>
+                      <!-- <q-btn
+                        v-if="item?.flaging === '2'"
+                        color="teal"
+                        icon="print"
+                        size="sm"
+                        padding="sm"
+                        round
+                        dense
+                        @click="cetakData(item)"
+                      >
+                        <q-tooltip>Kunci Data</q-tooltip>
+                      </q-btn> -->
+                      <!-- <app-btn-vpn_key @click="lihatCetak(item)" /> -->
                       <!-- <app-btn-cetak @click="lihatCetak(item)" /> -->
                     </div>
                   </q-item-section>
@@ -97,6 +120,7 @@
 
 <script setup>
 import { formatRpDouble, humanDate, jamTnpDetik } from 'src/modules/utils'
+
 import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
 import { computed, ref } from 'vue'
 

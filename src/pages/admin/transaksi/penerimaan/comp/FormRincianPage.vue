@@ -131,6 +131,7 @@ const printdata = ref(null)
 
 function cariorderan() {
   storeorder.fixed = true
+  storeorder.getorderanfix()
 }
 
 function onSubmit(val) {
