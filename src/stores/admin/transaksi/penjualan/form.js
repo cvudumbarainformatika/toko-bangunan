@@ -84,7 +84,7 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
     async simpanDetail() {
       this.loading = true
       if (this.noNota !== null) this.setForm('nota', this.noNota)
-        const keys = Object.keys(this.form)
+      const keys = Object.keys(this.form)
       const form={}
       keys.forEach((key) => {
         if (key=='harga_jual') form[key] = olahUang(this.form[key])
@@ -155,6 +155,14 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
     },
     simpanPembayaran() {
       this.loadingPembayaran = true
+      const keys = Object.keys(this.formPembayaran)
+      const form={}
+      keys.forEach((key) => {
+        if (key=='bayar') form[key] = olahUang(this.formPembayaran[key])
+        else if (key=='total') form[key] = olahUang(this.formPembayaran[key])
+        else if (key=='kembali') form[key] = olahUang(this.formPembayaran[key])
+          else form[key] = this.formPembayaran[key]
+      })
       return new Promise((resolve) => {
         api
           .post('v1/transaksi/penjualan/simpan-pembayaran', this.formPembayaran)
