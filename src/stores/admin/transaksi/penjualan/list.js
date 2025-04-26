@@ -1,4 +1,5 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 
 export const useListPenjualanStore = defineStore('list-penjualan-store', {
@@ -10,6 +11,12 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
       q: null,
       page: 0,
       per_page: 15,
+      from:date.formatDate(Date.now(), 'YYYY-MM-01'),
+      to: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+    },
+    dateDisplay: {
+      from: date.formatDate(Date.now(), '01 MMMM YYYY'),
+      to: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     },
   }),
   actions: {

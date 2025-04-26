@@ -52,6 +52,41 @@
                       :rules="[val=>(store.formPembayaran.cara_bayar == '2' ? !!val:true) || 'Harap di isi']"
                       :disable="store.loadingPembayaran"
                     />
+                    <template v-if="!store?.item?.sales_id && !store.formPembayaran.pelanggan_id">
+                      <div class="col-12 q-mb-md">
+                        <div class="row text-weight-bold q-mb-sm justify-center">Data Pelanggan</div>
+                        <div class="row">
+                          <div class="col-12">
+
+                            <app-input
+                            v-model="store.formPembayaran.dataPelanggan.nama"
+                            label="Nama Pelanggan"
+                            :disable="store.loadingPembayaran"
+                            />
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+
+                            <app-input
+                            v-model="store.formPembayaran.dataPelanggan.tlp"
+                            label="Tlp Pelanggan"
+                            :disable="store.loadingPembayaran"
+                            />
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+
+                            <app-input
+                            v-model="store.formPembayaran.dataPelanggan.alamat"
+                            label="Alamat Pelanggan"
+                            :disable="store.loadingPembayaran"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </template>
                     <template v-if="store.formPembayaran.cara_bayar=='5'" >
                       <app-input-rp
                       ref="refBayar"
