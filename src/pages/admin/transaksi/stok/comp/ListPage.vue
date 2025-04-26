@@ -50,9 +50,7 @@
                   @mouseleave="hoveredId = null"
                 >
                   <q-item-section avatar>
-                    <!-- <q-avatar>
-                      <img src="https://cdn.quasar.dev/img/avatar2.jpg" />
-                    </q-avatar> -->
+                    <q-avatar color="teal" text-color="white">{{ item?.brand[0] }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">
@@ -60,6 +58,10 @@
                         >Nama Barang : {{ item?.namabarang }}</span
                       >
                       <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
+                      <span class="text-weight-bold">
+                        || Keterangan : 1 {{ item?.satuan_b }} ({{ item?.isi }}
+                        {{ item?.satuan_k }})</span
+                      >
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
@@ -74,8 +76,13 @@
                         ({{ item?.jumlah_k }} {{ item?.satuan_k }})
                       </span>
                       <span class="text-weight-bold text-red">
-                        || Harga : {{ formatRpDouble(item?.harga_beli_k) }} per({{
+                        || Harga Satuan Kecil : {{ formatRpDouble(item?.harga_beli_k) }} per({{
                           item?.satuan_k
+                        }})</span
+                      >
+                      <span class="text-weight-bold text-red">
+                        || Harga Satuan Besar : {{ formatRpDouble(item?.harga_beli_b) }} per({{
+                          item?.satuan_b
                         }})</span
                       >
                     </q-item-label>

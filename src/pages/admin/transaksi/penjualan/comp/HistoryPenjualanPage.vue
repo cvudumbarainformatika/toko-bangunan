@@ -10,7 +10,41 @@
                   <app-btn-back @click="emits('back')" />
                 </div>
                 <div class="col-auto">
-                  <div class="flex items-center">
+                  <div class="flex items-center q-col-gutter-x-xs">
+                    <app-input-date
+                      :model="store.dateDisplay.from"
+                      label="Dari"
+                      style="min-width: 150px"
+                      outlined
+                      :debounce="300"
+                      @set-model="
+                        (val) => {
+                          store.dateDisplay.from = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          store.params.from = val
+                        }
+                      "
+                    />
+                    <app-input-date
+                      :model="store.dateDisplay.to"
+                      label="Sampai"
+                      style="min-width: 150px"
+                      outlined
+                      :debounce="300"
+                      @set-model="
+                        (val) => {
+                          store.dateDisplay.to = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          store.params.to = val
+                        }
+                      "
+                    />
                     <app-input
                       v-model="store.params.q"
                       prepend-icon="search"
@@ -24,6 +58,19 @@
                         }
                       "
                     />
+
+                    <q-btn
+                      round
+                      icon="refresh"
+                      dense
+                      @click="
+                        () => {
+                          store.getList()
+                        }
+                      "
+                    >
+                      <q-tooltip>Rerfresh</q-tooltip>
+                    </q-btn>
                   </div>
                 </div>
               </div>
@@ -67,6 +114,17 @@
                           </div>
                           <div v-if="item?.sales" class="col-2 q-ml-sm">
                             Sales : {{ item?.sales?.nama }}
+                          </div>
+                        </div>
+                        <div class="row" v-if="item?.keterangan">
+                          <div class="col-3 text-weight-bold">
+                            {{ item?.keterangan?.nama }}
+                          </div>
+                          <div class="col-2 q-ml-sm">
+                            {{ item?.keterangan?.tlp }}
+                          </div>
+                          <div class="col-5 q-ml-sm">
+                            {{ item?.keterangan?.alamat }}
                           </div>
                         </div>
                       </q-item-label>

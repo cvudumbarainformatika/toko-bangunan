@@ -27,7 +27,7 @@ const props = defineProps({
     default: null,
   },
 })
-console.log('get', props?.data)
+// console.log('get', props?.data)
 store.form.noorder = props?.data?.noorder
 store.form.suplier = props?.data?.suplier
 store.form.nopenerimaan = props?.data?.nopenerimaan

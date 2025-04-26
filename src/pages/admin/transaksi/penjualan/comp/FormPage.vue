@@ -22,15 +22,17 @@
       </div>
     </div>
     <div class="row q-mb-sm">
-      <div class="col-4">Produk</div>
-      <div class="col-2 ">Jumlah</div>
-      <div class="col-2 ">Harga Jual</div>
-      <div class="col-2">Diskon (Rp)</div>
-      <div class="col-2 ">Harga Beli</div>
+      <div class="col-auto" style="width: 25%;">Produk</div>
+      <div class="col-auto" style="width: 15%;">Jumlah (SB)</div>
+      <div class="col-auto" style="width: 15%;">Jumlah (SK)</div>
+      <div class="col-auto" style="width: 10%;">isi</div>
+      <div class="col-auto" style="width: 10%;">Jumlah (allSK)</div>
+      <div class="col-auto" style="width: 15%;">Harga Jual</div>
+      <div class="col-auto" style="width: 10%;">Diskon (Rp)</div>
     </div>
   <q-separator />
-  <div class="row items-center q-col-gutter-sm">
-    <div class="col-4">
+  <div class="row items-center q-col-gutter-x-sm">
+    <div class="col-auto" style="width: 25%;">
       <AppSelectLocal
         ref="refSelectBarang"
         v-model="store.barang"
@@ -45,22 +47,38 @@
         @on-input="onInput($event)"
       />
     </div>
-    <div class="col-2">
-      <app-input ref="refJumlah" v-model="store.form.jumlah" :label="'Jumlah (Stok'+ (store?.barang?.stok?.jumlah_k??0)+')'" :autofocus="false" @keyup.enter.stop="onEnterinput()"
-      :rules="[(val) => parseFloat(val)>0 || 'Jumlah barang harus lebih besar dari 0']" @clear=setNol(strJumlah) @update:model-value="(val)=>{
-
+    <div class="col-auto" style="width: 15%;">
+      <app-input ref="refJumlahB" v-model="store.form.jumlahB" :label="'Jumlah ('+ (store?.barang?.stok?.satuan_b??'')+')'"  :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      @clear=setNol(strJumlahB) @update:model-value="(val)=>{
         const _removedZeros = val?.replace(/^0+/, '')
-        store.setForm('jumlah',parseFloat(_removedZeros))
+
+        store.setForm('jumlahB',_removedZeros)
+        setJumlah()
       }"
       />
     </div>
-    <div class="col-2">
+    <div class="col-auto" style="width: 15%;">
+      <app-input ref="refJumlah" v-model="store.form.jumlahK" :label="'Jumlah ('+ (store?.barang?.stok?.satuan_k??'')+')'"  :autofocus="false" @keyup.enter.stop="onEnterinput()"
+       @clear=setNol(strJumlah) @update:model-value="(val)=>{
+        const _removedZeros = val?.replace(/^0+/, '')
+        store.setForm('jumlahK',_removedZeros)
+        setJumlah()
+      }"
+      />
+    </div>
+    <div class="col-auto" style="width: 10%;">
+      <app-input-rp currency outlined v-model="store.form.isi" label="isi" :autofocus="false" readonly  />
+    </div>
+    <div class="col-auto" style="width: 10%;">
+      <app-input-rp currency outlined v-model="store.form.jumlah" :label="'(Stok'+ (store?.barang?.stok?.jumlah_k??0)+')'" :autofocus="false" readonly  />
+    </div>
+    <div class="col-auto" style="width: 15%;">
       <app-input-rp currency v-model="store.form.harga_jual" label="Harga Jual" outlined :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear="()=>{
       store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
     }" />
     </div>
-    <div class="col-2"><app-input-rp currency outlined v-model="store.form.diskon" label="Diskon (Rp)" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear=setNol(strDsikon) /></div>
-    <div class="col-2"><app-input-rp currency outlined v-model="store.form.harga_beli" label="Harga Beli" :autofocus="false" readonly  /></div>
+    <div class="col-auto" style="width: 10%;"><app-input-rp currency outlined v-model="store.form.diskon" label="Diskon (Rp)" :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear=setNol(strDsikon) /></div>
+
   </div>
 </template>
 <script setup>
@@ -73,7 +91,9 @@ const store=useFromPenjualanStore()
 
 const refSelectBarang=ref(null)
 const refJumlah=ref(null)
-const strJumlah=ref('jumlah')
+const refJumlahB=ref(null)
+const strJumlah=ref('jumlahK')
+const strJumlahB=ref('jumlahB')
 const strDsikon=ref('diskon')
 function selected(val){
   // console.log('ref', refSelectBarang.value?.refAuto);
@@ -81,10 +101,13 @@ function selected(val){
   const keys=Object.keys(val)
   if(keys?.length>0){
     store.barang=val
+    console.log('store', store.barang);
+
     store.setForm('kodebarang',store?.barang?.kodebarang)
     if(!store.form.sales_id) store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
     else store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual2))
     store.setForm('harga_beli',isNaN(store?.barang?.stok?.harga_beli_k)?0:parseFloat(store?.barang?.stok?.harga_beli_k))
+    store.setForm('isi',isNaN(store?.barang?.stok?.isi)?(parseFloat(store?.barang?.isi)):parseFloat(store?.barang?.stok?.isi))
     console.log('form', store.form);
   }
   setTimeout(() => {
@@ -93,6 +116,14 @@ function selected(val){
 
   },100)
 
+}
+function setJumlah(){
+  const isi= parseFloat(store.form.isi) ?? 1
+  const jumB=((isNaN(parseFloat(store.form.jumlahB))?0:parseFloat(store.form.jumlahB)) * isi)
+  const jumK= (isNaN(parseFloat(store.form.jumlahK))?0:parseFloat(store.form.jumlahK))
+  const jumlah= jumB + jumK
+
+  store.setForm('jumlah',jumlah)
 }
 function validasi(){
   const jumlah=refJumlah.value?.appInput?.validate()
@@ -110,14 +141,13 @@ function onInput(){
 }
 
 function onEnterinput(){
-  console.log('on enter input');
+  console.log('on enter input',refSelectBarang.value,refSelectBarang.value?.refAuto);
   if(validasi()) store.simpanDetail()
 
-
+  refSelectBarang.value?.refAuto?.focus()
 }
 function setNol(val){
   console.log('nol',val);
-
   store.setForm(val,0)
 }
 </script>

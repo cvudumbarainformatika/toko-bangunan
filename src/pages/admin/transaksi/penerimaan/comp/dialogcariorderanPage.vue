@@ -8,50 +8,62 @@
       <q-separator />
 
       <q-card-section style="max-height: 50vh" class="scroll">
-        <q-list separator>
-          <transition-group name="list">
-            <q-item v-for="(item, n) in storeorder.itemorderan" :key="n" class="list-move">
-              <q-item-section>
-                <q-item-label>
-                  <span class="text-weight-bold">No. Order</span> :
-                  <span class="text-weight-bold"
-                    ><q-badge outline color="red">{{ item?.noorder }}</q-badge></span
-                  >
-                </q-item-label>
-                <!-- <q-separator class="q-my-md" /> -->
-                <q-item-label>
-                  <span class="text-weight-bold">Tgl</span> :
-                  <span class="text-weight-bold">{{ item?.tglorder }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="text-weight-bold">Supplier</span> :
-                  <span class="text-weight-bold"
-                    ><q-badge color="green">{{ item?.suplier?.nama }}</q-badge></span
-                  >
-                </q-item-label>
-                <q-item-label>
-                  <span class="text-weight-bold">Total</span> :
-                  <span class="text-weight-bold"
-                    ><q-badge>{{ formatRpDouble(item?.total) }}</q-badge></span
-                  >
-                </q-item-label>
-              </q-item-section>
+        <div align="center" v-if="storeorder.loadingdialogorder === true">
+          <q-spinner-radio color="primary" size="2em" />
+        </div>
+        <div
+          align="center"
+          v-if="storeorder.loadingdialogorder === false && storeorder.itemorderan.length === 0"
+        >
+          Belum Ada Data Yang Ditampilkan...!!!
+        </div>
+        <div v-else>
+          <q-list separator>
+            <transition-group name="list">
+              <q-item v-for="(item, n) in storeorder.itemorderan" :key="n" class="list-move">
+                <q-item-section>
+                  <q-item-label>
+                    <span class="text-weight-bold">No. Order</span> :
+                    <span class="text-weight-bold"
+                      ><q-badge outline color="red">{{ item?.noorder }}</q-badge></span
+                    >
+                  </q-item-label>
+                  <!-- <q-separator class="q-my-md" /> -->
+                  <q-item-label>
+                    <span class="text-weight-bold">Tgl</span> :
+                    <span class="text-weight-bold">{{ item?.tglorder }}</span>
+                  </q-item-label>
+                  <q-item-label>
+                    <span class="text-weight-bold">Supplier</span> :
+                    <span class="text-weight-bold"
+                      ><q-badge color="green">{{ item?.suplier?.nama }}</q-badge></span
+                    >
+                  </q-item-label>
+                  <q-item-label>
+                    <span class="text-weight-bold">Total</span> :
+                    <span class="text-weight-bold"
+                      ><q-badge>{{ formatRpDouble(item?.total) }}</q-badge></span
+                    >
+                  </q-item-label>
+                </q-item-section>
 
-              <q-item-section side>
-                <div class="q-gutter-sm">
-                  <q-btn
-                    flat
-                    round
-                    size="lg"
-                    color="primary"
-                    icon="fact_check"
-                    @click="pilih(item)"
-                  />
-                </div>
-              </q-item-section>
-            </q-item>
-          </transition-group>
-        </q-list>
+                <q-item-section side>
+                  <div class="q-gutter-sm">
+                    <q-btn
+                      :loading="storeorder.loadingdialogorder"
+                      flat
+                      round
+                      size="lg"
+                      color="primary"
+                      icon="fact_check"
+                      @click="pilih(item)"
+                    />
+                  </div>
+                </q-item-section>
+              </q-item>
+            </transition-group>
+          </q-list>
+        </div>
       </q-card-section>
 
       <q-separator />
@@ -71,7 +83,7 @@ import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/tra
 const storeorder = useAdminListTransaksiOrderBarangStore()
 const storepenerimaan = useAdminFormTransaksiPenerimaanBarangStore()
 
-storeorder.getorderanfix()
+// storeorder.getorderanfix()
 
 function pilih(item) {
   console.log('item', item)

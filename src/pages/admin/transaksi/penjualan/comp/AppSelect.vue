@@ -4,6 +4,7 @@
     :options="optionx"
     :label="label"
     dense
+    autofocus
     :outlined="outlined"
     hide-bottom-space
     no-error-icon

@@ -131,6 +131,7 @@ const printdata = ref(null)
 
 function cariorderan() {
   storeorder.fixed = true
+  storeorder.getorderanfix()
 }
 
 function onSubmit(val) {
@@ -192,12 +193,12 @@ if (props?.data) {
   const rincians = []
   for (let i = 0; i < newset.length; i++) {
     const el = newset[i]
-    const obterima = rinciterima.filter((x) => x.kdbarang === el)
+    const obterima = rinciterima?.filter((x) => x.kdbarang === el)
 
     const obj = {
-      kdbarang: rinciorder.filter((x) => x.kdbarang === el)[0].kdbarang,
-      namabarang: rinciorder.filter((x) => x.kdbarang === el)[0].mbarang?.namabarang,
-      jumlahorder: rinciorder.filter((x) => x.kdbarang === el)[0].jumlahpo,
+      kdbarang: rinciorder?.filter((x) => x.kdbarang === el)[0].kdbarang,
+      namabarang: rinciorder?.filter((x) => x.kdbarang === el)[0].mbarang?.namabarang,
+      jumlahorder: rinciorder?.filter((x) => x.kdbarang === el)[0].jumlahpo,
       jumlahterima: obterima?.map((x) => parseInt(x.jumlah_b)).reduce((a, b) => a + b, 0),
       hargafaktur: obterima?.map((x) => parseInt(x.hargafaktur)).reduce((a, b) => a + b, 0),
       subtotalfix: obterima?.map((x) => parseInt(x.subtotalfix)).reduce((a, b) => a + b, 0),

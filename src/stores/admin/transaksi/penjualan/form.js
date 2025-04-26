@@ -15,6 +15,9 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
     form: {
       kodebarang: '',
       jumlah: 0,
+      jumlahB: 0,
+      jumlahK: 0,
+      isi: 0,
       harga_beli: 0,
       harga_jual: 0,
       diskon: 0,
@@ -28,6 +31,11 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
       bayar: 0,
       total: 0,
       kembali: 0,
+      dataPelanggan: {
+        nama:'',
+        tlp:'',
+        alamat:'',
+      }
     },
     noNota: null,
     item: null,
@@ -45,6 +53,8 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
       this.form = {
         kodebarang: '',
         jumlah: 0,
+        jumlahB: 0,
+        jumlahK: 0,
         harga_beli: 0,
         harga_jual: 0,
         diskon: 0,
@@ -64,6 +74,11 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
         bayar: 0,
         total: 0,
         kembali: 0,
+        dataPelanggan: {
+          nama:'',
+          tlp:'',
+          alamat:'',
+        }
       }
     },
     async simpanDetail() {

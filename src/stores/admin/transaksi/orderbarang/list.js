@@ -6,6 +6,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
   {
     state: () => ({
       meta: null,
+      loadingdialogorder: false,
       items: [],
       itemsdialog: [],
       isError: false,
@@ -43,7 +44,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
         }
         try {
           const { data } = await api.get('/v1/transaksi/orderpembelian/getlistorder', params)
-          console.log('get master barang', data)
+          // console.log('get master barang', data)
           this.meta = data
           this.olahdata(data?.data)
           this.loading = false
@@ -149,30 +150,38 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
       //     })
       // },
       async getorderanfix() {
+        this.itemorderan = []
+
         try {
+          this.loadingdialogorder = true
           const { data } = await api.get('/v1/transaksi/orderpembelian/getlistorderfixheder')
-          this.loading = false
-          const hasilglobal = []
-          data?.forEach((x) => {
-            const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
-            const hasil = {
-              id: x?.id,
-              noorder: x?.noorder,
-              tglorder: x?.tglorder,
-              kdsuplier: x?.kdsuplier,
-              flaging: x?.flaging,
-              suplier: x?.suplier,
-              total: total,
-              rinci: x?.rinci,
-            }
-            console.log('hasil', hasil)
-            hasilglobal.push(hasil)
-            this.itemorderan = hasilglobal
-          })
+          if (data.length === 0) {
+            this.itemorderan = []
+          } else {
+            const hasilglobal = []
+            data?.forEach((x) => {
+              const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+              const hasil = {
+                id: x?.id,
+                noorder: x?.noorder,
+                tglorder: x?.tglorder,
+                kdsuplier: x?.kdsuplier,
+                flaging: x?.flaging,
+                suplier: x?.suplier,
+                total: total,
+                rinci: x?.rinci,
+              }
+
+              hasilglobal.push(hasil)
+              this.itemorderan = hasilglobal
+            })
+            this.loadingdialogorder = false
+          }
+          this.loadingdialogorder = false
         } catch (error) {
           console.log(error)
           this.isError = true
-          this.loading = false
+          this.loadingdialogorder = false
         }
       },
     },
