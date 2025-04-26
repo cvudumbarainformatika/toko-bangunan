@@ -31,6 +31,11 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
       bayar: 0,
       total: 0,
       kembali: 0,
+      dataPelanggan: {
+        nama:'',
+        tlp:'',
+        alamat:'',
+      }
     },
     noNota: null,
     item: null,
@@ -69,6 +74,11 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
         bayar: 0,
         total: 0,
         kembali: 0,
+        dataPelanggan: {
+          nama:'',
+          tlp:'',
+          alamat:'',
+        }
       }
     },
     async simpanDetail() {

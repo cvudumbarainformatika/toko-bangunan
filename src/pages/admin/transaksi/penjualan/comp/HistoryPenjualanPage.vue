@@ -24,6 +24,31 @@
                         }
                       "
                     />
+                    <app-input
+                      v-model="store.params.q"
+                      prepend-icon="search"
+                      label="Telusuri"
+                      style="min-width: 250px"
+                      :debounce="300"
+                      @update:model-value="
+                        (e) => {
+                          infiniteScroll.reset()
+                          store.getList()
+                        }
+                      "
+                    />
+
+                    <q-btn
+                      round
+                      icon="refresh"
+                      dense
+                      @click="
+                        () => {
+                        store.getList()
+                      }"
+                    >
+                    <q-tooltip >Rerfresh</q-tooltip>
+                    </q-btn>
                   </div>
                 </div>
               </div>
@@ -67,6 +92,17 @@
                           </div>
                           <div v-if="item?.sales" class="col-2 q-ml-sm">
                             Sales : {{ item?.sales?.nama }}
+                          </div>
+                        </div>
+                        <div class="row" v-if="item?.keterangan">
+                          <div class="col-3 text-weight-bold">
+                            {{ item?.keterangan?.nama }}
+                          </div>
+                          <div  class="col-2 q-ml-sm">
+                            {{ item?.keterangan?.tlp }}
+                          </div>
+                          <div  class="col-5 q-ml-sm">
+                            {{ item?.keterangan?.alamat }}
                           </div>
                         </div>
                       </q-item-label>
@@ -115,7 +151,7 @@
                     <div class="row q-px-sm">
                       <div class="col-5">
                         {{
-                          detail?.master_barang?.namabarang + ' ' + (item?.flag!=null ? '' : (detail?.master_barang?.stok === null ? '' : '(stok ' + detail?.master_barang?.stok.jumlah_k + '  ' + detail?.master_barang?.stok.satuan_k + ' )'))
+                          detail?.master_barang?.namabarang + ' ' + (item?.flag!=null ? '' : (detail?.master_barang?.stok === null ? '' : '(stok ' + detail?.master_barang?.stok?.jumlah_k + '  ' + detail?.master_barang?.stok?.satuan_k + ' )'))
                         }}
                       </div>
                       <div class="col-1 text-right">{{ detail?.jumlah }}</div>

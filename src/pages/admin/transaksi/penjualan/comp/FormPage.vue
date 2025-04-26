@@ -141,10 +141,10 @@ function onInput(){
 }
 
 function onEnterinput(){
-  console.log('on enter input');
+  console.log('on enter input',refSelectBarang.value,refSelectBarang.value?.refAuto);
   if(validasi()) store.simpanDetail()
 
-
+  refSelectBarang.value?.refAuto?.focus()
 }
 function setNol(val){
   console.log('nol',val);
