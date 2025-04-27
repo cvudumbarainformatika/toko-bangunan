@@ -47,4 +47,5 @@ jobs:
 
       - name: Trigger webhook di server
         run: |
-          curl -X POST "https://panel.jangurkeramik.my.id:34958/hook?access_key=L5WSquGZA6iNf3SaGvvRRZRoW41wSxbdPKy5qWUVX0rT9AcJ"
+          curl -sS -G "${{ vars.DEPLOY_WEBHOOK_URL }}" \
+          --data-urlencode "param=repo=${{ github.event.repository.name }}&branch=${{ github.ref_name }}&user=${{ github.actor }}&msg=${{ github.event.head_commit.message }}"
