@@ -47,5 +47,7 @@ jobs:
 
       - name: Trigger webhook di server
         run: |
+          echo Starting Trigger
           curl -sS -G "${{ vars.DEPLOY_WEBHOOK_URL }}" \
           --data-urlencode "param=repo=${{ github.event.repository.name }}&branch=${{ github.ref_name }}&user=${{ github.actor }}&msg=${{ github.event.head_commit.message }}"
+          echo Trigger Success
