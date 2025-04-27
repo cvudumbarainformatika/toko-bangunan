@@ -107,13 +107,7 @@ const rightDrawerOpen = ref(false)
 const selectedTab = ref(null)
 const selectedMenu = ref(null)
 
-// function toggleLeftDrawer () {
-//   leftDrawerOpen.value = !leftDrawerOpen.value
-// }
 
-// function toggleRightDrawer () {
-//   rightDrawerOpen.value = !rightDrawerOpen.value
-// }
 
 const $q = useQuasar()
 const router = useRouter()
