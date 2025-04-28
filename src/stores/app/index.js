@@ -122,6 +122,10 @@ export const useAppStore = defineStore('app-store', {
 
     logout() {
       return new Promise((resolve) => {
+        if (!this.auth) {
+          resolve()
+          return
+        }
         api.post('/logout').finally(() => {
           localStorage.removeItem('token')
           localStorage.removeItem('user')

@@ -7,7 +7,7 @@
             <q-item-label header>
               <div class="row full-width items-center">
                 <div class="col-grow">
-                  <div class="flex items-center">
+                  <div class="flex items-center q-gutter-sm">
                     <app-input
                       v-model="storeOrderH.params.q"
                       prepend-icon="search"
@@ -21,6 +21,41 @@
                         }
                       "
                     />
+                    <app-input-date
+                      :model="storeOrderH.dateDisplay.from"
+                      label="Dari"
+                      style="min-width: 150px"
+                      outlined
+                      :debounce="300"
+                      @set-model="
+                        (val) => {
+                          storeOrderH.dateDisplay.from = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          storeOrderH.params.from = val
+                        }
+                      "
+                    />
+                    <app-input-date
+                      :model="storeOrderH.dateDisplay.to"
+                      label="Sampai"
+                      style="min-width: 150px"
+                      outlined
+                      :debounce="300"
+                      @set-model="
+                        (val) => {
+                          storeOrderH.dateDisplay.to = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          storeOrderH.params.to = val
+                        }
+                      "
+                    />
+                    <q-btn round color="primary" icon="find_replace" @click="refreshList" />
                   </div>
                 </div>
 
@@ -126,6 +161,12 @@ import { computed, ref } from 'vue'
 
 // const search = ref(null)
 const storeOrderH = useAdminListTransaksiOrderBarangStore()
+
+const refreshList = async () => {
+  // Reset infinite scroll
+  infiniteScroll.value.reset()
+  await storeOrderH.getList()
+}
 
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)

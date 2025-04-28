@@ -1,4 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 
 export const useAdminListTransaksiOrderBarangStore = defineStore(
@@ -20,12 +21,18 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
         q: null,
         page: 0,
         per_page: 15,
+        from: date.formatDate(Date.now(), 'YYYY-MM-01'),
+        to: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       },
       getorderan: {
         noorder: null,
       },
       getorderhasil: [],
       opendialogCetak: false,
+      dateDisplay: {
+        from: date.formatDate(Date.now(), '01 MMMM YYYY'),
+        to: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      },
     }),
     // persist: true,
     // getters: {
@@ -39,6 +46,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
         this.params.page = 1
         this.isError = false
         this.loading = true
+        console.log('isError', this.isError)
         const params = {
           params: this.params,
         }

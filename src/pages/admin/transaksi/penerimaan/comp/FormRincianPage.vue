@@ -68,20 +68,32 @@
                       </div>
                       <div class="col-2">
                         <AppInputRp
+                          label="Barang Rusak"
+                          dense
+                          outlined
+                          v-model="item.rusak"
+                          currency
+                          style="width: 100px"
+                        />
+                      </div>
+                      <div class="col-2">
+                        <AppInputRp
                           label="Barang Datang"
                           dense
                           outlined
                           v-model="item.jumlahpox"
                           currency
+                          style="width: 100px"
                         />
                       </div>
-                      <div class="col-2">
+                      <div class="col-1">
                         <app-input-rp
                           label="harga fix"
                           dense
                           outlined
                           v-model="item.hargafix"
                           currency
+                          style="width: 100px"
                         />
                       </div>
                       <div class="col-2" v-if="props?.data?.kunci === '1'"></div>
@@ -89,8 +101,8 @@
                         <app-btn
                           :loading="store.loading && store.form.id === item.id"
                           type="submit"
-                          label="Simpan"
                           color="teal"
+                          icon="save"
                         />
                       </div>
                     </div>
@@ -215,7 +227,7 @@ if (props?.data) {
     totalfix: props?.data?.totalfix,
     rincians: rincians,
   }
+
   store.dataprops = penerimaan
-  console.log('penerimaan', store.dataprops)
 }
 </script>
