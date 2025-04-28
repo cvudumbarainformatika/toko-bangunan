@@ -277,7 +277,7 @@ onBeforeMount(() => {
 function lihatCetak(item) {
   store.itemCetak = item
   store.opendialogCetak = true
-  console.log('itemCetak', store.itemCetak)
+  console.log('itemCetak di list', store.itemCetak)
 }
 
 function statusFlag(flag) {
