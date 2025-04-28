@@ -3,41 +3,47 @@
     <q-card flat>
       <div class="fit column">
         <div class="col-auto">
-        <div class="row items-center q-pa-lg">
-          <div class="col-grow">
-            <app-btn-back @click="store.openPembayaran=false" />
+          <div class="row items-center q-pa-lg">
+            <div class="col-grow">
+              <app-btn-back @click="store.openPembayaran = false" />
+            </div>
+            <div class="col-auto">
+              <!-- <app-btn :dense="false" label="Simpan" color="primary" /> -->
+            </div>
           </div>
-          <div class="col-auto">
-            <!-- <app-btn :dense="false" label="Simpan" color="primary" /> -->
-          </div>
-        </div>
         </div>
         <div class="col full-height q-px-lg q-pb-lg">
           <q-card flat class="col full-height">
             <q-form class="full-height" @submit="onSubmit">
               <q-card-section class="full-height q-pa-lg scroll">
-                <div class="row q-col-gutter-md justify-around ">
+                <div class="row q-col-gutter-md justify-around">
                   <div :class="`col-${isMobile ? 12 : 6}`" class="row q-col-gutter-md items-center">
-                    <div v-if="store?.item!=null" class="col-12 q-py-md">
+                    <div v-if="store?.item != null" class="col-12 q-py-md">
                       <div class="row justify-between f-16">
-                        <div class="col-auto text-weight-bold">Total Nota Nomor : {{ store.formPembayaran.no_penjualan }}</div>
+                        <div class="col-auto text-weight-bold">
+                          Total Nota Nomor : {{ store.formPembayaran.no_penjualan }}
+                        </div>
                         <div class="col-auto text-weight-bold text-right f-20">
-                          <div class="row justify-end">{{formatDouble(store?.item?.total)}}</div>
-                          <div v-if="store?.item?.total_diskon>0" class="row justify-end">{{formatDouble(store?.item?.total_diskon)}}</div>
-                          <div v-if="store?.item?.total_diskon>0" class="row justify-end">{{formatDouble(store?.item?.total-store?.item?.total_diskon)}}</div>
+                          <div class="row justify-end">{{ formatDouble(store?.item?.total) }}</div>
+                          <div v-if="store?.item?.total_diskon > 0" class="row justify-end">
+                            {{ formatDouble(store?.item?.total_diskon) }}
+                          </div>
+                          <div v-if="store?.item?.total_diskon > 0" class="row justify-end">
+                            {{ formatDouble(store?.item?.total - store?.item?.total_diskon) }}
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     <app-select
-                    class="col-12"
-                    v-model="store.formPembayaran.cara_bayar"
-                    label="Pilih Cara Bayar"
-                    :options="optionCaraBayar"
-                    option-label="label"
-                    option-value="value"
-                    @update:model-value="selectCaraBayar"
-                    :disable="store.loadingPembayaran || !store?.item?.sales_id "
+                      class="col-12"
+                      v-model="store.formPembayaran.cara_bayar"
+                      label="Pilih Cara Bayar"
+                      :options="optionCaraBayar"
+                      option-label="label"
+                      option-value="value"
+                      @update:model-value="selectCaraBayar"
+                      :disable="store.loadingPembayaran || !store?.item?.sales_id"
                     />
                     <app-select-server
                       ref="refPelanggan"
@@ -45,80 +51,104 @@
                       v-model="store.formPembayaran.pelanggan_id"
                       url="v1/transaksi/penjualan/list-pelanggan"
                       option-value="id"
-                      :option-label="opt=> opt.nama + ' ' + opt?.alamat"
+                      :option-label="(opt) => opt.nama + ' ' + opt?.alamat"
                       label="Cari Pelanggan"
                       :filter-min="3"
                       clearable
-                      :rules="[val=>(store.formPembayaran.cara_bayar == '2' ? !!val:true) || 'Harap di isi']"
+                      :rules="[
+                        (val) =>
+                          (store.formPembayaran.cara_bayar == '2' ? !!val : true) || 'Harap di isi',
+                      ]"
                       :disable="store.loadingPembayaran"
                     />
                     <template v-if="!store?.item?.sales_id && !store.formPembayaran.pelanggan_id">
                       <div class="col-12 q-mb-md">
-                        <div class="row text-weight-bold q-mb-sm justify-center">Data Pelanggan</div>
+                        <div class="row text-weight-bold q-mb-sm justify-center">
+                          Data Pelanggan
+                        </div>
                         <div class="row">
                           <div class="col-12">
-
                             <app-input
-                            v-model="store.formPembayaran.dataPelanggan.nama"
-                            label="Nama Pelanggan"
-                            :disable="store.loadingPembayaran"
+                              v-model="store.formPembayaran.dataPelanggan.nama"
+                              label="Nama Pelanggan"
+                              :disable="store.loadingPembayaran"
                             />
                           </div>
                         </div>
                         <div class="row">
                           <div class="col-12">
-
                             <app-input
-                            v-model="store.formPembayaran.dataPelanggan.tlp"
-                            label="Tlp Pelanggan"
-                            :disable="store.loadingPembayaran"
+                              v-model="store.formPembayaran.dataPelanggan.tlp"
+                              label="Tlp Pelanggan"
+                              :disable="store.loadingPembayaran"
                             />
                           </div>
                         </div>
                         <div class="row">
                           <div class="col-12">
-
                             <app-input
-                            v-model="store.formPembayaran.dataPelanggan.alamat"
-                            label="Alamat Pelanggan"
-                            :disable="store.loadingPembayaran"
+                              v-model="store.formPembayaran.dataPelanggan.alamat"
+                              label="Alamat Pelanggan"
+                              :disable="store.loadingPembayaran"
                             />
                           </div>
                         </div>
                       </div>
                     </template>
-                    <template v-if="store.formPembayaran.cara_bayar=='5'" >
+                    <template v-if="store.formPembayaran.cara_bayar == '5'">
                       <app-input-rp
-                      ref="refBayar"
-                      class="col-6"
-                      v-model="store.formPembayaran.bayar"
-                      outlined
-                      currency
-                      label="Bayar"
-                      :rules="[val=> parseInt(olahUang(val))>=(parseInt(store.formPembayaran.total) - store.formPembayaran?.total_diskon) || 'nominal pembayaran kurang']"
-                      @update:model-value="updateBayar"
-                      :disable="store.loadingPembayaran"
-                    />
-                    <div class="col-3" :class="(parseInt((parseInt(store.formPembayaran.total)-store.formPembayaran?.total_diskon))>parseInt(olahUang(store.formPembayaran.bayar))) || !parseInt(olahUang(store.formPembayaran?.bayar))?'text-negative':''">
-                      {{ formatDouble(store.formPembayaran.kembali) }}
-                    </div>
-                    <div v-if="(parseInt((parseInt(store.formPembayaran.total) - store.formPembayaran?.total_diskon)) > parseInt(olahUang(store.formPembayaran.bayar))) " class="col-3 text-negative text-center"> Kurang bayar</div>
-
-
+                        ref="refBayar"
+                        class="col-6"
+                        v-model="store.formPembayaran.bayar"
+                        outlined
+                        currency
+                        label="Bayar"
+                        :rules="[
+                          (val) =>
+                            parseInt(olahUang(val)) >=
+                              parseInt(store.formPembayaran.total) -
+                                store.formPembayaran?.total_diskon || 'nominal pembayaran kurang',
+                        ]"
+                        @update:model-value="updateBayar"
+                        :disable="store.loadingPembayaran"
+                      />
+                      <div
+                        class="col-3"
+                        :class="
+                          parseInt(
+                            parseInt(store.formPembayaran.total) -
+                              store.formPembayaran?.total_diskon,
+                          ) > parseInt(olahUang(store.formPembayaran.bayar)) ||
+                          !parseInt(olahUang(store.formPembayaran?.bayar))
+                            ? 'text-negative'
+                            : ''
+                        "
+                      >
+                        {{ formatDouble(store.formPembayaran.kembali) }}
+                      </div>
+                      <div
+                        v-if="
+                          parseInt(
+                            parseInt(store.formPembayaran.total) -
+                              store.formPembayaran?.total_diskon,
+                          ) > parseInt(olahUang(store.formPembayaran.bayar))
+                        "
+                        class="col-3 text-negative text-center"
+                      >
+                        Kurang bayar
+                      </div>
                     </template>
 
-
-
                     <div class="col-12">
-                    <q-separator class="q-my-md" />
-                    <app-btn
-                      :loading="store.loadingPembayaran"
-                      :disable="store.loadingPembayaran"
-                      type="submit"
-                      :dense="false"
-                      label="Simpan"
-                      color="primary"
-                    />
+                      <q-separator class="q-my-md" />
+                      <app-btn
+                        :loading="store.loadingPembayaran"
+                        :disable="store.loadingPembayaran"
+                        type="submit"
+                        :dense="false"
+                        label="Simpan"
+                        color="primary"
+                      />
                     </div>
                   </div>
                 </div>
@@ -126,9 +156,8 @@
             </q-form>
           </q-card>
         </div>
-
       </div>
-
+      <DialogCetak v-model="store.opendialogCetak" />
     </q-card>
   </q-dialog>
 </template>
@@ -136,46 +165,57 @@
 import { useQuasar } from 'quasar'
 import { formatDouble, olahUang } from 'src/modules/formatter'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
-import { computed, ref } from 'vue'
+import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
+import { computed, defineAsyncComponent, ref, shallowRef } from 'vue'
 
+const DialogCetak = shallowRef(defineAsyncComponent(() => import('./cetak/DialogCetak.vue')))
 const $q = useQuasar()
 const isMobile = computed(() => {
   return $q.screen.lt.sm // Quasar screen size helper
 })
-const store=useFromPenjualanStore()
+const store = useFromPenjualanStore()
+const storelist = useListPenjualanStore()
 
-const optionCaraBayar=ref([
-  {label:'Tunai',value:'5'},
-  {label:'Kredit',value:'2'},
+const optionCaraBayar = ref([
+  { label: 'Tunai', value: '5' },
+  { label: 'Kredit', value: '2' },
 ])
-const refPelanggan=ref(null)
+const refPelanggan = ref(null)
 function onSubmit() {
-  console.log('submit form pembayaran',refPelanggan.value, store.formPembayaran);
-  store.simpanPembayaran()
+  console.log('submit form pembayaran', refPelanggan.value, store.formPembayaran)
+  store
+    .simpanPembayaran()
+    .then((res) => {
+      if (res?.status == 200) {
+        store.opendialogCetak = true
+        store.openPembayaran = false
+        console.log('cetak', storelist.itemCetak)
+      }
+    })
+    .then(() => {
+      store.resetPembayaran()
+    })
 }
-function selectCaraBayar(val){
-  console.log('cara bayar', val);
-  if(val=='2') {
-    store.formPembayaran.bayar=0
-    store.formPembayaran.kembali=0
+function selectCaraBayar(val) {
+  console.log('cara bayar', val)
+  if (val == '2') {
+    store.formPembayaran.bayar = 0
+    store.formPembayaran.kembali = 0
   }
-
 }
-const refBayar=ref(null)
-function updateBayar(val){
+const refBayar = ref(null)
+function updateBayar(val) {
   // console.log('upda ba', val,refBayar.value?.appInput.validate());
   const _removedZeros = val?.replace(/^0+/, '')
-  const normalAngka=olahUang(_removedZeros)
+  const normalAngka = olahUang(_removedZeros)
   //untuk hapus o dipean angka pake ini yaa
   if (normalAngka > 1) {
     // store.formPembayaran.bayar = normalAngka
-    store.formPembayaran.kembali = parseInt(normalAngka) - (store.formPembayaran.total - store?.formPembayaran?.total_diskon)
+    store.formPembayaran.kembali =
+      parseInt(normalAngka) - (store.formPembayaran.total - store?.formPembayaran?.total_diskon)
   }
-  setTimeout(()=>{
+  setTimeout(() => {
     refBayar.value?.appInput?.validate()
-
-  },50)
-
-
+  }, 50)
 }
 </script>

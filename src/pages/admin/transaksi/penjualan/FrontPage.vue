@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="col-2 text-right">
-        <app-btn-cetak v-if="store?.noNota" class="q-mr-xs" @click="lihatCetak()"></app-btn-cetak>
+        <!-- <app-btn-cetak v-if="store?.noNota" class="q-mr-xs" @click="lihatCetak()"></app-btn-cetak> -->
         <app-btn
           v-if="store?.noNota"
           class="q-mr-xs"
@@ -116,8 +116,8 @@ function bayar(item) {
   store.formPembayaran.total_diskon = item?.total_diskon
   store.formPembayaran.no_penjualan = item?.no_penjualan
 }
-function lihatCetak(item) {
-  console.log('item', item)
-  store.opendialogCetak = true
-}
+// function lihatCetak(item) {
+//   console.log('item', item)
+//   store.opendialogCetak = true
+// }
 </script>

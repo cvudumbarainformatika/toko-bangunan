@@ -32,10 +32,10 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
       total: 0,
       kembali: 0,
       dataPelanggan: {
-        nama:'',
-        tlp:'',
-        alamat:'',
-      }
+        nama: '',
+        tlp: '',
+        alamat: '',
+      },
     },
     noNota: null,
     item: null,
@@ -75,10 +75,10 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
         total: 0,
         kembali: 0,
         dataPelanggan: {
-          nama:'',
-          tlp:'',
-          alamat:'',
-        }
+          nama: '',
+          tlp: '',
+          alamat: '',
+        },
       }
     },
     async simpanDetail() {
@@ -87,10 +87,10 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
       const keys = Object.keys(this.form)
       const form={}
       keys.forEach((key) => {
-        if (key=='harga_jual') form[key] = olahUang(this.form[key])
-        else if (key=='diskon') form[key] = olahUang(this.form[key])
-        else if (key=='harga_beli') form[key] = olahUang(this.form[key])
-          else form[key] = this.form[key]
+        if (key == 'harga_jual') form[key] = olahUang(this.form[key])
+        else if (key == 'diskon') form[key] = olahUang(this.form[key])
+        else if (key == 'harga_beli') form[key] = olahUang(this.form[key])
+        else form[key] = this.form[key]
       })
       await api
         .post('/v1/transaksi/penjualan/simpan-detail', form)
@@ -100,6 +100,7 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
           notifSuccess(data?.message ?? 'Data berhasil disimpan')
           this.noNota = data?.nota
           this.item = data?.header
+
           // cari di list
           const index = this.list?.items?.findIndex((obj) => obj.id === this.item.id)
           if (index >= 0) this.list.items[index] = this.item
@@ -174,9 +175,11 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
             const index = this.list?.items?.findIndex((obj) => obj.id === item.id)
             if (index >= 0) this.list.items[index] = item
             else this.list.items.unshift(item)
-            this.resetPembayaran()
-            const list=useListPenjualanStore()
+            // this.resetPembayaran()
+            const list = useListPenjualanStore()
             list.getListNull()
+
+            list.itemCetak = item
             notifSuccess(resp?.data?.message)
             resolve(resp)
           })
