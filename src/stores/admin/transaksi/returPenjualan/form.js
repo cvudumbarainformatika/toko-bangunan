@@ -22,6 +22,10 @@ export const useFormReturPenjualanStore = defineStore('form_retur-penjualan-stor
       console.log('reset Form');
 
     },
+    setForm(item){
+      console.log('set Form', item);
+
+    },
     async submit() {
       this.loading = true
 

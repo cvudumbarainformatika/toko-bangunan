@@ -150,25 +150,8 @@
                     <div class="col-1 text-right">Diskon</div>
                     <div class="col-2 text-right">Subtotal</div>
                   </div>
-                  <q-separator />
-                  <div v-if="item?.flag != null" class="row q-pa-sm text-weight-bold f-10 text-italic">(Detail Penjualan )</div>
-                  <div v-for="detail in item?.detail" :key="detail?.id">
-                    <div class="row q-px-sm">
-                      <div class="col-5">
-                        {{
-                          detail?.master_barang?.namabarang + ' ' + (item?.flag!=null ? '' : (detail?.master_barang?.stok === null ? '' : '(stok ' + detail?.master_barang?.stok?.jumlah_k + '  ' + detail?.master_barang?.stok?.satuan_k + ' )'))
-                        }}
-                      </div>
-                      <div class="col-1 text-right">{{ detail?.jumlah }}</div>
-                      <div class="col-1 text-right">{{ detail?.master_barang?.satuan_k }}</div>
-                      <div class="col-2 text-right">{{ formatDouble(detail?.harga_jual) }}</div>
-                      <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
-                      <div class="col-2 text-right">{{ formatDouble(detail?.subtotal) }}</div>
-                    </div>
-                  </div>
                   <template v-if="item?.flag != null">
                     <q-separator />
-                    <div class="row q-pa-sm text-weight-bold f-10 text-italic">(Detail Penjualan Fifo)</div>
                     <div v-for="detail in item?.detail_fifo" :key="detail?.id">
                       <div class="row q-px-sm">
                         <div class="col-5">
