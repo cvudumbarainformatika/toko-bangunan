@@ -179,9 +179,11 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
                 total: total,
                 rinci: x?.rinci,
               }
-
               hasilglobal.push(hasil)
               this.itemorderan = hasilglobal
+            })
+            this.itemorderan.forEach((y) => {
+              console.log('rincian', y)
             })
             this.loadingdialogorder = false
           }

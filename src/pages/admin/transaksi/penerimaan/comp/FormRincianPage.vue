@@ -71,7 +71,7 @@
                           label="Barang Rusak"
                           dense
                           outlined
-                          v-model="item.rusak"
+                          v-model="item.itemrusak"
                           currency
                           style="width: 100px"
                         />
@@ -81,7 +81,7 @@
                           label="Barang Datang"
                           dense
                           outlined
-                          v-model="item.jumlahpox"
+                          v-model="item.sisajumlahbelumditerima"
                           currency
                           style="width: 100px"
                         />
@@ -116,6 +116,7 @@
       </q-card>
     </div>
   </div>
+
   <dialogcariorderan-page />
   <dialog-cetakdata v-model="store.dialogCetak" :printdata="printdata" />
 </template>
@@ -151,7 +152,7 @@ function onSubmit(val) {
   store.form.id = val?.id
   store.form.kdbarang = val?.kdbarang
   store.form.jumlahorder = val?.jumlahpo
-  store.form.jumlahpo = olahUang(val?.jumlahpox)
+  store.form.jumlahpo = olahUang(val?.sisajumlahbelumditerima)
   store.form.jumlahpo_k = val?.jumlahpo_k
   store.form.satuan_b = val?.satuan_b
   store.form.satuan_k = val?.satuan_k
@@ -186,7 +187,7 @@ const props = defineProps({
 
 const lists = computed(() => {
   const arr = props.data?.rinci
-  // console.log('arr', arr)
+  console.log('arr', arr)
   return arr?.sort((a, b) => {
     return b.id - a.id
   })

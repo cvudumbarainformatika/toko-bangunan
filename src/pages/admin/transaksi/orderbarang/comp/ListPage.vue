@@ -103,7 +103,7 @@
                     <div class="flex q-gutter-sm">
                       <app-btn-edit-list @click="lihatdetail(item)" />
                       <q-btn
-                        v-if="item?.flaging === '1'"
+                        v-if="item?.flaging === null"
                         color="teal"
                         icon="vpn_key"
                         size="sm"
