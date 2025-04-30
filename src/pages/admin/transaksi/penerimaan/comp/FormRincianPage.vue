@@ -12,8 +12,40 @@
         </q-card-section>
         <q-card-section>
           <div class="row q-gutter-sm">
-            <div class="col-6">
-              <app-input label="No. order" disable v-model="store.form.noorder" />
+            <div class="col-3">
+              <app-input
+                label="No. order"
+                disable
+                v-model="store.form.noorder"
+                style="width: 100%"
+              />
+            </div>
+            <div class="col-3">
+              <app-input
+                label="No. Faktur"
+                v-model="store.form.nofaktur"
+                style="width: 100%"
+                :valid="{ required: false }"
+              />
+            </div>
+            <div class="col-3">
+              <app-input-date
+                :model="store.dateDisplay.tgl"
+                label="Tgl Faktur"
+                style="min-width: 150px"
+                outlined
+                :debounce="300"
+                @set-model="
+                  (val) => {
+                    store.dateDisplay.tgl = val
+                  }
+                "
+                @db-model="
+                  (val) => {
+                    store.form.tgl = val
+                  }
+                "
+              />
             </div>
             <div class="col-1" v-if="store.form.nopenerimaan === undefined">
               <q-btn round color="primary" icon="find_in_page" @click="cariorderan()" />
@@ -42,17 +74,24 @@
           <q-separator class="q-mt-sm" />
         </q-card-section>
         <q-card-section style="max-height: 80%" class="scroll">
-          <q-list>
+          <q-list v-for="(item, n) in store.rinci" :key="n" class="full-width">
             <transition-group>
-              <q-item v-for="(item, n) in store.rinci" :key="n" class="list-move">
-                <q-form ref="refForm" class="column full-height" @submit="onSubmit(item)">
+              <q-item class="list-move">
+                <q-form
+                  ref="refForm"
+                  class="column full-height full-width"
+                  @submit="onSubmit(item)"
+                >
                   <q-item-section>
-                    <div class="row full-width q-gutter-xs">
+                    <div class="row q-gutter-xs">
                       <div class="col-12">
                         <span class="text-weight-medium">{{ item?.mbarang?.namabarang }}</span>
-                        <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
+                        <span class="text-grey-8"> ({{ item?.kdbarang }})</span
+                        ><span class="text-red"> || Isi {{ item?.isi }} {{ item?.satuan_k }}</span>
                       </div>
-                      <div class="col-2">
+                    </div>
+                    <div class="row q-gutter-xs">
+                      <div class="col-3">
                         <span class="text-weight-medium">
                           {{ item?.jumlahpo }} {{ item?.satuan_b }}</span
                         >
@@ -63,8 +102,31 @@
                       <div class="col-1">
                         <span> X </span>
                       </div>
-                      <div class="col-2">
+                      <div class="col-3">
                         <span class="text-weight-medium"> {{ formatRpDouble(item?.hargapo) }}</span>
+                      </div>
+                      <div class="col-1">
+                        <span> = </span>
+                      </div>
+                      <div class="col-3">
+                        <span> {{ formatRpDouble(item.subtotal) }} </span>
+                      </div>
+                    </div>
+                    <div class="row q-gutter-xs">
+                      <div class="col-2">
+                        <app-input label="Motif" v-model="store.form.motif" style="width: 100%" />
+                      </div>
+                      <div class="col-2">
+                        <AppInputRp
+                          label="Barang Datang"
+                          dense
+                          outlined
+                          v-model="item.sisajumlahbelumditerimax"
+                          currency
+                          :valid="null"
+                          :autofocus="n === 0"
+                          @update:model-value="kurangisisabarangdatang(item)"
+                        />
                       </div>
                       <div class="col-2">
                         <AppInputRp
@@ -73,31 +135,29 @@
                           outlined
                           v-model="item.itemrusak"
                           currency
-                          style="width: 100px"
+                          :valid="null"
+                          @update:model-value="kurangisisabarangdatang(item)"
                         />
                       </div>
                       <div class="col-2">
                         <AppInputRp
-                          label="Barang Datang"
+                          label="Barang Diterima"
                           dense
                           outlined
                           v-model="item.sisajumlahbelumditerima"
                           currency
-                          style="width: 100px"
                         />
                       </div>
-                      <div class="col-1">
+                      <div class="col-3">
                         <app-input-rp
                           label="harga fix"
                           dense
                           outlined
                           v-model="item.hargafix"
                           currency
-                          style="width: 100px"
                         />
                       </div>
-                      <div class="col-2" v-if="props?.data?.kunci === '1'"></div>
-                      <div class="col-2" v-else>
+                      <div class="col-2 q-ml-auto" v-if="props?.data?.kunci !== '1'">
                         <app-btn
                           :loading="store.loading && store.form.id === item.id"
                           type="submit"
@@ -107,10 +167,10 @@
                       </div>
                     </div>
                   </q-item-section>
-                  <q-separator class="q-mt-sm" />
                 </q-form>
               </q-item>
             </transition-group>
+            <q-separator class="q-mt-sm" />
           </q-list>
         </q-card-section>
       </q-card>
@@ -131,7 +191,9 @@ import { formatRpDouble, olahUang } from 'src/modules/formatter'
 
 // import AppSelectServer from 'src/components/~global/AppSelectServer.vue'
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
+
 import AppInputRp from 'src/components/~global/AppInputRp.vue'
+
 import { notifError } from 'src/modules/notifs'
 import { computed, defineAsyncComponent, ref } from 'vue'
 
@@ -150,16 +212,29 @@ function cariorderan() {
 function onSubmit(val) {
   console.log('val', val)
   store.form.id = val?.id
+  store.form.idx = val?.idx
   store.form.kdbarang = val?.kdbarang
   store.form.jumlahorder = val?.jumlahpo
   store.form.jumlahpo = olahUang(val?.sisajumlahbelumditerima)
+  store.form.jumlah_datang_b = olahUang(val?.sisajumlahbelumditerimax)
   store.form.jumlahpo_k = val?.jumlahpo_k
   store.form.satuan_b = val?.satuan_b
   store.form.satuan_k = val?.satuan_k
   store.form.isi = val?.isi
   store.form.hargafaktur = val?.hargapo
   store.form.hargaasli = olahUang(val?.hargafix)
-  if (parseFloat(store.form.jumlahorder) < parseFloat(store.form.jumlahpo)) {
+  store.form.jumlahbarangrusak = olahUang(val?.itemrusak)
+  store.form.totalditerimabias = val?.totalditerimabias
+  store.form.totalpenerimaanall =
+    parseFloat(store.form.jumlah_datang_b) + parseFloat(store.form.totalditerimabias)
+
+  if (parseFloat(store.form.jumlahorder) === parseFloat(store.form.totalpenerimaanall)) {
+    store.form.flagingx = '1'
+  } else {
+    store.form.flagingx = null
+  }
+
+  if (parseFloat(store.form.jumlahorder) < parseFloat(store.form.totalpenerimaanall)) {
     notifError('Jumlah yang Anda Masukkan Melebihi jumlah pesanan...!!!')
   } else {
     store.save()
@@ -192,6 +267,10 @@ const lists = computed(() => {
     return b.id - a.id
   })
 })
+
+function kurangisisabarangdatang(item) {
+  item.sisajumlahbelumditerima = item.sisajumlahbelumditerimax - item.itemrusak
+}
 
 function cetakData() {
   store.dialogCetak = true

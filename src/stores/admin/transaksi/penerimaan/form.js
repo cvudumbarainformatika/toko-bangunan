@@ -2,6 +2,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useAdminListTransaksiPenerimaanBarangStore } from './list'
 import { notifError, notifSuccess } from 'src/modules/notifs'
+import { date } from 'quasar'
 
 export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
   'admin-form-transaksi-penerimaanbarang-store',
@@ -12,12 +13,14 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
       form: {
         nopenerimaan: '',
         noorder: '',
+        nofaktur: '',
         kdsuplier: '',
         suplier: '',
         jumlahpo: 0,
         hargaasli: 0,
         id: '',
         kunci: null,
+        tgl: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       },
       rinci: [],
       loading: false,
@@ -26,6 +29,10 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
       hiden: false,
       kunci: null,
       dataprops: [],
+      dateDisplay: {
+        tgl: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      },
+      tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
     }),
     // persist: true,
     // getters: {
@@ -34,17 +41,24 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
 
     actions: {
       initResetRinci() {
+        this.form.id = null
         this.form.kdbarang = null
         this.form.namabarang = null
         this.form.brand = null
         this.form.merk = null
         this.form.seri = null
+        this.form.jumlahorder = null
+        this.form.jumlahpo = null
+        this.form.jumlah_datang_b = null
+        this.form.jumlahpo_k = null
         this.form.satuan_b = null
         this.form.satuan_k = null
         this.form.isi = null
-        this.form.harga = null
-        this.form.ukuran = null
-        this.form.jumlah = 1
+        this.form.hargafaktur = null
+        this.form.hargaasli = null
+        this.form.jumlahbarangrusak = null
+        this.form.totalditerimabias = null
+        this.form.totalpenerimaanall = null
       },
 
       async save() {
