@@ -148,7 +148,7 @@
                           currency
                         />
                       </div>
-                      <div class="col-3">
+                      <div class="col-2">
                         <app-input-rp
                           label="harga fix"
                           dense
@@ -157,7 +157,7 @@
                           currency
                         />
                       </div>
-                      <div class="col-2 q-ml-auto" v-if="props?.data?.kunci !== '1'">
+                      <div class="col-1 q-ml-auto side top" v-if="props?.data?.kunci !== '1'">
                         <app-btn
                           :loading="store.loading && store.form.id === item.id"
                           type="submit"
@@ -167,6 +167,14 @@
                       </div>
                     </div>
                   </q-item-section>
+                  <!-- <q-item-section top side v-if="props?.data?.kunci != '1'">
+                    <app-btn
+                      :loading="store.loading && store.form.id === item.id"
+                      type="submit"
+                      color="teal"
+                      icon="save"
+                    />
+                  </q-item-section> -->
                 </q-form>
               </q-item>
             </transition-group>
