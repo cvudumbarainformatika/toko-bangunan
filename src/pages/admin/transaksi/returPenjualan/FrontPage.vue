@@ -26,7 +26,8 @@
         form.item=null
         form.resetForm()
         isList='listPenjualan'
-      }"/>
+      }"
+      @selesai="selesai"/>
     <template #fallback>
       <Loading />
     </template>
@@ -58,4 +59,14 @@ const list=useListReturPenjualanStore()
 const form=useFormReturPenjualanStore()
 
 list.getList()
+
+function selesai(data){
+
+  const index=list.items.findIndex(i=>i.id==data?.pj.id)
+  if(index>=0){
+    list.items[index]=data?.pj
+  }
+  console.log('selesai front', data, index);
+
+}
 </script>

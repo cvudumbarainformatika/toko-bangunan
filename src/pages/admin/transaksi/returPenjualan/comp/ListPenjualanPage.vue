@@ -22,7 +22,7 @@
                       }"
                       @db-model="(val)=>{
                         store.params.from=val
-
+                        store.getList()
                       }"
                     />
                     <app-input-date
@@ -36,7 +36,7 @@
                       }"
                       @db-model="(val)=>{
                         store.params.to=val
-
+                        store.getList()
                       }"
                     />
                     <app-input
@@ -152,7 +152,7 @@
                   </div>
                   <template v-if="item?.flag != null">
                     <q-separator />
-                    <div v-for="detail in item?.detail_fifo" :key="detail?.id">
+                    <div v-for="detail in item?.detail" :key="detail?.id">
                       <div class="row q-px-sm">
                         <div class="col-5">
                           {{
