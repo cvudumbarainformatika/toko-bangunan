@@ -14,6 +14,7 @@
                       label="Telusuri"
                       style="min-width: 250px"
                       :debounce="300"
+                      :loading="storeOrderH.loading"
                       @update:model-value="
                         (e) => {
                           infiniteScroll?.reset()
@@ -55,7 +56,13 @@
                         }
                       "
                     />
-                    <q-btn round color="primary" icon="find_replace" @click="refreshList" />
+                    <q-btn
+                      round
+                      color="primary"
+                      icon="find_replace"
+                      @click="refreshList"
+                      :loading="storeOrderH.loading"
+                    />
                   </div>
                 </div>
 
@@ -163,8 +170,8 @@ const storeOrderH = useAdminListTransaksiOrderBarangStore()
 
 const refreshList = async () => {
   // Reset infinite scroll
-  console.log('refresh')
-  infiniteScroll.value?.reset()
+  console.log('refresh', infiniteScroll.value.disable)
+  infiniteScroll.value.reset() // Reset infinite scroll
   await storeOrderH.getList()
 }
 

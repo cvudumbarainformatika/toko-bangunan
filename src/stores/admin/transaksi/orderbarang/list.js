@@ -45,7 +45,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
         // console.log('get master barang page', this.params.page);
         this.params.page = 1
         this.isError = false
-        //this.loading = true
+        this.loading = true
         const params = {
           params: this.params,
         }
