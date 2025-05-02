@@ -25,6 +25,7 @@
                       @db-model="
                         (val) => {
                           store.params.from = val
+                          store.getList()
                         }
                       "
                     />
@@ -42,6 +43,7 @@
                       @db-model="
                         (val) => {
                           store.params.to = val
+                          store.getList()
                         }
                       "
                     />

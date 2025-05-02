@@ -24,12 +24,12 @@
                           Total Nota Nomor : {{ store.formPembayaran.no_penjualan }}
                         </div>
                         <div class="col-auto text-weight-bold text-right f-20">
-                          <div class="row justify-end">{{ formatDouble(store?.item?.total) }}</div>
+                          <div class="row justify-end">{{ formatDouble(store?.item?.total + (store?.item?.total_diskon??0)) }}</div>
                           <div v-if="store?.item?.total_diskon > 0" class="row justify-end">
                             {{ formatDouble(store?.item?.total_diskon) }}
                           </div>
                           <div v-if="store?.item?.total_diskon > 0" class="row justify-end">
-                            {{ formatDouble(store?.item?.total - store?.item?.total_diskon) }}
+                            {{ formatDouble(store?.item?.total) }}
                           </div>
                         </div>
                       </div>
@@ -104,10 +104,7 @@
                         currency
                         label="Bayar"
                         :rules="[
-                          (val) =>
-                            parseInt(olahUang(val)) >=
-                              parseInt(store.formPembayaran.total) -
-                                store.formPembayaran?.total_diskon || 'nominal pembayaran kurang',
+                          (val) => parseInt(olahUang(val)) >= parseInt(store.formPembayaran.total) || 'nominal pembayaran kurang',
                         ]"
                         @update:model-value="updateBayar"
                         :disable="store.loadingPembayaran"
@@ -115,10 +112,7 @@
                       <div
                         class="col-3"
                         :class="
-                          parseInt(
-                            parseInt(store.formPembayaran.total) -
-                              store.formPembayaran?.total_diskon,
-                          ) > parseInt(olahUang(store.formPembayaran.bayar)) ||
+                          parseInt(store.formPembayaran.total) > parseInt(olahUang(store.formPembayaran.bayar)) ||
                           !parseInt(olahUang(store.formPembayaran?.bayar))
                             ? 'text-negative'
                             : ''
@@ -128,10 +122,7 @@
                       </div>
                       <div
                         v-if="
-                          parseInt(
-                            parseInt(store.formPembayaran.total) -
-                              store.formPembayaran?.total_diskon,
-                          ) > parseInt(olahUang(store.formPembayaran.bayar))
+                        parseInt(store.formPembayaran.total)  > parseInt(olahUang(store.formPembayaran.bayar))
                         "
                         class="col-3 text-negative text-center"
                       >
@@ -212,7 +203,7 @@ function updateBayar(val) {
   if (normalAngka > 1) {
     // store.formPembayaran.bayar = normalAngka
     store.formPembayaran.kembali =
-      parseInt(normalAngka) - (store.formPembayaran.total - store?.formPembayaran?.total_diskon)
+      parseInt(normalAngka) - (store.formPembayaran.total)
   }
   setTimeout(() => {
     refBayar.value?.appInput?.validate()
