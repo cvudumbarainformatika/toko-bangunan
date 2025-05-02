@@ -135,9 +135,9 @@
                     <q-item-label lines="1">
                       <div class="row">
                         <div class="col-2">{{ item?.no_penjualan }}</div>
-                        <div class="col-2 q-ml-sm">{{ formatDouble(item?.total) }}<span class="text-italic f-10 q-ml-xs">(total)</span></div>
+                        <div class="col-2 q-ml-sm">{{ formatDouble(item?.total + item?.total_diskon) }}<span class="text-italic f-10 q-ml-xs">(total)</span></div>
                         <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }} <span class="text-italic f-10 q-ml-xs">(diskon)</span></span> </div>
-                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total - item?.total_diskon) }}<span class="text-italic f-10 q-ml-xs">(total - diskon)</span></span> </div>
+                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total) }}<span class="text-italic f-10 q-ml-xs">(total - diskon)</span></span> </div>
                         <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
                       </div>
 
@@ -189,10 +189,10 @@
                 <div v-for="detail in item?.detail" :key="detail?.id">
                   <div class="row q-px-sm">
                     <div class="col-6">{{detail?.master_barang?.namabarang??'' + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand??'')+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri??'')+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran??'')}}</div>
-                    <div class="col-1 text-right">{{detail?.jumlah}}</div>
-                    <div class="col-2 text-right">{{detail?.harga_jual}}</div>
-                    <div class="col-1 text-right">{{detail?.diskon}}</div>
-                    <div class="col-2 text-right">{{detail?.subtotal}}</div>
+                    <div class="col-1 text-right">{{formatDouble(detail?.jumlah)}}</div>
+                    <div class="col-2 text-right">{{formatDouble(detail?.harga_jual)}}</div>
+                    <div class="col-1 text-right">{{formatDouble(detail?.diskon)}}</div>
+                    <div class="col-2 text-right">{{formatDouble(detail?.subtotal)}}</div>
                 </div>
                 </div>
                 </q-expansion-item>
