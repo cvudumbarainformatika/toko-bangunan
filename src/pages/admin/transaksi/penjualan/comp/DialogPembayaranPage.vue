@@ -61,7 +61,7 @@
                       ]"
                       :disable="store.loadingPembayaran"
                     />
-                    <template v-if="!store?.item?.sales_id && !store.formPembayaran.pelanggan_id">
+                    <template v-if="!store.formPembayaran.pelanggan_id">
                       <div class="col-12 q-mb-md">
                         <div class="row text-weight-bold q-mb-sm justify-center">
                           Data Pelanggan
