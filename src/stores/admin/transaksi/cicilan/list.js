@@ -14,10 +14,11 @@ export const useListCicilanPenjualanStore = defineStore('list-cicilan-penjualan-
       sales:null
     },
     flagOptions:[
-      {label:'Semua',value:'semua'},
+      {label:'Semua Terhutang',value:'semua'},
       {label:'Belum ada Cicilan',value:'2'},
       {label:'Proses Cicilan',value:'3'},
       {label:'Dibawa Sales',value:'4'},
+      {label:'Lunas',value:'5'},
     ]
   }),
   actions: {
