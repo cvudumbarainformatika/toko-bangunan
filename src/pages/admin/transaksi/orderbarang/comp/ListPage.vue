@@ -16,7 +16,7 @@
                       :debounce="300"
                       @update:model-value="
                         (e) => {
-                          infiniteScroll.reset()
+                          infiniteScroll?.reset()
                           storeOrderH.getList()
                         }
                       "
@@ -66,7 +66,6 @@
             </q-item-label>
             <q-separator inset="item" />
           </div>
-
           <div ref="scrollTarget" class="col full-height scroll">
             <q-infinite-scroll
               @load="storeOrderH.loadMore"
@@ -164,7 +163,8 @@ const storeOrderH = useAdminListTransaksiOrderBarangStore()
 
 const refreshList = async () => {
   // Reset infinite scroll
-  infiniteScroll.value.reset()
+  console.log('refresh')
+  infiniteScroll.value?.reset()
   await storeOrderH.getList()
 }
 

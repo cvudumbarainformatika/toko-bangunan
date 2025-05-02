@@ -87,6 +87,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
               this.itemPenerimaan = hasil
 
               //console.log('addd', this.item)
+
               notifSuccess('Data berhasil disimpan')
               this.initResetRinci()
               // inject data
