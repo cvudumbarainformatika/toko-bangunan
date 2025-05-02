@@ -7,7 +7,7 @@
             <q-item-label header>
               <div class="row full-width items-center">
                 <div class="col-grow">
-                  <div class="flex items-center">
+                  <div class="flex items-center q-gutter-sm">
                     <app-input
                       v-model="storePenerimaanH.params.q"
                       prepend-icon="search"
@@ -17,10 +17,45 @@
                       @update:model-value="
                         (e) => {
                           infiniteScroll.reset()
-                          // storePenerimaanH.getList()
+                          storePenerimaanH.getList()
                         }
                       "
                     />
+                    <app-input-date
+                      :model="storePenerimaanH.dateDisplay.from"
+                      label="Dari"
+                      style="min-width: 150px"
+                      outlined
+                      :debounce="300"
+                      @set-model="
+                        (val) => {
+                          storePenerimaanH.dateDisplay.from = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          storePenerimaanH.params.from = val
+                        }
+                      "
+                    />
+                    <app-input-date
+                      :model="storePenerimaanH.dateDisplay.to"
+                      label="Sampai"
+                      style="min-width: 150px"
+                      outlined
+                      :debounce="300"
+                      @set-model="
+                        (val) => {
+                          storePenerimaanH.dateDisplay.to = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          storePenerimaanH.params.to = val
+                        }
+                      "
+                    />
+                    <q-btn round color="primary" icon="find_replace" @click="refreshList" />
                   </div>
                 </div>
 
@@ -126,6 +161,12 @@ const emits = defineEmits(['add', 'edit'])
 
 const lihatdetail = (item) => {
   emits('edit', item)
+}
+
+const refreshList = async () => {
+  // Reset infinite scroll
+  infiniteScroll.value.reset()
+  await storePenerimaanH.getList()
 }
 
 // function lihatdetail(val) {

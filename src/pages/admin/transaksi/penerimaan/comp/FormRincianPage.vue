@@ -114,7 +114,13 @@
                     </div>
                     <div class="row q-gutter-xs">
                       <div class="col-2">
-                        <app-input label="Motif" v-model="store.form.motif" style="width: 100%" />
+                        <app-input
+                          label="Motif"
+                          v-model="item.motif"
+                          style="width: 100%"
+                          :valid="{ required: false }"
+                          :autofocus="n === 0"
+                        />
                       </div>
                       <div class="col-2">
                         <AppInputRp
@@ -123,8 +129,6 @@
                           outlined
                           v-model="item.sisajumlahbelumditerimax"
                           currency
-                          :valid="null"
-                          :autofocus="n === 0"
                           @update:model-value="kurangisisabarangdatang(item)"
                         />
                       </div>
@@ -158,12 +162,14 @@
                         />
                       </div>
                       <div class="col-1 q-ml-auto side top" v-if="props?.data?.kunci !== '1'">
-                        <app-btn
-                          :loading="store.loading && store.form.id === item.id"
-                          type="submit"
-                          color="teal"
-                          icon="save"
-                        />
+                        <div v-if="item.sisajumlahbelumditerimax !== 0">
+                          <app-btn
+                            :loading="store.loading && store.form.id === item.id"
+                            type="submit"
+                            color="teal"
+                            icon="save"
+                          />
+                        </div>
                       </div>
                     </div>
                   </q-item-section>
@@ -219,8 +225,12 @@ function cariorderan() {
 
 function onSubmit(val) {
   console.log('val', val)
+  if (store.form.nofaktur === '') {
+    notifError('No Faktur Tidak Boleh Kosong...!!!')
+  }
   store.form.id = val?.id
   store.form.idx = val?.idx
+  store.form.motif = val?.motif
   store.form.kdbarang = val?.kdbarang
   store.form.jumlahorder = val?.jumlahpo
   store.form.jumlahpo = olahUang(val?.sisajumlahbelumditerima)
