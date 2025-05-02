@@ -14,7 +14,7 @@
   </template>
   <template v-if="isList=='list'">
   <Suspense>
-    <list-page @back="()=>isList='listPenjualan'"/>
+    <list-page @back="()=>isList='listPenjualan'" @selesai="listSelesai"/>
     <template #fallback>
       <Loading />
     </template>
@@ -39,6 +39,7 @@
 import { useListReturPenjualanStore } from 'src/stores/admin/transaksi/returPenjualan/list'
 import { useFormReturPenjualanStore } from 'src/stores/admin/transaksi/returPenjualan/form'
 import { defineAsyncComponent, ref } from 'vue'
+import { useListTransaksiReturPenjualanStore } from 'src/stores/admin/transaksi/returPenjualan/retur'
 const listPage = defineAsyncComponent(() =>
   import('./comp/ListPage.vue')
 )
@@ -55,10 +56,11 @@ const isList=ref('listPenjualan')
 
 const list=useListReturPenjualanStore()
 
-
 const form=useFormReturPenjualanStore()
 
+const retur=useListTransaksiReturPenjualanStore()
 list.getList()
+retur.getList()
 
 function selesai(data){
 
@@ -67,6 +69,28 @@ function selesai(data){
     list.items[index]=data?.pj
   }
   console.log('selesai front', data, index);
+
+}
+function listSelesai(val){
+  console.log('val', val);
+  val.loading=true
+  form.selesai({no_retur:val.no_retur})
+  .then((data) => {
+    val.loading=false
+    selesai(data)
+    const isi= data?.data
+    const index=retur.items.findIndex(i=>i.id==isi.id)
+    if(index>=0){
+      retur.items[index]=isi
+    }
+
+  }).catch(() => {
+    val.loading=false
+
+  })
+  .finally(() => {
+    val.loading=false
+  })
 
 }
 </script>

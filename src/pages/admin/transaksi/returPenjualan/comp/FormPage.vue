@@ -92,6 +92,7 @@ import { useFormReturPenjualanStore } from 'src/stores/admin/transaksi/returPenj
 const emits = defineEmits(['back','selesai'])
 const store= useFormReturPenjualanStore()
 function submit(item) {
+  if(parseInt(item.retur)===0) return notifError('Jumlah retur tidak boleh nol')
   store.initForm('no_penjualan',item?.no_penjualan)
   store.initForm('kodebarang',item?.kodebarang)
   store.initForm('retur',item?.retur)
