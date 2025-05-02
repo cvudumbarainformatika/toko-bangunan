@@ -1,6 +1,10 @@
 <template>
   <div v-if="isList">
-    <HistoryPenjualanPage @back="isList = false" @use-nota="useNota" @bayar="bayar" />
+    <HistoryPenjualanPage @back="()=>{
+      store.resetPembayaran()
+      isList = false
+      }"
+      @use-nota="useNota" @bayar="bayar" />
   </div>
   <div v-else class="q-pa-md">
     <div class="row items-center">
@@ -31,6 +35,7 @@
               store.formPembayaran.total = store.item?.total
               store.formPembayaran.total_diskon = store.item?.total_diskon
               store.formPembayaran.no_penjualan = store.noNota
+              console.log('store.formPembayaran', store.formPembayaran)
             }
           "
         />
@@ -108,7 +113,7 @@ function useNota(val) {
   store.item = val
 }
 function bayar(item) {
-  // console.log('bayar', item);
+  console.log('bayar', item);
   store.noNota = item?.no_penjualan
   store.item = item
   store.openPembayaran = true

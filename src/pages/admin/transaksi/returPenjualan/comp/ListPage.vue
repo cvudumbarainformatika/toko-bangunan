@@ -22,7 +22,7 @@
                       }"
                       @db-model="(val)=>{
                         store.params.from=val
-
+                        store.getList()
                       }"
                     />
                     <app-input-date
@@ -36,7 +36,7 @@
                       }"
                       @db-model="(val)=>{
                         store.params.to=val
-
+                        store.getList()
                       }"
                     />
                     <app-input
@@ -73,7 +73,7 @@
             <q-infinite-scroll
               @load="store.loadMore"
               ref="infiniteScroll"
-              :disable="store?.isError || store?.meta?.next_page_url === null"
+              :disable="store?.isError || !store?.meta?.next_page_url"
               :scroll-target="scrollTarget"
               :offset="150"
               :initial-index="store.params.page"
@@ -85,16 +85,17 @@
                   v-ripple
                   @mouseover="hoveredId = item?.id"
                   @mouseleave="hoveredId = null"
-                  :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }"
+                  :class="{ 'bg-grey-8 text-white': hoveredId === item?.id,
+                            'bg-primary text-white': item.status === '' && hoveredId !== item?.id }"
                 >
                   <template v-slot:header>
                     <q-item-section>
                       <q-item-label lines="1">
                         <div class="row">
                           <div class="col-3">{{ item?.no_penjualan }}</div>
+                          <div class="col-2 q-ml-sm">{{ item?.no_retur }}</div>
                           <div class="col-2 q-ml-sm">{{ formatDouble(item?.total) }}</div>
-                          <div class="col-2 q-ml-sm">{{ formatDouble(item?.total_diskon) }}</div>
-                          <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
+                          <div class="col-2 q-ml-sm">{{ statusFlag(item?.status) }}</div>
                         </div>
                       </q-item-label>
                       <q-item-label lines="1">
@@ -122,17 +123,25 @@
                     </q-item-section>
                     <q-item-section v-if="hoveredId === item?.id" side>
                       <div class="flex q-gutter-sm">
-                        <!-- <app-btn
-                          icon="input"
+                        <app-btn
+                          v-if="item.status === ''"
+                          icon="check_circle"
                           color="primary"
-                          tooltip="retur nota ini"
-                          @click="emits('form', item)"
-                        /> -->
+                          tooltip="Selesaikan Transaksi dan Tambahkan stok"
+                          @click="emits('selesai', item)"
+                          :loading="item?.loading"
+                          :disable="item?.loading"
+                        />
                       </div>
                     </q-item-section>
                     <q-item-section v-else side top>
                       <q-item-label caption>{{ humanDate(item?.tgl) }}</q-item-label>
                       <q-item-label caption>{{ jamTnpDetik(item?.tgl) }}</q-item-label>
+                      <app-btn
+                          v-if="item?.loading"
+                          :loading="item?.loading"
+                          :disable="item?.loading"
+                        />
                     </q-item-section>
                   </template>
                   <q-separator />
@@ -141,44 +150,22 @@
                     <div class="col-1 text-right">Jumlah</div>
                     <div class="col-1 text-right">Satuan</div>
                     <div class="col-2 text-right">Harga</div>
-                    <div class="col-1 text-right">Diskon</div>
                     <div class="col-2 text-right">Subtotal</div>
                   </div>
                   <q-separator />
-                  <div v-if="item?.flag != null" class="row q-pa-sm text-weight-bold f-10 text-italic">(Detail Penjualan )</div>
                   <div v-for="detail in item?.detail" :key="detail?.id">
                     <div class="row q-px-sm">
                       <div class="col-5">
                         {{
-                          detail?.master_barang?.namabarang + ' ' + (item?.flag!=null ? '' : (detail?.master_barang?.stok === null ? '' : '(stok ' + detail?.master_barang?.stok?.jumlah_k + '  ' + detail?.master_barang?.stok?.satuan_k + ' )'))
+                          detail?.master_barang?.namabarang
                         }}
                       </div>
                       <div class="col-1 text-right">{{ detail?.jumlah }}</div>
                       <div class="col-1 text-right">{{ detail?.master_barang?.satuan_k }}</div>
                       <div class="col-2 text-right">{{ formatDouble(detail?.harga_jual) }}</div>
-                      <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
                       <div class="col-2 text-right">{{ formatDouble(detail?.subtotal) }}</div>
                     </div>
                   </div>
-                  <template v-if="item?.flag != null">
-                    <q-separator />
-                    <div class="row q-pa-sm text-weight-bold f-10 text-italic">(Detail Penjualan Fifo)</div>
-                    <div v-for="detail in item?.detail_fifo" :key="detail?.id">
-                      <div class="row q-px-sm">
-                        <div class="col-5">
-                          {{
-                            detail?.master_barang?.namabarang + ' ' + (item?.flag!=null ? '' : (detail?.master_barang?.stok === null ? '' : '(stok ' + detail?.master_barang?.stok.jumlah_k + '  ' + detail?.master_barang?.stok.satuan_k + ' )'))
-                          }}
-                        </div>
-                        <div class="col-1 text-right">{{ detail?.jumlah }}</div>
-                        <div class="col-1 text-right">{{ detail?.master_barang?.satuan_k }}</div>
-                        <div class="col-2 text-right">{{ formatDouble(detail?.harga_jual) }}</div>
-                        <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
-                        <div class="col-2 text-right">{{ formatDouble(detail?.subtotal) }}</div>
-                      </div>
-                    </div>
-
-                  </template>
                 </q-expansion-item>
                 <q-separator />
               </q-intersection>
@@ -201,7 +188,7 @@ import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListTransaksiReturPenjualanStore } from 'src/stores/admin/transaksi/returPenjualan/retur'
 
-const emits = defineEmits(['back'])
+const emits = defineEmits(['back','selesai'])
 const store=useListTransaksiReturPenjualanStore()
 
 const scrollTarget = ref(null)
@@ -212,11 +199,11 @@ const hoveredId = ref(null)
 function statusFlag(flag) {
   let status = ''
   switch (flag) {
-    case null:
+    case '':
       status = 'Draft'
       break
     case '1':
-      status = 'Pesanan Sales'
+      status = 'Selesai'
       break
     case '2':
       status = 'Belum Ada Cicilan'

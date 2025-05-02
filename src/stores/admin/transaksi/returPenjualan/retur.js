@@ -28,7 +28,7 @@ export const useListTransaksiReturPenjualanStore = defineStore('list-transaksi-r
       }
       this.loading = true
       try {
-        const { data } = await api.get('/v1/transaksi/retur/list-penjualan',params)
+        const { data } = await api.get('/v1/transaksi/retur/list-retur',params)
         console.log('list retur penjualan', data);
 
         this.meta = data?.meta
@@ -49,9 +49,9 @@ export const useListTransaksiReturPenjualanStore = defineStore('list-transaksi-r
       console.log('load more', index);
 
       return new Promise((resolve) => {
-        api.get('/v1/transaksi/retur/list-penjualan', params)
+        api.get('/v1/transaksi/retur/list-retur', params)
           .then(({data}) => {
-            console.log('list retur penjualan',data);
+            console.log('list retur penjualan, more',data);
             if(data.data?.length){
               this.meta = data?.meta
               this.items.push(...data.data)
