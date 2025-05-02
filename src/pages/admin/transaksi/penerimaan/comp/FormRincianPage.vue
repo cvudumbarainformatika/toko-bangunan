@@ -162,12 +162,19 @@
                         />
                       </div>
                       <div class="col-1 q-ml-auto side top" v-if="props?.data?.kunci !== '1'">
-                        <div v-if="item.sisajumlahbelumditerimax !== 0">
+                        <div v-if="item.flaging !== '1'">
                           <app-btn
                             :loading="store.loading && store.form.id === item.id"
                             type="submit"
-                            color="teal"
+                            color="red"
                             icon="save"
+                          />
+                        </div>
+                        <div v-else>
+                          <app-btn
+                            :loading="store.loading && store.form.id === item.id"
+                            color="teal"
+                            icon="done_all"
                           />
                         </div>
                       </div>
