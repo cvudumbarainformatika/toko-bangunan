@@ -112,6 +112,7 @@
                         <span> {{ formatRpDouble(item.subtotal) }} </span>
                       </div>
                     </div>
+
                     <div class="row q-gutter-xs">
                       <div class="col-2">
                         <app-input
@@ -161,6 +162,7 @@
                           currency
                         />
                       </div>
+
                       <div class="col-1 q-ml-auto side top" v-if="props?.data?.kunci !== '1'">
                         <div v-if="item.flaging !== '1'">
                           <app-btn
