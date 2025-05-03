@@ -94,12 +94,13 @@
             <q-item>
               <q-item-section>
                     <q-item-label lines="1">
-                      <div class="row text-weight-bold">
+                      <div class="row text-weight-bold q-col-gutter-x-sm">
                         <div class="col-2">No Penjualan</div>
-                        <div class="col-2 q-ml-sm">Total</div>
-                        <div class="col-2 q-ml-sm">Total Diskon<span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
-                        <div class="col-2 q-ml-sm">Total - Diskon <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
-                        <div class="col-2 q-ml-sm">Status</div>
+                        <div class="col-2">Total</div>
+                        <div class="col-2">Total Diskon<span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                        <div class="col-2">Total Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                        <div class="col-2">Total - Diskon - Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                        <div class="col-2 text-right">Status</div>
                       </div>
 
                       </q-item-label>
@@ -133,12 +134,13 @@
                 <template v-slot:header>
                   <q-item-section>
                     <q-item-label lines="1">
-                      <div class="row">
+                      <div class="row q-col-gutter-x-sm">
                         <div class="col-2">{{ item?.no_penjualan }}</div>
-                        <div class="col-2 q-ml-sm">{{ formatDouble(item?.total + item?.total_diskon) }}<span class="text-italic f-10 q-ml-xs">(total)</span></div>
-                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }} <span class="text-italic f-10 q-ml-xs">(diskon)</span></span> </div>
-                        <div class="col-2 q-ml-sm"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total) }}<span class="text-italic f-10 q-ml-xs">(total - diskon)</span></span> </div>
-                        <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
+                        <div class="col-2">{{ formatDouble(item?.total + item?.total_diskon) }}<span class="text-italic f-10 q-ml-xs">(total)</span></div>
+                        <div class="col-2"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }} <span class="text-italic f-10 q-ml-xs">(diskon)</span></span> </div>
+                        <div class="col-2"> <span v-if="totalRetur(item)>0"> {{ formatDouble(totalRetur(item)) }}<span class="text-italic f-10 q-ml-xs">(retur)</span></span> </div>
+                        <div class="col-2"> <span v-if="item?.total_diskon>0 || totalRetur(item)>0"> {{ formatDouble(item?.total - totalRetur(item)) }}<span class="text-italic f-10 q-ml-xs">(total - diskon - retur)</span></span> </div>
+                        <div class="col-2 text-right">{{ statusFlag(item?.flag) }}</div>
                       </div>
 
                       </q-item-label>
@@ -180,19 +182,23 @@
                 </template>
                 <q-separator  />
                 <div class="row q-pa-sm">
-                  <div class="col-6">Barang</div>
+                  <div class="col-5">Barang</div>
                   <div class="col-1 text-right">Jumlah</div>
-                  <div class="col-2 text-right">Harga</div>
+                  <div class="col-1 text-right">Jumlah Retur</div>
+                  <div class="col-1 text-right">Harga</div>
                   <div class="col-1 text-right">Diskon</div>
+                  <div class="col-1 text-right">Retur</div>
                   <div class="col-2 text-right">Subtotal</div>
                 </div>
                 <div v-for="detail in item?.detail" :key="detail?.id">
                   <div class="row q-px-sm">
-                    <div class="col-6">{{detail?.master_barang?.namabarang??'' + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand??'')+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri??'')+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran??'')}}</div>
+                    <div class="col-5">{{detail?.master_barang?.namabarang??'' + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand??'')+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri??'')+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran??'')}}</div>
                     <div class="col-1 text-right">{{formatDouble(detail?.jumlah)}}</div>
-                    <div class="col-2 text-right">{{formatDouble(detail?.harga_jual)}}</div>
+                    <div class="col-1 text-right">{{formatDouble(detailRetur(item,detail))}}</div>
+                    <div class="col-1 text-right">{{formatDouble(detail?.harga_jual)}}</div>
                     <div class="col-1 text-right">{{formatDouble(detail?.diskon)}}</div>
-                    <div class="col-2 text-right">{{formatDouble(detail?.subtotal)}}</div>
+                    <div class="col-1 text-right">{{formatDouble(item?.header_retur?.flatMap(m=>m.detail).filter(m=>m.kodebarang === detail?.kodebarang)?.reduce((acc,it)=>acc+it.subtotal,0))}}</div>
+                    <div class="col-2 text-right">{{formatDouble(subtotal(item,detail))}}</div>
                 </div>
                 </div>
                 </q-expansion-item>
@@ -266,7 +272,29 @@ function statusFlag(flag) {
 
   return status
 }
-
+function totalRetur(item) {
+  let total = 0
+  if (item?.header_retur?.length > 0) {
+    total = item?.header_retur?.reduce((total, item) => total + item?.total, 0)
+  }
+  return total
+}
+function detailRetur(item,detail) {
+  let total = 0
+  if (item?.header_retur?.length > 0) {
+    total = item?.header_retur?.flatMap(m => m?.detail).filter(f => f?.kodebarang === detail?.kodebarang)?.reduce((total, item) => total + item?.jumlah, 0)
+  }
+  return total
+}
+function subtotal(item,detail) {
+  let total = 0
+  const subtotal = detail?.subtotal??0
+  const diskon = detail?.diskon??0
+  if (item?.header_retur?.length > 0) {
+    total = item?.header_retur?.flatMap(m => m?.detail).filter(f => f?.kodebarang === detail?.kodebarang)?.reduce((total, item) => total + item?.subtotal, 0)
+  }
+  return subtotal-diskon-total
+}
 // eslint-disable-next-line no-unused-vars
 const next = computed(() => {
   let page = false

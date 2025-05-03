@@ -2,11 +2,13 @@ import { acceptHMRUpdate, defineStore } from "pinia"
 import { api } from "src/boot/axios"
 import { notifSuccess } from "src/modules/notifs"
 import { useListReturPenjualanStore } from "./list"
+import { useListTransaksiReturPenjualanStore } from "./retur"
 
 export const useFormReturPenjualanStore = defineStore('form_retur-penjualan-store',{
   state: () => ({
     loading: false,
     list: useListReturPenjualanStore(),
+    retur: useListTransaksiReturPenjualanStore(),
     form:{},
     noRetur:'',
     item:null
@@ -37,11 +39,16 @@ export const useFormReturPenjualanStore = defineStore('form_retur-penjualan-stor
         const resp = await api.post('/v1/transaksi/retur/simpan', this.form)
         item.loading = false
         const pj=resp?.data?.pj
+        const ret=resp?.data?.data
         console.log('submit retur penjualan', pj)
         const index=this.list.items.findIndex(i=>i.id==pj.id)
         if(index>=0){
           this.list.items[index]=pj
         }
+        const indexRetur=this.retur.items.findIndex(i=>i.id==ret.id)
+        if(indexRetur>=0){
+          this.retur.items[indexRetur]=ret
+        }else this.retur.items.unshift(ret)
         this.setForm(pj)
         this.resetForm()
         this.noRetur=resp?.data?.noretur

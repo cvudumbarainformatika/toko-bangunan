@@ -23,15 +23,19 @@
       <q-card-section class="q-pt-none">
         <div class="row q-mt-sm justify-between">
           <div class="col-4">Total Hutang</div>
-          <div class="col-3">{{ formatDouble(totalHutang()) || 0 }}</div>
+          <div class="col-3 text-right">{{ formatDouble(totalHutang()) || 0 }}</div>
+        </div>
+        <div class="row q-mt-sm justify-between">
+          <div class="col-4">Total Retur</div>
+          <div class="col-3 text-right">{{ formatDouble(totalRetur()) }}</div>
         </div>
         <div class="row q-mt-sm justify-between">
           <div class="col-4">Total Cicilan</div>
-          <div class="col-3">{{ formatDouble(totalCicilan()) }}</div>
+          <div class="col-3 text-right">{{ formatDouble(totalCicilan()) }}</div>
         </div>
         <div class="row q-mt-sm justify-between">
           <div class="col-4">Sisa Hutang</div>
-          <div class="col-3">{{ formatDouble(
+          <div class="col-3 text-right">{{ formatDouble(
             totalHutang() -
             totalCicilan()
             )  }}</div>
@@ -49,9 +53,9 @@
           <q-separator />
           <div v-for="item in cariPenjualan()" :key="item.id" class="row ">
             <div style="width: 33%;" class="col-auto ">{{ item.no_penjualan }}</div>
-            <div style="width: 23%;" class="col-auto text-right">{{ formatDouble(item?.total - item?.total_diskon) }}</div>
+            <div style="width: 23%;" class="col-auto text-right">{{ formatDouble(item?.total-retur(item)) }}</div>
             <div style="width: 22%;" class="col-auto text-right">{{ formatDouble(cariCicilan(item)) }}</div>
-            <div style="width: 22%;" class="col-auto text-right">{{ formatDouble(item?.total - item?.total_diskon - cariCicilan(item)) }}</div>
+            <div style="width: 22%;" class="col-auto text-right">{{ formatDouble(item?.total - cariCicilan(item) - retur(item)) }}</div>
           </div>
         </div>
         <app-input-rp
@@ -106,13 +110,21 @@ function totalCicilan() {
 }
 function totalHutang() {
   const hutang=list.items?.filter(f=>f.pelanggan_id===store?.item?.pelanggan?.id)?.reduce((a, b) => a + parseFloat(b?.total??0), 0) ?? 0
-  const diskon=list.items?.filter(f=>f.pelanggan_id===store?.item?.pelanggan?.id)?.reduce((a, b) => a + parseFloat(b?.total_diskon??0), 0) ?? 0
+  const retur=list.items?.filter(f=>f.pelanggan_id===store?.item?.pelanggan?.id)?.flatMap(x=>x?.header_retur)?.reduce((a, b) => a + parseFloat(b?.total??0), 0) ?? 0
 
-  return hutang - diskon
+  return hutang - retur
+}
+function totalRetur() {
+  const retur=list.items?.filter(f=>f.pelanggan_id===store?.item?.pelanggan?.id)?.flatMap(x=>x?.header_retur)?.reduce((a, b) => a + parseFloat(b?.total??0), 0) ?? 0
+
+  return  retur
 }
 function cariPenjualan() {
   const data=list.items?.filter(f=>f.pelanggan_id===store?.item?.pelanggan?.id)
 
   return data
+}
+function retur(item) {
+  return item?.header_retur?.reduce((a, b) => a + parseFloat(b.total), 0) ?? 0
 }
 </script>
