@@ -60,6 +60,10 @@ const routes = [
         path: '/admin/transaksi/stok',
         component: () => import('pages/admin/transaksi/stok/IndexPage.vue'),
       },
+      {
+        path: '/admin/transaksi/stok-opname',
+        component: () => import('pages/admin/transaksi/stokOpname/IndexPage.vue'),
+      },
 
       // Settings
       {
