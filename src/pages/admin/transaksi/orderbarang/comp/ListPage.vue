@@ -95,7 +95,9 @@
                   @mouseleave="hoveredId = null"
                 >
                   <q-item-section avatar>
-                    <q-avatar color="teal" text-color="white">OR</q-avatar>
+                    <q-avatar color="teal" text-color="white">{{
+                      ambiltanggalaja(item.tglorder)
+                    }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">{{ item?.noorder }}</q-item-label>
@@ -116,6 +118,8 @@
                         padding="sm"
                         round
                         dense
+                        :loading="store.lock"
+                        @click="store.kunci('1', item?.noorder)"
                       >
                         <q-tooltip>Kunci Data</q-tooltip>
                       </q-btn>
@@ -161,12 +165,14 @@
 
 <script setup>
 import { formatRpDouble, humanDate, jamTnpDetik } from 'src/modules/utils'
+import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 
 import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
 import { computed, ref } from 'vue'
 
 // const search = ref(null)
 const storeOrderH = useAdminListTransaksiOrderBarangStore()
+const store = useAdminFormTransaksiOrderBarangStore()
 
 const refreshList = async () => {
   // Reset infinite scroll
@@ -190,6 +196,27 @@ const emits = defineEmits(['add', 'edit'])
 
 const lihatdetail = (item) => {
   emits('edit', item)
+}
+
+function ambiltanggalaja(val) {
+  // Periksa apakah val adalah string (format ISO atau format lain)
+  if (typeof val === 'string') {
+    // Konversi string ke objek Date
+    const dateObj = new Date(val)
+    // Periksa apakah konversi berhasil (valid date)
+    if (!isNaN(dateObj.getTime())) {
+      return dateObj.getDate()
+    }
+  }
+
+  // Jika val sudah berupa objek Date
+  if (val instanceof Date && !isNaN(val.getTime())) {
+    return val.getDate()
+  }
+
+  // Fallback: jika format tidak dikenali, tampilkan tanggal hari ini
+  console.warn('Format tanggal tidak valid:', val)
+  return new Date().getDate()
 }
 
 // function lihatdetail(val) {
