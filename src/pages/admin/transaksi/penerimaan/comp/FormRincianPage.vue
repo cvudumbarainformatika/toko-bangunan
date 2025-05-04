@@ -116,7 +116,7 @@
                     <div class="row q-gutter-xs">
                       <div class="col-2">
                         <app-input
-                          label="Motif"
+                          label="No. Seri"
                           v-model="item.motif"
                           style="width: 100%"
                           :valid="{ required: false }"
