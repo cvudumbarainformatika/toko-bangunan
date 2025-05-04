@@ -57,9 +57,23 @@ const routes = [
         component: () => import('pages/admin/transaksi/returPenjualan/IndexPage.vue'),
       },
       {
+        path: '/admin/transaksi/penyesuaian',
+        component: () => import('pages/admin/transaksi/penyesuaian/IndexPage.vue'),
+      },
+      {
         path: '/admin/transaksi/stok',
         component: () => import('pages/admin/transaksi/stok/IndexPage.vue'),
       },
+      {
+        path: '/admin/transaksi/stok-opname',
+        component: () => import('pages/admin/transaksi/stokOpname/IndexPage.vue'),
+      },
+
+      // // Laporan
+      // {
+      //   path: '/admin/laporan/kartustok',
+      //   component: () => import('pages/admin/laporan/kartustok/IndexPage.vue'),
+      // },
 
       // Settings
       {
