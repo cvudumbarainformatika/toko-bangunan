@@ -17,6 +17,9 @@ export const useAppStore = defineStore('app-store', {
     token: null,
     loading: false,
     titleLoading: '',
+    inactivityTimer: null,
+    // inactivityTimeout: 15 * 60 * 1000, // 15 menit dalam milidetik
+    inactivityTimeout: 3 * 60 * 1000, // 3 menit dalam milidetik
   }),
   persist: true,
 
@@ -25,6 +28,59 @@ export const useAppStore = defineStore('app-store', {
   // },
 
   actions: {
+    // Inisialisasi timer inaktivitas
+    initInactivityTimer() {
+      if (!this.auth) return // Jangan inisialisasi jika belum login
+
+      // Reset timer yang ada jika sudah ada
+      this.resetInactivityTimer()
+
+      // Buat timer baru
+      this.inactivityTimer = setTimeout(() => {
+        // Logout otomatis setelah timeout
+        this.logout()
+        notifError('Anda telah logout otomatis karena tidak aktif selama 15 menit')
+      }, this.inactivityTimeout)
+
+      // Tambahkan event listener untuk reset timer saat ada aktivitas
+      const resetTimer = this.resetInactivityTimer.bind(this)
+
+      // Daftar event yang akan di-monitor
+      const events = ['mousemove', 'mousedown', 'keypress', 'touchstart', 'scroll']
+
+      // Tambahkan event listener untuk setiap event
+      events.forEach((event) => {
+        document.addEventListener(event, resetTimer)
+      })
+    },
+
+    // Reset timer inaktivitas
+    resetInactivityTimer() {
+      if (this.inactivityTimer) {
+        clearTimeout(this.inactivityTimer)
+        this.inactivityTimer = null
+      }
+
+      // Buat timer baru
+      this.initInactivityTimer()
+    },
+
+    // Hentikan timer inaktivitas
+    stopInactivityTimer() {
+      if (this.inactivityTimer) {
+        clearTimeout(this.inactivityTimer)
+        this.inactivityTimer = null
+      }
+
+      // Hapus event listener
+      const resetTimer = this.resetInactivityTimer.bind(this)
+      const events = ['mousemove', 'mousedown', 'keypress', 'touchstart', 'scroll']
+
+      events.forEach((event) => {
+        document.removeEventListener(event, resetTimer)
+      })
+    },
+
     checkTokenExpiration() {
       const activeTime = localStorage.getItem('activeTime')
       if (activeTime) {
@@ -51,6 +107,10 @@ export const useAppStore = defineStore('app-store', {
       this.user = user
       this.auth = true
       this.updateLastActive()
+
+      // Inisialisasi timer inaktivitas saat restore session
+      this.initInactivityTimer()
+
       return true
     },
 
@@ -87,6 +147,9 @@ export const useAppStore = defineStore('app-store', {
               setTimeout(() => {
                 routerInstance.push('/')
                 this.loading = false
+
+                // Inisialisasi timer inaktivitas setelah login
+                this.initInactivityTimer()
               }, 500)
             })
             resolve(resp)
@@ -112,6 +175,9 @@ export const useAppStore = defineStore('app-store', {
             routerInstance.push({ path: '/' })
             this.loading = false
             waitLoad('done')
+
+            // Inisialisasi timer inaktivitas
+            this.initInactivityTimer()
           }, 500)
         })
         .catch((error) => {
@@ -126,6 +192,10 @@ export const useAppStore = defineStore('app-store', {
           resolve()
           return
         }
+
+        // Hentikan timer inaktivitas
+        this.stopInactivityTimer()
+
         api.post('/logout').finally(() => {
           localStorage.removeItem('token')
           localStorage.removeItem('user')
