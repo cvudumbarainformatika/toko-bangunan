@@ -53,7 +53,25 @@
                 </div>
                 <div class="row full-width">
                   <span class="col-3">Pelanggan</span>
-                  <span>: {{ store.itemCetak?.pelanggan?.nama }}</span>
+                  <span
+                    >:
+                    {{
+                      !store.itemCetak?.pelanggan
+                        ? store.itemCetak?.keterangan?.nama
+                        : store.itemCetak?.pelanggan?.nama
+                    }}</span
+                  >
+                </div>
+                <div class="row full-width">
+                  <span class="col-3">Alamat</span>
+                  <span
+                    >:
+                    {{
+                      !store.itemCetak?.pelanggan
+                        ? store.itemCetak?.keterangan?.alamat
+                        : store.itemCetak?.pelanggan?.alamat
+                    }}</span
+                  >
                 </div>
               </div>
             </div>
@@ -70,6 +88,7 @@
                       <th>NAMA BARANG</th>
                       <th>QTY</th>
                       <th>HARGA BELI</th>
+                      <th>DISKON</th>
                       <th>JUMLAH</th>
                     </tr>
                   </thead>
@@ -79,10 +98,11 @@
                       <td>{{ item.master_barang?.namabarang }}</td>
                       <td class="text-center">{{ item.jumlah }}</td>
                       <td class="text-right">{{ formatRpDouble(item.harga_jual) }}</td>
+                      <td class="text-right">{{ formatRpDouble(item.diskon) }}</td>
                       <td class="text-right">{{ formatRpDouble(item.subtotal) }}</td>
                     </tr>
                     <tr>
-                      <td colspan="4">
+                      <td colspan="5">
                         <div class="row justify-between">
                           <div class="flex-start">
                             Terbilang : {{ terbilangRupiah(store.itemCetak?.total) }} Rupiah,
@@ -94,8 +114,21 @@
                         {{ formatRpDouble(store.itemCetak?.total) }}
                       </td>
                     </tr>
+                    <!-- <tr>
+                      <td colspan="5">
+                        <div class="row justify-between">
+                          <div class="flex-start">
+                            <span hidden></span>
+                          </div>
+                          <div class="text-bold flex-end q-pl-sm">DISC</div>
+                        </div>
+                      </td>
+                      <td class="text-bold text-right">
+                        - {{ formatRpDouble(store.itemCetak?.total_diskon) }}
+                      </td>
+                    </tr> -->
                     <tr>
-                      <td colspan="4">
+                      <td colspan="5">
                         <div class="row justify-between">
                           <div class="flex-start">
                             <span hidden></span>
@@ -108,7 +141,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="4">
+                      <td colspan="5">
                         <div class="row justify-between">
                           <div class="flex-start">
                             <span hidden></span>

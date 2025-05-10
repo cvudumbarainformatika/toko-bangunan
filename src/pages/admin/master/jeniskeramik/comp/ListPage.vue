@@ -12,7 +12,7 @@
                       v-model="store.params.q"
                       prepend-icon="search"
                       label="Telusuri"
-                      style="min-width: 350px"
+                      style="min-width: 250px"
                       :debounce="300"
                       @update:model-value="
                         (e) => {
@@ -21,36 +21,11 @@
                         }
                       "
                     />
-                    <div class="q-pl-sm" />
-                    <q-btn-dropdown
-                      color="grey-9"
-                      rounded
-                      fab-mini
-                      glossy
-                      dropdown-icon="filter_alt"
-                      menu-self="bottom start"
-                      transition-show="scale"
-                      transition-hide="scale"
-                    >
-                      <q-list class="justify-center q-pr-sm">
-                        <q-item
-                          v-for="item in store.filterstok"
-                          :key="item.value"
-                          clickable
-                          v-close-popup
-                          @click="filter(item.value)"
-                        >
-                          <q-item-section>
-                            <q-item-label>{{ item.label }}</q-item-label>
-                          </q-item-section>
-                        </q-item>
-                      </q-list>
-                    </q-btn-dropdown>
                   </div>
                 </div>
 
                 <div class="col-auto">
-                  <app-btn icon="add" tooltip="Tambah Data" color="primary" @click="emits('add')" />
+                  <app-btn icon="add" tooltip="Tambah Data" color="accent" @click="emits('add')" />
                 </div>
               </div>
             </q-item-label>
@@ -77,52 +52,18 @@
                   v-ripple
                   @mouseover="hoveredId = item?.id"
                   @mouseleave="hoveredId = null"
-                  :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }"
                 >
                   <q-item-section avatar>
-                    <q-avatar>
-                      <q-img
-                        v-if="item.image"
-                        :src="getImageUrl(item.image)"
-                        @click="imgClick(getImageUrl(item.image))"
-                      />
-                    </q-avatar>
+                    <q-avatar color="accent" text-color="white">{{ item.nama[0] }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1">{{ item?.namabarang }}</q-item-label>
-                    <q-item-label caption lines="2">
-                      <span class="text-weight-bold">Kategori: {{ item?.kategori }}</span> |
-                      <span
-                        class="text-weight-bold"
-                        :class="{
-                          'text-yellow-8': store.params.minim_stok !== 1,
-                          'bg-red text-white q-px-sm q-py-xs rounded':
-                            store.params.minim_stok === 1,
-                        }"
-                        >Stok Sekarang: {{ item?.stok_kecil }} {{ item?.satuan_k }}</span
-                      >
-                      <span
-                        class="text-weight-bold"
-                        :class="{
-                          'text-yellow-8': store.params.minim_stok !== 1,
-                          'bg-red text-white q-px-sm q-py-xs rounded':
-                            store.params.minim_stok === 1,
-                        }"
-                      >
-                        ({{ item?.stok_besar }} {{ item?.satuan_b }})</span
-                      >
-                    </q-item-label>
+                    <q-item-label lines="1">{{ item?.nama }}</q-item-label>
+                    <!-- <q-item-label caption lines="2">
+                      <span class="text-weight-bold">{{ item?.jabatan }} - {{ item?.nohp }} </span>
+                    </q-item-label> -->
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
-                      <q-btn
-                        icon="assignment_turned_in"
-                        color="teal-7"
-                        round
-                        dense
-                        @click="kartuStok(item)"
-                        ><q-tooltip>Kartu Stok</q-tooltip></q-btn
-                      >
                       <app-btn-edit-list @click="edit(item)" />
                       <app-btn-delete-list @click="del(item)" />
                     </div>
@@ -137,7 +78,7 @@
 
               <template v-slot:loading>
                 <div v-if="!store.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="primary" size="40px" />
+                  <q-spinner-dots color="accent" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>
@@ -149,56 +90,27 @@
       </div> -->
     </div>
   </div>
-  <DialogImage ref="dialogImage" />
-  <DialogKartu v-model="store.dialogKartu" />
 </template>
-
 <script setup>
 import { useQuasar } from 'quasar'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
-// import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form'
-import { useAdminMasterBarangStore } from 'src/stores/admin/master/barang/list'
-import { computed, defineAsyncComponent, onBeforeMount, ref, shallowRef } from 'vue'
-import { pathImg } from 'src/boot/axios'
-import DialogImage from './DialogImage.vue'
-const DialogKartu = shallowRef(defineAsyncComponent(() => import('./DialogKartu.vue')))
+import { useAdminMasterJenisStore } from 'src/stores/admin/master/jeniskeramik/list'
+import { computed, onBeforeMount, ref } from 'vue'
 
-// const search = ref(null)
-const store = useAdminMasterBarangStore()
-// const form = useAdminFormMasterBarangStore()
-
+const store = useAdminMasterJenisStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
 const emits = defineEmits(['add', 'edit'])
-const dialogImage = ref(null)
-
 const $q = useQuasar()
 onBeforeMount(() => {
-  store.params.minim_stok = 0
-  store.getList()
   // Promise.all([
   //   store.getList(null)
   // ])
 })
-// Fungsi untuk mendapatkan URL gambar
-const getImageUrl = (image) => {
-  if (image instanceof File || image instanceof Blob) {
-    return URL.createObjectURL(image)
-  }
-  return pathImg + image // Jika gambar sudah ada di server
-}
-const imgClick = (val) => {
-  console.log('img', val)
-  // store.image = val
-  // store.setExpand()
-  dialogImage.value.openDialog(val)
-}
-
 const edit = (item) => {
-  console.log('ediitx', item.rincians)
   emits('edit', item)
 }
 const del = (item) => {
@@ -219,7 +131,6 @@ const del = (item) => {
       // console.log('I am triggered on both OK and Cancel')
     })
 }
-
 // eslint-disable-next-line no-unused-vars
 const next = computed(() => {
   let page = false
@@ -231,18 +142,6 @@ const next = computed(() => {
   return page
 })
 
-const filter = (val) => {
-  store.params.minim_stok = val
-  infiniteScroll.value.reset()
-  store.getList()
-}
-
-const kartuStok = (item) => {
-  store.kartuStok = item
-  store.selectedKodebarang = item?.kodebarang
-  console.log('kartuStok', store.kartuStok)
-  store.dialogKartu = true
-}
 // function loadMore(index, done) {
 //   store.params.page = index
 //   if (store.params.page === 1) {

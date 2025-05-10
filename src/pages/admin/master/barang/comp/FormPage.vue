@@ -114,11 +114,17 @@
                     label="Ukuran"
                     :valid="{ required: store.form.kategori !== 'Keramik' }"
                   />
+                  <app-input
+                    class="col-6"
+                    v-model="store.form.minim_stok"
+                    label="Batas Low Stock (Satuan Kecil)"
+                    :valid="{ required: store.form.kategori !== 'Keramik' }"
+                  />
 
                   <app-select
                     class="col-4"
                     v-model="store.form.satuan_b"
-                    label="Satuan Bsr"
+                    label="Satuan Besar"
                     :options="selectSatuan.items"
                     option-label="satuan"
                     option-value="satuan"
@@ -141,10 +147,19 @@
                   <app-select
                     class="col-4"
                     v-model="store.form.satuan_k"
-                    label="Satuan Kcl"
+                    label="Satuan Kecil"
                     :options="selectSatuan.items"
                     option-label="satuan"
                     option-value="satuan"
+                    :valid="store.form.kategori !== 'Keramik'"
+                  />
+                  <app-select
+                    class="col-12"
+                    v-model="store.form.kodejenis"
+                    label="Pilih Jenis Keramik"
+                    :options="selectJenis?.items"
+                    option-label="nama"
+                    option-value="kodejenis"
                     :valid="store.form.kategori !== 'Keramik'"
                   />
 
@@ -219,6 +234,7 @@
 import { useQuasar } from 'quasar'
 import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form'
 import { useAdminMasterBrandSelectStore } from 'src/stores/admin/master/brand/select'
+import { useAdminMasterJenisSelectStore } from 'src/stores/admin/master/jeniskeramik/select'
 import { useAdminMasterSatuanSelectStore } from 'src/stores/admin/master/satuan/select'
 import { computed, onMounted, ref } from 'vue'
 import { pathImg } from 'src/boot/axios'
@@ -227,12 +243,13 @@ import { notifError } from 'src/modules/notifs'
 const emits = defineEmits(['back'])
 const $q = useQuasar()
 const isMobile = computed(() => {
-  return $q.screen.lt.sm // Quasar screen size helper
+  return $q.screen.lt.xl // Quasar screen size helper
 })
 
 const store = useAdminFormMasterBarangStore()
 const selectSatuan = useAdminMasterSatuanSelectStore()
 const selectBrand = useAdminMasterBrandSelectStore()
+const selectJenis = useAdminMasterJenisSelectStore()
 
 const props = defineProps({
   data: {
