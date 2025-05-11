@@ -15,7 +15,7 @@
         <q-page-container>
           <div id="printMe">
             <div class="row full-width justify-between">
-              <div class="flex-start" style="width: 60%">
+              <div class="flex-start content-center" style="width: 60%">
                 <div class="row q-px-md q-py-md">
                   <div class="q-pr-md" v-if="profil.fotoProfil">
                     <q-img
@@ -59,6 +59,17 @@
                       !store.itemCetak?.pelanggan
                         ? store.itemCetak?.keterangan?.nama
                         : store.itemCetak?.pelanggan?.nama
+                    }}</span
+                  >
+                </div>
+                <div class="row full-width">
+                  <span class="col-3">Telepon</span>
+                  <span
+                    >:
+                    {{
+                      !store.itemCetak?.pelanggan
+                        ? store.itemCetak?.keterangan?.tlp
+                        : store.itemCetak?.pelanggan?.telepon
                     }}</span
                   >
                 </div>

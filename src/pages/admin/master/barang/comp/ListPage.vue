@@ -154,7 +154,7 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 // import { useAdminFormMasterBarangStore } from 'src/stores/admin/master/barang/form'
 import { useAdminMasterBarangStore } from 'src/stores/admin/master/barang/list'
@@ -178,6 +178,8 @@ const dialogImage = ref(null)
 const $q = useQuasar()
 onBeforeMount(() => {
   store.params.minim_stok = 0
+  store.params.bulan = date.formatDate(Date.now(), 'MM')
+  store.params.tahun = date.formatDate(Date.now(), 'YYYY')
   store.getList()
   // Promise.all([
   //   store.getList(null)
