@@ -15,6 +15,7 @@ export const useListCicilanPenjualanStore = defineStore('list-cicilan-penjualan-
     },
     flagOptions:[
       {label:'Semua Terhutang',value:'semua'},
+      {label:'Down Payment (DP)',value:'7'},
       {label:'Belum ada Cicilan',value:'2'},
       {label:'Proses Cicilan',value:'3'},
       {label:'Dibawa Sales',value:'4'},
