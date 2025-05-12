@@ -18,8 +18,9 @@ export const useAppStore = defineStore('app-store', {
     loading: false,
     titleLoading: '',
     inactivityTimer: null,
-    // inactivityTimeout: 15 * 60 * 1000, // 15 menit dalam milidetik
     inactivityTimeout: 3 * 60 * 1000, // 3 menit dalam milidetik
+    isLoggingOut: false, // Flag untuk mencegah logout berulang
+    isResettingTimer: false, // Flag untuk mencegah rekursi tak terbatas
   }),
   persist: true,
 
@@ -32,15 +33,66 @@ export const useAppStore = defineStore('app-store', {
     initInactivityTimer() {
       if (!this.auth) return // Jangan inisialisasi jika belum login
 
-      // Reset timer yang ada jika sudah ada
-      this.resetInactivityTimer()
+      // Jika sedang dalam proses reset, jangan lanjutkan
+      if (this.isResettingTimer) return
+
+      // Hapus timer yang ada jika sudah ada
+      if (this.inactivityTimer) {
+        clearTimeout(this.inactivityTimer)
+        this.inactivityTimer = null
+      }
 
       // Buat timer baru
       this.inactivityTimer = setTimeout(() => {
         // Logout otomatis setelah timeout
         this.logout()
-        notifError('Anda telah logout otomatis karena tidak aktif selama 15 menit')
+        notifError('Anda telah logout otomatis karena tidak aktif selama beberapa menit')
       }, this.inactivityTimeout)
+    },
+
+    // Reset timer inaktivitas
+    resetInactivityTimer() {
+      // Mencegah rekursi tak terbatas
+      if (this.isResettingTimer) return
+
+      // Set flag bahwa sedang dalam proses reset
+      this.isResettingTimer = true
+
+      // Hapus timer yang ada
+      if (this.inactivityTimer) {
+        clearTimeout(this.inactivityTimer)
+        this.inactivityTimer = null
+      }
+
+      // Buat timer baru
+      this.initInactivityTimer()
+
+      // Reset flag
+      this.isResettingTimer = false
+    },
+
+    // Hentikan timer inaktivitas
+    stopInactivityTimer() {
+      if (this.inactivityTimer) {
+        clearTimeout(this.inactivityTimer)
+        this.inactivityTimer = null
+      }
+
+      // Hapus event listener
+      const resetTimer = this.resetInactivityTimer.bind(this)
+      const events = ['mousemove', 'mousedown', 'keypress', 'touchstart', 'scroll']
+
+      events.forEach((event) => {
+        document.removeEventListener(event, resetTimer)
+      })
+    },
+
+    // Tambahkan event listeners untuk aktivitas
+    setupActivityListeners() {
+      if (!this.auth) return // Jangan setup jika belum login
+
+      // Hapus event listener yang mungkin sudah ada
+      this.removeActivityListeners()
 
       // Tambahkan event listener untuk reset timer saat ada aktivitas
       const resetTimer = this.resetInactivityTimer.bind(this)
@@ -54,25 +106,8 @@ export const useAppStore = defineStore('app-store', {
       })
     },
 
-    // Reset timer inaktivitas
-    resetInactivityTimer() {
-      if (this.inactivityTimer) {
-        clearTimeout(this.inactivityTimer)
-        this.inactivityTimer = null
-      }
-
-      // Buat timer baru
-      this.initInactivityTimer()
-    },
-
-    // Hentikan timer inaktivitas
-    stopInactivityTimer() {
-      if (this.inactivityTimer) {
-        clearTimeout(this.inactivityTimer)
-        this.inactivityTimer = null
-      }
-
-      // Hapus event listener
+    // Hapus event listeners
+    removeActivityListeners() {
       const resetTimer = this.resetInactivityTimer.bind(this)
       const events = ['mousemove', 'mousedown', 'keypress', 'touchstart', 'scroll']
 
@@ -110,6 +145,9 @@ export const useAppStore = defineStore('app-store', {
 
       // Inisialisasi timer inaktivitas saat restore session
       this.initInactivityTimer()
+
+      // Setup event listeners
+      this.setupActivityListeners()
 
       return true
     },
@@ -150,6 +188,9 @@ export const useAppStore = defineStore('app-store', {
 
                 // Inisialisasi timer inaktivitas setelah login
                 this.initInactivityTimer()
+
+                // Setup event listeners
+                this.setupActivityListeners()
               }, 500)
             })
             resolve(resp)
@@ -178,6 +219,9 @@ export const useAppStore = defineStore('app-store', {
 
             // Inisialisasi timer inaktivitas
             this.initInactivityTimer()
+
+            // Setup event listeners
+            this.setupActivityListeners()
           }, 500)
         })
         .catch((error) => {
@@ -188,28 +232,43 @@ export const useAppStore = defineStore('app-store', {
 
     logout() {
       return new Promise((resolve) => {
-        if (!this.auth) {
+        if (!this.auth || this.isLoggingOut) {
           resolve()
           return
         }
 
+        // Set flag bahwa proses logout sedang berlangsung
+        this.isLoggingOut = true
+
         // Hentikan timer inaktivitas
         this.stopInactivityTimer()
 
-        api.post('/logout').finally(() => {
-          localStorage.removeItem('token')
-          localStorage.removeItem('user')
-          localStorage.removeItem('activeTime')
+        // Hapus event listeners
+        this.removeActivityListeners()
 
-          // Reset state
-          this.auth = false
-          this.user = null
-          this.token = null
+        api
+          .post('/logout')
+          .catch((error) => {
+            console.log('Logout error:', error)
+            // Tetap lanjutkan proses logout meskipun API error
+          })
+          .finally(() => {
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+            localStorage.removeItem('activeTime')
 
-          // Redirect to login
-          routerInstance.push('/auth')
-          resolve()
-        })
+            // Reset state
+            this.auth = false
+            this.user = null
+            this.token = null
+
+            // Reset flag logout
+            this.isLoggingOut = false
+
+            // Redirect to login
+            routerInstance.push('/auth')
+            resolve()
+          })
       })
     },
   },

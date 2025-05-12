@@ -32,7 +32,18 @@ api.interceptors.response.use(
     // Handle 401 Unauthorized errors
     if (error.response?.status === 401) {
       const app = useAppStore()
-      await app.logout()
+      console.log('error 401', error)
+
+      // Cek apakah user sudah logout untuk mencegah logout berulang
+      if (app.auth) {
+        // Tandai bahwa proses logout sedang berlangsung
+        if (!app.isLoggingOut) {
+          app.isLoggingOut = true
+          await app.logout()
+          app.isLoggingOut = false
+        }
+      }
+
       return Promise.reject(new Error('Session expired. Please login again.'))
     }
     return Promise.reject(error)

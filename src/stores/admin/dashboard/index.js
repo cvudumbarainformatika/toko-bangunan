@@ -179,21 +179,22 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
         const { data } = await api.get('/v1/dasboard/fastmove10')
         const datax = data
         console.log('datax', datax)
-        // Jika API sudah siap, gunakan data dari API
-        // this.topProductsData = data
-        this.topProductsData.products = datax.data.map((item) => item.namabarang)
-        this.topProductsData.series = {
-          name: 'Jumlah Terjual',
-          type: 'bar',
-          data: datax.data.map((item) => item.jumlahbarang),
+
+        if (datax && datax.data && Array.isArray(datax.data)) {
+          // Pastikan products adalah array
+          this.topProductsData.products = datax.data.map((item) => item.namabarang)
+
+          // Pastikan series adalah array yang berisi objek
+          this.topProductsData.series = [
+            {
+              name: 'Jumlah Terjual',
+              type: 'bar',
+              data: datax.data.map((item) => item.jumlahbarang),
+            },
+          ]
         }
 
-        // Untuk sementara gunakan data dummy
-        // console.log(
-        //   'Fetched top products data',
-        //   this.topProductsData.products,
-        //   this.topProductsData.series,
-        // )
+        console.log('Fetched top products data:', this.topProductsData)
       } catch (error) {
         console.error('Error fetching top products:', error)
         throw error
