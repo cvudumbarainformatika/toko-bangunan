@@ -21,6 +21,7 @@
               title="Produk Terlaris"
               :xAxisData="store.topProductsData.products"
               :series="store.topProductsData.series"
+              :horizontal="true"
             />
           </q-card-section>
         </q-card>

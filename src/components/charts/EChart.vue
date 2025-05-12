@@ -48,6 +48,10 @@ const props = defineProps({
       },
     ],
   },
+  horizontal: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 // Determine if we're using a pie chart
@@ -79,7 +83,36 @@ const chartOption = computed(() => {
     }
   }
 
-  // For bar/line charts
+  // For horizontal bar charts
+  if (props.horizontal && !isPieChart.value) {
+    return {
+      ...baseConfig,
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true,
+      },
+      yAxis: {
+        type: 'category',
+        data: props.xAxisData,
+        axisLabel: {
+          width: 120,
+          overflow: 'truncate',
+          interval: 0,
+        },
+      },
+      xAxis: {
+        type: 'value',
+      },
+      series: props.series.map((item) => ({
+        ...item,
+        type: 'bar',
+      })),
+    }
+  }
+
+  // For regular bar/line charts
   return {
     ...baseConfig,
     grid: {
