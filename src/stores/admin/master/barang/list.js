@@ -1,4 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifError, notifSuccess } from 'src/modules/notifs'
 
@@ -8,13 +9,39 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
     items: [],
     isError: false,
     loading: false,
+    dialogFilter: false,
+    dialogKartu: false,
     image: '',
     params: {
       q: null,
       page: 0,
       per_page: 15,
+      minim_stok: 0,
+      bulan: date.formatDate(Date.now(), 'MM'),
+      tahun: date.formatDate(Date.now(), 'YYYY'),
     },
     expand: false,
+    filterstok: [
+      { label: 'Low Stock', value: 1 },
+      { label: 'Safety Stock', value: 2 },
+      { label: 'All Stock', value: 0 },
+    ],
+    pilihbulan: [
+      { label: 'Januari', value: '01' },
+      { label: 'Februari', value: '02' },
+      { label: 'Maret', value: '03' },
+      { label: 'April', value: '04' },
+      { label: 'Mei', value: '05' },
+      { label: 'Juni', value: '06' },
+      { label: 'Juli', value: '07' },
+      { label: 'Agustus', value: '08' },
+      { label: 'September', value: '09' },
+      { label: 'Oktober', value: '10' },
+      { label: 'November', value: '11' },
+      { label: 'Desember', value: '12' },
+    ],
+    kartuStok: [],
+    selectedKodebarang: null,
   }),
   // persist: true,
   // getters: {
@@ -35,9 +62,13 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       }
       try {
         const { data } = await api.get('/v1/master/barang/listbarang', params)
-        // console.log('get master barang', data)
+        console.log('get master barang', data)
         this.meta = data
         this.items = data?.data
+
+        const arr = this.items.filter((x) => x.kodebarang === this.selectedKodebarang)
+        this.kartuStok = arr[0]
+        console.log('arr kartustok', this.kartuStok)
         this.loading = false
         // this.items = data
       } catch (error) {
@@ -60,7 +91,7 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
         api
           .get('/v1/master/barang/listbarang', params)
           .then(({ data }) => {
-            console.log('get master barang', data.data)
+            console.log('get master barangxxxx', data.data)
             this.meta = data
             this.items.push(...data.data)
 
@@ -91,6 +122,11 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
         console.log('del brg error', error)
         notifError('Terjadi Kesalahan')
       }
+    },
+    getKartuStok() {
+      const arr = this.items
+      // console.log('arr', this.kartuStok?.kodebarang)
+      console.log('x', arr)
     },
   },
 })

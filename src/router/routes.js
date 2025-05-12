@@ -30,6 +30,10 @@ const routes = [
         component: () => import('pages/admin/master/satuan/IndexPage.vue'),
       },
       {
+        path: '/admin/master/jeniskeramik',
+        component: () => import('pages/admin/master/jeniskeramik/IndexPage.vue'),
+      },
+      {
         path: '/admin/master/barang',
         component: () => import('pages/admin/master/barang/IndexPage.vue'),
       },

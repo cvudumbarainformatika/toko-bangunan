@@ -11,6 +11,7 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
       namabarang: null,
       namagabung: null,
       brand: null,
+      kodejenis: null,
       kualitas: null,
       satuan_b: null,
       satuan_k: null,
@@ -19,6 +20,7 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
       hargajual1: 0,
       hargajual2: 0,
       hargabeli: 0,
+      minim_stok: 20,
       ukuran: null,
       rincians: [], // Array untuk menyimpan file gambar
     },
@@ -45,6 +47,8 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
         this.form.isi = 1
         this.form.hargajual1 = 0
         this.form.hargajual2 = 0
+        this.form.hargabeli = 0
+        this.form.minim_stok = 20
         this.form.rincians = [] // Reset rincians gambar
       }
     },
