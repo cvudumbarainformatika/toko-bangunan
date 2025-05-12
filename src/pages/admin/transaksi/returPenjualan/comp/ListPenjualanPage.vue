@@ -222,6 +222,9 @@ function statusFlag(flag) {
     case '6':
       status = 'Batal'
       break
+    case '7':
+      status = 'Down Payment (DP)'
+      break
 
     default:
       break

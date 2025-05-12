@@ -95,12 +95,13 @@
               <q-item-section>
                     <q-item-label lines="1">
                       <div class="row text-weight-bold q-col-gutter-x-sm">
-                        <div class="col-2">No Penjualan</div>
-                        <div class="col-2">Total</div>
-                        <div class="col-2">Total Diskon<span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
-                        <div class="col-2">Total Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
-                        <div class="col-2">Total - Diskon - Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
-                        <div class="col-2 text-right">Status</div>
+                        <div class="col-auto" style="width: calc(100%/7);">No Penjualan</div>
+                        <div class="col-auto" style="width: calc(100%/7);">Total</div>
+                        <div class="col-auto" style="width: calc(100%/7);">DP / Pembayaran</div>
+                        <div class="col-auto" style="width: calc(100%/7);">Total Diskon<span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                        <div class="col-auto" style="width: calc(100%/7);">Total Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                        <div class="col-auto" style="width: calc(100%/7);">Total - Diskon - Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                        <div class="col-auto text-right" style="width: calc(100%/7);">Status</div>
                       </div>
 
                       </q-item-label>
@@ -135,12 +136,13 @@
                   <q-item-section>
                     <q-item-label lines="1">
                       <div class="row q-col-gutter-x-sm">
-                        <div class="col-2">{{ item?.no_penjualan }}</div>
-                        <div class="col-2">{{ formatDouble(item?.total + item?.total_diskon) }}<span class="text-italic f-10 q-ml-xs">(total)</span></div>
-                        <div class="col-2"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }} <span class="text-italic f-10 q-ml-xs">(diskon)</span></span> </div>
-                        <div class="col-2"> <span v-if="totalRetur(item)>0"> {{ formatDouble(totalRetur(item)) }}<span class="text-italic f-10 q-ml-xs">(retur)</span></span> </div>
-                        <div class="col-2"> <span v-if="item?.total_diskon>0 || totalRetur(item)>0"> {{ formatDouble(item?.total - totalRetur(item)) }}<span class="text-italic f-10 q-ml-xs">(total - diskon - retur)</span></span> </div>
-                        <div class="col-2 text-right">{{ statusFlag(item?.flag) }}</div>
+                        <div class="col-auto" style="width: calc(100%/7)">{{ item?.no_penjualan }}</div>
+                        <div class="col-auto" style="width: calc(100%/7)">{{ formatDouble(item?.total + item?.total_diskon) }}<span class="text-italic f-10 q-ml-xs">(total)</span></div>
+                        <div class="col-auto" style="width: calc(100%/7)"> <span v-if="item?.bayar>0"> {{ item?.kembali > 0 ?formatDouble(item?.bayar - item?.kembali): formatDouble(item?.bayar)}} <span class="text-italic f-10 q-ml-xs">{{parseInt(item?.kembali ) < 0 ? '(DP)' :'(Pembayaran)'}}</span></span> </div>
+                        <div class="col-auto" style="width: calc(100%/7)"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }} <span class="text-italic f-10 q-ml-xs">(diskon)</span></span> </div>
+                        <div class="col-auto" style="width: calc(100%/7)"> <span v-if="totalRetur(item)>0"> {{ formatDouble(totalRetur(item)) }}<span class="text-italic f-10 q-ml-xs">(retur)</span></span> </div>
+                        <div class="col-auto" style="width: calc(100%/7)"> <span v-if="item?.total_diskon>0 || totalRetur(item)>0"> {{ formatDouble(item?.total - totalRetur(item)) }}<span class="text-italic f-10 q-ml-xs">(total - diskon - retur)</span></span> </div>
+                        <div class="col-auto text-right" style="width: calc(100%/7)">{{ statusFlag(item?.flag) }}</div>
                       </div>
 
                       </q-item-label>
@@ -158,8 +160,12 @@
                         emits('bawa', item)
                         item.expand = !item.expand
                         }" :loading="item?.loading" :disable="item?.loading"/>
-                      <app-btn v-if="item?.flag == '4'" class="q-mr-xs" icon="price_check" tooltip="Bayar Cililan" color="green" @click="()=>{
+                      <app-btn v-if="['4']?.includes(item?.flag)" class="q-mr-xs" icon="price_check" tooltip="Bayar Cililan" color="green" @click="()=>{
                         emits('cicil', item)
+                        item.expand = !item.expand
+                        }" :loading="item?.loading" :disable="item?.loading"/>
+                      <app-btn v-if="['7']?.includes(item?.flag)" class="q-mr-xs" icon="price_check" tooltip="Pelunasan" color="yellow" @click="()=>{
+                        emits('lunas', item)
                         item.expand = !item.expand
                         }" :loading="item?.loading" :disable="item?.loading"/>
                       <app-btn v-if="item?.flag == '4'" class="q-mr-xs" icon="money_off_csred" tooltip="Kembali tanpa bayar cicilan" color="secondary" @click="()=>{
@@ -237,7 +243,7 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['bawa', 'cicil','kembali','buka'])
+const emits = defineEmits(['bawa', 'cicil','kembali','buka','lunas'])
 
 
 function statusFlag(flag) {
@@ -263,6 +269,9 @@ function statusFlag(flag) {
       break;
     case '6':
       status = 'Batal';
+      break;
+    case '7':
+      status = 'Down Payment (DP)'
       break;
 
     default:

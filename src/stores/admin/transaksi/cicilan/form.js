@@ -10,6 +10,7 @@ export const useCicilanPenjualanFormStore=defineStore('form_cicilan_penjualan',{
     isOpen:false,
     isOpenList:false,
     isOpenDetail:false,
+    isOpenDP:false,
     form:{},
     item:{},
   }),
@@ -61,6 +62,32 @@ export const useCicilanPenjualanFormStore=defineStore('form_cicilan_penjualan',{
 
       }).catch((err)=>{
         item.loading=false
+        const msg=err?.response?.data?.message
+        notifError(msg)
+      })
+    },
+    async simpanPelunasan(){
+       this.loading=true
+
+      const form={}
+      const keys=Object.keys(this.form)
+      keys.forEach((key)=>{
+        if(key==='jumlah') form[key]= olahUang (this.form[key])
+          else form[key]=this.form[key]
+        })
+        console.log('form pelunasan', form);
+      await api.post('v1/transaksi/cicilan/simpan-pelunasan',form)
+      .then(({data})=>{
+        console.log('simpan cicilan', data);
+        this.loading=false
+        this.isOpenDP=false
+        // this.isOpenDetail=false
+
+        const list=useListCicilanPenjualanStore()
+        list.getList()
+        notifSuccess(data?.message)
+      }).catch((err)=>{
+        this.loading=false
         const msg=err?.response?.data?.message
         notifError(msg)
       })

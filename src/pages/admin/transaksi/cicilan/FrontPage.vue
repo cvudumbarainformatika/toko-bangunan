@@ -1,6 +1,6 @@
 <template>
   <div v-if="isList">
-    <ListPenjualanPage @back="isList=false" @bawa="bawaNota" @cicil="cicilNota" @kembali="kembaliTanpaBayar" @buka="bukaCicilan"/>
+    <ListPenjualanPage @back="isList=false" @bawa="bawaNota" @cicil="cicilNota" @kembali="kembaliTanpaBayar" @buka="bukaCicilan" @lunas="lunasNota"/>
   </div>
   <div v-else class="q-pa-md">
     <div class="row items-center">
@@ -55,6 +55,7 @@
   </div>
   <DialogCicilan/>
   <DialogListCicilan/>
+  <DialogPelunasan/>
 </template>
 <script setup>
 import { Dialog } from 'quasar'
@@ -67,6 +68,7 @@ const FormPage=shallowRef(defineAsyncComponent(()=>import('./comp/FormPage.vue')
 const ListPenjualanPage=shallowRef(defineAsyncComponent(()=>import('./comp/ListPenjualanPage.vue')))
 const DialogCicilan=shallowRef(defineAsyncComponent(()=>import('./comp/DialogCicilanPage.vue')))
 const DialogListCicilan=shallowRef(defineAsyncComponent(()=>import('./comp/DialogListCicilan.vue')))
+const DialogPelunasan=shallowRef(defineAsyncComponent(()=>import('./comp/DialogPelunasan.vue')))
 
 const isList=ref(true)
 
@@ -114,6 +116,18 @@ function cicilNota(val){
   }
   // isList.value=false
 }
+function lunasNota(val){
+  console.log('Lunas nota', val);
+  // console.log('list', list.params);
+  store.item=val
+  store.setForm('pelanggan_id',val.pelanggan_id)
+  store.setForm('sales_id',val.sales_id)
+  store.setForm('id',val.id)
+  store.setForm('no_penjualan',val.no_penjualan)
+  store.isOpenDP=true
+  }
+
+
 function bukaCicilan(val){
   console.log('cicil nota', val);
   store.item=val

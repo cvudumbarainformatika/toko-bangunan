@@ -37,13 +37,23 @@
 
                     <app-select
                       class="col-12"
-                      v-model="store.formPembayaran.cara_bayar"
-                      label="Pilih Cara Bayar"
+                      v-model="store.formPembayaran.flag"
+                      label="Pilihan Pembayaran"
                       :options="optionCaraBayar"
                       option-label="label"
                       option-value="value"
                       @update:model-value="selectCaraBayar"
-                      :disable="store.loadingPembayaran || !store?.item?.sales_id"
+                      :disable="store.loadingPembayaran"
+                      :loading="store.loadingPembayaran"
+                    />
+                    <app-select
+                    v-if="['5','7'].includes(store.formPembayaran.flag)"
+                      class="col-12"
+                      v-model="store.formPembayaran.cara_bayar"
+                      label="Pilih Cara Bayar"
+                      :options="['cash', 'transfer']"
+                      :disable="store.loadingPembayaran"
+                      :loading="store.loadingPembayaran"
                     />
                     <app-select-server
                       ref="refPelanggan"
@@ -95,7 +105,7 @@
                         </div>
                       </div>
                     </template>
-                    <template v-if="store.formPembayaran.cara_bayar == '5'">
+                    <template v-if="store.formPembayaran.flag == '5'">
                       <app-input-rp
                         ref="refBayar"
                         class="col-6"
@@ -129,6 +139,31 @@
                         Kurang bayar
                       </div>
                     </template>
+                    <template v-if="store.formPembayaran.flag == '7'">
+                      <app-input-rp
+                        ref="refBayar"
+                        class="col-6"
+                        v-model="store.formPembayaran.bayar"
+                        outlined
+                        currency
+                        label="Bayar"
+                        @update:model-value="updateBayar"
+                        :disable="store.loadingPembayaran"
+                      />
+                      <div
+                        class="col-3"
+                      >
+                        {{ formatDouble(store.formPembayaran.kembali) }}
+                      </div>
+                      <div
+                        v-if="
+                        parseInt(store.formPembayaran.total)  > parseInt(olahUang(store.formPembayaran.bayar))
+                        "
+                        class="col-3 text-center f-16"
+                      >
+                        Kurang bayar
+                      </div>
+                    </template>
 
                     <div class="col-12">
                       <q-separator class="q-my-md" />
@@ -158,6 +193,7 @@ import { formatDouble, olahUang } from 'src/modules/formatter'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
 import { computed, defineAsyncComponent, ref, shallowRef } from 'vue'
+import { notifError } from 'src/modules/notifs'
 
 const DialogCetak = shallowRef(defineAsyncComponent(() => import('./cetak/DialogCetak.vue')))
 const $q = useQuasar()
@@ -165,15 +201,18 @@ const isMobile = computed(() => {
   return $q.screen.lt.sm // Quasar screen size helper
 })
 const store = useFromPenjualanStore()
+ 
 const storelist = useListPenjualanStore()
 
 const optionCaraBayar = ref([
-  { label: 'Tunai', value: '5' },
+  { label: 'Lunas', value: '5' },
+  { label: 'Down Payment (DP)', value: '7' },
   { label: 'Kredit', value: '2' },
 ])
 const refPelanggan = ref(null)
 function onSubmit() {
   console.log('submit form pembayaran', refPelanggan.value, store.formPembayaran)
+  if(!store?.item?.sales_id  && store.formPembayaran.flag=='2') return notifError('Pembayaran Secara Kredit Harus Memilih Sales')
   store
     .simpanPembayaran()
     .then((res) => {
@@ -192,6 +231,9 @@ function selectCaraBayar(val) {
   if (val == '2') {
     store.formPembayaran.bayar = 0
     store.formPembayaran.kembali = 0
+    store.formPembayaran.cara_bayar = ''
+  }else{
+    store.formPembayaran.cara_bayar = 'cash'
   }
 }
 const refBayar = ref(null)
