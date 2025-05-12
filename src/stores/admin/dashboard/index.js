@@ -22,12 +22,12 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
 
     // Data untuk chart produk terlaris
     topProductsData: {
-      products: ['Produk A', 'Produk B', 'Produk C', 'Produk D', 'Produk E'],
+      products: [],
       series: [
         {
           name: 'Jumlah Terjual',
           type: 'bar',
-          data: [120, 90, 70, 60, 50],
+          data: [],
         },
       ],
     },
@@ -52,15 +52,21 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
 
     // Data untuk chart tren penjualan
     salesTrendData: {
-      months: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-      series: [
-        {
-          name: 'Penjualan',
-          type: 'line',
-          smooth: true,
-          data: [3000, 2800, 3200, 3600, 3000, 3400, 3700, 3900, 3500, 3800, 4000, 4200],
-        },
+      trendMonths: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'Mei',
+        'Jun',
+        'Jul',
+        'Agu',
+        'Sep',
+        'Okt',
+        'Nov',
+        'Des',
       ],
+      trendSeries: [],
     },
 
     // Statistik ringkasan
@@ -114,11 +120,11 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
 
     // Mengambil data penjualan bulanan
     async fetchMonthlySales() {
-      const params = {
-        params: this.params,
-      }
+      // const params = {
+      //   params: this.params,
+      // }
       try {
-        const { data } = await api.get('/v1/dasboard/penjualanbulanan', params)
+        const { data } = await api.get('/v1/dasboard/penjualanbulanan')
         const datax = data
         console.log('datax', datax)
         if (datax && datax.data && Array.isArray(datax.data)) {
@@ -159,7 +165,7 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
             },
           ]
 
-          console.log('Updated monthly sales data:', this.salesData.series)
+          // console.log('Updated monthly sales data:', this.salesData.series)
         }
       } catch (error) {
         console.error('Error fetching monthly sales:', error)
@@ -169,17 +175,25 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
 
     // Mengambil data produk terlaris
     async fetchTopProducts() {
-      // const params = {
-      //   params: this.params,
-      // }
       try {
-        // const { data } = await api.get('/v1/dasboard/barang/listbarang', params)
-
+        const { data } = await api.get('/v1/dasboard/fastmove10')
+        const datax = data
+        console.log('datax', datax)
         // Jika API sudah siap, gunakan data dari API
         // this.topProductsData = data
+        this.topProductsData.products = datax.data.map((item) => item.namabarang)
+        this.topProductsData.series = {
+          name: 'Jumlah Terjual',
+          type: 'bar',
+          data: datax.data.map((item) => item.jumlahbarang),
+        }
 
         // Untuk sementara gunakan data dummy
-        console.log('Fetched top products data')
+        // console.log(
+        //   'Fetched top products data',
+        //   this.topProductsData.products,
+        //   this.topProductsData.series,
+        // )
       } catch (error) {
         console.error('Error fetching top products:', error)
         throw error
@@ -207,15 +221,44 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
     // Mengambil data tren penjualan
     async fetchSalesTrend() {
       try {
-        // const { data } = await api.get('/v1/admin/dashboard/sales-trend', {
-        //   params: this.periode,
-        // })
+        const { data } = await api.get('/v1/dasboard/salestrend')
+        const datax = data
+        console.log('datax', datax)
+        if (datax && datax.data && Array.isArray(datax.data)) {
+          // Inisialisasi array untuk tahun saat ini dan tahun sebelumnya
+          const currentYearData = Array(12).fill(0)
+
+          // Mendapatkan tahun saat ini dan tahun sebelumnya
+          const currentYear = parseInt(this.periode.tahun)
+
+          // Mengisi data berdasarkan bulan
+          datax.data.forEach((item) => {
+            // Bulan dalam data dimulai dari 1, array dimulai dari 0
+            const monthIndex = parseInt(item.bulan) - 1
+            const year = parseInt(item.tahun)
+
+            if (monthIndex >= 0 && monthIndex < 12) {
+              if (year === currentYear) {
+                currentYearData[monthIndex] = item.subtotal || 0
+              }
+            }
+          })
+
+          this.salesTrendData.trendSeries = [
+            {
+              name: 'Penjualan',
+              type: 'line',
+              smooth: true,
+              data: currentYearData,
+            },
+          ]
+        }
 
         // Jika API sudah siap, gunakan data dari API
         // this.salesTrendData = data
 
         // Untuk sementara gunakan data dummy
-        console.log('Fetched sales trend data')
+        console.log('Fetched sales trend data', this.salesTrendData.series)
       } catch (error) {
         console.error('Error fetching sales trend:', error)
         throw error
