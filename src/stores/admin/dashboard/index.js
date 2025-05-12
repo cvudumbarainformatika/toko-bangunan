@@ -188,18 +188,44 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
           const topData = sortedData.slice(0, 10)
 
           // Untuk chart horizontal, kita perlu membalik urutan agar yang terbesar muncul di atas
-          // (karena sumbu Y pada chart horizontal berjalan dari atas ke bawah)
           const reversedData = [...topData].reverse()
 
           // Pastikan products adalah array
           this.topProductsData.products = reversedData.map((item) => item.namabarang)
+
+          // Warna-warna untuk batang chart
+          const colors = [
+            '#5470c6',
+            '#91cc75',
+            '#fac858',
+            '#ee6666',
+            '#73c0de',
+            '#3ba272',
+            '#fc8452',
+            '#9a60b4',
+            '#ea7ccc',
+            '#8dc1a9',
+          ]
+
+          // Buat data dengan warna berbeda untuk setiap item
+          const itemsWithColors = reversedData.map((item, index) => ({
+            value: item.jumlahbarang,
+            itemStyle: {
+              color: colors[index % colors.length],
+            },
+          }))
 
           // Pastikan series adalah array yang berisi objek
           this.topProductsData.series = [
             {
               name: 'Jumlah Terjual',
               type: 'bar',
-              data: reversedData.map((item) => item.jumlahbarang),
+              data: itemsWithColors,
+              label: {
+                show: true,
+                position: 'right',
+                formatter: '{c}',
+              },
             },
           ]
 
