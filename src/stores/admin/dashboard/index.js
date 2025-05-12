@@ -181,20 +181,33 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
         console.log('datax', datax)
 
         if (datax && datax.data && Array.isArray(datax.data)) {
+          // Urutkan data berdasarkan jumlah barang (dari terbesar ke terkecil)
+          const sortedData = [...datax.data].sort((a, b) => b.jumlahbarang - a.jumlahbarang)
+
+          // Ambil hanya 10 data teratas jika lebih dari 10
+          const topData = sortedData.slice(0, 10)
+
+          // Untuk chart horizontal, kita perlu membalik urutan agar yang terbesar muncul di atas
+          // (karena sumbu Y pada chart horizontal berjalan dari atas ke bawah)
+          const reversedData = [...topData].reverse()
+
           // Pastikan products adalah array
-          this.topProductsData.products = datax.data.map((item) => item.namabarang)
+          this.topProductsData.products = reversedData.map((item) => item.namabarang)
 
           // Pastikan series adalah array yang berisi objek
           this.topProductsData.series = [
             {
               name: 'Jumlah Terjual',
               type: 'bar',
-              data: datax.data.map((item) => item.jumlahbarang),
+              data: reversedData.map((item) => item.jumlahbarang),
             },
           ]
-        }
 
-        console.log('Fetched top products data:', this.topProductsData)
+          console.log('Processed top products data:', {
+            products: this.topProductsData.products,
+            series: this.topProductsData.series,
+          })
+        }
       } catch (error) {
         console.error('Error fetching top products:', error)
         throw error
