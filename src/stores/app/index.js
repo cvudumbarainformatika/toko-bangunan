@@ -253,6 +253,7 @@ export const useAppStore = defineStore('app-store', {
             // Tetap lanjutkan proses logout meskipun API error
           })
           .finally(() => {
+            console.log('logout')
             localStorage.removeItem('token')
             localStorage.removeItem('user')
             localStorage.removeItem('activeTime')
