@@ -105,7 +105,7 @@ function selected(val){
 
     store.setForm('kodebarang',store?.barang?.kodebarang)
     if(!store.form.sales_id) store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
-    else store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual2))
+    else store.setForm('harga_jual',isNaN(store?.barang?.hargajual2)?0:parseFloat(store?.barang?.hargajual2))
     store.setForm('harga_beli',isNaN(store?.barang?.stok?.harga_beli_k)?0:parseFloat(store?.barang?.stok?.harga_beli_k))
     store.setForm('isi',isNaN(store?.barang?.stok?.isi)?(parseFloat(store?.barang?.isi)):parseFloat(store?.barang?.stok?.isi))
     console.log('form', store.form);
