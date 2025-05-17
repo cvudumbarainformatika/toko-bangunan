@@ -42,12 +42,14 @@ const routes = [
       {
         path: '/admin/transaksi/orderbarang',
         component: () => import('pages/admin/transaksi/orderbarang/IndexPage.vue'),
-      },
-      {
+      },      {
         path: '/admin/transaksi/penerimaan',
         component: () => import('pages/admin/transaksi/penerimaan/IndexPage.vue'),
       },
-
+      {
+        path: '/admin/transaksi/pengembalianbarang',
+        component: () => import('pages/admin/transaksi/pengembalianBarang/IndexPage.vue'),
+      },
       {
         path: '/admin/transaksi/penjualan',
         component: () => import('pages/admin/transaksi/penjualan/IndexPage.vue'),

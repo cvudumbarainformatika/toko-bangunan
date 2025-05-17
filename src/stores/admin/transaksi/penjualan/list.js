@@ -7,6 +7,8 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
     isError: false,
     loading: false,
     opendialogCetak: false,
+    items:[],
+    meta: null,
     params: {
       q: null,
       page: 0,
