@@ -232,8 +232,8 @@ const detailColumns = [
 function getStatusColor(status) {
   const colors = {
     pending: 'warning',
-    approved: 'positive',
-    rejected: 'negative'
+    diganti: 'positive',
+    ditolak: 'negative'
   }
   return colors[status] || 'grey'
 }
