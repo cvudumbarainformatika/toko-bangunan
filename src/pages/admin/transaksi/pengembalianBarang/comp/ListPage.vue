@@ -148,7 +148,7 @@ const columns = [
   {
     name: 'no_penjualan',
     label: 'No Penjualan',
-    field: row => row.penjualan?.no_penjualan,
+    field: row => row.no_penjualan,
     align: 'left',
   },
   {
@@ -169,7 +169,7 @@ const detailColumns = [
   {
     name: 'barang',
     label: 'Barang',
-    field: row => row.barang?.nama,
+    field: row => row.barang?.namabarang,
     align: 'left'
   },
   {

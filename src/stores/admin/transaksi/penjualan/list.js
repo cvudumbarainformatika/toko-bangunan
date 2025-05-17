@@ -7,12 +7,12 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
     isError: false,
     loading: false,
     opendialogCetak: false,
-    items:[],
+    items: [],
     meta: null,
     params: {
       q: null,
-      page: 0,
-      per_page: 15,
+      page: 1,
+      per_page: 10,
       from:date.formatDate(Date.now(), 'YYYY-MM-01'),
       to: date.formatDate(Date.now(), 'YYYY-MM-DD'),
     },
@@ -24,23 +24,33 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
   }),
   actions: {
     async getList() {
+
       this.params.page = 1
       this.isError = false
       this.loading = true
       const params = {
         params: this.params,
       }
-      this.loading = true
+
       try {
         const { data } = await api.get('/v1/transaksi/penjualan/list', params)
         console.log('list penjualan', data)
 
+        // Don't reset items array here, let the component handle it
+        if (this.params.page === 1) {
+          this.items = data?.data || []
+        } else {
+          this.items.push(...(data?.data || []))
+        }
+
         this.meta = data?.meta
-        this.items = data?.data
         this.loading = false
+        return data
       } catch (error) {
-        console.log(error)
+        console.error('Error fetching penjualan:', error)
+        this.isError = true
         this.loading = false
+        throw error
       }
     },
     async getListNull() {
@@ -67,31 +77,29 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
         this.loading = false
       }
     },
-    loadMore(index, done) {
-      this.isError = false
-      this.params.page = index
-      const params = {
-        params: this.params,
+    async loadMore(index, done) {
+      try {
+        this.isError = false
+        this.params.page = index
+        const params = {
+          params: this.params,
+        }
+
+        const { data } = await api.get('/v1/transaksi/penjualan/list', params)
+
+        if (data?.data?.length) {
+          this.items.push(...data.data)
+          this.meta = data?.meta
+          // done()
+        } else {
+          // No more data
+          done(true)
+        }
+      } catch (error) {
+        console.error('Error in loadMore:', error)
+        this.isError = true
+        done(true)
       }
-
-      console.log('load more', index)
-
-      return new Promise((resolve) => {
-        api
-          .get('/v1/transaksi/penjualan/list', params)
-          .then(({ data }) => {
-            console.log('list penjualan', data)
-            this.meta = data?.meta
-            this.items.push(...data.data)
-            done()
-            resolve()
-          })
-          .catch(() => {
-            this.isError = true
-            done(true)
-            resolve()
-          })
-      })
     },
   },
 })

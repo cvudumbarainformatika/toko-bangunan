@@ -21,10 +21,10 @@ export const useListPengembalianStore = defineStore('pengembalian-list-store', {
     async getList() {
       this.loading = true
       try {
-        const { data } = await api.get('/v1/transaksi/pengembalianbarang', {
+        const { data } = await api.get('/v1/transaksi/pengembalianbarang/get', {
           params: this.params
         })
-        this.items = data.data??[]
+        this.items = data.data?.data ?? []
         this.total = data.total
       } catch (error) {
         console.error('Error fetching pengembalian:', error)
@@ -36,7 +36,7 @@ export const useListPengembalianStore = defineStore('pengembalian-list-store', {
 
     async getById(id) {
       try {
-        const { data } = await api.get(`/v1/transaksi/pengembalianbarang/${id}`)
+        const { data } = await api.get(`/v1/transaksi/pengembalianbarang/getbyid/${id}`)
         return data
       } catch (error) {
         console.error('Error fetching pengembalian detail:', error)

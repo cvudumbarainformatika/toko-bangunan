@@ -14,8 +14,12 @@ export const useFormPengembalianStore = defineStore('pengembalian-form-store', {
     setForm(penjualan) {
       this.item = penjualan
       this.keterangan = ''
-      this.details = penjualan?.details?.map(d => ({
-        ...d,
+      this.details = penjualan?.detail?.map(d => ({
+        id: d.id,
+        barang_id: d.master_barang.id,
+        kodebarang: d.kodebarang,
+        master_barang: d.master_barang,
+        jumlah: d.jumlah,
         qty_retur: 0,
         keterangan: ''
       })) || []
@@ -38,15 +42,17 @@ export const useFormPengembalianStore = defineStore('pengembalian-form-store', {
 
         const payload = {
           penjualan_id: this.item.id,
+          no_penjualan: this.item.no_penjualan,
           keterangan: this.keterangan,
           details: validDetails.map(d => ({
             barang_id: d.barang_id,
+            kodebarang: d.kodebarang,
             qty: d.qty_retur,
             keterangan_rusak: d.keterangan
           }))
         }
 
-        const { data } = await api.post('/v1/transaksi/pengembalianbarang', payload)
+        const { data } = await api.post('/v1/transaksi/pengembalianbarang/store', payload)
         return data
       } catch (error) {
         console.error('Error saving pengembalian:', error)

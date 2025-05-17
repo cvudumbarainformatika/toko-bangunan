@@ -28,11 +28,11 @@
                       </div>
                       <div class="row">
                         <div class="col-4">Tanggal</div>
-                        <div class="col-8">: {{ form.item?.tanggal }}</div>
+                        <div class="col-8">: {{ dateFullFormat(form.item?.tgl) }}</div>
                       </div>
                       <div class="row">
                         <div class="col-4">Pelanggan</div>
-                        <div class="col-8">: {{ form.item?.pelanggan?.nama || form.item?.keterangan_pelanggan }}</div>
+                        <div class="col-8">: {{ form.item?.pelanggan?.nama || form.item?.keterangan?.nama }}</div>
                       </div>
                     </div>
                   </q-card-section>
@@ -55,40 +55,39 @@
 
               <!-- Detail Barang -->
               <div class="text-subtitle2 q-mt-md">Detail Barang</div>
-              <q-table
-                :rows="details"
-                :columns="detailColumns"
-                row-key="id"
-                :pagination="{ rowsPerPage: 0 }"
-                hide-pagination
-              >
-                <!-- Qty Column -->
-                <template #body-cell-qty_retur="props">
-                  <q-td :props="props">
-                    <q-input
-                      v-model.number="props.row.qty_retur"
-                      type="number"
-                      dense
-                      :rules="[
-                        val => val >= 0 || 'Qty harus lebih dari 0',
-                        val => val <= props.row.jumlah || 'Qty melebihi pembelian'
-                      ]"
-                      style="width: 100px"
-                    />
-                  </q-td>
-                </template>
 
-                <!-- Keterangan Column -->
-                <template #body-cell-keterangan="props">
-                  <q-td :props="props">
-                    <q-input
-                      v-model="props.row.keterangan"
-                      dense
-                      :rules="[val => !!val || 'Keterangan harus diisi']"
-                    />
-                  </q-td>
-                </template>
-              </q-table>
+              <!-- Header -->
+              <div class="row q-pa-sm bg-primary text-white text-weight-bold">
+                <div class="col-5">Barang</div>
+                <div class="col-2 text-right">Jumlah Beli</div>
+                <div class="col-2 text-right">Jumlah Retur</div>
+                <div class="col-3">Keterangan</div>
+              </div>
+
+              <!-- Items -->
+              <div v-for="item in form.details" :key="item.id" class="row q-pa-sm items-center q-col-gutter-x-sm">
+                <div class="col-5">{{ item.master_barang?.namabarang }}</div>
+                <div class="col-2 text-right">{{ item.jumlah }}</div>
+                <div class="col-2 text-right">
+                  <q-input
+                    v-model.number="item.qty_retur"
+                    type="number"
+                    dense
+                    class="text-right"
+                    :rules="[
+                      val => val >= 0 || 'Qty harus lebih dari 0',
+                      val => val <= item.jumlah || 'Qty melebihi pembelian'
+                    ]"
+                  />
+                </div>
+                <div class="col-3">
+                  <q-input
+                    v-model="item.keterangan"
+                    dense
+                    :rules="[val => !item.qty_retur || !!val || 'Keterangan harus diisi']"
+                  />
+                </div>
+              </div>
 
               <!-- Buttons -->
               <div class="row justify-end q-gutter-sm">
@@ -103,6 +102,7 @@
                   type="submit"
                   color="primary"
                   :loading="form.loading"
+                  :disable="form.loading"
                 />
               </div>
             </q-form>
@@ -114,67 +114,49 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import { useFormPengembalianStore } from 'src/stores/admin/transaksi/pengembalianBarang/form'
+import { dateFullFormat } from 'src/modules/utils'
+import { notifError } from 'src/modules/notifs'
 
 // Store
 const form = useFormPengembalianStore()
 
-// Computed
-const details = computed(() => {
-  // Transform penjualan details untuk form input
-  return form.item?.details?.map(item => ({
-    ...item,
-    qty_retur: 0,
-    keterangan: ''
-  })) || []
-})
-
-const detailColumns = [
-  {
-    name: 'barang',
-    label: 'Barang',
-    field: row => row.barang?.nama,
-    align: 'left'
-  },
-  {
-    name: 'jumlah',
-    label: 'Qty Beli',
-    field: 'jumlah',
-    align: 'right'
-  },
-  {
-    name: 'qty_retur',
-    label: 'Qty Retur',
-    field: 'qty_retur',
-    align: 'right'
-  },
-  {
-    name: 'keterangan',
-    label: 'Keterangan',
-    field: 'keterangan',
-    align: 'left'
-  }
-]
+// Emits
+const emit = defineEmits(['back', 'selesai'])
 
 // Methods
 async function onSubmit() {
   try {
     // Filter hanya barang yang di-retur
-    const validDetails = details.value.filter(d => d.qty_retur > 0)
+    const validDetails = form.details.filter(d => d.qty_retur > 0)
     if (!validDetails.length) {
-      throw new Error('Minimal satu barang harus diretur')
+      notifError('Minimal satu barang harus diretur')
+      return
     }
 
-    await form.simpan()
-    form.$emit('selesai', form.item)
+    // Validate keterangan
+    if (!form.keterangan) {
+      notifError('Keterangan harus diisi')
+      return
+    }
+
+    // Validate details have keterangan
+    const missingKeterangan = validDetails.find(d => !d.keterangan)
+    if (missingKeterangan) {
+      notifError('Semua barang yang diretur harus memiliki keterangan')
+      return
+    }
+
+    const response = await form.simpan()
+    emit('selesai', response?.data)
   } catch (error) {
     console.error('Error saving:', error)
+    notifError(error?.response?.data?.message || 'Gagal menyimpan pengembalian barang')
   }
 }
 
 function resetForm() {
-  details.value.forEach(item => {
+  form.details.forEach(item => {
     item.qty_retur = 0
     item.keterangan = ''
   })

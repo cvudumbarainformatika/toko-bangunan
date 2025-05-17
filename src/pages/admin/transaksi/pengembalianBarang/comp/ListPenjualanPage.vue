@@ -1,115 +1,203 @@
 <template>
-  <div>
-    <div class="row q-mb-md">
-      <div class="col-12 col-md-8">
-        <q-card>
-          <q-card-section class="row items-center">
-            <div class="text-h6">List Penjualan</div>
-            <q-space />
+  <q-page class="column no-wrap">
+    <q-card flat bordered class="col column no-wrap">
+      <q-card-section class="col-auto">
+        <div class="row items-center q-mb-sm">
+          <div class="text-h6">List Penjualan</div>
+          <q-space />
+          <div class="row items-center q-gutter-x-sm">
+            <app-input-date
+              :model="list.dateDisplay.from"
+              label="Dari"
+              style="min-width: 150px"
+              outlined
+              :debounce="300"
+              @set-model="(val) => {
+                list.dateDisplay.from = val
+              }"
+              @db-model="(val)=>{
+                list.params.from=val
+                list.getList
+              }"
+            />
+            <app-input-date
+              :model="list.dateDisplay.to"
+              label="Sampai"
+              style="min-width: 150px"
+              outlined
+              :debounce="300"
+              @set-model="(val) => {
+                list.dateDisplay.to = val
+              }"
+              @db-model="(val)=>{
+                list.params.to=val
+                list.getList
+              }"
+            />
+            <app-input
+              v-model="list.params.q"
+              prepend-icon="search"
+              label="Telusuri"
+              style="min-width: 250px"
+              :debounce="300"
+              @update:model-value="() => list.getList"
+            />
             <q-btn
-              label="List Pengembalian"
+              round
+              icon="refresh"
+              dense
+              @click="list.getList"
+            >
+              <q-tooltip>Refresh</q-tooltip>
+            </q-btn>
+            <app-btn
+              icon="list"
+              tooltip="List Pengembalian"
               color="primary"
               @click="$emit('list')"
-              icon="list"
             />
-          </q-card-section>
+          </div>
+        </div>
 
-          <q-card-section>
-            <q-table
-              :rows="list.items"
-              :columns="columns"
-              :loading="list.loading"
-              row-key="id"
-              v-model:pagination="pagination"
-              @request="onRequest"
-              binary-state-sort
+        <div class="row items-center q-pb-sm text-weight-bold">
+          <div class="col-3">No Penjualan</div>
+          <div class="col-2">Total</div>
+          <div class="col-2">Total Diskon</div>
+          <div class="col-2">Total Retur</div>
+          <div class="col-auto">Status</div>
+          <div class="col"></div>
+        </div>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-section class="col">
+        <q-infinite-scroll
+          class="full-height"
+          @load="list.loadMore"
+          ref="infiniteScroll"
+          :disable="list.loading || list.isError || !list.meta?.next_page_url"
+        >
+          <q-intersection v-for="(item, i) in list.items" :key="i" transition="fade">
+            <q-expansion-item
+              v-model="item.expand"
+              clickable
+              v-ripple
+              @mouseover="hoveredId = item?.id"
+              @mouseleave="hoveredId = null"
+              :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }"
             >
-              <!-- Kolom Actions -->
-              <template #body-cell-actions="props">
-                <q-td :props="props">
-                  <q-btn
-                    flat
-                    round
-                    color="primary"
-                    icon="archive"
-                    @click="$emit('form', props.row)"
-                  >
-                    <q-tooltip>Pengembalian Barang</q-tooltip>
-                  </q-btn>
-                </q-td>
+              <template #header>
+                <q-item-section>
+                  <q-item-label lines="1">
+                    <div class="row">
+                      <div class="col-3">{{ item?.no_penjualan }}</div>
+                      <div class="col-2">{{ formatDouble(item?.total) }}</div>
+                      <div class="col-2">{{ formatDouble(item?.total_diskon) }}</div>
+                      <div class="col-2">{{ formatDouble(item?.header_retur?.reduce((sum, r) => sum + r.total, 0) || 0) }}</div>
+                      <div class="col-auto">{{ item?.status }}</div>
+                    </div>
+                  </q-item-label>
+                  <q-item-label caption>
+                    <div class="row">
+                      <div class="col-3">{{ item?.pelanggan?.nama }}</div>
+                      <div class="col-5 q-ml-sm">{{ item?.keterangan?.alamat }}</div>
+                    </div>
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section v-if="hoveredId === item?.id" side>
+                  <div class="flex q-gutter-sm">
+                    <app-btn
+                      v-if="['2','3','5'].includes(item?.flag)"
+                      icon="archive"
+                      color="primary"
+                      tooltip="Pengembalian Barang"
+                      @click="$emit('form', item)"
+                    />
+                  </div>
+                </q-item-section>
+                <q-item-section v-else side top>
+                  <q-item-label caption>{{ humanDate(item?.tgl) }}</q-item-label>
+                  <q-item-label caption>{{ jamTnpDetik(item?.tgl) }}</q-item-label>
+                </q-item-section>
               </template>
 
-            </q-table>
-          </q-card-section>
-        </q-card>
-      </div>
-    </div>
-  </div>
+              <q-separator />
+              <q-card class="q-ma-sm">
+                <q-card-section>
+                  <div class="row q-pa-sm">
+                    <div class="col-5">Barang</div>
+                    <div class="col-1 text-right">Jumlah</div>
+                    <div class="col-1 text-right">Jumlah Retur</div>
+                    <div class="col-1 text-right">Harga</div>
+                    <div class="col-1 text-right">Diskon</div>
+                    <div class="col-1 text-right">Retur</div>
+                    <div class="col-2 text-right">Subtotal</div>
+                  </div>
+                  <template v-if="item?.detail?.length">
+                    <div v-for="detail in item?.detail" :key="detail?.id" class="row q-pa-sm q-gutter-y-sm">
+                      <div class="col-5">{{detail?.master_barang?.namabarang??'' + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand??'')+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri??'')+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran??'')}}</div>
+                      <div class="col-1 text-right">{{formatDouble(detail?.jumlah)}}</div>
+                      <div class="col-1 text-right">{{formatDouble(detailRetur(item,detail))}}</div>
+                      <div class="col-1 text-right">{{formatDouble(detail?.harga_jual)}}</div>
+                      <div class="col-1 text-right">{{formatDouble(detail?.diskon)}}</div>
+                      <div class="col-1 text-right">{{formatDouble(item?.header_retur?.flatMap(m=>m.detail).filter(m=>m.kodebarang === detail?.kodebarang)?.reduce((acc,it)=>acc+it.subtotal,0))}}</div>
+                      <div class="col-2 text-right">{{formatDouble(subtotal(item,detail))}}</div>
+                    </div>
+                  </template>
+                  <div v-else class="q-pa-md text-center text-grey">
+                    Tidak ada detail barang
+                  </div>
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
+            <q-separator />
+          </q-intersection>
+
+          <template #loading>
+            <div v-if="!list.isError" class="text-center q-my-md">
+              <q-spinner-dots color="primary" size="40px" />
+            </div>
+          </template>
+        </q-infinite-scroll>
+      </q-card-section>
+    </q-card>
+  </q-page>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
+import { formatDouble } from 'src/modules/formatter'
+import { humanDate, jamTnpDetik } from 'src/modules/utils'
 
 // Store
 const list = useListPenjualanStore()
-
-// Table config
-const pagination = ref({
-  sortBy: 'tanggal',
-  descending: true,
-  page: 1,
-  rowsPerPage: 10,
-  rowsNumber: 10
-})
-
-const columns = [
-  {
-    name: 'no_penjualan',
-    label: 'No Penjualan',
-    field: 'no_penjualan',
-    align: 'left',
-    sortable: true
-  },
-  {
-    name: 'tanggal',
-    label: 'Tanggal',
-    field: 'tanggal',
-    align: 'left',
-    sortable: true
-  },
-  {
-    name: 'nama_pelanggan',
-    label: 'Pelanggan',
-    field: row => row.pelanggan?.nama || row.keterangan_pelanggan,
-    align: 'left',
-  },
-  {
-    name: 'total',
-    label: 'Total',
-    field: 'total',
-    align: 'right',
-    format: val => new Intl.NumberFormat('id-ID').format(val),
-  },
-  {
-    name: 'actions',
-    label: 'Actions',
-    field: 'actions',
-    align: 'center',
+list.getList()
+// Refs
+const infiniteScroll = ref(null)
+const hoveredId = ref(null)
+function detailRetur(item, detail) {
+  let total = 0
+  if (item?.header_retur?.length > 0) {
+    total = item?.header_retur?.flatMap(m => m?.detail)
+      .filter(f => f?.kodebarang === detail?.kodebarang)
+      ?.reduce((total, item) => total + item?.jumlah, 0)
   }
-]
-
-// Methods
-async function onRequest(props) {
-  const { page, rowsPerPage, sortBy, descending } = props.pagination
-  list.params.page = page
-  list.params.perPage = rowsPerPage
-  list.params.sortBy = sortBy
-  list.params.sortDesc = descending
-  await list.getList()
-  pagination.value.rowsNumber = list.total
+  return total || 0
 }
 
-// Initial load
-onRequest({ pagination: pagination.value })
+function subtotal(item, detail) {
+  const subtotal = detail?.subtotal ?? 0
+  const diskon = detail?.diskon ?? 0
+  let returTotal = 0
+
+  if (item?.header_retur?.length > 0) {
+    returTotal = item?.header_retur?.flatMap(m => m?.detail)
+      .filter(f => f?.kodebarang === detail?.kodebarang)
+      ?.reduce((total, item) => total + item?.subtotal, 0)
+  }
+
+  return subtotal - diskon - (returTotal || 0)
+}
 </script>
