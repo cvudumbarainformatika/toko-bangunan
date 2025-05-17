@@ -102,8 +102,45 @@
           </div>
         </q-card-section>
 
+        <q-card-actions align="right" class="q-mt-md">
+          <!-- Tombol approve/reject hanya muncul jika status pending -->
+          <template v-if="selectedItem?.status === 'pending'">
+            <q-btn
+              label="Tolak"
+              no-caps
+              dense
+              color="negative"
+              :loading="form.loading"
+              @click="confirmReject"
+            />
+            <q-btn
+              label="Setujui"
+              color="green"
+              no-caps
+              dense
+              :loading="form.loading"
+              @click="confirmApprove"
+            />
+          </template>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <!-- Dialog Konfirmasi -->
+    <q-dialog v-model="showConfirmDialog" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <span class="text-subtitle1">{{ confirmMessage }}</span>
+        </q-card-section>
+
         <q-card-actions align="right">
-          <q-btn flat label="Tutup" color="primary" v-close-popup />
+          <q-btn label="Batal" color="primary" v-close-popup />
+          <q-btn
+            :label="confirmAction === 'approve' ? 'Setujui' : 'Tolak'"
+            :color="confirmAction === 'approve' ? 'positive' : 'negative'"
+            @click="handleConfirm"
+            :loading="form.loading"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -113,13 +150,18 @@
 <script setup>
 import { ref } from 'vue'
 import { useListPengembalianStore } from 'src/stores/admin/transaksi/pengembalianBarang/list'
+import { useFormPengembalianStore } from 'src/stores/admin/transaksi/pengembalianBarang/form'
 
 // Store
 const list = useListPengembalianStore()
+const form = useFormPengembalianStore()
 
 // State
 const showDetailDialog = ref(false)
+const showConfirmDialog = ref(false)
 const selectedItem = ref(null)
+const confirmAction = ref('')
+const confirmMessage = ref('')
 
 // Table config
 const pagination = ref({
@@ -190,8 +232,8 @@ const detailColumns = [
 function getStatusColor(status) {
   const colors = {
     pending: 'warning',
-    diganti: 'positive',
-    ditolak: 'negative'
+    approved: 'positive',
+    rejected: 'negative'
   }
   return colors[status] || 'grey'
 }
@@ -199,6 +241,32 @@ function getStatusColor(status) {
 function showDetail(item) {
   selectedItem.value = item
   showDetailDialog.value = true
+}
+
+function confirmApprove() {
+  confirmAction.value = 'approve'
+  confirmMessage.value = `Apakah anda yakin ingin menyetujui pengembalian barang ${selectedItem.value.no_pengembalian}?`
+  showConfirmDialog.value = true
+}
+
+function confirmReject() {
+  confirmAction.value = 'reject'
+  confirmMessage.value = `Apakah anda yakin ingin menolak pengembalian barang ${selectedItem.value.no_pengembalian}?`
+  showConfirmDialog.value = true
+}
+
+async function handleConfirm() {
+  try {
+    if (confirmAction.value === 'approve') {
+      await form.approve(selectedItem.value.id)
+    } else {
+      await form.reject(selectedItem.value.id)
+    }
+    showConfirmDialog.value = false
+    showDetailDialog.value = false
+  } catch (error) {
+    console.error('Error:', error)
+  }
 }
 
 async function onRequest(props) {

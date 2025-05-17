@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { acceptHMRUpdate } from 'pinia'
+import { notifSuccess, notifError } from 'src/modules/notifs'
+import { useListPengembalianStore } from './list'
 
 export const useFormPengembalianStore = defineStore('pengembalian-form-store', {
   state: () => ({
@@ -56,6 +58,52 @@ export const useFormPengembalianStore = defineStore('pengembalian-form-store', {
         return data
       } catch (error) {
         console.error('Error saving pengembalian:', error)
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async approve(id) {
+      this.loading = true
+      try {
+        const { data } = await api.post(`/v1/transaksi/pengembalianbarang/approve/${id}`)
+
+        // Update list
+        const list = useListPengembalianStore()
+        const index = list.items.findIndex(item => item.id === id)
+        if (index >= 0) {
+          list.items[index] = data.data
+        }
+
+        notifSuccess(data.message)
+        return data
+      } catch (error) {
+        console.error('Error approving pengembalian:', error)
+        notifError(error?.response?.data?.message || 'Gagal menyetujui pengembalian')
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async reject(id) {
+      this.loading = true
+      try {
+        const { data } = await api.post(`/v1/transaksi/pengembalianbarang/reject/${id}`)
+
+        // Update list
+        const list = useListPengembalianStore()
+        const index = list.items.findIndex(item => item.id === id)
+        if (index >= 0) {
+          list.items[index] = data.data
+        }
+
+        notifSuccess(data.message)
+        return data
+      } catch (error) {
+        console.error('Error rejecting pengembalian:', error)
+        notifError(error?.response?.data?.message || 'Gagal menolak pengembalian')
         throw error
       } finally {
         this.loading = false
