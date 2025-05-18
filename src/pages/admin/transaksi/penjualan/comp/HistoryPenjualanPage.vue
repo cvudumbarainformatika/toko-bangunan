@@ -25,7 +25,7 @@
                       @db-model="
                         (val) => {
                           store.params.from = val
-                          store.getList()
+                          reload()
                         }
                       "
                     />
@@ -43,7 +43,7 @@
                       @db-model="
                         (val) => {
                           store.params.to = val
-                          store.getList()
+                          reload()
                         }
                       "
                     />
@@ -55,8 +55,7 @@
                       :debounce="300"
                       @update:model-value="
                         (e) => {
-                          infiniteScroll.reset()
-                          store.getList()
+                          reload()
                         }
                       "
                     />
@@ -67,7 +66,7 @@
                       dense
                       @click="
                         () => {
-                          store.getList()
+                          reload()
                         }
                       "
                     >
@@ -85,10 +84,10 @@
               @load="store.loadMore"
               ref="infiniteScroll"
               :disable="store?.isError || store?.meta?.next_page_url === null"
-              :scroll-target="scrollTarget"
               :offset="150"
               :initial-index="store.params.page"
-            >
+              >
+              <!-- :scroll-target="scrollTarget" -->
               <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade">
                 <q-expansion-item
                   v-model="item.expand"
@@ -276,6 +275,11 @@ onBeforeMount(() => {
   //   store.getList(null)
   // ])
 })
+function reload(){
+  store.items = []
+  infiniteScroll.value?.reset()
+  store.getList()
+}
 function lihatCetak(item) {
   store.itemCetak = item
   store.opendialogCetak = true

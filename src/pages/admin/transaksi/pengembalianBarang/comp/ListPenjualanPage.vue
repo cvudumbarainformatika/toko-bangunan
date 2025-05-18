@@ -17,7 +17,7 @@
               }"
               @db-model="(val)=>{
                 list.params.from=val
-                list.getList
+                reload()
               }"
             />
             <app-input-date
@@ -31,7 +31,7 @@
               }"
               @db-model="(val)=>{
                 list.params.to=val
-                list.getList
+                reload()
               }"
             />
             <app-input
@@ -40,13 +40,13 @@
               label="Telusuri"
               style="min-width: 250px"
               :debounce="300"
-              @update:model-value="() => list.getList"
+              @update:model-value="() => reload()"
             />
             <q-btn
               round
               icon="refresh"
               dense
-              @click="list.getList"
+              @click="reload()"
             >
               <q-tooltip>Refresh</q-tooltip>
             </q-btn>
@@ -177,6 +177,11 @@ list.getList()
 // Refs
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
+function reload(){
+  list.items = []
+  infiniteScroll.value?.reset()
+  list.getList()
+}
 function detailRetur(item, detail) {
   let total = 0
   if (item?.header_retur?.length > 0) {

@@ -17,8 +17,7 @@
                       :debounce="300"
                       @update:model-value="
                         (e) => {
-                          infiniteScroll.reset()
-                          store.getList()
+                          reload()
                         }
                       "
                     />
@@ -33,8 +32,7 @@
                     :options="store.flagOptions"
                     @update:model-value="
                         (e) => {
-                          infiniteScroll.reset()
-                          store.getList()
+                          reload()
                         }
                       "
                   />
@@ -48,8 +46,7 @@
                       :debounce="300"
                       @update:model-value="
                         (e) => {
-                          infiniteScroll.reset()
-                          store.getList()
+                          reload()
                         }
                       "
                     />
@@ -63,8 +60,7 @@
                       :debounce="300"
                       @update:model-value="
                         (e) => {
-                          infiniteScroll.reset()
-                          store.getList()
+                          reload()
                         }
                       "
                     />
@@ -245,6 +241,11 @@ const hoveredId = ref(null)
 
 const emits = defineEmits(['bawa', 'cicil','kembali','buka','lunas'])
 
+function reload(){
+  store.items = []
+  store.getList()
+  infiniteScroll.value?.reset()
+}
 
 function statusFlag(flag) {
   let status=''

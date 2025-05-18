@@ -4,7 +4,9 @@
       store.resetPembayaran()
       isList = false
       }"
-      @use-nota="useNota" @bayar="bayar" />
+      @use-nota="useNota"
+      @bayar="bayar"
+      />
   </div>
   <div v-else class="q-pa-md">
     <div class="row items-center">

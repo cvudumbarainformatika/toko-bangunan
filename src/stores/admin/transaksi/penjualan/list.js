@@ -39,8 +39,6 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
         // Don't reset items array here, let the component handle it
         if (this.params.page === 1) {
           this.items = data?.data || []
-        } else {
-          this.items.push(...(data?.data || []))
         }
 
         this.meta = data?.meta
@@ -77,29 +75,33 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
         this.loading = false
       }
     },
-    async loadMore(index, done) {
-      try {
+     loadMore(index, done) {
+      console.log('load more', index);
+
         this.isError = false
         this.params.page = index
         const params = {
           params: this.params,
         }
 
-        const { data } = await api.get('/v1/transaksi/penjualan/list', params)
-
-        if (data?.data?.length) {
-          this.items.push(...data.data)
-          this.meta = data?.meta
-          // done()
-        } else {
-          // No more data
-          done(true)
-        }
-      } catch (error) {
-        console.error('Error in loadMore:', error)
-        this.isError = true
-        done(true)
-      }
+        return new Promise((resolve) => {
+        api
+          .get('/v1/transaksi/penjualan/list', params)
+          .then(({ data }) => {
+            console.log('list penjualan', data)
+            this.meta = data?.meta
+            if(index>1){
+              this.items.push(...data.data)
+            }
+            done()
+            resolve()
+          })
+          .catch(() => {
+            this.isError = true
+            done(true)
+            resolve()
+          })
+      })
     },
   },
 })

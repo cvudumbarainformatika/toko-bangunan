@@ -22,7 +22,7 @@
                       }"
                       @db-model="(val)=>{
                         store.params.from=val
-                        store.getList()
+                        reload()
                       }"
                     />
                     <app-input-date
@@ -36,7 +36,7 @@
                       }"
                       @db-model="(val)=>{
                         store.params.to=val
-                        store.getList()
+                        reload()
                       }"
                     />
                     <app-input
@@ -47,7 +47,7 @@
                       :debounce="300"
                       @update:model-value="
                         (e) => {
-                          store.getList()
+                          reload()
                         }
                       "
                     />
@@ -57,7 +57,7 @@
                       dense
                       @click="
                         () => {
-                        store.getList()
+                        reload()
                       }"
                     >
                     <q-tooltip >Rerfresh</q-tooltip>
@@ -197,6 +197,11 @@ const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 
+function reload(){
+  store.items = []
+  store.getList()
+  infiniteScroll.value?.reset()
+}
 
 function statusFlag(flag) {
   let status = ''
