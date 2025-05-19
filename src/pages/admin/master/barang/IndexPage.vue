@@ -10,7 +10,6 @@
       "
       @edit="
         (data) => {
-          // console.log('edit', data);
 
           item = data
           isList = false
