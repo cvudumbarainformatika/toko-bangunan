@@ -23,7 +23,8 @@
                     />
                     <div class="q-pl-sm" />
                     <q-btn-dropdown
-                      color="grey-9"
+                      class="text-yellow-8"
+                      color="grey-10"
                       rounded
                       fab-mini
                       glossy
@@ -38,7 +39,7 @@
                           :key="item.value"
                           clickable
                           v-close-popup
-                          @click="filter(item.value)"
+                          @click="filter(item)"
                         >
                           <q-item-section>
                             <q-item-label>{{ item.label }}</q-item-label>
@@ -46,11 +47,21 @@
                         </q-item>
                       </q-list>
                     </q-btn-dropdown>
+                    <div class="q-pl-sm" />
+                    <div>
+                      <q-item-label>{{ label }}</q-item-label>
+                    </div>
                   </div>
                 </div>
 
                 <div class="col-auto">
-                  <app-btn icon="add" tooltip="Tambah Data" color="primary" @click="emits('add')" />
+                  <app-btn
+                    icon="add"
+                    class="text-yellow-8"
+                    tooltip="Tambah Data"
+                    color="grey-10"
+                    @click="emits('add')"
+                  />
                 </div>
               </div>
             </q-item-label>
@@ -89,27 +100,38 @@
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1">{{ item?.namabarang }}</q-item-label>
+                    <q-item-label lines="1"
+                      >{{ item?.namabarang }}
+                      <q-badge class="bg-grey-8" style="font-size: smaller"
+                        >per {{ item?.satuan_b }} isi {{ item?.isi }} {{ item?.satuan_k }}
+                      </q-badge>
+                    </q-item-label>
                     <q-item-label caption lines="2">
-                      <span class="text-weight-bold">Kategori: {{ item?.kategori }}</span> |
-                      <span
+                      <span class="text-weight-bold"
+                        >Kategori: {{ item?.kategori }} {{ item?.jeniskeramik }}
+                      </span>
+                      |
+                      <q-badge
                         class="text-weight-bold"
                         :class="{
-                          'text-yellow-8': store.params.minim_stok !== 1,
-                          'bg-red text-white q-px-sm q-py-xs rounded':
-                            store.params.minim_stok === 1,
+                          'bg-grey-10 text-yellow-8 q-px-sm q-py-xs rounded':
+                            item?.stok_kecil > item?.minim_stok,
+                          'bg-grey-10 text-red q-px-sm q-py-xs rounded':
+                            store.params.minim_stok === 1 || item?.stok_kecil < item?.minim_stok,
                         }"
-                        >Stok Sekarang: {{ item?.stok_kecil }} {{ item?.satuan_k }}</span
+                        >Stok Sekarang: {{ item?.stok_besarbaru }} {{ item?.satuan_b }} Lebih
+                        {{ item?.stok_besarkecil }} {{ item?.satuan_k }}</q-badge
                       >
-                      <span
+                      <q-badge
                         class="text-weight-bold"
                         :class="{
-                          'text-yellow-8': store.params.minim_stok !== 1,
-                          'bg-red text-white q-px-sm q-py-xs rounded':
-                            store.params.minim_stok === 1,
+                          'bg-grey-10 text-yellow-8 q-px-sm q-py-xs rounded':
+                            item?.stok_kecil > item?.minim_stok,
+                          'bg-grey-10 text-red q-px-sm q-py-xs rounded':
+                            store.params.minim_stok === 1 || item?.stok_kecil < item?.minim_stok,
                         }"
                       >
-                        ({{ item?.stok_besar }} {{ item?.satuan_b }})</span
+                        ({{ item?.stok_kecil }} {{ item?.satuan_k }})</q-badge
                       >
                     </q-item-label>
                   </q-item-section>
@@ -137,7 +159,7 @@
 
               <template v-slot:loading>
                 <div v-if="!store.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="primary" size="40px" />
+                  <q-spinner-dots color="yellow-9" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>
@@ -170,6 +192,7 @@ const store = useAdminMasterBarangStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
+const label = ref('All Stock')
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
 const emits = defineEmits(['add', 'edit'])
@@ -234,7 +257,8 @@ const next = computed(() => {
 })
 
 const filter = (val) => {
-  store.params.minim_stok = val
+  store.params.minim_stok = val.value
+  label.value = val.label
   infiniteScroll.value.reset()
   store.getList()
 }
@@ -242,7 +266,7 @@ const filter = (val) => {
 const kartuStok = (item) => {
   store.kartuStok = item
   store.selectedKodebarang = item?.kodebarang
-  console.log('kartuStok', store.kartuStok)
+  // console.log('kartuStok', store.kartuStok)
   store.dialogKartu = true
 }
 // function loadMore(index, done) {

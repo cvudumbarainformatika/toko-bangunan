@@ -3,10 +3,10 @@
     <div class="col full-height">
       <q-card flat bordered square class="full-height" style="overflow: hidden">
         <q-form ref="formRef" @submit="onSubmit(data?.flaging)">
-          <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
+          <q-card-section class="q-px-md q-py-xs bg-yellow-8 text-black col-auto full-width">
             <div class="row items-center justify-between">
               <div class="f-12 text-weight-bold">
-                <app-btn-back size="sm" @click="emits('back')" class="bg-dark" />
+                <app-btn-back size="sm" @click="emits('back')" class="bg-black text-yellow-8" />
                 Form Order
               </div>
             </div>
@@ -29,13 +29,15 @@
               <div class="col-1" v-if="data?.flaging === undefined || data?.flaging === null">
                 <q-btn
                   round
-                  color="primary"
-                  size="sm"
+                  dense
+                  color="grey-10"
+                  class="text-yellow-9"
+                  size="md"
                   icon="lock_open"
                   @click="kuncitrans('1')"
                   :loading="store.lock"
                 >
-                  <q-tooltip class="bg-teal text-white"> KUNCI TRANSAKSI </q-tooltip>
+                  <q-tooltip class="bg-grey text-white"> KUNCI TRANSAKSI </q-tooltip>
                 </q-btn>
               </div>
               <div class="row" v-else>
@@ -45,12 +47,13 @@
                     padding="sm"
                     round
                     dense
-                    color="primary"
+                    color="yellow-9"
+                    class="text-black"
                     icon="lock"
                     @click="kuncitrans()"
                     :loading="store.lock"
                   >
-                    <q-tooltip class="bg-teal text-white"> BUKA KUNCI TRANSAKSI </q-tooltip>
+                    <q-tooltip class="bg-grey text-white"> BUKA KUNCI TRANSAKSI </q-tooltip>
                   </q-btn>
                 </div>
                 <div class="q-pl-xs">
@@ -153,7 +156,8 @@
                   type="submit"
                   :dense="false"
                   label="Simpan"
-                  color="teal"
+                  color="grey-10"
+                  class="text-yellow-9"
                 />
               </div>
             </div>

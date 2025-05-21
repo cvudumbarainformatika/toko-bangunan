@@ -19,6 +19,7 @@
                 <div class="full-width">
                   Pilih Kategori :
                   <q-radio
+                    color="yellow-9"
                     v-model="store.form.kategori"
                     class="q-pl-sm q-pr-lg"
                     v-for="item in store.pilihkategori"
@@ -33,7 +34,13 @@
                 <template v-if="store.form.kategori">
                   <div class="col-12">
                     <div class="row items-center q-gutter-sm">
-                      <q-btn color="primary" icon="photo" label="Pilih Foto" @click="imgClick" />
+                      <app-btn
+                        color="grey-10"
+                        class="text-yellow-9"
+                        icon="photo"
+                        label="Pilih Foto"
+                        @click="imgClick"
+                      />
                       <q-file
                         ref="fileRef"
                         v-model="newImages"
@@ -154,6 +161,7 @@
                     :valid="store.form.kategori !== 'Keramik'"
                   />
                   <app-select
+                    v-if="store.form.kategori === 'Keramik'"
                     class="col-12"
                     v-model="store.form.kodejenis"
                     label="Pilih Jenis Keramik"
@@ -209,7 +217,8 @@
                       type="submit"
                       :dense="false"
                       label="Simpan"
-                      color="primary"
+                      color="grey-10"
+                      class="text-yellow-9"
                     />
                   </div>
                 </template>
