@@ -2,10 +2,10 @@
   <div class="fit column absolute">
     <div class="col full-height">
       <q-card flat bordered square class="full-height" style="overflow: hidden">
-        <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
+        <q-card-section class="q-px-md q-py-xs bg-yellow-8 text-black col-auto full-width">
           <div class="row items-center justify-between">
             <div class="f-12 text-weight-bold">
-              <app-btn-back size="sm" @click="emits('back')" class="bg-dark" />
+              <app-btn-back size="sm" @click="emits('back')" class="bg-black text-yellow-8" />
               Form Peneriaman
             </div>
           </div>
@@ -48,12 +48,20 @@
               />
             </div>
             <div class="col-1" v-if="store.form.nopenerimaan === undefined">
-              <q-btn round color="primary" icon="find_in_page" @click="cariorderan()" />
+              <app-btn
+                size="md"
+                :dense="false"
+                color="grey-10"
+                class="text-yellow-8"
+                icon="find_in_page"
+                @click="cariorderan()"
+              />
             </div>
             <div class="col-1" v-else-if="props?.data?.kunci === null">
               <q-btn
                 round
-                color="primary"
+                color="grey-10"
+                class="text-yellow-9"
                 icon="lock_open"
                 @click="store.kirimstok(lists, store.form.nopenerimaan)"
                 :loading="store.loadingstok"
@@ -61,7 +69,15 @@
             </div>
             <div class="row" v-else-if="props?.data?.kunci === '1'">
               <div>
-                <q-btn size="sm" padding="sm" round dense color="primary" icon="lock" />
+                <q-btn
+                  size="sm"
+                  padding="sm"
+                  round
+                  dense
+                  color="yellow-9"
+                  class="text-black"
+                  icon="lock"
+                />
               </div>
               <div class="q-pl-xs">
                 <app-btn-cetak @click="cetakData()" />
@@ -87,7 +103,7 @@
                       <div class="col-12">
                         <span class="text-weight-medium">{{ item?.mbarang?.namabarang }}</span>
                         <span class="text-grey-8"> ({{ item?.kdbarang }})</span
-                        ><span class="text-red"> || Isi {{ item?.isi }} {{ item?.satuan_k }}</span>
+                        ><span class="text-lime"> || Isi {{ item?.isi }} {{ item?.satuan_k }}</span>
                       </div>
                     </div>
                     <div class="row q-gutter-xs">
@@ -175,7 +191,8 @@
                         <div v-else>
                           <app-btn
                             :loading="store.loading && store.form.id === item.id"
-                            color="teal"
+                            color="lime"
+                            class="text-black"
                             icon="done_all"
                           />
                         </div>

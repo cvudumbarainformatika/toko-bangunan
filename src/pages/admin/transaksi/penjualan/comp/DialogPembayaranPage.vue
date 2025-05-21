@@ -24,7 +24,11 @@
                           Total Nota Nomor : {{ store.formPembayaran.no_penjualan }}
                         </div>
                         <div class="col-auto text-weight-bold text-right f-20">
-                          <div class="row justify-end">{{ formatDouble(store?.item?.total + (store?.item?.total_diskon??0)) }}</div>
+                          <div class="row justify-end">
+                            {{
+                              formatDouble(store?.item?.total + (store?.item?.total_diskon ?? 0))
+                            }}
+                          </div>
                           <div v-if="store?.item?.total_diskon > 0" class="row justify-end">
                             {{ formatDouble(store?.item?.total_diskon) }}
                           </div>
@@ -47,7 +51,7 @@
                       :loading="store.loadingPembayaran"
                     />
                     <app-select
-                    v-if="['5','7'].includes(store.formPembayaran.flag)"
+                      v-if="['5', '7'].includes(store.formPembayaran.flag)"
                       class="col-12"
                       v-model="store.formPembayaran.cara_bayar"
                       label="Pilih Cara Bayar"
@@ -114,7 +118,9 @@
                         currency
                         label="Bayar"
                         :rules="[
-                          (val) => parseInt(olahUang(val)) >= parseInt(store.formPembayaran.total) || 'nominal pembayaran kurang',
+                          (val) =>
+                            parseInt(olahUang(val)) >= parseInt(store.formPembayaran.total) ||
+                            'nominal pembayaran kurang',
                         ]"
                         @update:model-value="updateBayar"
                         :disable="store.loadingPembayaran"
@@ -122,7 +128,8 @@
                       <div
                         class="col-3"
                         :class="
-                          parseInt(store.formPembayaran.total) > parseInt(olahUang(store.formPembayaran.bayar)) ||
+                          parseInt(store.formPembayaran.total) >
+                            parseInt(olahUang(store.formPembayaran.bayar)) ||
                           !parseInt(olahUang(store.formPembayaran?.bayar))
                             ? 'text-negative'
                             : ''
@@ -132,7 +139,8 @@
                       </div>
                       <div
                         v-if="
-                        parseInt(store.formPembayaran.total)  > parseInt(olahUang(store.formPembayaran.bayar))
+                          parseInt(store.formPembayaran.total) >
+                          parseInt(olahUang(store.formPembayaran.bayar))
                         "
                         class="col-3 text-negative text-center"
                       >
@@ -150,14 +158,13 @@
                         @update:model-value="updateBayar"
                         :disable="store.loadingPembayaran"
                       />
-                      <div
-                        class="col-3"
-                      >
+                      <div class="col-3">
                         {{ formatDouble(store.formPembayaran.kembali) }}
                       </div>
                       <div
                         v-if="
-                        parseInt(store.formPembayaran.total)  > parseInt(olahUang(store.formPembayaran.bayar))
+                          parseInt(store.formPembayaran.total) >
+                          parseInt(olahUang(store.formPembayaran.bayar))
                         "
                         class="col-3 text-center f-16"
                       >
@@ -173,7 +180,8 @@
                         type="submit"
                         :dense="false"
                         label="Simpan"
-                        color="primary"
+                        color="grey-10"
+                        class="text-yellow-9"
                       />
                     </div>
                   </div>
@@ -201,7 +209,7 @@ const isMobile = computed(() => {
   return $q.screen.lt.sm // Quasar screen size helper
 })
 const store = useFromPenjualanStore()
- 
+
 const storelist = useListPenjualanStore()
 
 const optionCaraBayar = ref([
@@ -212,7 +220,8 @@ const optionCaraBayar = ref([
 const refPelanggan = ref(null)
 function onSubmit() {
   console.log('submit form pembayaran', refPelanggan.value, store.formPembayaran)
-  if(!store?.item?.sales_id  && store.formPembayaran.flag=='2') return notifError('Pembayaran Secara Kredit Harus Memilih Sales')
+  if (!store?.item?.sales_id && store.formPembayaran.flag == '2')
+    return notifError('Pembayaran Secara Kredit Harus Memilih Sales')
   store
     .simpanPembayaran()
     .then((res) => {
@@ -232,7 +241,7 @@ function selectCaraBayar(val) {
     store.formPembayaran.bayar = 0
     store.formPembayaran.kembali = 0
     store.formPembayaran.cara_bayar = ''
-  }else{
+  } else {
     store.formPembayaran.cara_bayar = 'cash'
   }
 }
@@ -244,8 +253,7 @@ function updateBayar(val) {
   //untuk hapus o dipean angka pake ini yaa
   if (normalAngka > 1) {
     // store.formPembayaran.bayar = normalAngka
-    store.formPembayaran.kembali =
-      parseInt(normalAngka) - (store.formPembayaran.total)
+    store.formPembayaran.kembali = parseInt(normalAngka) - store.formPembayaran.total
   }
   setTimeout(() => {
     refBayar.value?.appInput?.validate()

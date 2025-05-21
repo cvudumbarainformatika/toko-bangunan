@@ -58,10 +58,10 @@ export default defineConfig((ctx) => {
       env: {
         API: ctx?.dev
           ? // ? 'https://api.jangurkeramik.my.id'
-            'http://localhost/newtokobangunan/belakang-toko/public'
-            // 'http://belakang-toko.test'
-            // 'http://localhost:8182'
-          : 'https://api.jangurkeramik.my.id',
+            // 'http://localhost/newtokobangunan/belakang-toko/public'
+            'http://belakang-toko.test'
+          : // 'http://localhost:8182'
+            'https://api.jangurkeramik.my.id',
       },
       // rawDefine: {}
       // ignorePublicFolder: true,

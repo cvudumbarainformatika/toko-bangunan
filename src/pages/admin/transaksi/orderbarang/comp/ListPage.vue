@@ -59,7 +59,7 @@
                     <app-btn
                       round
                       color="grey-10"
-                      class="text-yellow-8"
+                      class="text-yellow-9"
                       icon="search"
                       @click="refreshList"
                       :loading="storeOrderH.loading"
@@ -72,7 +72,7 @@
                     icon="add"
                     tooltip="Tambah Data"
                     color="grey-10"
-                    class="text-yellow-8"
+                    class="text-yellow-9"
                     @click="emits('add')"
                   />
                 </div>

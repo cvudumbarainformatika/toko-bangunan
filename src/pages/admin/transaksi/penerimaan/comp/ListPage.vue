@@ -55,12 +55,24 @@
                         }
                       "
                     />
-                    <q-btn round color="primary" icon="find_replace" @click="refreshList" />
+                    <app-btn
+                      round
+                      color="grey-10"
+                      class="text-yellow-9"
+                      icon="search"
+                      @click="refreshList"
+                    />
                   </div>
                 </div>
 
                 <div class="col-auto">
-                  <app-btn icon="add" tooltip="Tambah Data" color="primary" @click="emits('add')" />
+                  <app-btn
+                    icon="add"
+                    tooltip="Tambah Data"
+                    color="grey-10"
+                    class="text-yellow-9"
+                    @click="emits('add')"
+                  />
                 </div>
               </div>
             </q-item-label>
@@ -89,22 +101,22 @@
                   @mouseleave="hoveredId = null"
                 >
                   <q-item-section avatar>
-                    <q-avatar color="pink" text-color="white">P</q-avatar>
+                    <q-avatar color="yellow-9" text-color="white">P</q-avatar>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">
-                      <span class="text-weight-bold text-primary"
+                      <span class="text-weight-bold"
                         >No. Penerimaan : {{ item?.nopenerimaan }}</span
                       >
                       <span class="text-weight-bold"> || Supplier : {{ item?.suplier }}</span>
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
-                        ><q-badge rounded outline color="yellow">
+                        ><q-badge rounded outline color="grey">
                           No. Order : {{ item?.noorder }}
                         </q-badge></span
                       >
-                      <span class="text-weight-bold text-red">
+                      <span class="text-weight-bold text-yellow-9">
                         || TOTAL BARANG DATANG : {{ formatRpDouble(item?.total) }}</span
                       >
                     </q-item-label>

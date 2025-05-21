@@ -117,7 +117,7 @@
                           'bg-grey-10 text-yellow-8 q-px-sm q-py-xs rounded':
                             item?.stok_kecil > item?.minim_stok,
                           'bg-grey-10 text-red q-px-sm q-py-xs rounded':
-                            store.params.minim_stok === 1 || item?.stok_kecil < item?.minim_stok,
+                            store.params.minim_stok === 1 || item?.stok_kecil <= item?.minim_stok,
                         }"
                         >Stok Sekarang: {{ item?.stok_besarbaru }} {{ item?.satuan_b }} Lebih
                         {{ item?.stok_besarkecil }} {{ item?.satuan_k }}</q-badge
@@ -128,7 +128,7 @@
                           'bg-grey-10 text-yellow-8 q-px-sm q-py-xs rounded':
                             item?.stok_kecil > item?.minim_stok,
                           'bg-grey-10 text-red q-px-sm q-py-xs rounded':
-                            store.params.minim_stok === 1 || item?.stok_kecil < item?.minim_stok,
+                            store.params.minim_stok === 1 || item?.stok_kecil <= item?.minim_stok,
                         }"
                       >
                         ({{ item?.stok_kecil }} {{ item?.satuan_k }})</q-badge

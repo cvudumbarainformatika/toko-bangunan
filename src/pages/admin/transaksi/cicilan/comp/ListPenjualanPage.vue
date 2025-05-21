@@ -1,12 +1,11 @@
 <template>
-   <div class="column fit">
+  <div class="column fit">
     <div class="col full-height">
       <div class="full-height q-pa-sm">
         <q-list class="rounded-borders full-height column">
           <div class="col-auto">
             <q-item-label header>
               <div class="row full-width items-center">
-
                 <div class="col-auto">
                   <div class="flex items-center">
                     <app-input
@@ -31,52 +30,55 @@
                     option-value="value"
                     :options="store.flagOptions"
                     @update:model-value="
-                        (e) => {
-                          reload()
-                        }
-                      "
+                      (e) => {
+                        reload()
+                      }
+                    "
                   />
                 </div>
                 <div class="col-auto">
                   <app-input
-                      v-model="store.params.sales"
-                      prepend-icon="search"
-                      label="Telusuri Nama sales"
-                      style="min-width: 250px"
-                      :debounce="300"
-                      @update:model-value="
-                        (e) => {
-                          reload()
-                        }
-                      "
-                    />
+                    v-model="store.params.sales"
+                    prepend-icon="search"
+                    label="Telusuri Nama sales"
+                    style="min-width: 250px"
+                    :debounce="300"
+                    @update:model-value="
+                      (e) => {
+                        reload()
+                      }
+                    "
+                  />
                 </div>
                 <div class="col-auto">
                   <app-input
-                      v-model="store.params.pelanggan"
-                      prepend-icon="search"
-                      label="Telusuri Nama planggan"
-                      style="min-width: 250px"
-                      :debounce="300"
-                      @update:model-value="
-                        (e) => {
-                          reload()
-                        }
-                      "
-                    />
+                    v-model="store.params.pelanggan"
+                    prepend-icon="search"
+                    label="Telusuri Nama planggan"
+                    style="min-width: 250px"
+                    :debounce="300"
+                    @update:model-value="
+                      (e) => {
+                        reload()
+                      }
+                    "
+                  />
                 </div>
 
                 <q-space />
                 <div class="col-auto">
-                  <app-btn icon="refresh" tooltip="refresh" flat @click="store.getList" />
+                  <app-btn
+                    class="text-yellow-9"
+                    icon="refresh"
+                    tooltip="refresh"
+                    flat
+                    @click="store.getList"
+                  />
                 </div>
-
-
               </div>
             </q-item-label>
-            <q-separator  />
+            <q-separator />
           </div>
-
 
           <div ref="scrollTarget" class="col full-height scroll">
             <q-infinite-scroll
@@ -87,124 +89,253 @@
               :offset="150"
               :initial-index="store.params.page"
             >
-            <q-item>
-              <q-item-section>
-                    <q-item-label lines="1">
-                      <div class="row text-weight-bold q-col-gutter-x-sm">
-                        <div class="col-auto" style="width: calc(100%/7);">No Penjualan</div>
-                        <div class="col-auto" style="width: calc(100%/7);">Total</div>
-                        <div class="col-auto" style="width: calc(100%/7);">DP / Pembayaran</div>
-                        <div class="col-auto" style="width: calc(100%/7);">Total Diskon<span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
-                        <div class="col-auto" style="width: calc(100%/7);">Total Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
-                        <div class="col-auto" style="width: calc(100%/7);">Total - Diskon - Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
-                        <div class="col-auto text-right" style="width: calc(100%/7);">Status</div>
+              <q-item>
+                <q-item-section>
+                  <q-item-label lines="1">
+                    <div class="row text-weight-bold q-col-gutter-x-sm">
+                      <div class="col-auto" style="width: calc(100% / 7)">No Penjualan</div>
+                      <div class="col-auto" style="width: calc(100% / 7)">Total</div>
+                      <div class="col-auto" style="width: calc(100% / 7)">DP / Pembayaran</div>
+                      <div class="col-auto" style="width: calc(100% / 7)">
+                        Total Diskon<span class="text-italic f-10 q-ml-xs">(jika ada)</span>
                       </div>
-
-                      </q-item-label>
-                    <q-item-label lines="1">
-                      <div class="row text-weight-bold">
-                        <div class="col-3 text-weight-bold">Nama Pelanggan</div>
-                        <div class="col-2 q-ml-sm">Nama Sales </div>
-                        <div  class="col-2 q-ml-sm">Total cicilan <span class="text-italic f-10 q-ml-xs">(jika ada)</span></div>
+                      <div class="col-auto" style="width: calc(100% / 7)">
+                        Total Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span>
                       </div>
-                    </q-item-label>
-                  </q-item-section>
-                  <q-item-section  side top>
-                    <q-item-label caption>Tanngal</q-item-label>
-                    <q-item-label caption>Jam</q-item-label>
-                  </q-item-section>
-            </q-item>
-            <q-separator  />
-              <q-intersection
-                v-for="(item, i) in store.items"
-                :key="i"
-                transition="fade"
-                >
+                      <div class="col-auto" style="width: calc(100% / 7)">
+                        Total - Diskon - Retur
+                        <span class="text-italic f-10 q-ml-xs">(jika ada)</span>
+                      </div>
+                      <div class="col-auto text-right" style="width: calc(100% / 7)">Status</div>
+                    </div>
+                  </q-item-label>
+                  <q-item-label lines="1">
+                    <div class="row text-weight-bold">
+                      <div class="col-3 text-weight-bold">Nama Pelanggan</div>
+                      <div class="col-2 q-ml-sm">Nama Sales</div>
+                      <div class="col-2 q-ml-sm">
+                        Total cicilan <span class="text-italic f-10 q-ml-xs">(jika ada)</span>
+                      </div>
+                    </div>
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                  <q-item-label caption>Tanngal</q-item-label>
+                  <q-item-label caption>Jam</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade">
                 <q-expansion-item
                   v-model="item.expand"
                   clickable
                   v-ripple
                   @mouseover="hoveredId = item?.id"
                   @mouseleave="hoveredId = null"
-                  :class="{ 'bg-grey-8 text-white': hoveredId === item?.id } "
+                  :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }"
                 >
-                <template v-slot:header>
-                  <q-item-section>
-                    <q-item-label lines="1">
-                      <div class="row q-col-gutter-x-sm">
-                        <div class="col-auto" style="width: calc(100%/7)">{{ item?.no_penjualan }}</div>
-                        <div class="col-auto" style="width: calc(100%/7)">{{ formatDouble(item?.total + item?.total_diskon) }}<span class="text-italic f-10 q-ml-xs">(total)</span></div>
-                        <div class="col-auto" style="width: calc(100%/7)"> <span v-if="item?.bayar>0"> {{ item?.kembali > 0 ?formatDouble(item?.bayar - item?.kembali): formatDouble(item?.bayar)}} <span class="text-italic f-10 q-ml-xs">{{parseInt(item?.kembali ) < 0 ? '(DP)' :'(Pembayaran)'}}</span></span> </div>
-                        <div class="col-auto" style="width: calc(100%/7)"> <span v-if="item?.total_diskon>0"> {{ formatDouble(item?.total_diskon) }} <span class="text-italic f-10 q-ml-xs">(diskon)</span></span> </div>
-                        <div class="col-auto" style="width: calc(100%/7)"> <span v-if="totalRetur(item)>0"> {{ formatDouble(totalRetur(item)) }}<span class="text-italic f-10 q-ml-xs">(retur)</span></span> </div>
-                        <div class="col-auto" style="width: calc(100%/7)"> <span v-if="item?.total_diskon>0 || totalRetur(item)>0"> {{ formatDouble(item?.total - totalRetur(item)) }}<span class="text-italic f-10 q-ml-xs">(total - diskon - retur)</span></span> </div>
-                        <div class="col-auto text-right" style="width: calc(100%/7)">{{ statusFlag(item?.flag) }}</div>
-                      </div>
-
+                  <template v-slot:header>
+                    <q-item-section>
+                      <q-item-label lines="1">
+                        <div class="row q-col-gutter-x-sm">
+                          <div class="col-auto" style="width: calc(100% / 7)">
+                            {{ item?.no_penjualan }}
+                          </div>
+                          <div class="col-auto" style="width: calc(100% / 7)">
+                            {{ formatDouble(item?.total + item?.total_diskon)
+                            }}<span class="text-italic f-10 q-ml-xs">(total)</span>
+                          </div>
+                          <div class="col-auto" style="width: calc(100% / 7)">
+                            <span v-if="item?.bayar > 0">
+                              {{
+                                item?.kembali > 0
+                                  ? formatDouble(item?.bayar - item?.kembali)
+                                  : formatDouble(item?.bayar)
+                              }}
+                              <span class="text-italic f-10 q-ml-xs">{{
+                                parseInt(item?.kembali) < 0 ? '(DP)' : '(Pembayaran)'
+                              }}</span></span
+                            >
+                          </div>
+                          <div class="col-auto" style="width: calc(100% / 7)">
+                            <span v-if="item?.total_diskon > 0">
+                              {{ formatDouble(item?.total_diskon) }}
+                              <span class="text-italic f-10 q-ml-xs">(diskon)</span></span
+                            >
+                          </div>
+                          <div class="col-auto" style="width: calc(100% / 7)">
+                            <span v-if="totalRetur(item) > 0">
+                              {{ formatDouble(totalRetur(item))
+                              }}<span class="text-italic f-10 q-ml-xs">(retur)</span></span
+                            >
+                          </div>
+                          <div class="col-auto" style="width: calc(100% / 7)">
+                            <span v-if="item?.total_diskon > 0 || totalRetur(item) > 0">
+                              {{ formatDouble(item?.total - totalRetur(item))
+                              }}<span class="text-italic f-10 q-ml-xs"
+                                >(total - diskon - retur)</span
+                              ></span
+                            >
+                          </div>
+                          <div class="col-auto text-right" style="width: calc(100% / 7)">
+                            {{ statusFlag(item?.flag) }}
+                          </div>
+                        </div>
                       </q-item-label>
-                    <q-item-label lines="1">
-                      <div class="row">
-                        <div class="col-3 text-weight-bold">Pelanggan: {{ item?.pelanggan?.nama }}</div>
-                        <div class="col-2 q-ml-sm">Sales : {{ item?.sales?.nama }}</div>
-                        <div v-if="item?.cicilan?.length > 0" class="col-2 q-ml-sm">Total cicilan : {{ formatDouble(item?.cicilan?.reduce((total, item) => total + item?.jumlah, 0)) }}</div>
-                      </div>
-                    </q-item-label>
-                  </q-item-section>
-                  <q-item-section v-if="hoveredId === item?.id" side>
-                    <div class="flex q-gutter-sm">
-                      <app-btn v-if="item?.flag == '2' || item?.flag == '3'" icon="card_travel" color="orange" tooltip="Di bawa Sales" @click="()=>{
-                        emits('bawa', item)
-                        item.expand = !item.expand
-                        }" :loading="item?.loading" :disable="item?.loading"/>
-                      <app-btn v-if="['4']?.includes(item?.flag)" class="q-mr-xs" icon="price_check" tooltip="Bayar Cililan" color="green" @click="()=>{
-                        emits('cicil', item)
-                        item.expand = !item.expand
-                        }" :loading="item?.loading" :disable="item?.loading"/>
-                      <app-btn v-if="['7']?.includes(item?.flag)" class="q-mr-xs" icon="price_check" tooltip="Pelunasan" color="yellow" @click="()=>{
-                        emits('lunas', item)
-                        item.expand = !item.expand
-                        }" :loading="item?.loading" :disable="item?.loading"/>
-                      <app-btn v-if="item?.flag == '4'" class="q-mr-xs" icon="money_off_csred" tooltip="Kembali tanpa bayar cicilan" color="secondary" @click="()=>{
-                        emits('kembali', item)
-                        item.expand = !item.expand
-                        }" :loading="item?.loading" :disable="item?.loading"/>
-                      <app-btn v-if="['3','5']?.includes(item?.flag)" class="q-mr-xs" icon="view_list" tooltip="List Cicilan" color="secondary" @click="()=>{
-                        emits('buka', item)
-                        item.expand = !item.expand
-                        }" :loading="item?.loading" :disable="item?.loading"/>
-                      <!-- <app-btn  icon="card_travel" color="orange" tooltip="Di bawa Sales" @click="emits('bawa', item)"/>
+                      <q-item-label lines="1">
+                        <div class="row">
+                          <div class="col-3 text-weight-bold">
+                            Pelanggan: {{ item?.pelanggan?.nama }}
+                          </div>
+                          <div class="col-2 q-ml-sm">Sales : {{ item?.sales?.nama }}</div>
+                          <div v-if="item?.cicilan?.length > 0" class="col-2 q-ml-sm">
+                            Total cicilan :
+                            {{
+                              formatDouble(
+                                item?.cicilan?.reduce((total, item) => total + item?.jumlah, 0),
+                              )
+                            }}
+                          </div>
+                        </div>
+                      </q-item-label>
+                    </q-item-section>
+                    <q-item-section v-if="hoveredId === item?.id" side>
+                      <div class="flex q-gutter-sm">
+                        <app-btn
+                          v-if="item?.flag == '2' || item?.flag == '3'"
+                          icon="card_travel"
+                          color="orange"
+                          tooltip="Di bawa Sales"
+                          @click="
+                            () => {
+                              emits('bawa', item)
+                              item.expand = !item.expand
+                            }
+                          "
+                          :loading="item?.loading"
+                          :disable="item?.loading"
+                        />
+                        <app-btn
+                          v-if="['4']?.includes(item?.flag)"
+                          class="q-mr-xs"
+                          icon="price_check"
+                          tooltip="Bayar Cililan"
+                          color="green"
+                          @click="
+                            () => {
+                              emits('cicil', item)
+                              item.expand = !item.expand
+                            }
+                          "
+                          :loading="item?.loading"
+                          :disable="item?.loading"
+                        />
+                        <app-btn
+                          v-if="['7']?.includes(item?.flag)"
+                          class="q-mr-xs text-black"
+                          icon="price_check"
+                          tooltip="Pelunasan"
+                          color="yellow-8"
+                          @click="
+                            () => {
+                              emits('lunas', item)
+                              item.expand = !item.expand
+                            }
+                          "
+                          :loading="item?.loading"
+                          :disable="item?.loading"
+                        />
+                        <app-btn
+                          v-if="item?.flag == '4'"
+                          class="q-mr-xs"
+                          icon="money_off_csred"
+                          tooltip="Kembali tanpa bayar cicilan"
+                          color="secondary"
+                          @click="
+                            () => {
+                              emits('kembali', item)
+                              item.expand = !item.expand
+                            }
+                          "
+                          :loading="item?.loading"
+                          :disable="item?.loading"
+                        />
+                        <app-btn
+                          v-if="['3', '5']?.includes(item?.flag)"
+                          class="q-mr-xs"
+                          icon="view_list"
+                          tooltip="List Cicilan"
+                          color="secondary"
+                          @click="
+                            () => {
+                              emits('buka', item)
+                              item.expand = !item.expand
+                            }
+                          "
+                          :loading="item?.loading"
+                          :disable="item?.loading"
+                        />
+                        <!-- <app-btn  icon="card_travel" color="orange" tooltip="Di bawa Sales" @click="emits('bawa', item)"/>
                       <app-btn  class="q-mr-xs" icon="price_check" tooltip="Bayar Cililn" color="green" @click="emits('cicil', item)"/>
                       <app-btn  class="q-mr-xs" icon="money_off_csred" tooltip="Kembali tanpa bayar cicilan" color="secondary" @click="emits('kembali', item)" /> -->
+                      </div>
+                    </q-item-section>
+                    <q-item-section v-else side top>
+                      <q-item-label caption>{{ humanDate(item?.tgl) }}</q-item-label>
+                      <q-item-label caption>{{ jamTnpDetik(item?.tgl) }}</q-item-label>
+                    </q-item-section>
+                  </template>
+                  <q-separator />
+                  <div class="row q-pa-sm">
+                    <div class="col-5">Barang</div>
+                    <div class="col-1 text-right">Jumlah</div>
+                    <div class="col-1 text-right">Jumlah Retur</div>
+                    <div class="col-1 text-right">Harga</div>
+                    <div class="col-1 text-right">Diskon</div>
+                    <div class="col-1 text-right">Retur</div>
+                    <div class="col-2 text-right">Subtotal</div>
+                  </div>
+                  <div v-for="detail in item?.detail" :key="detail?.id">
+                    <div class="row q-px-sm">
+                      <div class="col-5">
+                        {{
+                          detail?.master_barang?.namabarang ??
+                          '' +
+                            ' ' +
+                            (detail?.master_barang?.brand === null
+                              ? ''
+                              : (detail?.master_barang?.brand ?? '')) +
+                            ' ' +
+                            (detail?.master_barang?.seri === null
+                              ? ''
+                              : (detail?.master_barang?.seri ?? '')) +
+                            ' ' +
+                            (detail?.master_barang?.ukuran === null
+                              ? ''
+                              : (detail?.master_barang?.ukuran ?? ''))
+                        }}
+                      </div>
+                      <div class="col-1 text-right">{{ formatDouble(detail?.jumlah) }}</div>
+                      <div class="col-1 text-right">
+                        {{ formatDouble(detailRetur(item, detail)) }}
+                      </div>
+                      <div class="col-1 text-right">{{ formatDouble(detail?.harga_jual) }}</div>
+                      <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
+                      <div class="col-1 text-right">
+                        {{
+                          formatDouble(
+                            item?.header_retur
+                              ?.flatMap((m) => m.detail)
+                              .filter((m) => m.kodebarang === detail?.kodebarang)
+                              ?.reduce((acc, it) => acc + it.subtotal, 0),
+                          )
+                        }}
+                      </div>
+                      <div class="col-2 text-right">{{ formatDouble(subtotal(item, detail)) }}</div>
                     </div>
-                  </q-item-section>
-                  <q-item-section v-else side top>
-                    <q-item-label caption>{{ humanDate(item?.tgl) }}</q-item-label>
-                    <q-item-label caption>{{ jamTnpDetik(item?.tgl) }}</q-item-label>
-                  </q-item-section>
-                </template>
-                <q-separator  />
-                <div class="row q-pa-sm">
-                  <div class="col-5">Barang</div>
-                  <div class="col-1 text-right">Jumlah</div>
-                  <div class="col-1 text-right">Jumlah Retur</div>
-                  <div class="col-1 text-right">Harga</div>
-                  <div class="col-1 text-right">Diskon</div>
-                  <div class="col-1 text-right">Retur</div>
-                  <div class="col-2 text-right">Subtotal</div>
-                </div>
-                <div v-for="detail in item?.detail" :key="detail?.id">
-                  <div class="row q-px-sm">
-                    <div class="col-5">{{detail?.master_barang?.namabarang??'' + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand??'')+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri??'')+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran??'')}}</div>
-                    <div class="col-1 text-right">{{formatDouble(detail?.jumlah)}}</div>
-                    <div class="col-1 text-right">{{formatDouble(detailRetur(item,detail))}}</div>
-                    <div class="col-1 text-right">{{formatDouble(detail?.harga_jual)}}</div>
-                    <div class="col-1 text-right">{{formatDouble(detail?.diskon)}}</div>
-                    <div class="col-1 text-right">{{formatDouble(item?.header_retur?.flatMap(m=>m.detail).filter(m=>m.kodebarang === detail?.kodebarang)?.reduce((acc,it)=>acc+it.subtotal,0))}}</div>
-                    <div class="col-2 text-right">{{formatDouble(subtotal(item,detail))}}</div>
-                </div>
-                </div>
+                  </div>
                 </q-expansion-item>
-                <q-separator  />
+                <q-separator />
               </q-intersection>
 
               <template v-slot:loading>
@@ -239,44 +370,44 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['bawa', 'cicil','kembali','buka','lunas'])
+const emits = defineEmits(['bawa', 'cicil', 'kembali', 'buka', 'lunas'])
 
-function reload(){
+function reload() {
   store.items = []
   store.getList()
   infiniteScroll.value?.reset()
 }
 
 function statusFlag(flag) {
-  let status=''
+  let status = ''
   switch (flag) {
     case null:
-      status = 'Draft';
-      break;
+      status = 'Draft'
+      break
     case '1':
-      status = 'Pesanan Sales';
-      break;
+      status = 'Pesanan Sales'
+      break
     case '2':
-      status = 'Belum Ada Cicilan';
-      break;
+      status = 'Belum Ada Cicilan'
+      break
     case '3':
-      status = 'Proses Cicilan';
-      break;
+      status = 'Proses Cicilan'
+      break
     case '4':
-      status = 'Dibawa Sales';
-      break;
+      status = 'Dibawa Sales'
+      break
     case '5':
-      status = 'Lunas';
-      break;
+      status = 'Lunas'
+      break
     case '6':
-      status = 'Batal';
-      break;
+      status = 'Batal'
+      break
     case '7':
       status = 'Down Payment (DP)'
-      break;
+      break
 
     default:
-      break;
+      break
   }
   // console.log('status', status, flag);
 
@@ -289,21 +420,27 @@ function totalRetur(item) {
   }
   return total
 }
-function detailRetur(item,detail) {
+function detailRetur(item, detail) {
   let total = 0
   if (item?.header_retur?.length > 0) {
-    total = item?.header_retur?.flatMap(m => m?.detail).filter(f => f?.kodebarang === detail?.kodebarang)?.reduce((total, item) => total + item?.jumlah, 0)
+    total = item?.header_retur
+      ?.flatMap((m) => m?.detail)
+      .filter((f) => f?.kodebarang === detail?.kodebarang)
+      ?.reduce((total, item) => total + item?.jumlah, 0)
   }
   return total
 }
-function subtotal(item,detail) {
+function subtotal(item, detail) {
   let total = 0
-  const subtotal = detail?.subtotal??0
-  const diskon = detail?.diskon??0
+  const subtotal = detail?.subtotal ?? 0
+  const diskon = detail?.diskon ?? 0
   if (item?.header_retur?.length > 0) {
-    total = item?.header_retur?.flatMap(m => m?.detail).filter(f => f?.kodebarang === detail?.kodebarang)?.reduce((total, item) => total + item?.subtotal, 0)
+    total = item?.header_retur
+      ?.flatMap((m) => m?.detail)
+      .filter((f) => f?.kodebarang === detail?.kodebarang)
+      ?.reduce((total, item) => total + item?.subtotal, 0)
   }
-  return subtotal-diskon-total
+  return subtotal - diskon - total
 }
 // eslint-disable-next-line no-unused-vars
 const next = computed(() => {
@@ -315,11 +452,9 @@ const next = computed(() => {
 
   return page
 })
-
 </script>
 <style lang="scss" scoped>
 .example-item {
   height: 56px;
 }
-
 </style>
