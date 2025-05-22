@@ -12,13 +12,17 @@
               style="min-width: 150px"
               outlined
               :debounce="300"
-              @set-model="(val) => {
-                list.dateDisplay.from = val
-              }"
-              @db-model="(val)=>{
-                list.params.from=val
-                reload()
-              }"
+              @set-model="
+                (val) => {
+                  list.dateDisplay.from = val
+                }
+              "
+              @db-model="
+                (val) => {
+                  list.params.from = val
+                  reload()
+                }
+              "
             />
             <app-input-date
               :model="list.dateDisplay.to"
@@ -26,13 +30,17 @@
               style="min-width: 150px"
               outlined
               :debounce="300"
-              @set-model="(val) => {
-                list.dateDisplay.to = val
-              }"
-              @db-model="(val)=>{
-                list.params.to=val
-                reload()
-              }"
+              @set-model="
+                (val) => {
+                  list.dateDisplay.to = val
+                }
+              "
+              @db-model="
+                (val) => {
+                  list.params.to = val
+                  reload()
+                }
+              "
             />
             <app-input
               v-model="list.params.q"
@@ -42,14 +50,16 @@
               :debounce="300"
               @update:model-value="() => reload()"
             />
-            <q-btn
+            <app-btn
               round
+              color="grey-10"
+              class="text-yellow-3"
               icon="refresh"
               dense
+              tooltip="Refresh"
               @click="reload()"
-            >
-              <q-tooltip>Refresh</q-tooltip>
-            </q-btn>
+            />
+
             <app-btn
               icon="list"
               tooltip="List Pengembalian"
@@ -94,7 +104,13 @@
                       <div class="col-3">{{ item?.no_penjualan }}</div>
                       <div class="col-2">{{ formatDouble(item?.total) }}</div>
                       <div class="col-2">{{ formatDouble(item?.total_diskon) }}</div>
-                      <div class="col-2">{{ formatDouble(item?.header_retur?.reduce((sum, r) => sum + r.total, 0) || 0) }}</div>
+                      <div class="col-2">
+                        {{
+                          formatDouble(
+                            item?.header_retur?.reduce((sum, r) => sum + r.total, 0) || 0,
+                          )
+                        }}
+                      </div>
                       <div class="col-auto">{{ item?.status }}</div>
                     </div>
                   </q-item-label>
@@ -108,7 +124,7 @@
                 <q-item-section v-if="hoveredId === item?.id" side>
                   <div class="flex q-gutter-sm">
                     <app-btn
-                      v-if="['2','3','5'].includes(item?.flag)"
+                      v-if="['2', '3', '5'].includes(item?.flag)"
                       icon="archive"
                       color="primary"
                       tooltip="Pengembalian Barang"
@@ -135,19 +151,49 @@
                     <div class="col-2 text-right">Subtotal</div>
                   </div>
                   <template v-if="item?.detail?.length">
-                    <div v-for="detail in item?.detail" :key="detail?.id" class="row q-pa-sm q-gutter-y-sm">
-                      <div class="col-5">{{detail?.master_barang?.namabarang??'' + ' ' +  (detail?.master_barang?.brand===null ? '' : detail?.master_barang?.brand??'')+ ' ' +  (detail?.master_barang?.seri===null ? '' : detail?.master_barang?.seri??'')+ ' ' +  (detail?.master_barang?.ukuran===null ? '' : detail?.master_barang?.ukuran??'')}}</div>
-                      <div class="col-1 text-right">{{formatDouble(detail?.jumlah)}}</div>
-                      <div class="col-1 text-right">{{formatDouble(detailRetur(item,detail))}}</div>
-                      <div class="col-1 text-right">{{formatDouble(detail?.harga_jual)}}</div>
-                      <div class="col-1 text-right">{{formatDouble(detail?.diskon)}}</div>
-                      <div class="col-1 text-right">{{formatDouble(item?.header_retur?.flatMap(m=>m.detail).filter(m=>m.kodebarang === detail?.kodebarang)?.reduce((acc,it)=>acc+it.subtotal,0))}}</div>
-                      <div class="col-2 text-right">{{formatDouble(subtotal(item,detail))}}</div>
+                    <div
+                      v-for="detail in item?.detail"
+                      :key="detail?.id"
+                      class="row q-pa-sm q-gutter-y-sm"
+                    >
+                      <div class="col-5">
+                        {{
+                          detail?.master_barang?.namabarang ??
+                          '' +
+                            ' ' +
+                            (detail?.master_barang?.brand === null
+                              ? ''
+                              : (detail?.master_barang?.brand ?? '')) +
+                            ' ' +
+                            (detail?.master_barang?.seri === null
+                              ? ''
+                              : (detail?.master_barang?.seri ?? '')) +
+                            ' ' +
+                            (detail?.master_barang?.ukuran === null
+                              ? ''
+                              : (detail?.master_barang?.ukuran ?? ''))
+                        }}
+                      </div>
+                      <div class="col-1 text-right">{{ formatDouble(detail?.jumlah) }}</div>
+                      <div class="col-1 text-right">
+                        {{ formatDouble(detailRetur(item, detail)) }}
+                      </div>
+                      <div class="col-1 text-right">{{ formatDouble(detail?.harga_jual) }}</div>
+                      <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
+                      <div class="col-1 text-right">
+                        {{
+                          formatDouble(
+                            item?.header_retur
+                              ?.flatMap((m) => m.detail)
+                              .filter((m) => m.kodebarang === detail?.kodebarang)
+                              ?.reduce((acc, it) => acc + it.subtotal, 0),
+                          )
+                        }}
+                      </div>
+                      <div class="col-2 text-right">{{ formatDouble(subtotal(item, detail)) }}</div>
                     </div>
                   </template>
-                  <div v-else class="q-pa-md text-center text-grey">
-                    Tidak ada detail barang
-                  </div>
+                  <div v-else class="q-pa-md text-center text-grey">Tidak ada detail barang</div>
                 </q-card-section>
               </q-card>
             </q-expansion-item>
@@ -177,7 +223,7 @@ list.getList()
 // Refs
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
-function reload(){
+function reload() {
   list.items = []
   infiniteScroll.value?.reset()
   list.getList()
@@ -185,8 +231,9 @@ function reload(){
 function detailRetur(item, detail) {
   let total = 0
   if (item?.header_retur?.length > 0) {
-    total = item?.header_retur?.flatMap(m => m?.detail)
-      .filter(f => f?.kodebarang === detail?.kodebarang)
+    total = item?.header_retur
+      ?.flatMap((m) => m?.detail)
+      .filter((f) => f?.kodebarang === detail?.kodebarang)
       ?.reduce((total, item) => total + item?.jumlah, 0)
   }
   return total || 0
@@ -198,8 +245,9 @@ function subtotal(item, detail) {
   let returTotal = 0
 
   if (item?.header_retur?.length > 0) {
-    returTotal = item?.header_retur?.flatMap(m => m?.detail)
-      .filter(f => f?.kodebarang === detail?.kodebarang)
+    returTotal = item?.header_retur
+      ?.flatMap((m) => m?.detail)
+      .filter((f) => f?.kodebarang === detail?.kodebarang)
       ?.reduce((total, item) => total + item?.subtotal, 0)
   }
 

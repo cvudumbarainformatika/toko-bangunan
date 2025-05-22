@@ -28,8 +28,8 @@
                   <app-btn
                     icon="add"
                     tooltip="Tambah Data"
-                    color="yellow-8"
-                    class="text-black"
+                    class="text-yellow-8"
+                    color="grey-10"
                     @click="emits('add')"
                   />
                 </div>
@@ -90,7 +90,7 @@
 
               <template v-slot:loading>
                 <div v-if="!store.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="teal" size="40px" />
+                  <q-spinner-dots color="yellow-9" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>

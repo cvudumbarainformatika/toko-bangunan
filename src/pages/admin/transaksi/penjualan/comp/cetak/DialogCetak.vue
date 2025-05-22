@@ -190,7 +190,7 @@
             <div class="q-pa-md row justify-end items-end">
               <div class="items-end">
                 <q-btn v-print="printObj" unelevated color="dark" round size="sm" icon="print">
-                  <q-tooltip class="primary" :offset="[10, 10]"> Print </q-tooltip>
+                  <q-tooltip :offset="[10, 10]"> Print </q-tooltip>
                 </q-btn>
               </div>
             </div>

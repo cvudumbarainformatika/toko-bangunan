@@ -65,7 +65,8 @@
         <app-btn
           flat
           label="Simpan"
-          color="yellow-9"
+          color="grey-10"
+          class="text-yellow-9"
           :loading="store.loading"
           :disable="store.loading || store.form.jumlah <= 0"
           @click="store.simpanPelunasan"

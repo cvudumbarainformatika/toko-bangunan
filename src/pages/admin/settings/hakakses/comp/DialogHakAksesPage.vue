@@ -43,8 +43,14 @@
         </q-select>
       </q-card-section>
 
-      <q-card-actions align="right" class="bg-white text-teal">
-        <q-btn color="primary" label="SIMPAN" @click="store.tambahhakakses()" />
+      <q-card-actions align="right" class="text-teal">
+        <!-- <q-btn color="primary" label="Simpan" @click="store.tambahhakakses()" /> -->
+        <app-btn
+          label="Simpan"
+          color="grey-10"
+          class="text-yellow-9"
+          @click="store.tambahhakakses()"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>

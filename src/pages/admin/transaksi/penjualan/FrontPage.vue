@@ -1,12 +1,15 @@
 <template>
   <div v-if="isList">
-    <HistoryPenjualanPage @back="()=>{
-      store.resetPembayaran()
-      isList = false
-      }"
+    <HistoryPenjualanPage
+      @back="
+        () => {
+          store.resetPembayaran()
+          isList = false
+        }
+      "
       @use-nota="useNota"
       @bayar="bayar"
-      />
+    />
   </div>
   <div v-else class="q-pa-md">
     <div class="row items-center">
@@ -55,15 +58,15 @@
     <div class="q-my-xs">
       <div v-if="store.loading" class="row full-width justify-between items-center q-pa-xs">
         <div class="col-auto">
-          <q-spinner-pie color="primary" size="20px" />
-          <q-spinner-pie color="primary" size="30px" />
-          <q-spinner-pie color="primary" size="40px" />
+          <q-spinner-pie color="grey-5" size="20px" />
+          <q-spinner-pie color="grey-5" size="30px" />
+          <q-spinner-pie color="grey-5" size="40px" />
         </div>
         <div class="col-auto">Sedang menyimpan</div>
         <div class="col-auto">
-          <q-spinner-pie color="primary" size="40px" />
-          <q-spinner-pie color="primary" size="30px" />
-          <q-spinner-pie color="primary" size="20px" />
+          <q-spinner-pie color="grey-5" size="40px" />
+          <q-spinner-pie color="grey-5" size="30px" />
+          <q-spinner-pie color="grey-5" size="20px" />
         </div>
       </div>
       <FormPage v-else />
@@ -115,7 +118,7 @@ function useNota(val) {
   store.item = val
 }
 function bayar(item) {
-  console.log('bayar', item);
+  console.log('bayar', item)
   store.noNota = item?.no_penjualan
   store.item = item
   store.openPembayaran = true

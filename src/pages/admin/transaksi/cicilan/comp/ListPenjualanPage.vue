@@ -68,7 +68,7 @@
                 <q-space />
                 <div class="col-auto">
                   <app-btn
-                    class="text-yellow-9"
+                    class="text-yellow-3"
                     icon="refresh"
                     tooltip="refresh"
                     flat
@@ -286,7 +286,7 @@
                     </q-item-section>
                   </template>
                   <q-separator />
-                  <div class="row q-pa-sm">
+                  <div class="row q-pa-sm bg-grey-10">
                     <div class="col-5">Barang</div>
                     <div class="col-1 text-right">Jumlah</div>
                     <div class="col-1 text-right">Jumlah Retur</div>
@@ -296,7 +296,7 @@
                     <div class="col-2 text-right">Subtotal</div>
                   </div>
                   <div v-for="detail in item?.detail" :key="detail?.id">
-                    <div class="row q-px-sm">
+                    <div class="row q-px-sm bg-grey-9">
                       <div class="col-5">
                         {{
                           detail?.master_barang?.namabarang ??
