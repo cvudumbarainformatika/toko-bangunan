@@ -3,8 +3,6 @@
     <HistoryPenjualanPage @add="()=>{
       store.resetPembayaran()
       isList = false
-      console.log('@ form');
-
       }"
       @use-nota="useNota"
       @bayar="bayar"
