@@ -1,8 +1,10 @@
 <template>
   <div v-if="isList">
-    <HistoryPenjualanPage @back="()=>{
+    <HistoryPenjualanPage @add="()=>{
       store.resetPembayaran()
       isList = false
+      console.log('@ form');
+
       }"
       @use-nota="useNota"
       @bayar="bayar"
@@ -10,6 +12,9 @@
   </div>
   <div v-else class="q-pa-md">
     <div class="row items-center">
+      <div class="col-1">
+        <app-btn-back @click="isList = true" />
+      </div>
       <div class="col-10">
         <div class="row justify-center text-weight-bold text-h5 q-my-xs">Penjualan</div>
         <div class="row justify-center text-weight-bold q-my-xs">
@@ -23,7 +28,7 @@
           </div>
         </div>
       </div>
-      <div class="col-2 text-right">
+      <div class="col-1 text-right">
         <!-- <app-btn-cetak v-if="store?.noNota" class="q-mr-xs" @click="lihatCetak()"></app-btn-cetak> -->
         <app-btn
           v-if="store?.noNota"
@@ -41,12 +46,12 @@
             }
           "
         />
-        <app-btn
+        <!-- <app-btn
           icon="open_in_new"
           tooltip="Buka History Penjualan"
           color="primary"
           @click="isList = true"
-        />
+        /> -->
       </div>
     </div>
 
@@ -102,7 +107,7 @@ const DialogPembayaranPage = shallowRef(
 )
 const DialogCetak = shallowRef(defineAsyncComponent(() => import('./comp/cetak/DialogCetak.vue')))
 
-const isList = ref(false)
+const isList = ref(true)
 const store = useFromPenjualanStore()
 const list = useListPenjualanStore()
 list.getList()

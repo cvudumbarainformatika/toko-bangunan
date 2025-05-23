@@ -7,10 +7,10 @@
             <q-item-label header>
               <div class="row full-width items-center">
                 <div class="col-grow">
-                  <app-btn-back @click="emits('back')" />
+                  <!-- <app-btn-back @click="emits('back')" /> -->
                 </div>
                 <div class="col-auto">
-                  <div class="flex items-center q-col-gutter-x-xs">
+                  <div class="flex items-center q-col-gutter-x-sm">
                     <app-input-date
                       :model="store.dateDisplay.from"
                       label="Dari"
@@ -70,8 +70,15 @@
                         }
                       "
                     >
+
                       <q-tooltip>Rerfresh</q-tooltip>
                     </q-btn>
+                    <app-btn
+                      icon="add"
+                      tooltip="Buka Form"
+                      color="primary"
+                      @click="emits('add')"
+                    />
                   </div>
                 </div>
               </div>
@@ -267,7 +274,7 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['add', 'edit', 'back', 'useNota', 'bayar'])
+const emits = defineEmits(['add', 'edit', 'useNota', 'bayar'])
 
 // const $q = useQuasar()
 onBeforeMount(() => {
