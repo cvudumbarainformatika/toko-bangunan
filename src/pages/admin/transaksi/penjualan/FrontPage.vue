@@ -18,10 +18,10 @@
       <div class="col-10">
         <div class="row justify-center text-weight-bold text-h5 q-my-xs">Penjualan</div>
         <div class="row justify-center text-weight-bold q-my-xs">
-          <div class="col-6">
-            <div class="row justify-between">
-              <div class="col-5 text-right">Nota :</div>
-              <div class="col-6">
+          <div class="col-5 text-center">
+            <div class="row justify-center q-col-gutter-x-xs">
+              <div class="col-auto text-right">Nota :</div>
+              <div class="col-auto">
                 {{ store.noNota ?? 'nota tersedia setelah diisimpan satu data' }}
               </div>
             </div>
