@@ -33,8 +33,8 @@
                           infiniteScroll.reset()
                         }
                       "
-                      />
-                      <app-input
+                    />
+                    <app-input
                       v-model="store.params.tahun"
                       label="Tahun"
                       style="min-width: 100px"
@@ -49,19 +49,21 @@
                   </div>
                 </div>
                 <div class="col-auto">
-                  <q-btn
-                      round
-                      icon="refresh"
-                      dense
-                      @click="
-                        () => {
+                  <app-btn
+                    round
+                    icon="refresh"
+                    tooltip="Refresh"
+                    color="grey-10"
+                    class="text-yellow-3"
+                    dense
+                    @click="
+                      () => {
                         store.getList()
                         // store.init()
                         // infiniteScroll.reset()
-                      }"
-                    >
-                    <q-tooltip >Rerfresh</q-tooltip>
-                    </q-btn>
+                      }
+                    "
+                  />
                 </div>
               </div>
             </q-item-label>
@@ -110,7 +112,10 @@
                         </q-badge></span
                       >
                       <span class="text-weight-bold">
-                        || Jumlah : {{ Math.floor(item.jumlah_k / (item?.isi>0?item?.isi:1)) }} {{ item?.satuan_b }} {{ item?.jumlah_k%(item?.isi>0?item?.isi:1) }} {{ item?.satuan_k }}</span
+                        || Jumlah :
+                        {{ Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) }}
+                        {{ item?.satuan_b }} {{ item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) }}
+                        {{ item?.satuan_k }}</span
                       >
                       <span v-if="item?.isi > 1">
                         ({{ item?.jumlah_k }} {{ item?.satuan_k }})
@@ -128,9 +133,9 @@
                     </q-item-label>
                   </q-item-section>
                   <q-item-section side top>
-                      <q-item-label caption>{{ humanDate(item?.tgl_opname) }}</q-item-label>
-                      <q-item-label caption>{{ jamTnpDetik(item?.tgl_opname) }}</q-item-label>
-                    </q-item-section>
+                    <q-item-label caption>{{ humanDate(item?.tgl_opname) }}</q-item-label>
+                    <q-item-label caption>{{ jamTnpDetik(item?.tgl_opname) }}</q-item-label>
+                  </q-item-section>
                 </q-item>
                 <q-separator inset="item" />
               </q-intersection>
@@ -166,7 +171,6 @@ const emits = defineEmits(['add', 'edit'])
 
 store.init()
 store.getList()
-
 
 const lihatdetail = (item) => {
   emits('edit', item)

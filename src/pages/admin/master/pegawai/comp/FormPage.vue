@@ -95,7 +95,8 @@
                     type="submit"
                     :dense="false"
                     label="Simpan"
-                    color="teal"
+                    color="grey-10"
+                    class="text-yellow-9"
                   />
                 </div>
               </div>

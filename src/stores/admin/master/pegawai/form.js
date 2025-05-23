@@ -13,8 +13,8 @@ export const useAdminFormMasterPegawaiStore = defineStore('admin-form-master-peg
       username: null,
       email: null,
       password: null,
-      jabatan: null,
-      kodejabatan: null,
+      jabatan: 'Pegawai',
+      kodejabatan: 2,
       nohp: null,
       alamat: null,
     },
@@ -39,8 +39,6 @@ export const useAdminFormMasterPegawaiStore = defineStore('admin-form-master-peg
       if (data) {
         return new Promise((resolve) => {
           for (const key in this.form) {
-            // console.log(`${key}: ${this.form[key]}`);
-            // console.log(`${key}`);
             this.form[key] = data[key]
           }
           this.form.username = data?.username
@@ -49,9 +47,16 @@ export const useAdminFormMasterPegawaiStore = defineStore('admin-form-master-peg
           resolve()
         })
       } else {
-        for (const key in this.form) {
-          // console.log(`${key}: ${this.form[key]}`);
-          this.form[key] = null
+        this.form = {
+          id: null,
+          nama: null,
+          username: null,
+          email: null,
+          password: null,
+          jabatan: 'Pegawai',
+          kodejabatan: 2,
+          nohp: null,
+          alamat: null,
         }
       }
     },

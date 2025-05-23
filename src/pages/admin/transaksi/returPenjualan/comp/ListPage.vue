@@ -6,9 +6,7 @@
           <div class="col-auto">
             <q-item-label header>
               <div class="row full-width items-center">
-                <div class="col-grow f-24">
-                  List Transaksi Retur Penjualan
-                </div>
+                <div class="col-grow f-24">List Transaksi Retur Penjualan</div>
                 <div class="col-auto text-right">
                   <div class="flex items-center q-col-gutter-x-sm">
                     <app-input-date
@@ -17,13 +15,17 @@
                       style="min-width: 150px"
                       outlined
                       :debounce="300"
-                      @set-model="(val) => {
-                        store.dateDisplay.from = val
-                      }"
-                      @db-model="(val)=>{
-                        store.params.from=val
-                        store.getList()
-                      }"
+                      @set-model="
+                        (val) => {
+                          store.dateDisplay.from = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          store.params.from = val
+                          store.getList()
+                        }
+                      "
                     />
                     <app-input-date
                       :model="store.dateDisplay.to"
@@ -31,13 +33,17 @@
                       style="min-width: 150px"
                       outlined
                       :debounce="300"
-                      @set-model="(val) => {
-                        store.dateDisplay.to = val
-                      }"
-                      @db-model="(val)=>{
-                        store.params.to=val
-                        store.getList()
-                      }"
+                      @set-model="
+                        (val) => {
+                          store.dateDisplay.to = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          store.params.to = val
+                          store.getList()
+                        }
+                      "
                     />
                     <app-input
                       v-model="store.params.q"
@@ -51,18 +57,23 @@
                         }
                       "
                     />
-                    <q-btn
-                      round
-                      icon="refresh"
-                      dense
-                      @click="
-                        () => {
-                        store.getList()
-                      }"
-                    >
-                    <q-tooltip >Rerfresh</q-tooltip>
-                    </q-btn>
-                    <app-btn-back @click="emits('back')" />
+                    <div class="q-px-xs">
+                      <app-btn
+                        round
+                        icon="refresh"
+                        tooltip="Refresh"
+                        color="grey-10"
+                        class="text-yellow-3"
+                        dense
+                        @click="
+                          () => {
+                            store.getList()
+                          }
+                        "
+                      />
+                    </div>
+
+                    <app-btn-back glossy color="grey-10" @click="emits('back')" />
                   </div>
                 </div>
               </div>
@@ -85,8 +96,10 @@
                   v-ripple
                   @mouseover="hoveredId = item?.id"
                   @mouseleave="hoveredId = null"
-                  :class="{ 'bg-grey-8 text-white': hoveredId === item?.id,
-                            'bg-primary text-white': item.status === '' && hoveredId !== item?.id }"
+                  :class="{
+                    'bg-grey-8 text-white': hoveredId === item?.id,
+                    'bg-primary text-white': item.status === '' && hoveredId !== item?.id,
+                  }"
                 >
                   <template v-slot:header>
                     <q-item-section>
@@ -112,10 +125,10 @@
                           <div class="col-3 text-weight-bold">
                             {{ item?.keterangan?.nama }}
                           </div>
-                          <div  class="col-2 q-ml-sm">
+                          <div class="col-2 q-ml-sm">
                             {{ item?.keterangan?.tlp }}
                           </div>
-                          <div  class="col-5 q-ml-sm">
+                          <div class="col-5 q-ml-sm">
                             {{ item?.keterangan?.alamat }}
                           </div>
                         </div>
@@ -138,10 +151,10 @@
                       <q-item-label caption>{{ humanDate(item?.tgl) }}</q-item-label>
                       <q-item-label caption>{{ jamTnpDetik(item?.tgl) }}</q-item-label>
                       <app-btn
-                          v-if="item?.loading"
-                          :loading="item?.loading"
-                          :disable="item?.loading"
-                        />
+                        v-if="item?.loading"
+                        :loading="item?.loading"
+                        :disable="item?.loading"
+                      />
                     </q-item-section>
                   </template>
                   <q-separator />
@@ -156,9 +169,7 @@
                   <div v-for="detail in item?.detail" :key="detail?.id">
                     <div class="row q-px-sm">
                       <div class="col-5">
-                        {{
-                          detail?.master_barang?.namabarang
-                        }}
+                        {{ detail?.master_barang?.namabarang }}
                       </div>
                       <div class="col-1 text-right">{{ detail?.jumlah }}</div>
                       <div class="col-1 text-right">{{ detail?.master_barang?.satuan_k }}</div>
@@ -183,18 +194,17 @@
   </div>
 </template>
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListTransaksiReturPenjualanStore } from 'src/stores/admin/transaksi/returPenjualan/retur'
 
-const emits = defineEmits(['back','selesai'])
-const store=useListTransaksiReturPenjualanStore()
+const emits = defineEmits(['back', 'selesai'])
+const store = useListTransaksiReturPenjualanStore()
 
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
-
 
 function statusFlag(flag) {
   let status = ''
@@ -228,5 +238,4 @@ function statusFlag(flag) {
 
   return status
 }
-
 </script>

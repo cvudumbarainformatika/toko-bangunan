@@ -28,7 +28,8 @@
                   <app-btn
                     icon="add"
                     tooltip="Tambah Data"
-                    color="light-green"
+                    class="text-yellow-8"
+                    color="grey-10"
                     @click="emits('add')"
                   />
                 </div>
@@ -59,7 +60,7 @@
                   @mouseleave="hoveredId = null"
                 >
                   <q-item-section avatar>
-                    <q-avatar color="light-green" text-color="white">{{ item.nama[0] }}</q-avatar>
+                    <q-avatar color="yellow-9" text-color="white">{{ item.nama[0] }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">{{ item?.nama }}</q-item-label>
@@ -85,7 +86,7 @@
 
               <template v-slot:loading>
                 <div v-if="!store.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="light-green" size="40px" />
+                  <q-spinner-dots color="yellow-9" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>

@@ -6,12 +6,7 @@
           <q-card-section class="row items-center">
             <div class="text-h6">Form Pengembalian Barang</div>
             <q-space />
-            <q-btn
-              label="Kembali"
-              color="primary"
-              @click="$emit('back')"
-              icon="arrow_back"
-            />
+            <q-btn label="Kembali" color="primary" @click="$emit('back')" icon="arrow_back" />
           </q-card-section>
 
           <q-card-section>
@@ -32,7 +27,9 @@
                       </div>
                       <div class="row">
                         <div class="col-4">Pelanggan</div>
-                        <div class="col-8">: {{ form.item?.pelanggan?.nama || form.item?.keterangan?.nama }}</div>
+                        <div class="col-8">
+                          : {{ form.item?.pelanggan?.nama || form.item?.keterangan?.nama }}
+                        </div>
                       </div>
                     </div>
                   </q-card-section>
@@ -48,7 +45,7 @@
                     v-model="form.keterangan"
                     label="Keterangan"
                     type="textarea"
-                    :rules="[val => !!val || 'Keterangan harus diisi']"
+                    :rules="[(val) => !!val || 'Keterangan harus diisi']"
                   />
                 </div>
               </div>
@@ -65,7 +62,11 @@
               </div>
 
               <!-- Items -->
-              <div v-for="item in form.details" :key="item.id" class="row q-pa-sm items-center q-col-gutter-x-sm">
+              <div
+                v-for="item in form.details"
+                :key="item.id"
+                class="row q-pa-sm items-center q-col-gutter-x-sm"
+              >
                 <div class="col-5">{{ item.master_barang?.namabarang }}</div>
                 <div class="col-2 text-right">{{ item.jumlah }}</div>
                 <div class="col-2 text-right">
@@ -75,8 +76,8 @@
                     dense
                     class="text-right"
                     :rules="[
-                      val => val >= 0 || 'Qty harus lebih dari 0',
-                      val => val <= item.jumlah || 'Qty melebihi pembelian'
+                      (val) => val >= 0 || 'Qty harus lebih dari 0',
+                      (val) => val <= item.jumlah || 'Qty melebihi pembelian',
                     ]"
                   />
                 </div>
@@ -84,23 +85,19 @@
                   <q-input
                     v-model="item.keterangan"
                     dense
-                    :rules="[val => !item.qty_retur || !!val || 'Keterangan harus diisi']"
+                    :rules="[(val) => !item.qty_retur || !!val || 'Keterangan harus diisi']"
                   />
                 </div>
               </div>
 
               <!-- Buttons -->
               <div class="row justify-end q-gutter-sm">
-                <q-btn
-                  label="Reset"
-                  color="negative"
-                  @click="resetForm"
-                  :disable="form.loading"
-                />
+                <q-btn label="Reset" color="negative" @click="resetForm" :disable="form.loading" />
                 <q-btn
                   label="Simpan"
                   type="submit"
-                  color="primary"
+                  color="grey-10"
+                  class="text-yellow-9"
                   :loading="form.loading"
                   :disable="form.loading"
                 />
@@ -128,7 +125,7 @@ const emit = defineEmits(['back', 'selesai'])
 async function onSubmit() {
   try {
     // Filter hanya barang yang di-retur
-    const validDetails = form.details.filter(d => d.qty_retur > 0)
+    const validDetails = form.details.filter((d) => d.qty_retur > 0)
     if (!validDetails.length) {
       notifError('Minimal satu barang harus diretur')
       return
@@ -141,7 +138,7 @@ async function onSubmit() {
     }
 
     // Validate details have keterangan
-    const missingKeterangan = validDetails.find(d => !d.keterangan)
+    const missingKeterangan = validDetails.find((d) => !d.keterangan)
     if (missingKeterangan) {
       notifError('Semua barang yang diretur harus memiliki keterangan')
       return
@@ -156,7 +153,7 @@ async function onSubmit() {
 }
 
 function resetForm() {
-  form.details.forEach(item => {
+  form.details.forEach((item) => {
     item.qty_retur = 0
     item.keterangan = ''
   })

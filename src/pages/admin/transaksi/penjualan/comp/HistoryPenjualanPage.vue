@@ -60,25 +60,28 @@
                       "
                     />
 
-                    <q-btn
-                      round
-                      icon="refresh"
-                      dense
-                      @click="
-                        () => {
-                          reload()
-                        }
-                      "
-                    >
-
-                      <q-tooltip>Rerfresh</q-tooltip>
-                    </q-btn>
+                    <div class="q-pl-xs">
+                      <app-btn
+                        round
+                        icon="refresh"
+                        tooltip="Refresh"
+                        color="grey-10"
+                        class="text-yellow-3"
+                        dense
+                        @click="
+                          () => {
+                            reload()
+                          }
+                        "
+                      />
+                    </div>
                     <app-btn
                       icon="add"
                       tooltip="Buka Form"
                       color="primary"
                       @click="emits('add')"
                     />
+
                   </div>
                 </div>
               </div>
@@ -93,7 +96,7 @@
               :disable="store?.isError || store?.meta?.next_page_url === null"
               :offset="150"
               :initial-index="store.params.page"
-              >
+            >
               <!-- :scroll-target="scrollTarget" -->
               <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade">
                 <q-expansion-item
@@ -168,7 +171,7 @@
                     </q-item-section>
                   </template>
                   <q-separator />
-                  <div class="row q-pa-sm text-weight-bold">
+                  <div class="row q-pa-sm text-weight-bold bg-grey-10">
                     <div class="col-5">Barang</div>
                     <div class="col-1 text-right">Jumlah</div>
                     <div class="col-1 text-right">Satuan</div>
@@ -179,12 +182,12 @@
                   <q-separator />
                   <div
                     v-if="item?.flag != null"
-                    class="row q-pa-sm text-weight-bold f-10 text-italic"
+                    class="row q-pa-sm text-weight-bold f-10 text-italic bg-grey-9"
                   >
                     (Detail Penjualan )
                   </div>
                   <div v-for="detail in item?.detail" :key="detail?.id">
-                    <div class="row q-px-sm">
+                    <div class="row q-px-sm bg-grey-9">
                       <div class="col-5">
                         {{
                           detail?.master_barang?.namabarang +
@@ -209,12 +212,14 @@
                   </div>
                   <template v-if="item?.flag != null">
                     <q-separator />
-                    <div class="row q-pa-sm text-weight-bold f-10 text-italic">
+                    <div
+                      class="row q-pa-sm text-weight-bold f-10 text-italic text-yellow-7 bg-grey-9"
+                    >
                       (Detail Penjualan Fifo)
                     </div>
                     <div v-for="detail in item?.detail_fifo" :key="detail?.id">
-                      <div class="row q-px-sm">
-                        <div class="col-5">
+                      <div class="row q-px-sm bg-grey-9">
+                        <div class="col-5 text-yellow-2">
                           {{
                             detail?.master_barang?.namabarang +
                             ' ' +
@@ -229,11 +234,19 @@
                                   ' )')
                           }}
                         </div>
-                        <div class="col-1 text-right">{{ detail?.jumlah }}</div>
-                        <div class="col-1 text-right">{{ detail?.master_barang?.satuan_k }}</div>
-                        <div class="col-2 text-right">{{ formatDouble(detail?.harga_jual) }}</div>
-                        <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
-                        <div class="col-2 text-right">{{ formatDouble(detail?.subtotal) }}</div>
+                        <div class="col-1 text-right text-yellow-3">{{ detail?.jumlah }}</div>
+                        <div class="col-1 text-right text-yellow-3">
+                          {{ detail?.master_barang?.satuan_k }}
+                        </div>
+                        <div class="col-2 text-right text-yellow-3">
+                          {{ formatDouble(detail?.harga_jual) }}
+                        </div>
+                        <div class="col-1 text-right text-yellow-3">
+                          {{ formatDouble(detail?.diskon) }}
+                        </div>
+                        <div class="col-2 text-right text-yellow-3">
+                          {{ formatDouble(detail?.subtotal) }}
+                        </div>
                       </div>
                     </div>
                   </template>
@@ -243,7 +256,7 @@
 
               <template v-slot:loading>
                 <div v-if="!store.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="primary" size="40px" />
+                  <q-spinner-dots color="yellow-9" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>
@@ -282,7 +295,7 @@ onBeforeMount(() => {
   //   store.getList(null)
   // ])
 })
-function reload(){
+function reload() {
   store.items = []
   infiniteScroll.value?.reset()
   store.getList()

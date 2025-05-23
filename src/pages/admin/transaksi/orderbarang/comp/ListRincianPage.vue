@@ -4,7 +4,7 @@
       <q-card flat bordered square class="full-height" style="overflow: hidden">
         <!-- <q-avatar size="33px" color="dark" text-color="white">-</q-avatar> -->
 
-        <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
+        <q-card-section class="q-px-md q-py-xs bg-yellow-8 text-black col-auto full-width">
           <div class="row items-center justify-between">
             <div class="f-12 text-weight-bold" style="height: 23px">
               List Order || No.Order : {{ data?.noorder ?? '-' }}

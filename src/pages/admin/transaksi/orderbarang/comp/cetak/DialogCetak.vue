@@ -81,7 +81,7 @@
                     <tr v-for="(item, n) in store.item?.rinci" :key="n">
                       <td class="text-center">{{ n + 1 }}</td>
                       <td>{{ item.mbarang?.namabarang }}</td>
-                      <td class="text-center">{{ item.jumlahpo }}</td>
+                      <td class="text-center">{{ item.jumlahpo }} {{ item.satuan_k }}</td>
                       <td class="text-right">{{ formatRpDouble(item.hargapo) }}</td>
                       <td class="text-right">{{ formatRpDouble(item.total) }}</td>
                     </tr>

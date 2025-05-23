@@ -56,10 +56,11 @@
                         }
                       "
                     />
-                    <q-btn
+                    <app-btn
                       round
-                      color="primary"
-                      icon="find_replace"
+                      color="grey-10"
+                      class="text-yellow-9"
+                      icon="search"
                       @click="refreshList"
                       :loading="storeOrderH.loading"
                     />
@@ -67,7 +68,13 @@
                 </div>
 
                 <div class="col-auto">
-                  <app-btn icon="add" tooltip="Tambah Data" color="primary" @click="emits('add')" />
+                  <app-btn
+                    icon="add"
+                    tooltip="Tambah Data"
+                    color="grey-10"
+                    class="text-yellow-8"
+                    @click="emits('add')"
+                  />
                 </div>
               </div>
             </q-item-label>
@@ -95,16 +102,16 @@
                   @mouseleave="hoveredId = null"
                 >
                   <q-item-section avatar>
-                    <q-avatar color="teal" text-color="white">{{
+                    <q-avatar color="yellow-9" text-color="white">{{
                       ambiltanggalaja(item.tglorder)
                     }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1">{{ item?.noorder }}</q-item-label>
+                    <q-item-label lines="1">No. Order : {{ item?.noorder }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold">-- {{ item?.suplier?.nama }}</span>
-                      <span class="text-weight-bold text-red"> || TOTAL ORDERAN : </span
-                      ><q-badge outline color="red">{{ formatRpDouble(item?.total) }}</q-badge>
+                      <span class="text-weight-bold text-yellow-3"> || TOTAL ORDERAN : </span
+                      ><q-badge outline color="yellow-3">{{ formatRpDouble(item?.total) }}</q-badge>
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
@@ -149,7 +156,7 @@
 
               <template v-slot:loading>
                 <div v-if="!storeOrderH.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="primary" size="40px" />
+                  <q-spinner-dots color="yellow-9" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>

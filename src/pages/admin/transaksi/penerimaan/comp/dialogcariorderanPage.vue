@@ -9,7 +9,7 @@
 
       <q-card-section style="max-height: 50vh" class="scroll">
         <div align="center" v-if="storeorder.loadingdialogorder === true">
-          <q-spinner-radio color="primary" size="2em" />
+          <q-spinner-radio color="yellow-9" size="2em" />
         </div>
         <div
           align="center"
@@ -25,7 +25,7 @@
                   <q-item-label>
                     <span class="text-weight-bold">No. Order</span> :
                     <span class="text-weight-bold"
-                      ><q-badge outline color="red">{{ item?.noorder }}</q-badge></span
+                      ><q-badge outline color="yellow-8">{{ item?.noorder }}</q-badge></span
                     >
                   </q-item-label>
                   <!-- <q-separator class="q-my-md" /> -->
@@ -36,13 +36,17 @@
                   <q-item-label>
                     <span class="text-weight-bold">Supplier</span> :
                     <span class="text-weight-bold"
-                      ><q-badge color="green">{{ item?.suplier?.nama }}</q-badge></span
+                      ><q-badge color="grey-5" class="text-black">{{
+                        item?.suplier?.nama
+                      }}</q-badge></span
                     >
                   </q-item-label>
                   <q-item-label>
                     <span class="text-weight-bold">Total</span> :
                     <span class="text-weight-bold"
-                      ><q-badge>{{ formatRpDouble(item?.total) }}</q-badge></span
+                      ><q-badge color="lime-7" class="text-black">{{
+                        formatRpDouble(item?.total)
+                      }}</q-badge></span
                     >
                   </q-item-label>
                 </q-item-section>
@@ -54,7 +58,7 @@
                       flat
                       round
                       size="lg"
-                      color="primary"
+                      color="lime"
                       icon="fact_check"
                       @click="pilih(item)"
                     />
@@ -70,7 +74,7 @@
 
       <q-card-actions align="right">
         <!-- <q-btn flat label="Decline" color="primary" v-close-popup /> -->
-        <q-btn label="Keluar" color="primary" v-close-popup />
+        <app-btn label="Keluar" color="grey-10" class="text-yellow-9" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>

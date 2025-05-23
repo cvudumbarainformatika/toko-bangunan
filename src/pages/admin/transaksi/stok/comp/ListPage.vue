@@ -50,13 +50,11 @@
                   @mouseleave="hoveredId = null"
                 >
                   <q-item-section avatar>
-                    <q-avatar color="teal" text-color="white">{{ item?.brand[0] }}</q-avatar>
+                    <q-avatar color="yellow-8" text-color="white">{{ item?.brand[0] }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">
-                      <span class="text-weight-bold text-primary"
-                        >Nama Barang : {{ item?.namabarang }}</span
-                      >
+                      <span class="text-weight-bold">Nama Barang : {{ item?.namabarang }}</span>
                       <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
                       <span class="text-weight-bold">
                         || Keterangan : 1 {{ item?.satuan_b }} ({{ item?.isi }}
@@ -65,22 +63,24 @@
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
-                        ><q-badge rounded outline color="yellow">
+                        ><q-badge rounded outline color="grey-5">
                           No. Penerimaan : {{ item?.nopenerimaan }}
                         </q-badge></span
                       >
-                      <span class="text-weight-bold">
-                        || Jumlah : {{ item?.jumlah_b }} {{ item?.satuan_b }}</span
+                      <span> || </span>
+                      <span class="text-weight-bold text-yellow-3">
+                        Jumlah : {{ item?.jumlah_b }} {{ item?.satuan_b }}</span
                       >
-                      <span v-if="item?.isi > 1">
+                      <span v-if="item?.isi > 1" class="text-yellow-3">
                         ({{ item?.jumlah_k }} {{ item?.satuan_k }})
                       </span>
-                      <span class="text-weight-bold text-red">
-                        || Harga Satuan Kecil : {{ formatRpDouble(item?.harga_beli_k) }} per({{
+                      <span> || </span>
+                      <span class="text-weight-bold text-lime-8">
+                        Harga Satuan Kecil : {{ formatRpDouble(item?.harga_beli_k) }} per({{
                           item?.satuan_k
                         }})</span
                       >
-                      <span class="text-weight-bold text-red">
+                      <span class="text-weight-bold text-lime-8">
                         || Harga Satuan Besar : {{ formatRpDouble(item?.harga_beli_b) }} per({{
                           item?.satuan_b
                         }})</span
