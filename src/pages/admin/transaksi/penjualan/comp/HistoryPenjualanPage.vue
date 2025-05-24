@@ -47,6 +47,18 @@
                         }
                       "
                     />
+                    <app-select
+                    v-model="store.params.flag"
+                    label="Pilih Status"
+                    option-label="label"
+                    option-value="value"
+                    :options="store.flagOptions"
+                    @update:model-value="
+                      (e) => {
+                        reload()
+                      }
+                    "
+                  />
                     <app-input
                       v-model="store.params.q"
                       prepend-icon="search"
@@ -91,7 +103,7 @@
             <q-separator />
           </div>
 
-          <div ref="scrollTarget" class="col full-height scroll">
+          <div ref="scrollTarget" class="col full-height">
             <q-infinite-scroll
               @load="store.loadMore"
               ref="infiniteScroll"

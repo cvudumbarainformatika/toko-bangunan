@@ -15,12 +15,25 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
       per_page: 10,
       from:date.formatDate(Date.now(), 'YYYY-MM-01'),
       to: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      flag:'semua'
     },
     dateDisplay: {
       from: date.formatDate(Date.now(), '01 MMMM YYYY'),
       to: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     },
     itemCetak: [],
+    flagOptions:[
+      { label: 'Semua', value: 'semua' },
+      { label: 'Lunas', value: '5' },
+      { label: 'Belum Lunas', value: 'piutang' },
+      { label: 'Draft', value: 'draft' },
+      // { label: 'Pesanan Sales', value: '1' },
+      { label: 'Down Payment (DP)', value: '7' },
+      { label: 'Belum Ada Cicilan', value: '2' },
+      { label: 'Proses Cicilan', value: '3' },
+      { label: 'Dibawa Sales', value: '4' },
+      { label: 'Batal', value: '6' },
+    ]
   }),
   actions: {
     async getList() {
@@ -31,17 +44,19 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
       const params = {
         params: this.params,
       }
+      // console.log('get list',this.params.page);
 
       try {
         const { data } = await api.get('/v1/transaksi/penjualan/list', params)
         console.log('list penjualan', data)
+        this.meta = data?.meta
 
         // Don't reset items array here, let the component handle it
-        if (this.params.page === 1) {
+        if (data?.meta.current_page == 1) {
+          console.log('get list if',data?.meta.current_page );
           this.items = data?.data || []
         }
 
-        this.meta = data?.meta
         this.loading = false
         return data
       } catch (error) {
@@ -88,8 +103,9 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
         api
           .get('/v1/transaksi/penjualan/list', params)
           .then(({ data }) => {
-            console.log('list penjualan', data)
+            // console.log('list penjualan', data)
             this.meta = data?.meta
+
             if(index>1){
               this.items.push(...data.data)
             }

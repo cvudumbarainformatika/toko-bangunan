@@ -84,7 +84,7 @@
             </q-item-label>
             <q-separator />
           </div>
-          <div ref="scrollTarget" class="col full-height scroll">
+          <div ref="scrollTarget" class="col full-height">
             <q-infinite-scroll
               @load="store.loadMore"
               ref="infiniteScroll"
