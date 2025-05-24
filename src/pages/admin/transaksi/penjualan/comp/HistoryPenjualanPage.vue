@@ -59,8 +59,7 @@
                         }
                       "
                     />
-
-                    <div class="q-pl-xs">
+                    <div class="col">
                       <app-btn
                         round
                         icon="refresh"
@@ -75,12 +74,15 @@
                         "
                       />
                     </div>
-                    <app-btn
-                      icon="add"
-                      tooltip="Buka Form"
-                      color="primary"
-                      @click="emits('add')"
-                    />
+                    <div class="col">
+                      <app-btn
+                        icon="add"
+                        color="grey-10"
+                        class="text-yellow-8"
+                        tooltip="Buka Form"
+                        @click="emits('add')"
+                      />
+                    </div>
 
                   </div>
                 </div>
