@@ -224,11 +224,13 @@ const optionCaraBayar = ref([
 const refPelanggan = ref(null)
 function validasi(){
   let valid=false
+
   if(!store.formPembayaran.flag) return notifError('Pilihan Pembayaran Belum dipilih')
   else if (!store?.item?.sales_id && store.formPembayaran.flag == '2') return notifError('Pembayaran Secara Kredit Harus Memilih Sales')
-  else if (!store?.item?.pelanggan_id && !store.formPembayaran.dataPelanggan?.nama && ['2','7'].includes(store.formPembayaran.flag)) return notifError('Harus ada data pelanggan')
+  else if ((!store?.formPembayaran?.pelanggan_id && !store.formPembayaran.dataPelanggan?.nama) && ['2','7'].includes(store.formPembayaran.flag)) return notifError('Harus ada data pelanggan')
 
   else valid = true
+
     return valid
 }
 function onSubmit() {
