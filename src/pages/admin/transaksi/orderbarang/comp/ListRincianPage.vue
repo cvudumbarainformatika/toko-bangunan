@@ -50,7 +50,7 @@
                     </div>
                   </q-item-section>
                   <q-item-section top side>
-                    <div class="text-grey-8">
+                    <div class="text-grey-8" v-if="data?.flaging === null">
                       <q-btn
                         class="gt-xs"
                         size="12px"

@@ -130,18 +130,19 @@
                       >
                         <q-tooltip>Kunci Data</q-tooltip>
                       </q-btn>
-                      <!-- <q-btn
-                        v-if="item?.flaging === '2'"
-                        color="teal"
-                        icon="print"
+                      <q-btn
+                        v-if="item?.flaging === null"
+                        color="red"
+                        icon="delete_forever"
                         size="sm"
                         padding="sm"
                         round
                         dense
-                        @click="cetakData(item)"
+                        :loading="store.loadingdeleteall"
+                        @click="store.hapusall(item?.id, item?.noorder)"
                       >
                         <q-tooltip>Kunci Data</q-tooltip>
-                      </q-btn> -->
+                      </q-btn>
                       <!-- <app-btn-vpn_key @click="lihatCetak(item)" /> -->
                       <!-- <app-btn-cetak @click="lihatCetak(item)" /> -->
                     </div>

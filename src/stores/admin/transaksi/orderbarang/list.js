@@ -53,7 +53,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
           const { data } = await api.get('/v1/transaksi/orderpembelian/getlistorder', params)
           // console.log('get master barang', data)
           this.meta = data
-          this.olahdata(data?.data)
+          this.olahdata(data?.data, 1)
           this.loading = false
           // this.items = data
         } catch (error) {
@@ -78,7 +78,7 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             .then(({ data }) => {
               // console.log('heder order barang', data)
               this.meta = data
-              this.olahdata(data?.data)
+              this.olahdata(data?.data, 1)
               //this.items.push(...data.data)
               done()
               resolve()
@@ -113,9 +113,8 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             })
         })
       },
-      olahdata(val) {
-        // console.log('asli', val)
-        // const hasilglobal = []
+      olahdata(val, flaging) {
+        console.log('asli', val)
         val?.forEach((x) => {
           const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
           const hasil = {
@@ -128,14 +127,30 @@ export const useAdminListTransaksiOrderBarangStore = defineStore(
             total: total,
             rinci: x?.rinci,
           }
-          // console.log('hasil', hasil)
-          // hasilglobal.push(hasil)
           const index = this.items.findIndex((q) => q.id === x?.id)
+          console.log('index', index)
+          console.log('hasil', hasil)
+          // this.items[index] = hasil
 
-          if (index >= 0) this.items[index] = hasil
-          else this.items.unshift(hasil)
+          if (index >= 0) {
+            if (flaging === 1) {
+              this.items[index] = hasil
+            } else {
+              this.items = this.items.filter((item) => val.some((x) => x.id === item.id))
+            }
+          } else {
+            this.items.unshift(hasil)
+          }
         })
-        // this.items = hasilglobal.sort(({ tgl: a }, { tgl: b }) => b - a)
+        // Ubah sorting berdasarkan noorder (dari besar ke kecil)
+        this.items.sort((a, b) => {
+          // Pastikan noorder adalah string dan hapus karakter non-numerik jika ada
+          const noOrderA = String(a.noorder).replace(/\D/g, '')
+          const noOrderB = String(b.noorder).replace(/\D/g, '')
+
+          // Konversi ke number untuk perbandingan numerik
+          return parseInt(noOrderB, 10) - parseInt(noOrderA, 10)
+        })
       },
       // async getbyhedernoorder() {
       //   console.log('sasa')

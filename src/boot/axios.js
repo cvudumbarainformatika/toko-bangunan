@@ -33,6 +33,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       const app = useAppStore()
       console.log('error 401', error)
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      localStorage.removeItem('activeTime')
 
       // Cek apakah user sudah logout untuk mencegah logout berulang
       if (app.auth) {

@@ -13,7 +13,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
       form: {
         id: null,
         noorder: null,
-        kdsuplier: null,
+        kdsuplier: '',
         tglorder: null,
         kdbarang: null,
         namabarang: null,
@@ -29,9 +29,11 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
         ukuran: null,
         jumlahx: 1,
         harga: null,
+        hargax: null,
       },
       loading: false,
       lock: false,
+      loadingdeleteall: false,
       dialogCetak: false,
     }),
     // persist: true,
@@ -86,7 +88,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
                 //console.log('weweweweww', data?.notrans)
                 this.form.noorder = data?.notrans
               }
-              arr.olahdata(data?.result)
+              arr.olahdata(data?.result, 1)
 
               const hasil = data?.result[0]
               const total = hasil?.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
@@ -122,7 +124,6 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
             }
             // this.form.noorder = data?.noorder
             // console.log('aaaaaaaaaaaa', this.form)
-
             resolve()
           })
         } else {
@@ -143,7 +144,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
           if (resp.status === 200) {
             // console.log('sasasa', resp?.data?.result)
             const arr = useAdminListTransaksiOrderBarangStore()
-            arr.olahdata(resp?.data?.result, id)
+            arr.olahdata(resp?.data?.result, 1)
 
             const hasil = resp?.data?.result[0]
             // console.log('ccc', hasil)
@@ -167,7 +168,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               this.lock = false
 
               const arr = useAdminListTransaksiOrderBarangStore()
-              arr.olahdata(data?.result)
+              arr.olahdata(data?.result, 1)
 
               const hasil = data?.result[0]
               // console.log('ccc', hasil)
@@ -183,6 +184,34 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
               reject(err)
             })
         })
+      },
+
+      async hapusall(id, noorder) {
+        this.loadingdeleteall = true
+        const arr = useAdminListTransaksiOrderBarangStore()
+        const payload = {
+          id,
+          noorder,
+          from: arr.params.from,
+          to: arr.params.to,
+          q: arr.params.q,
+          per_page: String(arr.params.per_page),
+        }
+        try {
+          const resp = await api.post('/v1/transaksi/orderpembelian/hapusall', payload)
+          console.log(resp)
+          if (resp.status === 200) {
+            console.log('sasa', arr.this)
+
+            arr.olahdata(resp?.data?.data, 2)
+            notifSuccess('Data berhasil dihapus')
+            this.loadingdeleteall = false
+          }
+        } catch (err) {
+          console.log('sasasx', err)
+          notifError(err?.response?.data?.message)
+          this.loadingdeleteall = false
+        }
       },
     },
   },

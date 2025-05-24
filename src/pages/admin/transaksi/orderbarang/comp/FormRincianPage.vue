@@ -23,7 +23,8 @@
                   :options="storesupllier.itemsall"
                   option-label="nama"
                   option-value="kodesupl"
-                  :valid="store.form.kdsuplier !== null"
+                  :valid="store.form.kdsuplier === ''"
+                  onfocus="this.select()"
                 />
               </div>
               <div class="col-1" v-if="data?.flaging === undefined || data?.flaging === null">
@@ -149,16 +150,19 @@
                   currency
                 />
               </div>
+
               <div class="col-12">
                 <q-separator class="q-my-md" />
-                <app-btn
-                  :loading="store.loading"
-                  type="submit"
-                  :dense="false"
-                  label="Simpan"
-                  color="grey-10"
-                  class="text-yellow-9"
-                />
+                <div v-if="data?.flaging === undefined || data?.flaging === null">
+                  <app-btn
+                    :loading="store.loading"
+                    type="submit"
+                    :dense="false"
+                    label="Simpan"
+                    color="grey-10"
+                    class="text-yellow-9"
+                  />
+                </div>
               </div>
             </div>
           </q-card-section>
@@ -176,7 +180,7 @@ import { notifError } from 'src/modules/notifs'
 
 import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 
 const DialogCetakdata = defineAsyncComponent(() => import('./cetak/DialogCetak.vue'))
 
@@ -194,9 +198,6 @@ const props = defineProps({
 
 const formRef = ref(null)
 
-store.form.noorder = props?.data?.noorder
-store.form.kdsuplier = props?.data?.kdsuplier
-
 function isiform(val) {
   store.form.kdbarang = val?.kodebarang ?? '-'
   store.form.namabarang = val?.namabarang ?? '-'
@@ -209,9 +210,12 @@ function isiform(val) {
 }
 
 function onSubmit(kunci) {
-  console.log('kunci', kunci)
   if (kunci === undefined || kunci === null) {
-    store.save(props.data)
+    if (store.form.kdsuplier === null || store.form.kdsuplier === '') {
+      notifError('Maaf Supplier Tidak Boleh Kosong...!!!')
+    } else {
+      store.save(props.data)
+    }
   } else {
     notifError('Maaf Data ini Sudah Dikunci...!!')
   }
@@ -232,4 +236,9 @@ function kuncitrans(val) {
 function cetakData() {
   store.dialogCetak = true
 }
+onMounted(() => {
+  store.form.noorder = props?.data?.noorder
+  store.form.kdsuplier = props?.data?.kdsuplier ?? ''
+  store.initResetRinci()
+})
 </script>
