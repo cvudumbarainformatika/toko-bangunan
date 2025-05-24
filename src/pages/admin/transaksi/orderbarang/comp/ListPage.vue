@@ -72,7 +72,7 @@
                     icon="add"
                     tooltip="Tambah Data"
                     color="grey-10"
-                    class="text-yellow-9"
+                    class="text-yellow-8"
                     @click="emits('add')"
                   />
                 </div>
@@ -110,8 +110,8 @@
                     <q-item-label lines="1">No. Order : {{ item?.noorder }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold">-- {{ item?.suplier?.nama }}</span>
-                      <span class="text-weight-bold text-yellow-9"> || TOTAL ORDERAN : </span
-                      ><q-badge outline color="yellow-9">{{ formatRpDouble(item?.total) }}</q-badge>
+                      <span class="text-weight-bold text-yellow-3"> || TOTAL ORDERAN : </span
+                      ><q-badge outline color="yellow-3">{{ formatRpDouble(item?.total) }}</q-badge>
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
@@ -157,7 +157,7 @@
 
               <template v-slot:loading>
                 <div v-if="!storeOrderH.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="primary" size="40px" />
+                  <q-spinner-dots color="yellow-9" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>

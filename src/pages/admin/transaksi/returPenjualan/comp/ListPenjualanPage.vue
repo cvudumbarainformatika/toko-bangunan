@@ -6,9 +6,7 @@
           <div class="col-auto">
             <q-item-label header>
               <div class="row full-width items-center">
-                <div class="col-grow f-24">
-                  List Penjualan
-                </div>
+                <div class="col-grow f-24">List Penjualan</div>
                 <div class="col-auto text-right">
                   <div class="flex items-center q-col-gutter-x-sm">
                     <app-input-date
@@ -17,13 +15,17 @@
                       style="min-width: 150px"
                       outlined
                       :debounce="300"
-                      @set-model="(val) => {
-                        store.dateDisplay.from = val
-                      }"
-                      @db-model="(val)=>{
-                        store.params.from=val
-                        reload()
-                      }"
+                      @set-model="
+                        (val) => {
+                          store.dateDisplay.from = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          store.params.from = val
+                          reload()
+                        }
+                      "
                     />
                     <app-input-date
                       :model="store.dateDisplay.to"
@@ -31,13 +33,17 @@
                       style="min-width: 150px"
                       outlined
                       :debounce="300"
-                      @set-model="(val) => {
-                        store.dateDisplay.to = val
-                      }"
-                      @db-model="(val)=>{
-                        store.params.to=val
-                        reload()
-                      }"
+                      @set-model="
+                        (val) => {
+                          store.dateDisplay.to = val
+                        }
+                      "
+                      @db-model="
+                        (val) => {
+                          store.params.to = val
+                          reload()
+                        }
+                      "
                     />
                     <app-input
                       v-model="store.params.q"
@@ -51,31 +57,34 @@
                         }
                       "
                     />
-                    <q-btn
-                      round
-                      icon="refresh"
-                      dense
-                      @click="
-                        () => {
-                        reload()
-                      }"
-                    >
-                    <q-tooltip >Rerfresh</q-tooltip>
-                    </q-btn>
+                    <div class="q-px-xs">
+                      <app-btn
+                        round
+                        icon="refresh"
+                        color="grey-10"
+                        class="text-yellow-3"
+                        tooltip="Refresh"
+                        dense
+                        @click="
+                          () => {
+                            reload()
+                          }
+                        "
+                      />
+                    </div>
                     <app-btn
                       icon="open_in_new"
                       tooltip="Buka History Retur Penjualan"
                       color="primary"
                       @click="emits('list')"
                     />
-
                   </div>
                 </div>
               </div>
             </q-item-label>
             <q-separator />
           </div>
-          <div ref="scrollTarget" class="col full-height scroll">
+          <div ref="scrollTarget" class="col full-height">
             <q-infinite-scroll
               @load="store.loadMore"
               ref="infiniteScroll"
@@ -117,10 +126,10 @@
                           <div class="col-3 text-weight-bold">
                             {{ item?.keterangan?.nama }}
                           </div>
-                          <div  class="col-2 q-ml-sm">
+                          <div class="col-2 q-ml-sm">
                             {{ item?.keterangan?.tlp }}
                           </div>
-                          <div  class="col-5 q-ml-sm">
+                          <div class="col-5 q-ml-sm">
                             {{ item?.keterangan?.alamat }}
                           </div>
                         </div>
@@ -130,7 +139,7 @@
                       <div class="flex q-gutter-sm">
                         <app-btn
                           icon="input"
-                          color="primary"
+                          color="orange"
                           tooltip="retur nota ini"
                           @click="emits('form', item)"
                         />
@@ -142,7 +151,7 @@
                     </q-item-section>
                   </template>
                   <q-separator />
-                  <div class="row q-pa-sm text-weight-bold">
+                  <div class="row q-pa-sm text-weight-bold bg-grey-10">
                     <div class="col-5">Barang</div>
                     <div class="col-1 text-right">Jumlah</div>
                     <div class="col-1 text-right">Satuan</div>
@@ -153,10 +162,20 @@
                   <template v-if="item?.flag != null">
                     <q-separator />
                     <div v-for="detail in item?.detail" :key="detail?.id">
-                      <div class="row q-px-sm">
+                      <div class="row q-px-sm bg-grey-9">
                         <div class="col-5">
                           {{
-                            detail?.master_barang?.namabarang + ' ' + (item?.flag!=null ? '' : (detail?.master_barang?.stok === null ? '' : '(stok ' + detail?.master_barang?.stok.jumlah_k + '  ' + detail?.master_barang?.stok.satuan_k + ' )'))
+                            detail?.master_barang?.namabarang +
+                            ' ' +
+                            (item?.flag != null
+                              ? ''
+                              : detail?.master_barang?.stok === null
+                                ? ''
+                                : '(stok ' +
+                                  detail?.master_barang?.stok.jumlah_k +
+                                  '  ' +
+                                  detail?.master_barang?.stok.satuan_k +
+                                  ' )')
                           }}
                         </div>
                         <div class="col-1 text-right">{{ detail?.jumlah }}</div>
@@ -166,7 +185,6 @@
                         <div class="col-2 text-right">{{ formatDouble(detail?.subtotal) }}</div>
                       </div>
                     </div>
-
                   </template>
                 </q-expansion-item>
                 <q-separator />
@@ -174,7 +192,7 @@
 
               <template v-slot:loading>
                 <div v-if="!store.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="primary" size="40px" />
+                  <q-spinner-dots color="yellow-8" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>
@@ -186,18 +204,18 @@
 </template>
 <script setup>
 import { useListReturPenjualanStore } from 'src/stores/admin/transaksi/returPenjualan/list'
-import {ref} from 'vue'
+import { ref } from 'vue'
 import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 
-const emits = defineEmits(['list','form'])
-const store=useListReturPenjualanStore()
+const emits = defineEmits(['list', 'form'])
+const store = useListReturPenjualanStore()
 
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 
-function reload(){
+function reload() {
   store.items = []
   store.getList()
   infiniteScroll.value?.reset()
@@ -238,5 +256,4 @@ function statusFlag(flag) {
 
   return status
 }
-
 </script>

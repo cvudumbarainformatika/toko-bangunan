@@ -70,7 +70,7 @@
                     icon="add"
                     tooltip="Tambah Data"
                     color="grey-10"
-                    class="text-yellow-9"
+                    class="text-yellow-8"
                     @click="emits('add')"
                   />
                 </div>
@@ -116,7 +116,7 @@
                           No. Order : {{ item?.noorder }}
                         </q-badge></span
                       >
-                      <span class="text-weight-bold text-yellow-9">
+                      <span class="text-weight-bold text-yellow-3">
                         || TOTAL BARANG DATANG : {{ formatRpDouble(item?.total) }}</span
                       >
                     </q-item-label>
@@ -137,7 +137,7 @@
 
               <template v-slot:loading>
                 <div v-if="!storePenerimaanH.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="primary" size="40px" />
+                  <q-spinner-dots color="yellow-9" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>

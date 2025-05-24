@@ -77,16 +77,13 @@
                     </q-item-section>
                     <q-item-section v-if="hoveredId === item?.id" side>
                       <div class="flex q-gutter-sm">
-                        <q-btn
-                          round
-                          dense
-                          color="green-7"
+                        <app-btn
                           icon="add"
-                          size="md"
+                          class="text-yellow-8"
+                          tooltip="Pilih Data"
+                          color="grey-10"
                           @click="pilihitem(item)"
-                        >
-                          <q-tooltip>Pilih Data</q-tooltip>
-                        </q-btn>
+                        />
                       </div>
                     </q-item-section>
                     <q-item-section v-else side top>

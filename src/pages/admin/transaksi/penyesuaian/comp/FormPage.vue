@@ -33,7 +33,13 @@
                   "
                 />
                 <div class="col-auto">
-                  <app-btn icon="add" tooltip="Pilih Barang" color="green-7" @click="pilihbarang" />
+                  <app-btn
+                    icon="add"
+                    class="text-yellow-8"
+                    color="grey-10"
+                    tooltip="Pilih Barang"
+                    @click="pilihbarang"
+                  />
                 </div>
                 <app-input
                   class="col-4"
@@ -67,8 +73,8 @@
                     type="submit"
                     :dense="false"
                     label="Simpan"
-                    color="yellow-8"
-                    class="text-black"
+                    color="grey-10"
+                    class="text-yellow-9"
                   />
                 </div>
               </div>

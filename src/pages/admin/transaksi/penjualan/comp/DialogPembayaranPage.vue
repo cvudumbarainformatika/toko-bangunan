@@ -60,6 +60,7 @@
                       :loading="store.loadingPembayaran"
                     />
                     <app-select-server
+                      v-if="!store.formPembayaran.dataPelanggan.nama"
                       ref="refPelanggan"
                       class="col-12"
                       v-model="store.formPembayaran.pelanggan_id"
@@ -74,6 +75,7 @@
                           (store.formPembayaran.cara_bayar == '2' ? !!val : true) || 'Harap di isi',
                       ]"
                       :disable="store.loadingPembayaran"
+                      @update:model-value="setPelanggan"
                     />
                     <template v-if="!store.formPembayaran.pelanggan_id">
                       <div class="col-12 q-mb-md">
@@ -86,6 +88,7 @@
                               v-model="store.formPembayaran.dataPelanggan.nama"
                               label="Nama Pelanggan"
                               :disable="store.loadingPembayaran"
+                              @update:model-value="setNamaPelanggan"
                             />
                           </div>
                         </div>
@@ -210,6 +213,7 @@ const isMobile = computed(() => {
 })
 const store = useFromPenjualanStore()
 
+
 const storelist = useListPenjualanStore()
 
 const optionCaraBayar = ref([
@@ -218,22 +222,47 @@ const optionCaraBayar = ref([
   { label: 'Kredit', value: '2' },
 ])
 const refPelanggan = ref(null)
+function validasi(){
+  let valid=false
+  if(!store.formPembayaran.flag) return notifError('Pilihan Pembayaran Belum dipilih')
+  else if (!store?.item?.sales_id && store.formPembayaran.flag == '2') return notifError('Pembayaran Secara Kredit Harus Memilih Sales')
+  else if (!store?.item?.pelanggan_id && !store.formPembayaran.dataPelanggan?.nama && ['2','7'].includes(store.formPembayaran.flag)) return notifError('Harus ada data pelanggan')
+
+  else valid = true
+    return valid
+}
 function onSubmit() {
   console.log('submit form pembayaran', refPelanggan.value, store.formPembayaran)
-  if (!store?.item?.sales_id && store.formPembayaran.flag == '2')
-    return notifError('Pembayaran Secara Kredit Harus Memilih Sales')
-  store
-    .simpanPembayaran()
-    .then((res) => {
-      if (res?.status == 200) {
-        store.opendialogCetak = true
-        store.openPembayaran = false
-        console.log('cetak', storelist.itemCetak)
-      }
-    })
-    .then(() => {
-      store.resetPembayaran()
-    })
+
+  if(validasi()){
+    store
+      .simpanPembayaran()
+      .then((res) => {
+        if (res?.status == 200) {
+          store.opendialogCetak = true
+          store.openPembayaran = false
+          console.log('cetak', storelist.itemCetak)
+        }
+      })
+      .then(() => {
+        store.resetPembayaran()
+      })
+    }
+}
+function setNamaPelanggan() {
+  // console.log('set nama', val)
+  if(store.formPembayaran.pelanggan_id) store.formPembayaran.pelanggan_id=null
+
+}
+function setPelanggan() {
+  // console.log('set nama', val)
+  if(store.formPembayaran.dataPelanggan.nama) {
+    store.formPembayaran.dataPelanggan = {
+                                          nama: '',
+                                          tlp: '',
+                                          alamat: '',
+                                        }
+  }
 }
 function selectCaraBayar(val) {
   console.log('cara bayar', val)

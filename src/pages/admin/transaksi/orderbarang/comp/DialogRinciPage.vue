@@ -113,7 +113,8 @@
             type="submit"
             :dense="false"
             label="Simpan"
-            color="primary"
+            color="grey-10"
+            class="text-yellow-9"
             icon="save"
           />
         </q-card-actions>

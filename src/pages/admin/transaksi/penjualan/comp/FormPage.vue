@@ -8,6 +8,8 @@
         option-label="nama"
         option-value="id"
         label="Cari Sales"
+        clearable
+        valid
         :options="store.sales"
         :disable="store?.item?.detail?.length>0"
       />
