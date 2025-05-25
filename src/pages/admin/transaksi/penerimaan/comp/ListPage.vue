@@ -101,14 +101,18 @@
                   @mouseleave="hoveredId = null"
                 >
                   <q-item-section avatar>
-                    <q-avatar color="yellow-9" text-color="white">P</q-avatar>
+                    <q-avatar color="yellow-9" text-color="white">{{
+                      ambiltanggalaja(item.tgl)
+                    }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">
                       <span class="text-weight-bold"
                         >No. Penerimaan : {{ item?.nopenerimaan }}</span
                       >
-                      <span class="text-weight-bold"> || Supplier : {{ item?.suplier }}</span>
+                      <span class="text-weight-bold">
+                        || Supplier : {{ item?.suplier }} || No. Faktur : {{ item?.nofaktur }}</span
+                      >
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
@@ -117,8 +121,8 @@
                         </q-badge></span
                       >
                       <span class="text-weight-bold text-yellow-3">
-                        || TOTAL BARANG DATANG : {{ formatRpDouble(item?.total) }}</span
-                      >
+                        || TOTAL BARANG DATANG : {{ formatRpDouble(item?.total) }}
+                      </span>
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
@@ -196,6 +200,26 @@ const next = computed(() => {
   return page
 })
 
+function ambiltanggalaja(val) {
+  // Periksa apakah val adalah string (format ISO atau format lain)
+  if (typeof val === 'string') {
+    // Konversi string ke objek Date
+    const dateObj = new Date(val)
+    // Periksa apakah konversi berhasil (valid date)
+    if (!isNaN(dateObj.getTime())) {
+      return dateObj.getDate()
+    }
+  }
+
+  // Jika val sudah berupa objek Date
+  if (val instanceof Date && !isNaN(val.getTime())) {
+    return val.getDate()
+  }
+
+  // Fallback: jika format tidak dikenali, tampilkan tanggal hari ini
+  console.warn('Format tanggal tidak valid:', val)
+  return new Date().getDate()
+}
 defineExpose({ lihatdetail })
 
 // function loadMore(index, done) {

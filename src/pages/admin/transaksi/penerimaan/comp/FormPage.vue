@@ -16,6 +16,7 @@
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
 import FormRincianPage from './FormRincianPage.vue'
 import ListRincianPage from './ListRincianPage.vue'
+import { onMounted } from 'vue'
 // import { formatRpDouble } from 'src/modules/utils'
 
 const store = useAdminFormTransaksiPenerimaanBarangStore()
@@ -27,13 +28,29 @@ const props = defineProps({
     default: null,
   },
 })
-// console.log('get', props?.data)
-store.form.noorder = props?.data?.noorder
-store.form.suplier = props?.data?.suplier
-store.form.nopenerimaan = props?.data?.nopenerimaan
-store.rinci = props?.data?.orderan_h?.rinci
-store.form.kunci = props?.data?.kunci
-store.hiden = true
+onMounted(() => {
+  console.log('penerimaan', props?.data?.nopenerimaan)
+  if (
+    props?.data?.nopenerimaan === '' ||
+    props?.data?.nopenerimaan === null ||
+    props?.data?.nopenerimaan === undefined
+  ) {
+    store.form.nopenerimaan = ''
+    store.form.nofaktur = ''
+    store.form.noorder = ''
+    store.form.suplier = ''
+    store.rinci = []
+  } else {
+    store.form.noorder = props?.data?.noorder
+    store.form.suplier = props?.data?.suplier
+    store.form.nopenerimaan = props?.data?.nopenerimaan
+    store.form.nofaktur = props?.data?.nofaktur
+    store.rinci = props?.data?.orderan_h?.rinci
+    store.form.kunci = props?.data?.kunci
+    store.hiden = true
+  }
+})
+console.log('get', props?.data)
 
 // const lists = computed(() => {
 //   const arr = props.data?.rinci

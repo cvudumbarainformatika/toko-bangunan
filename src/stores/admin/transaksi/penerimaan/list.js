@@ -68,7 +68,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
           api
             .get('/v1/transaksi/penerimaan/getpenerimaan', params)
             .then(({ data }) => {
-              // console.log('heder order barang', data)
+              console.log('heder order barang', data)
               this.meta = data
               this.olahdata(data?.data)
               //this.items.push(...data.data)
@@ -114,8 +114,9 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
           const hasil = {
             id: x?.id,
             nopenerimaan: x?.nopenerimaan,
+            nofaktur: x?.nofaktur,
             noorder: x?.noorder,
-            tgl: x?.tgl,
+            tgl: x?.updated_at,
             kdsuplier: x?.kdsupllier,
             kunci: x?.kunci,
             suplier: x?.suplier?.nama,
