@@ -113,12 +113,13 @@
                       >
                       <span class="text-weight-bold">
                         || Jumlah :
-                        {{ Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) }}
-                        {{ item?.satuan_b }} {{ item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) }}
-                        {{ item?.satuan_k }}</span
+                        <span v-if="Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0">{{ Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) }} {{ item?.satuan_b }}</span>
+                        <span v-if="Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0 && item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0"> lebih </span>
+                        <span v-if="item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0">{{ item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) }} {{ item?.satuan_k }}</span>
+                        </span
                       >
                       <span v-if="item?.isi > 1">
-                        ({{ item?.jumlah_k }} {{ item?.satuan_k }})
+                        (total : {{ item?.jumlah_k }} {{ item?.satuan_k }})
                       </span>
                       <span class="text-weight-bold text-red">
                         || Harga Satuan Kecil : {{ formatRpDouble(item?.harga_beli_k) }} per({{

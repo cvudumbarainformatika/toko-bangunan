@@ -63,11 +63,12 @@
           <q-separator />
           <div v-for="item in cariPenjualan()" :key="item.id" class="row">
             <div style="width: 32%" class="col-auto">{{ item.no_penjualan }}</div>
-            <div style="width: 17%" class="col-auto text-right">
-              {{ formatDouble(item?.bayar) }}
-            </div>
+
             <div style="width: 17%" class="col-auto text-right">
               {{ formatDouble(item?.total - item?.bayar - retur(item)) }}
+            </div>
+            <div style="width: 17%" class="col-auto text-right">
+              {{ formatDouble(item?.bayar) }}
             </div>
             <div style="width: 17%" class="col-auto text-right">
               {{ formatDouble(cariCicilan(item)) }}
