@@ -114,7 +114,7 @@
                       <span class="text-weight-bold">
                         || Jumlah :
                         <span v-if="Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0">{{ Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) }} {{ item?.satuan_b }}</span>
-                        <span v-if="Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0 && item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0"> dan </span>
+                        <span v-if="Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0 && item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0"> lebih </span>
                         <span v-if="item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0">{{ item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) }} {{ item?.satuan_k }}</span>
                         </span
                       >
