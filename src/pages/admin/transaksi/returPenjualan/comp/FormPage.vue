@@ -42,10 +42,14 @@
                   const sudahRetur = store.item?.detail_retur
                     .filter((f) => f.kodebarang === item.kodebarang && f.status !== '')
                     ?.reduce((acc, cur) => acc + cur.jumlah, 0)
+                    item.sisa=item.jumlah-sudahRetur
+                    // console.log('sudahRetur',sudahRetur, item?.sisa , _removedZeros);
                   if (_removedZeros <= item.sisa) {
+                    console.log('if ',_removedZeros <= item.sisa)
                     item.retur = _removedZeros
                     item.sisa = item.jumlah - _removedZeros - sudahRetur
                   } else {
+                    // console.log('else ',_removedZeros <= item.sisa)
                     item.retur = item.jumlah - sudahRetur
                     item.sisa = 0
                     notifError('Jumlah retur tidak boleh lebih dari Max Retur')
