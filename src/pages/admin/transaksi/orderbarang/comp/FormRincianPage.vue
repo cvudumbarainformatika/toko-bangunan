@@ -134,7 +134,7 @@
                   dense
                   outlined
                   v-model="store.form.jumlahx"
-                  label="Jumlah Yang Di Pesan"
+                  label="Jumlah Yang Di Pesan (Satuan Besar)"
                   :valid="store.form.jumlahx !== null"
                   currency
                 />
@@ -145,7 +145,7 @@
                   outlined
                   class="col-6"
                   v-model="store.form.hargax"
-                  label="Harga Beli"
+                  label="Harga Beli (Harga Satuan Besar)"
                   :valid="store.form.hargax !== null"
                   currency
                 />

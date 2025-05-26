@@ -135,11 +135,25 @@
                                   item?.stok_kecil <= item?.minim_stok,
                               }
                         "
-                        >Stok Sekarang: {{ item?.stok_besarbaru }} {{ item?.satuan_b }}
-                        <template v-if="item?.stok_besarkecil > 0">
-                          Lebih {{ item?.stok_besarkecil }} {{ item?.satuan_k }}
-                        </template></q-badge
-                      >
+                        >Stok Sekarang:
+                        <span
+                          v-if="Math.floor(item.stok_besar / (item?.isi > 0 ? item?.isi : 1)) >= 0"
+                          >{{ Math.floor(item.stok_besar / (item?.isi > 0 ? item?.isi : 1)) }}
+                          {{ item?.satuan_b }}
+                        </span>
+                        <span
+                          v-if="
+                            Math.floor(item.stok_besar / (item?.isi > 0 ? item?.isi : 1)) > 0 &&
+                            item?.stok_besar % (item?.isi > 0 ? item?.isi : 1) > 0
+                          "
+                        >
+                          lebih
+                        </span>
+                        <span v-if="item?.stok_besar % (item?.isi > 0 ? item?.isi : 1) > 0"
+                          >{{ item?.stok_besar % (item?.isi > 0 ? item?.isi : 1) }}
+                          {{ item?.satuan_k }}
+                        </span>
+                      </q-badge>
                       <span class="q-px-sm">
                         <q-badge
                           class="text-weight-bold"
@@ -162,8 +176,8 @@
                                 }
                           "
                         >
-                          atau ({{ item?.stok_kecil }} {{ item?.satuan_k }})</q-badge
-                        >
+                          atau ({{ item?.stok_kecil }} {{ item?.satuan_k }})
+                        </q-badge>
                       </span>
                     </q-item-label>
                   </q-item-section>
