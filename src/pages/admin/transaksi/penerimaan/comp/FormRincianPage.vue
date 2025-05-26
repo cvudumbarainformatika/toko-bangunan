@@ -47,7 +47,14 @@
                 "
               />
             </div>
-            <div class="col-1" v-if="store.form.nopenerimaan === undefined">
+            <div
+              class="col-1"
+              v-if="
+                store.form.nopenerimaan === undefined ||
+                store.form.nopenerimaan === '' ||
+                store.form.nopenerimaan === null
+              "
+            >
               <app-btn
                 size="md"
                 :dense="false"
@@ -129,7 +136,7 @@
                       </div>
                     </div>
 
-                    <div class="row q-gutter-xs">
+                    <div class="row q-gutter-xs" v-if="props?.data?.kunci !== '1'">
                       <div class="col-2">
                         <app-input
                           label="No. Seri"
@@ -189,12 +196,13 @@
                           />
                         </div>
                         <div v-else>
-                          <app-btn
+                          <q-icon name="done_all" color="yellow" size="md" />
+                          <!-- <app-btn
                             :loading="store.loading && store.form.id === item.id"
                             color="lime"
                             class="text-black"
                             icon="done_all"
-                          />
+                          /> -->
                         </div>
                       </div>
                     </div>
@@ -235,7 +243,7 @@ import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/tra
 import AppInputRp from 'src/components/~global/AppInputRp.vue'
 
 import { notifError } from 'src/modules/notifs'
-import { computed, defineAsyncComponent, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 
 const DialogCetakdata = defineAsyncComponent(() => import('./cetak/DialogCetak.vue'))
 
@@ -250,38 +258,39 @@ function cariorderan() {
 }
 
 function onSubmit(val) {
-  console.log('val', val)
+  // console.log('val', val)
   if (store.form.nofaktur === '') {
     notifError('No Faktur Tidak Boleh Kosong...!!!')
-  }
-  store.form.id = val?.id
-  store.form.idx = val?.idx
-  store.form.motif = val?.motif
-  store.form.kdbarang = val?.kdbarang
-  store.form.jumlahorder = val?.jumlahpo
-  store.form.jumlahpo = olahUang(val?.sisajumlahbelumditerima)
-  store.form.jumlah_datang_b = olahUang(val?.sisajumlahbelumditerimax)
-  store.form.jumlahpo_k = val?.jumlahpo_k
-  store.form.satuan_b = val?.satuan_b
-  store.form.satuan_k = val?.satuan_k
-  store.form.isi = val?.isi
-  store.form.hargafaktur = val?.hargapo
-  store.form.hargaasli = olahUang(val?.hargafix)
-  store.form.jumlahbarangrusak = olahUang(val?.itemrusak)
-  store.form.totalditerimabias = val?.totalditerimabias
-  store.form.totalpenerimaanall =
-    parseFloat(store.form.jumlah_datang_b) + parseFloat(store.form.totalditerimabias)
-
-  if (parseFloat(store.form.jumlahorder) === parseFloat(store.form.totalpenerimaanall)) {
-    store.form.flagingx = '1'
   } else {
-    store.form.flagingx = null
-  }
+    store.form.id = val?.id
+    store.form.idx = val?.idx
+    store.form.motif = val?.motif
+    store.form.kdbarang = val?.kdbarang
+    store.form.jumlahorder = val?.jumlahpo
+    store.form.jumlahpo = olahUang(val?.sisajumlahbelumditerima)
+    store.form.jumlah_datang_b = olahUang(val?.sisajumlahbelumditerimax)
+    store.form.jumlahpo_k = val?.jumlahpo_k
+    store.form.satuan_b = val?.satuan_b
+    store.form.satuan_k = val?.satuan_k
+    store.form.isi = val?.isi
+    store.form.hargafaktur = val?.hargapo
+    store.form.hargaasli = olahUang(val?.hargafix)
+    store.form.jumlahbarangrusak = olahUang(val?.itemrusak)
+    store.form.totalditerimabias = val?.totalditerimabias
+    store.form.totalpenerimaanall =
+      parseFloat(store.form.jumlah_datang_b) + parseFloat(store.form.totalditerimabias)
 
-  if (parseFloat(store.form.jumlahorder) < parseFloat(store.form.totalpenerimaanall)) {
-    notifError('Jumlah yang Anda Masukkan Melebihi jumlah pesanan...!!!')
-  } else {
-    store.save()
+    if (parseFloat(store.form.jumlahorder) === parseFloat(store.form.totalpenerimaanall)) {
+      store.form.flagingx = '1'
+    } else {
+      store.form.flagingx = null
+    }
+
+    if (parseFloat(store.form.jumlahorder) < parseFloat(store.form.totalpenerimaanall)) {
+      notifError('Jumlah yang Anda Masukkan Melebihi jumlah pesanan...!!!')
+    } else {
+      store.save()
+    }
   }
 }
 
@@ -332,9 +341,9 @@ if (props?.data) {
     const obterima = rinciterima?.filter((x) => x.kdbarang === el)
 
     const obj = {
-      kdbarang: rinciorder?.filter((x) => x.kdbarang === el)[0].kdbarang,
-      namabarang: rinciorder?.filter((x) => x.kdbarang === el)[0].mbarang?.namabarang,
-      jumlahorder: rinciorder?.filter((x) => x.kdbarang === el)[0].jumlahpo,
+      kdbarang: rinciorder?.filter((x) => x.kdbarang === el)[0]?.kdbarang,
+      namabarang: rinciorder?.filter((x) => x.kdbarang === el)[0]?.mbarang?.namabarang,
+      jumlahorder: rinciorder?.filter((x) => x.kdbarang === el)[0]?.jumlahpo,
       jumlahterima: obterima?.map((x) => parseInt(x.jumlah_b)).reduce((a, b) => a + b, 0),
       hargafaktur: obterima?.map((x) => parseInt(x.hargafaktur)).reduce((a, b) => a + b, 0),
       subtotalfix: obterima?.map((x) => parseInt(x.subtotalfix)).reduce((a, b) => a + b, 0),
@@ -344,6 +353,7 @@ if (props?.data) {
 
   const penerimaan = {
     nopenerimaan: props?.data?.nopenerimaan,
+    nofaktur: props?.data?.nofaktur,
     noorder: props?.data?.noorder,
     suplier: props?.data?.suplier,
     tanggal: props?.data?.tgl,
@@ -352,6 +362,8 @@ if (props?.data) {
     rincians: rincians,
   }
 
-  store.dataprops = penerimaan
+  onMounted(() => {
+    store.dataprops = penerimaan
+  })
 }
 </script>

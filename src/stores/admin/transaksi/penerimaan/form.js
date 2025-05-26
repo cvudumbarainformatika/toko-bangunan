@@ -20,7 +20,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         hargaasli: 0,
         id: '',
         kunci: null,
-        tgl: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+        tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       },
       rinci: [],
       loading: false,
@@ -90,10 +90,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
 
               notifSuccess('Data berhasil disimpan')
               this.initResetRinci()
-              // inject data
-
-              // arr.items.unshift(data?.result?.original[0])
-              //this.initReset(null)
+              this.rinci = hasil?.orderheder?.rinci
               resolve(data)
             })
             .catch((err) => {
@@ -152,6 +149,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
             hasil.totalfix = totalfix
 
             this.itemPenerimaan = hasil
+            this.rinci = hasil?.orderheder?.rinci
             notifSuccess('Data berhasil dihapus')
           }
         } catch (error) {
