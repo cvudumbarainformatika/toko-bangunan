@@ -41,6 +41,7 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       { label: 'Desember', value: '12' },
     ],
     kartuStok: [],
+    selectkartuStok: [],
     selectedKodebarang: null,
   }),
   // persist: true,
@@ -66,9 +67,22 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
         this.meta = data
         this.items = data?.data
 
-        const arr = this.items.filter((x) => x.kodebarang === this.selectedKodebarang)
-        this.kartuStok = arr[0]
-        console.log('arr kartustok', this.kartuStok)
+        // Reset kartuStok jika tidak ada selectedKodebarang atau tidak ditemukan
+        if (this.selectedKodebarang) {
+          const arr = this.items.filter((x) => x.kodebarang === this.selectedKodebarang)
+          if (arr.length > 0) {
+            this.kartuStok = arr[0]
+            this.kartuStok.transaksi = this.cariTotalArray(this.kartuStok?.transaksi || [])
+            console.log('arr kartustok', this.kartuStok)
+          } else {
+            // Jika tidak ditemukan, reset kartuStok
+            this.kartuStok = null
+            console.log('Tidak ditemukan item dengan kodebarang:', this.selectedKodebarang)
+          }
+        } else {
+          this.kartuStok = null
+          console.log('selectedKodebarang belum diatur')
+        }
         this.loading = false
         // this.items = data
       } catch (error) {
@@ -127,6 +141,27 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       const arr = this.items
       // console.log('arr', this.kartuStok?.kodebarang)
       console.log('x', arr)
+    },
+
+    cariTotalArray(arr) {
+      let total = 0
+      if (arr?.length) {
+        for (let i = 0; i < arr?.length; i++) {
+          if (i === 0) {
+            total = arr[0]?.debit - arr[0]?.kredit
+            arr[0].total = total
+          } else {
+            const hinggaKeIndex = i + 1
+            const arrBaru = arr.slice(1, hinggaKeIndex)
+            const awal = arr[0]?.debit - arr[0]?.kredit
+            // const subT = arr[i]?.penerimaan - arr[i]?.pengeluaran;
+            const obj = arrBaru.map((x) => x.debit - x.kredit)
+            const skrg = obj?.reduce((x, y) => x + y, 0)
+            arr[i].total = awal + skrg
+          }
+        }
+      }
+      return arr
     },
   },
 })

@@ -63,7 +63,7 @@
                         icon="refresh"
                         tooltip="Refresh"
                         color="grey-10"
-                        class="text-yellow-3"
+                        class="text-yellow-8"
                         dense
                         @click="
                           () => {
@@ -73,7 +73,7 @@
                       />
                     </div>
 
-                    <app-btn-back glossy color="grey-10" @click="emits('back')" />
+                    <app-btn-back @click="emits('back')" />
                   </div>
                 </div>
               </div>

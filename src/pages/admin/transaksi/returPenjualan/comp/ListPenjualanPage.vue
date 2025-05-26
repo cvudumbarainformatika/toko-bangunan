@@ -62,7 +62,7 @@
                         round
                         icon="refresh"
                         color="grey-10"
-                        class="text-yellow-3"
+                        class="text-yellow-8"
                         tooltip="Refresh"
                         dense
                         @click="
@@ -73,9 +73,10 @@
                       />
                     </div>
                     <app-btn
-                      icon="open_in_new"
+                      icon="history"
                       tooltip="Buka History Retur Penjualan"
-                      color="primary"
+                      color="grey-10"
+                      class="text-yellow-8"
                       @click="emits('list')"
                     />
                   </div>
@@ -151,7 +152,10 @@
                     </q-item-section>
                   </template>
                   <q-separator />
-                  <div class="row q-pa-sm text-weight-bold bg-grey-10">
+                  <div
+                    class="row q-pa-sm text-weight-bold"
+                    :class="app?.dark ? 'bg-grey-10' : 'bg-grey-3 text-black'"
+                  >
                     <div class="col-5">Barang</div>
                     <div class="col-1 text-right">Jumlah</div>
                     <div class="col-1 text-right">Satuan</div>
@@ -162,7 +166,10 @@
                   <template v-if="item?.flag != null">
                     <q-separator />
                     <div v-for="detail in item?.detail" :key="detail?.id">
-                      <div class="row q-px-sm bg-grey-9">
+                      <div
+                        class="row q-px-sm"
+                        :class="app?.dark ? 'bg-grey-9' : 'bg-grey-3 text-black'"
+                      >
                         <div class="col-5">
                           {{
                             detail?.master_barang?.namabarang +
@@ -207,10 +214,11 @@ import { useListReturPenjualanStore } from 'src/stores/admin/transaksi/returPenj
 import { ref } from 'vue'
 import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
+import { useAppStore } from 'src/stores/app'
 
 const emits = defineEmits(['list', 'form'])
 const store = useListReturPenjualanStore()
-
+const app = useAppStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)

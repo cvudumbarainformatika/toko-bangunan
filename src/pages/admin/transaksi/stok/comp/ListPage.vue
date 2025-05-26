@@ -63,24 +63,36 @@
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
-                        ><q-badge rounded outline color="grey-5">
+                        ><q-badge rounded outline :color="app?.dark ? 'grey-5' : 'grey-8'">
                           No. Penerimaan : {{ item?.nopenerimaan }}
                         </q-badge></span
                       >
                       <span> || </span>
-                      <span class="text-weight-bold text-yellow-3">
+                      <span
+                        class="text-weight-bold"
+                        :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
+                      >
                         Jumlah : {{ item?.jumlah_b }} {{ item?.satuan_b }}</span
                       >
-                      <span v-if="item?.isi > 1" class="text-yellow-3">
+                      <span
+                        v-if="item?.isi > 1"
+                        :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
+                      >
                         ({{ item?.jumlah_k }} {{ item?.satuan_k }})
                       </span>
                       <span> || </span>
-                      <span class="text-weight-bold text-lime-8">
+                      <span
+                        class="text-weight-bold"
+                        :class="app?.dark ? 'text-green-3' : 'text-teal-9'"
+                      >
                         Harga Satuan Kecil : {{ formatRpDouble(item?.harga_beli_k) }} per({{
                           item?.satuan_k
                         }})</span
                       >
-                      <span class="text-weight-bold text-lime-8">
+                      <span
+                        class="text-weight-bold"
+                        :class="app?.dark ? 'text-green-3' : 'text-teal-9'"
+                      >
                         || Harga Satuan Besar : {{ formatRpDouble(item?.harga_beli_b) }} per({{
                           item?.satuan_b
                         }})</span
@@ -103,7 +115,7 @@
 
               <template v-slot:loading>
                 <div v-if="!store.isError" class="text-center q-my-md">
-                  <q-spinner-dots color="primary" size="40px" />
+                  <q-spinner-dots color="yellow-9" size="40px" />
                 </div>
               </template>
             </q-infinite-scroll>
@@ -118,11 +130,12 @@
 <script setup>
 import { formatRpDouble } from 'src/modules/formatter'
 import { useAdminListTransaksiStokBarangStore } from 'src/stores/admin/transaksi/stok/list'
+import { useAppStore } from 'src/stores/app'
 import { computed, ref } from 'vue'
 
 // const search = ref(null)
 const store = useAdminListTransaksiStokBarangStore()
-
+const app = useAppStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)

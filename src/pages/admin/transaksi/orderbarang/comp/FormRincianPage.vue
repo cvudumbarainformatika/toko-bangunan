@@ -6,7 +6,7 @@
           <q-card-section class="q-px-md q-py-xs bg-yellow-8 text-black col-auto full-width">
             <div class="row items-center justify-between">
               <div class="f-12 text-weight-bold">
-                <app-btn-back size="sm" @click="emits('back')" class="bg-black text-yellow-8" />
+                <app-btn-back size="sm" @click="emits('back')" />
                 Form Order
               </div>
             </div>

@@ -11,7 +11,7 @@
               <q-tooltip>Close</q-tooltip>
             </q-btn>
           </q-bar>
-          <q-card-section class="q-pa-none bg-black text-white">
+          <q-card-section :class="app?.dark ? 'bg-black text-white' : 'bg-white text-black'">
             <div class="row q-gutter-sm q-px-md q-py-md">
               <app-select
                 v-model="store.params.bulan"
@@ -34,7 +34,7 @@
         </q-header>
         <q-page-container>
           <div id="printMe">
-            <div class="row full-width justify-center q-pa-sm">
+            <div class="row full-width justify-center q-px-sm">
               <kop-cetak />
               <table class="full-width">
                 <thead>
@@ -48,50 +48,203 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(item, n) in store.kartuStok?.kartustok" :key="n">
+                  <tr v-for="(item, n) in store.kartuStok?.transaksi" :key="n">
                     <td class="text-center">{{ n + 1 }}</td>
                     <td class="text-center">{{ humanDate(item?.tanggal) }}</td>
                     <td>{{ item.notransaksi }}</td>
                     <td>
-                      {{ item.debit }} {{ item.satuan_k }}
-                      <span class="text-yellow-8" style="font-size: x-small">
-                        ({{ item.debit_b }} {{ item.satuan_b }})</span
+                      <span v-if="Math.floor(item.debit / (item?.isi > 0 ? item?.isi : 1)) >= 0"
+                        >{{ Math.floor(item.debit / (item?.isi > 0 ? item?.isi : 1)) }}
+                        {{ item?.satuan_b }}</span
+                      >
+                      <span
+                        v-if="
+                          Math.floor(item.debit / (item?.isi > 0 ? item?.isi : 1)) > 0 &&
+                          item?.debit % (item?.isi > 0 ? item?.isi : 1) > 0
+                        "
+                      >
+                        lebih
+                      </span>
+                      <span v-if="item?.debit % (item?.isi > 0 ? item?.isi : 1) > 0"
+                        >{{ item?.debit % (item?.isi > 0 ? item?.isi : 1) }}
+                        {{ item?.satuan_k }}</span
+                      >
+
+                      <span
+                        :class="app?.dark ? 'text-yellow-8' : 'text-brown-8'"
+                        style="font-size: x-small"
+                      >
+                        ({{ item.debit }} {{ item.satuan_k }})</span
                       >
                     </td>
                     <td>
-                      {{ item.kredit }} {{ item.satuan_k }}
-                      <span class="text-yellow-8" style="font-size: x-small">
-                        ({{ item.kredit_b }} {{ item.satuan_b }})
+                      <span v-if="Math.floor(item.kredit / (item?.isi > 0 ? item?.isi : 1)) >= 0"
+                        >{{ Math.floor(item.kredit / (item?.isi > 0 ? item?.isi : 1)) }}
+                        {{ item?.satuan_b }}</span
+                      >
+                      <span
+                        v-if="
+                          Math.floor(item.kredit / (item?.isi > 0 ? item?.isi : 1)) > 0 &&
+                          item?.kredit % (item?.isi > 0 ? item?.isi : 1) > 0
+                        "
+                      >
+                        lebih
+                      </span>
+                      <span v-if="item?.kredit % (item?.isi > 0 ? item?.isi : 1) > 0"
+                        >{{ item?.kredit % (item?.isi > 0 ? item?.isi : 1) }}
+                        {{ item?.satuan_k }}</span
+                      >
+
+                      <span
+                        :class="app?.dark ? 'text-yellow-8' : 'text-brown-8'"
+                        style="font-size: x-small"
+                      >
+                        ({{ item.kredit }} {{ item.satuan_k }})
                       </span>
                     </td>
                     <td class="content-center">
-                      {{ item.total }} {{ item.satuan_k }}
-                      <span class="text-yellow-8" style="font-size: x-small">
-                        ({{ item.total_b }} {{ item.satuan_b }})
+                      <span v-if="Math.floor(item.total / (item?.isi > 0 ? item?.isi : 1)) >= 0"
+                        >{{ Math.floor(item.total / (item?.isi > 0 ? item?.isi : 1)) }}
+                        {{ item?.satuan_b }}</span
+                      >
+                      <span
+                        v-if="
+                          Math.floor(item.total / (item?.isi > 0 ? item?.isi : 1)) > 0 &&
+                          item?.total % (item?.isi > 0 ? item?.isi : 1) > 0
+                        "
+                      >
+                        lebih
+                      </span>
+                      <span v-if="item?.total % (item?.isi > 0 ? item?.isi : 1) > 0"
+                        >{{ item?.total % (item?.isi > 0 ? item?.isi : 1) }}
+                        {{ item?.satuan_k }}</span
+                      >
+                      <span
+                        :class="app?.dark ? 'text-yellow-8' : 'text-brown-8'"
+                        style="font-size: x-small"
+                      >
+                        ({{ item.total }} {{ item.satuan_k }})
                       </span>
                     </td>
                   </tr>
                   <tr class="text-bold">
                     <td class="text-right" colspan="3">Jumlah Stok</td>
                     <td>
-                      {{ store.kartuStok?.total?.total_debit }} {{ store.kartuStok?.satuan_k }}
-                      <span class="text-yellow-8" style="font-size: x-small">
-                        ({{ store.kartuStok?.total?.total_debitbesar }}
-                        {{ store.kartuStok?.satuan_b }})
+                      <span
+                        v-if="
+                          Math.floor(
+                            totalDebit() / (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1),
+                          ) >= 0
+                        "
+                        >{{
+                          Math.floor(
+                            totalDebit() / (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1),
+                          )
+                        }}
+                        {{ store.kartuStok?.satuan_b }}</span
+                      >
+                      <span
+                        v-if="
+                          Math.floor(
+                            totalDebit() / (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1),
+                          ) > 0 &&
+                          totalDebit() % (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1) > 0
+                        "
+                      >
+                        lebih
+                      </span>
+                      <span
+                        v-if="
+                          totalDebit() % (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1) > 0
+                        "
+                        >{{ totalDebit() % (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1) }}
+                        {{ store.kartuStok?.satuan_k }}</span
+                      >
+                      <!-- {{ store.kartuStok?.total?.total_debitbesar }} {{ store.kartuStok?.satuan_b }} -->
+                      <span
+                        :class="app?.dark ? 'text-yellow-8' : 'text-brown-8'"
+                        style="font-size: x-small"
+                      >
+                        ({{ totalDebit() }} {{ store.kartuStok?.satuan_k }})
                       </span>
                     </td>
                     <td>
-                      {{ store.kartuStok?.total?.total_kredit }} {{ store.kartuStok?.satuan_k }}
-                      <span class="text-yellow-8" style="font-size: x-small">
-                        ({{ store.kartuStok?.total?.total_kreditbesar }}
-                        {{ store.kartuStok?.satuan_b }})
+                      <span
+                        v-if="
+                          Math.floor(
+                            totalKredit() / (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1),
+                          ) >= 0
+                        "
+                        >{{
+                          Math.floor(
+                            totalKredit() / (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1),
+                          )
+                        }}
+                        {{ store.kartuStok?.satuan_b }}</span
+                      >
+                      <span
+                        v-if="
+                          Math.floor(
+                            totalKredit() / (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1),
+                          ) > 0 &&
+                          totalKredit() % (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1) > 0
+                        "
+                      >
+                        lebih
+                      </span>
+                      <span
+                        v-if="
+                          totalKredit() % (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1) > 0
+                        "
+                        >{{
+                          totalKredit() % (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1)
+                        }}
+                        {{ store.kartuStok?.satuan_k }}</span
+                      >
+
+                      <span
+                        :class="app?.dark ? 'text-yellow-8' : 'text-brown-8'"
+                        style="font-size: x-small"
+                      >
+                        ({{ totalKredit() }} {{ store.kartuStok?.satuan_k }})
                       </span>
                     </td>
                     <td>
-                      {{ store.kartuStok?.total?.saldo_akhir }} {{ store.kartuStok?.satuan_k }}
-                      <span class="text-yellow-8" style="font-size: x-small">
-                        ({{ store.kartuStok?.total?.saldo_akhirbesar }}
-                        {{ store.kartuStok?.satuan_b }})
+                      <span
+                        v-if="
+                          Math.floor(
+                            totalStok() / (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1),
+                          ) >= 0
+                        "
+                        >{{
+                          Math.floor(
+                            totalStok() / (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1),
+                          )
+                        }}
+                        {{ store.kartuStok?.satuan_b }}</span
+                      >
+                      <span
+                        v-if="
+                          Math.floor(
+                            totalStok() / (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1),
+                          ) > 0 &&
+                          totalStok() % (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1) > 0
+                        "
+                      >
+                        lebih
+                      </span>
+                      <span
+                        v-if="
+                          totalStok() % (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1) > 0
+                        "
+                        >{{ totalStok() % (store.kartuStok?.isi > 0 ? store.kartuStok?.isi : 1) }}
+                        {{ store.kartuStok?.satuan_k }}</span
+                      >
+                      <span
+                        :class="app?.dark ? 'text-yellow-8' : 'text-brown-8'"
+                        style="font-size: x-small"
+                      >
+                        ({{ totalStok() }} {{ store.kartuStok?.satuan_k }})
                       </span>
                     </td>
                   </tr>
@@ -120,19 +273,16 @@
 <script setup>
 import { useAdminMasterBarangStore } from 'src/stores/admin/master/barang/list'
 import { useProfilStore } from 'src/stores/admin/profil'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import KopCetak from './KopCetak.vue'
 import { humanDate } from 'src/modules/utils'
+import { useAppStore } from 'src/stores/app'
 // import { usePrint } from 'vue3-print-nb'
 
 const profil = useProfilStore()
 const store = useAdminMasterBarangStore()
-
-// onMounted(async () => {
-//   if (!profil.profilData) {
-//     await profil.getProfil()
-//   }
-// })
+const app = useAppStore()
+onMounted(async () => {})
 
 function ambilData() {
   store.getList()
@@ -140,6 +290,23 @@ function ambilData() {
   //   store.kartuStok = store.meta
   // }
   console.log('items', store.kartuStok)
+}
+
+function totalDebit() {
+  const arr = store.kartuStok?.transaksi?.reduce((acc, item) => {
+    return acc + (item.debit || 0)
+  }, 0)
+  return arr
+}
+function totalKredit() {
+  const arr = store.kartuStok?.transaksi?.reduce((acc, item) => {
+    return acc + (item.kredit || 0)
+  }, 0)
+  return arr
+}
+
+function totalStok() {
+  return totalDebit() - totalKredit()
 }
 
 const printed = ref(false)

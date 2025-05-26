@@ -107,7 +107,9 @@
                     <tr v-for="(item, n) in store.itemCetak?.detail" :key="n">
                       <td class="text-center">{{ n + 1 }}</td>
                       <td>{{ item.master_barang?.namabarang }}</td>
-                      <td class="text-center">{{ item.jumlah }}</td>
+                      <td class="text-center">
+                        {{ item.jumlah }} {{ item?.master_barang?.satuan_k }}
+                      </td>
                       <td class="text-right">{{ formatRpDouble(item.harga_jual) }}</td>
                       <td class="text-right">{{ formatRpDouble(item.diskon) }}</td>
                       <td class="text-right">{{ formatRpDouble(item.subtotal) }}</td>

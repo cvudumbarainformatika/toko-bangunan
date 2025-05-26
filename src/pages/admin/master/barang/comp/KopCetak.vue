@@ -26,7 +26,7 @@
   <div class="row q-px-md q-py-md full-width">
     <span class="text-bold q-pr-md"> KARTU STOK </span>
     <span> {{ store.kartuStok?.namabarang }} </span>
-    <span class="text-yellow-8 q-pl-md content-center" style="font-size: small">
+    <span class="q-pl-md content-center" style="font-size: small">
       (1 {{ store.kartuStok?.satuan_b }} ISI {{ store.kartuStok?.isi }}
       {{ store.kartuStok?.satuan_k }})
     </span>

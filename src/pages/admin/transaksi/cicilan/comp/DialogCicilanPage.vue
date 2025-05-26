@@ -102,7 +102,6 @@
 
       <q-card-actions align="right">
         <app-btn
-          flat
           label="Simpan"
           color="grey-10"
           class="text-yellow-9"
