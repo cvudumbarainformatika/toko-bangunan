@@ -37,7 +37,9 @@
                   <q-item-section>
                     <div class="row full-width">
                       <div class="col-12">
-                        <span class="text-weight-medium">{{ item?.mbarang?.namabarang }}</span>
+                        <span class="text-weight-medium"
+                          >{{ item?.mbarang?.namabarang }} Seri {{ item?.motif }}</span
+                        >
                         <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
                       </div>
                       <div class="col-2">
