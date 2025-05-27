@@ -48,17 +48,17 @@
                       "
                     />
                     <app-select
-                    v-model="store.params.flag"
-                    label="Pilih Status"
-                    option-label="label"
-                    option-value="value"
-                    :options="store.flagOptions"
-                    @update:model-value="
-                      (e) => {
-                        reload()
-                      }
-                    "
-                  />
+                      v-model="store.params.flag"
+                      label="Pilih Status"
+                      option-label="label"
+                      option-value="value"
+                      :options="store.flagOptions"
+                      @update:model-value="
+                        (e) => {
+                          reload()
+                        }
+                      "
+                    />
                     <app-input
                       v-model="store.params.q"
                       prepend-icon="search"
@@ -77,7 +77,7 @@
                         icon="refresh"
                         tooltip="Refresh"
                         color="grey-10"
-                        class="text-yellow-3"
+                        class="text-yellow-8"
                         dense
                         @click="
                           () => {
@@ -95,7 +95,6 @@
                         @click="emits('add')"
                       />
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -185,7 +184,10 @@
                     </q-item-section>
                   </template>
                   <q-separator />
-                  <div class="row q-pa-sm text-weight-bold bg-grey-10">
+                  <div
+                    class="row q-pa-sm text-weight-bold"
+                    :class="app?.dark ? 'bg-grey-10' : 'bg-grey-3 text-black'"
+                  >
                     <div class="col-5">Barang</div>
                     <div class="col-1 text-right">Jumlah</div>
                     <div class="col-1 text-right">Satuan</div>
@@ -196,12 +198,16 @@
                   <q-separator />
                   <div
                     v-if="item?.flag != null"
-                    class="row q-pa-sm text-weight-bold f-10 text-italic bg-grey-9"
+                    class="row q-pa-sm text-weight-bold f-10 text-italic"
+                    :class="app?.dark ? 'bg-grey-9' : 'bg-grey-4 text-black'"
                   >
                     (Detail Penjualan )
                   </div>
                   <div v-for="detail in item?.detail" :key="detail?.id">
-                    <div class="row q-px-sm bg-grey-9">
+                    <div
+                      class="row q-px-sm"
+                      :class="app?.dark ? 'bg-grey-9' : 'bg-grey-4 text-black'"
+                    >
                       <div class="col-5">
                         {{
                           detail?.master_barang?.namabarang +
@@ -227,13 +233,17 @@
                   <template v-if="item?.flag != null">
                     <q-separator />
                     <div
-                      class="row q-pa-sm text-weight-bold f-10 text-italic text-yellow-7 bg-grey-9"
+                      class="row q-pa-sm text-weight-bold f-10 text-italic"
+                      :class="app?.dark ? 'bg-grey-9 text-yellow-3' : 'bg-grey-4 text-black'"
                     >
                       (Detail Penjualan Fifo)
                     </div>
                     <div v-for="detail in item?.detail_fifo" :key="detail?.id">
-                      <div class="row q-px-sm bg-grey-9">
-                        <div class="col-5 text-yellow-2">
+                      <div
+                        class="row q-px-sm"
+                        :class="app?.dark ? 'bg-grey-9 text-yellow-3' : 'bg-grey-4 text-black'"
+                      >
+                        <div class="col-5">
                           {{
                             detail?.master_barang?.namabarang +
                             ' ' +
@@ -248,17 +258,17 @@
                                   ' )')
                           }}
                         </div>
-                        <div class="col-1 text-right text-yellow-3">{{ detail?.jumlah }}</div>
-                        <div class="col-1 text-right text-yellow-3">
+                        <div class="col-1 text-right">{{ detail?.jumlah }}</div>
+                        <div class="col-1 text-right">
                           {{ detail?.master_barang?.satuan_k }}
                         </div>
-                        <div class="col-2 text-right text-yellow-3">
+                        <div class="col-2 text-right">
                           {{ formatDouble(detail?.harga_jual) }}
                         </div>
-                        <div class="col-1 text-right text-yellow-3">
+                        <div class="col-1 text-right">
                           {{ formatDouble(detail?.diskon) }}
                         </div>
-                        <div class="col-2 text-right text-yellow-3">
+                        <div class="col-2 text-right">
                           {{ formatDouble(detail?.subtotal) }}
                         </div>
                       </div>
@@ -290,11 +300,12 @@
 import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
+import { useAppStore } from 'src/stores/app'
 import { computed, defineAsyncComponent, onBeforeMount, ref, shallowRef } from 'vue'
 
 // const search = ref(null)
 const store = useListPenjualanStore()
-// const form = useAdminFormMasterBarangStore()
+const app = useAppStore()
 const DialogCetak = shallowRef(defineAsyncComponent(() => import('./cetak/DialogCetak.vue')))
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)

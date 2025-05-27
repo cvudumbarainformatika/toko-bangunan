@@ -103,36 +103,82 @@
                     <q-item-label lines="1"
                       >{{ item?.namabarang }}
                       <q-badge class="bg-grey-8" style="font-size: smaller"
-                        >per {{ item?.satuan_b }} isi {{ item?.isi }} {{ item?.satuan_k }}
+                        >Keterangan : per {{ item?.satuan_b }}
+                        <template v-if="item?.satuan_b !== item?.satuan_k">
+                          isi {{ item?.isi }} {{ item?.satuan_k }}
+                        </template>
                       </q-badge>
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
-                        >Kategori: {{ item?.kategori }} {{ item?.jeniskeramik }}
+                        >Kategori: {{ item?.kategori }}
+                        <template v-if="item?.jeniskeramik">({{ item?.jeniskeramik }}) </template>
                       </span>
                       |
                       <q-badge
                         class="text-weight-bold"
-                        :class="{
-                          'bg-grey-10 text-yellow-8 q-px-sm q-py-xs rounded':
-                            item?.stok_kecil > item?.minim_stok,
-                          'bg-grey-10 text-red q-px-sm q-py-xs rounded':
-                            store.params.minim_stok === 1 || item?.stok_kecil <= item?.minim_stok,
-                        }"
-                        >Stok Sekarang: {{ item?.stok_besarbaru }} {{ item?.satuan_b }} Lebih
-                        {{ item?.stok_besarkecil }} {{ item?.satuan_k }}</q-badge
-                      >
-                      <q-badge
-                        class="text-weight-bold"
-                        :class="{
-                          'bg-grey-10 text-yellow-8 q-px-sm q-py-xs rounded':
-                            item?.stok_kecil > item?.minim_stok,
-                          'bg-grey-10 text-red q-px-sm q-py-xs rounded':
-                            store.params.minim_stok === 1 || item?.stok_kecil <= item?.minim_stok,
-                        }"
-                      >
-                        ({{ item?.stok_kecil }} {{ item?.satuan_k }})</q-badge
-                      >
+                        outline
+                        :class="
+                          app?.dark
+                            ? {
+                                'text-yellow-8 q-px-sm q-py-xs rounded':
+                                  item?.stok_kecil > item?.minim_stok,
+                                'text-red q-px-sm q-py-xs rounded':
+                                  store.params.minim_stok === 1 ||
+                                  item?.stok_kecil <= item?.minim_stok,
+                              }
+                            : {
+                                'bg-yellow-10 q-px-sm q-py-xs rounded':
+                                  item?.stok_kecil > item?.minim_stok,
+                                'bg-red-9 q-px-sm q-py-xs rounded':
+                                  store.params.minim_stok === 1 ||
+                                  item?.stok_kecil <= item?.minim_stok,
+                              }
+                        "
+                        >Stok Sekarang:
+                        <span
+                          v-if="Math.floor(item.stok_besar / (item?.isi > 0 ? item?.isi : 1)) >= 0"
+                          >{{ Math.floor(item.stok_besar / (item?.isi > 0 ? item?.isi : 1)) }}
+                          {{ item?.satuan_b }}
+                        </span>
+                        <span
+                          v-if="
+                            Math.floor(item.stok_besar / (item?.isi > 0 ? item?.isi : 1)) > 0 &&
+                            item?.stok_besar % (item?.isi > 0 ? item?.isi : 1) > 0
+                          "
+                        >
+                          lebih
+                        </span>
+                        <span v-if="item?.stok_besar % (item?.isi > 0 ? item?.isi : 1) > 0"
+                          >{{ item?.stok_besar % (item?.isi > 0 ? item?.isi : 1) }}
+                          {{ item?.satuan_k }}
+                        </span>
+                      </q-badge>
+                      <span class="q-px-sm">
+                        <q-badge
+                          class="text-weight-bold"
+                          outline
+                          :class="
+                            app?.dark
+                              ? {
+                                  'text-yellow-8 q-px-sm q-py-xs rounded':
+                                    item?.stok_kecil > item?.minim_stok,
+                                  'text-red q-px-sm q-py-xs rounded':
+                                    store.params.minim_stok === 1 ||
+                                    item?.stok_kecil <= item?.minim_stok,
+                                }
+                              : {
+                                  'bg-yellow-10 q-px-sm q-py-xs rounded':
+                                    item?.stok_kecil > item?.minim_stok,
+                                  'bg-red-9 q-px-sm q-py-xs rounded':
+                                    store.params.minim_stok === 1 ||
+                                    item?.stok_kecil <= item?.minim_stok,
+                                }
+                          "
+                        >
+                          atau ({{ item?.stok_kecil }} {{ item?.satuan_k }})
+                        </q-badge>
+                      </span>
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
@@ -183,11 +229,12 @@ import { useAdminMasterBarangStore } from 'src/stores/admin/master/barang/list'
 import { computed, defineAsyncComponent, onBeforeMount, ref, shallowRef } from 'vue'
 import { pathImg } from 'src/boot/axios'
 import DialogImage from './DialogImage.vue'
+import { useAppStore } from 'src/stores/app'
 const DialogKartu = shallowRef(defineAsyncComponent(() => import('./DialogKartu.vue')))
 
 // const search = ref(null)
 const store = useAdminMasterBarangStore()
-// const form = useAdminFormMasterBarangStore()
+const app = useAppStore()
 
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
@@ -266,7 +313,7 @@ const filter = (val) => {
 const kartuStok = (item) => {
   store.kartuStok = item
   store.selectedKodebarang = item?.kodebarang
-  // console.log('kartuStok', store.kartuStok)
+  store.kartuStok.transaksi = store.cariTotalArray(item?.transaksi)
   store.dialogKartu = true
 }
 // function loadMore(index, done) {

@@ -30,5 +30,3 @@ const FormPage = defineAsyncComponent(() => import('./comp/FromPage.vue'))
 const isList = ref(true)
 const item = ref(null)
 </script>
-
-<style scoped></style>

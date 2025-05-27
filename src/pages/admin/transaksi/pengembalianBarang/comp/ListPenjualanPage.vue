@@ -53,7 +53,7 @@
             <app-btn
               round
               color="grey-10"
-              class="text-yellow-3"
+              class="text-yellow-8"
               icon="refresh"
               dense
               tooltip="Refresh"
@@ -126,7 +126,7 @@
                     <app-btn
                       v-if="['2', '3', '5'].includes(item?.flag)"
                       icon="archive"
-                      color="primary"
+                      color="orange"
                       tooltip="Pengembalian Barang"
                       @click="$emit('form', item)"
                     />
@@ -139,7 +139,7 @@
               </template>
 
               <q-separator />
-              <q-card class="q-ma-sm">
+              <q-card class="q-ma-sm" :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }">
                 <q-card-section>
                   <div class="row q-pa-sm">
                     <div class="col-5">Barang</div>

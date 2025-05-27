@@ -68,10 +68,10 @@
                 <q-space />
                 <div class="col-auto">
                   <app-btn
-                    class="text-yellow-3"
+                    color="grey-10"
+                    class="text-yellow-8"
                     icon="refresh"
                     tooltip="refresh"
-                    flat
                     @click="store.getList"
                   />
                 </div>
@@ -286,7 +286,10 @@
                     </q-item-section>
                   </template>
                   <q-separator />
-                  <div class="row q-pa-sm bg-grey-10">
+                  <div
+                    class="row q-pa-sm"
+                    :class="app?.dark ? 'bg-grey-10' : 'bg-grey-3 text-black'"
+                  >
                     <div class="col-5">Barang</div>
                     <div class="col-1 text-right">Jumlah</div>
                     <div class="col-1 text-right">Jumlah Retur</div>
@@ -296,7 +299,10 @@
                     <div class="col-2 text-right">Subtotal</div>
                   </div>
                   <div v-for="detail in item?.detail" :key="detail?.id">
-                    <div class="row q-px-sm bg-grey-9">
+                    <div
+                      class="row q-px-sm"
+                      :class="app?.dark ? 'bg-grey-9' : 'bg-grey-3 text-black'"
+                    >
                       <div class="col-5">
                         {{
                           detail?.master_barang?.namabarang ??
@@ -359,11 +365,12 @@
 import { formatDouble } from 'src/modules/formatter'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
+import { useAppStore } from 'src/stores/app'
 import { computed, ref } from 'vue'
 
 // const search = ref(null)
 const store = useListCicilanPenjualanStore()
-// const form = useAdminFormMasterBarangStore()
+const app = useAppStore()
 
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)

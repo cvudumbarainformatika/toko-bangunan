@@ -54,7 +54,7 @@
                     icon="refresh"
                     tooltip="Refresh"
                     color="grey-10"
-                    class="text-yellow-3"
+                    class="text-yellow-8"
                     dense
                     @click="
                       () => {
@@ -96,7 +96,7 @@
                   </q-item-section> -->
                   <q-item-section>
                     <q-item-label lines="1">
-                      <span class="text-weight-bold text-primary"
+                      <span class="text-weight-bold"
                         >Nama Barang : {{ item?.barang?.namabarang }}</span
                       >
                       <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
@@ -107,26 +107,50 @@
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
-                        ><q-badge rounded outline color="yellow">
+                        ><q-badge rounded outline :color="app?.dark ? 'grey-5' : 'grey-8'">
                           No. Penerimaan : {{ item?.nopenerimaan }}
                         </q-badge></span
                       >
-                      <span class="text-weight-bold">
-                        || Jumlah :
-                        <span v-if="Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0">{{ Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) }} {{ item?.satuan_b }}</span>
-                        <span v-if="Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0 && item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0"> lebih </span>
-                        <span v-if="item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0">{{ item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) }} {{ item?.satuan_k }}</span>
-                        </span
+                      <span
+                        class="text-weight-bold"
+                        :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
                       >
-                      <span v-if="item?.isi > 1">
+                        || Jumlah :
+                        <span v-if="Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0"
+                          >{{ Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) }}
+                          {{ item?.satuan_b }}</span
+                        >
+                        <span
+                          v-if="
+                            Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0 &&
+                            item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0
+                          "
+                        >
+                          lebih
+                        </span>
+                        <span v-if="item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0"
+                          >{{ item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) }}
+                          {{ item?.satuan_k }}</span
+                        >
+                      </span>
+                      <span
+                        v-if="item?.isi > 1"
+                        :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
+                      >
                         (total : {{ item?.jumlah_k }} {{ item?.satuan_k }})
                       </span>
-                      <span class="text-weight-bold text-red">
+                      <span
+                        class="text-weight-bold"
+                        :class="app?.dark ? 'text-green-3' : 'text-teal-9'"
+                      >
                         || Harga Satuan Kecil : {{ formatRpDouble(item?.harga_beli_k) }} per({{
                           item?.satuan_k
                         }})</span
                       >
-                      <span class="text-weight-bold text-red">
+                      <span
+                        class="text-weight-bold"
+                        :class="app?.dark ? 'text-green-3' : 'text-teal-9'"
+                      >
                         || Harga Satuan Besar : {{ formatRpDouble(item?.harga_beli_b) }} per({{
                           item?.satuan_b
                         }})</span
@@ -160,10 +184,11 @@ import { formatRpDouble } from 'src/modules/formatter'
 import { useAdminListTransaksiStokOpnameStore } from 'src/stores/admin/transaksi/opname/list'
 import { computed, ref } from 'vue'
 import { humanDate, jamTnpDetik } from 'src/modules/utils'
+import { useAppStore } from 'src/stores/app'
 
 // const search = ref(null)
 const store = useAdminListTransaksiStokOpnameStore()
-
+const app = useAppStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)

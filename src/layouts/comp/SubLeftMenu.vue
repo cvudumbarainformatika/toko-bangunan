@@ -15,7 +15,7 @@
           v-ripple
           clickable
           :active="menu === item"
-          active-class="bg-secondary text-white"
+          :active-class="app?.dark ? 'bg-grey-5 text-black' : 'bg-grey-9 text-white'"
           @click="emits('menuClick', item)"
           :class="{
             'bg-negative text-white': item?.name === 'page-pulang' && pasien?.status !== '3',
@@ -32,6 +32,8 @@
 </template>
 
 <script setup>
+import { useAppStore } from 'src/stores/app'
+
 defineProps({
   tab: {
     type: Object,
@@ -42,6 +44,6 @@ defineProps({
     default: null,
   },
 })
-
+const app = useAppStore()
 const emits = defineEmits(['menuClick'])
 </script>

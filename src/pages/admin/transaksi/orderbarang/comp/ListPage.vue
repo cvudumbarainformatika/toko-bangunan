@@ -110,8 +110,14 @@
                     <q-item-label lines="1">No. Order : {{ item?.noorder }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold">-- {{ item?.suplier?.nama }}</span>
-                      <span class="text-weight-bold text-yellow-3"> || TOTAL ORDERAN : </span
-                      ><q-badge outline color="yellow-3">{{ formatRpDouble(item?.total) }}</q-badge>
+                      <span
+                        class="text-weight-bold"
+                        :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
+                      >
+                        || TOTAL ORDERAN : </span
+                      ><q-badge outline :color="app?.dark ? 'yellow-3' : 'orange-9'">{{
+                        formatRpDouble(item?.total)
+                      }}</q-badge>
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
@@ -176,11 +182,13 @@ import { formatRpDouble, humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useAdminFormTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/form'
 
 import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
+import { useAppStore } from 'src/stores/app'
 import { computed, ref } from 'vue'
 
 // const search = ref(null)
 const storeOrderH = useAdminListTransaksiOrderBarangStore()
 const store = useAdminFormTransaksiOrderBarangStore()
+const app = useAppStore()
 
 const refreshList = async () => {
   // Reset infinite scroll

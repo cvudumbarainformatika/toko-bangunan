@@ -116,13 +116,16 @@
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
-                        ><q-badge rounded outline color="grey">
+                        ><q-badge rounded outline :color="app?.dark ? 'grey' : 'grey-9'">
                           No. Order : {{ item?.noorder }}
                         </q-badge></span
                       >
-                      <span class="text-weight-bold text-yellow-3">
-                        || TOTAL BARANG DATANG : {{ formatRpDouble(item?.total) }}
-                      </span>
+                      <span
+                        class="text-weight-bold"
+                        :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
+                      >
+                        || TOTAL BARANG DATANG : {{ formatRpDouble(item?.total) }}</span
+                      >
                     </q-item-label>
                   </q-item-section>
                   <q-item-section v-if="hoveredId === item?.id" side>
@@ -156,6 +159,7 @@
 <script setup>
 import { formatRpDouble, humanDate, jamTnpDetik } from 'src/modules/formatter'
 import { useAdminListTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/list'
+import { useAppStore } from 'src/stores/app'
 import { computed, ref } from 'vue'
 
 // const search = ref(null)
@@ -164,7 +168,7 @@ const storePenerimaanH = useAdminListTransaksiPenerimaanBarangStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const hoveredId = ref(null)
-
+const app = useAppStore()
 const emits = defineEmits(['add', 'edit'])
 
 // onMounted(() => {
