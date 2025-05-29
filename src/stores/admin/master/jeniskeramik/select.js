@@ -15,7 +15,6 @@ export const useAdminMasterJenisSelectStore = defineStore('admin-master-jenis-se
   actions: {
     async getDataAll() {
       this.loading = true
-
       try {
         const { data } = await api.get('/v1/master/select/master-get-jenis')
         console.log('get Jenis Keramik', data)
