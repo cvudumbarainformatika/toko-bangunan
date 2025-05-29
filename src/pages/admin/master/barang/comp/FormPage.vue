@@ -82,7 +82,7 @@
                           icon="task_alt"
                           class="absolute-center"
                           size="sm"
-                          @click="setThumbnail(image.id)"
+                          @click="setThumbnail(image.tempId || image.id, !!image.tempId)"
                         />
                       </div>
                     </div>
@@ -323,21 +323,31 @@ const hapusGambar = async (index, id) => {
     console.error('Gagal menghapus gambar:', error)
   }
 }
-const setThumbnail = async (id) => {
-  console.log('id image', id)
-  if (id) {
-    try {
-      const success = await store.setthumbnail(id)
+async function setThumbnail(identifier, isTemp = false) {
+  console.log(isTemp ? 'tempId image' : 'id image', identifier)
+
+  if (!identifier) return // Hentikan jika tidak ada identifier
+
+  try {
+    if (isTemp) {
+      // Kasus gambar belum tersimpan di server (menggunakan tempId)
+      store.form.rincians = store.form.rincians.map((image) => ({
+        ...image,
+        flag_thumbnail: image.tempId === identifier ? '1' : null,
+      }))
+    } else {
+      // Kasus gambar sudah tersimpan di server (menggunakan id)
+      const success = await store.setthumbnail(identifier)
       if (success) {
-        // Perbarui flag_thumbnail di store.form.rincians
         store.form.rincians = store.form.rincians.map((image) => ({
           ...image,
-          flag_thumbnail: image.id === id ? '1' : null,
+          flag_thumbnail: image.id === identifier ? '1' : null,
         }))
       }
-    } catch (error) {
-      console.error('Gagal memilih thumbnail:', error)
     }
+    console.log('store form', store.form.rincians)
+  } catch (error) {
+    console.error('Gagal memilih thumbnail:', error)
   }
 }
 
@@ -355,16 +365,14 @@ function onSubmit() {
   if (!store.form.kodebarang) {
     store.form.kodebarang = null // Atau '', sesuai backend
   }
-
   // Periksa apakah rincians tidak kosong dan tidak ada thumbnail yang dipilih
   if (store.form.rincians.length > 0) {
     const hasThumbnail = store.form.rincians.some((image) => image.flag_thumbnail === '1')
     if (!hasThumbnail) {
-      notifError('Silakan Pilih Thumbnail Terlebih Dahulu')
+      notifError('Silakan Centang Gambar untuk Pilih Thumbnail Terlebih Dahulu')
       return // Hentikan proses submit jika tidak ada thumbnail
     }
   }
-
   // Kirim data ke backend
   store
     .save({
