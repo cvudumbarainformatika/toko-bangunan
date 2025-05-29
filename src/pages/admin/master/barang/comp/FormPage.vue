@@ -82,7 +82,7 @@
                           icon="task_alt"
                           class="absolute-center"
                           size="sm"
-                          @click="setThumbnail(image.tempId)"
+                          @click="setThumbnail(image.id)"
                         />
                       </div>
                     </div>
@@ -323,32 +323,22 @@ const hapusGambar = async (index, id) => {
     console.error('Gagal menghapus gambar:', error)
   }
 }
-// const setThumbnail = async (id) => {
-//   console.log('id image', id)
-//   if (id) {
-//     try {
-//       const success = await store.setthumbnail(id)
-//       if (success) {
-//         // Perbarui flag_thumbnail di store.form.rincians
-//         store.form.rincians = store.form.rincians.map((image) => ({
-//           ...image,
-//           flag_thumbnail: image.id === id ? '1' : null,
-//         }))
-//       }
-//     } catch (error) {
-//       console.error('Gagal memilih thumbnail:', error)
-//     }
-//   }
-// }
-const setThumbnail = async (tempId) => {
-  console.log('tempId image', tempId)
-
-  // Perbarui flag_thumbnail di store.form.rincians
-  store.form.rincians = store.form.rincians.map((image) => ({
-    ...image,
-    flag_thumbnail: image.tempId === tempId ? '1' : null,
-  }))
-  console.log('store form', store.form.rincians)
+const setThumbnail = async (id) => {
+  console.log('id image', id)
+  if (id) {
+    try {
+      const success = await store.setthumbnail(id)
+      if (success) {
+        // Perbarui flag_thumbnail di store.form.rincians
+        store.form.rincians = store.form.rincians.map((image) => ({
+          ...image,
+          flag_thumbnail: image.id === id ? '1' : null,
+        }))
+      }
+    } catch (error) {
+      console.error('Gagal memilih thumbnail:', error)
+    }
+  }
 }
 
 // Fungsi untuk mendapatkan URL gambar (preview)
@@ -364,6 +354,15 @@ function onSubmit() {
   // Pastikan kodebarang ada di form
   if (!store.form.kodebarang) {
     store.form.kodebarang = null // Atau '', sesuai backend
+  }
+
+  // Periksa apakah rincians tidak kosong dan tidak ada thumbnail yang dipilih
+  if (store.form.rincians.length > 0) {
+    const hasThumbnail = store.form.rincians.some((image) => image.flag_thumbnail === '1')
+    if (!hasThumbnail) {
+      notifError('Silakan Pilih Thumbnail Terlebih Dahulu')
+      return // Hentikan proses submit jika tidak ada thumbnail
+    }
   }
 
   // Kirim data ke backend
