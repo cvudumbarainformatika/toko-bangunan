@@ -18,7 +18,7 @@ export const useAdminMasterBrandSelectStore = defineStore('admin-master-brand-se
 
       try {
         const { data } = await api.get('/v1/master/select/master-get-brand')
-        console.log('get Satuan all', data)
+        // console.log('get Brands', data)
         if (data) {
           this.items = data
         }

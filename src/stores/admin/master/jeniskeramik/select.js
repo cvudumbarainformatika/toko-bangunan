@@ -17,10 +17,10 @@ export const useAdminMasterJenisSelectStore = defineStore('admin-master-jenis-se
       this.loading = true
       try {
         const { data } = await api.get('/v1/master/select/master-get-jenis')
-        console.log('get Jenis Keramik', data)
         if (data) {
           this.items = data
         }
+        console.log('get Jenis Keramik', this.items)
         this.loading = false
       } catch (error) {
         console.log(error)

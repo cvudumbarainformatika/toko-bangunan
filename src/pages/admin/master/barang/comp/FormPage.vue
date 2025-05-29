@@ -270,6 +270,9 @@ const props = defineProps({
 
 onMounted(() => {
   store.initReset(props.data)
+  selectJenis.getDataAll()
+  selectSatuan.getDataAll()
+  selectBrand.getDataAll()
 })
 // function validKeterangan() {
 //   if (props.valid) {
