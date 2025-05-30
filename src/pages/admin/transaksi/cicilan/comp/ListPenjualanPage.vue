@@ -231,7 +231,7 @@
                           :disable="item?.loading"
                         />
                         <app-btn
-                          v-if="['7']?.includes(item?.flag)"
+                          v-if="['7', '8']?.includes(item?.flag)"
                           class="q-mr-xs text-black"
                           icon="price_check"
                           tooltip="Pelunasan"
