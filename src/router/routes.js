@@ -74,6 +74,10 @@ const routes = [
         path: '/admin/transaksi/stok-opname',
         component: () => import('pages/admin/transaksi/stokOpname/IndexPage.vue'),
       },
+      {
+        path: '/admin/transaksi/order-penjualan',
+        component: () => import('pages/admin/transaksi/orderpenjualan/IndexPage.vue'),
+      },
 
       // // Laporan
       // {
