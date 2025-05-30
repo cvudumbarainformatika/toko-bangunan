@@ -75,7 +75,15 @@
       <app-input-rp currency outlined v-model="store.form.jumlah" :label="'(Stok'+ (store?.barang?.jumlah_k??0)+')'" :autofocus="false" readonly  />
     </div>
     <div class="col-auto" style="width: 15%;">
-      <app-input-rp currency v-model="store.form.harga_jual" label="Harga Jual" outlined :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear="()=>{
+      <app-input-rp v-if="store.form.jumlahB>0 && store.form.jumlahK<=0" currency v-model="store.form.hargaJualB" label="Harga Jual" outlined :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      @update:model-value="(val)=>{
+        const jual=olahUang(val)
+        store.setForm('harga_jual',jual/store.form.isi)
+      console.log('gede', jual,store.form.harga_jual);
+
+    }" />
+      <app-input-rp v-else currency v-model="store.form.harga_jual" label="Harga Jual" outlined :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      @clear="()=>{
       store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
     }" />
     </div>
@@ -84,6 +92,7 @@
   </div>
 </template>
 <script setup>
+import { olahUang } from 'src/modules/utils'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
 
@@ -111,6 +120,7 @@ function selected(val){
     store.setForm('harga_beli',isNaN(store?.barang?.harga_beli_k)?0:parseFloat(store?.barang?.harga_beli_k))
     store.setForm('isi',isNaN(store?.barang?.isi)?(parseFloat(store?.barang?.barang?.isi)):parseFloat(store?.barang?.isi))
     store.setForm('motif',store?.barang?.motif ?? '')
+    store.setForm('hargaJualB',olahUang(store.form.harga_jual) * store.form.isi)
     console.log('form', store.form);
   }
   setTimeout(() => {
