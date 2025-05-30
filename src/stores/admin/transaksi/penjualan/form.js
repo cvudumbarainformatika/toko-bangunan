@@ -8,8 +8,10 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
   state: () => ({
     loading: false,
     loadingPembayaran: false,
+    loadingTempo: false,
     openPembayaran: false,
     opendialogCetak: false,
+    openDialogTempo: false,
     barang: null,
     barangs: [],
     form: {
@@ -38,6 +40,11 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
         alamat: '',
       },
     },
+    formTempo:{
+      id: null,
+      tempo: null
+    },
+    dispTempo: null,
     noNota: null,
     item: null,
     sales: [],
@@ -81,6 +88,15 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
           alamat: '',
         },
       }
+    },
+    resetTempo(){
+      this.formTempo = {
+        id: null,
+        tempo: null
+      }
+      this.dispTempo = null
+      this.item = null
+      this.openDialogTempo=false
     },
     async simpanDetail() {
       this.loading = true
@@ -195,6 +211,26 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
           })
       })
     },
+    simpanTempo(){
+      this.loadingTempo=true
+      return new Promise((resolve) => {
+        api
+        .post('v1/transaksi/penjualan/simpan-tempo', this.formTempo)
+        .then((resp) => {
+          this.loadingTempo = false
+          const data= resp?.data
+          notifSuccess(data.message)
+          const index=this.list.items.findIndex(i=>i.id==data?.data?.id)
+          if(index>=0) this.list.items[index].tempo=data?.data?.tempo
+          this.resetTempo()
+          resolve(resp)
+        })
+        .catch(() => {
+          this.loadingTempo = false
+
+        })
+      })
+    }
   },
 })
 

@@ -6,6 +6,7 @@
       }"
       @use-nota="useNota"
       @bayar="bayar"
+      @tempo="tempo"
     />
   </div>
   <div v-else class="q-pa-md">
@@ -88,8 +89,10 @@
   </div>
   <DialogPembayaranPage v-model="store.openPembayaran" />
   <DialogCetak v-model="store.opendialogCetak" />
+  <DialogTempo v-model="store.openDialogTempo" />
 </template>
 <script setup>
+import { date } from 'quasar'
 import { formatDouble } from 'src/modules/formatter'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
@@ -104,6 +107,7 @@ const DialogPembayaranPage = shallowRef(
   defineAsyncComponent(() => import('./comp/DialogPembayaranPage.vue')),
 )
 const DialogCetak = shallowRef(defineAsyncComponent(() => import('./comp/cetak/DialogCetak.vue')))
+const DialogTempo = shallowRef(defineAsyncComponent(() => import('./comp/DialogTempo.vue')))
 
 const isList = ref(true)
 const store = useFromPenjualanStore()
@@ -125,6 +129,19 @@ function bayar(item) {
   store.formPembayaran.total = item?.total
   store.formPembayaran.total_diskon = item?.total_diskon
   store.formPembayaran.no_penjualan = item?.no_penjualan
+}
+function tempo(item) {
+  const nextMth=date.addToDate(Date.now(),{month:1})
+  console.log('tempo', item);
+
+  store.formTempo.tempo = date.formatDate(nextMth, 'YYYY-MM-DD')
+  store.formTempo.id=item.id
+  store.dispTempo = date.formatDate(nextMth, 'DD MMMM YYYY')
+  store.item=item
+  store.openDialogTempo = true
+  setTimeout(() => {
+    if(item?.expand) delete item.expand
+  },100)
 }
 // function lihatCetak(item) {
 //   console.log('item', item)
