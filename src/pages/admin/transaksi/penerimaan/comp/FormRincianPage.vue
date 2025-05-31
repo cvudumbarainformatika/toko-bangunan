@@ -28,6 +28,7 @@
                 :valid="{ required: false }"
               />
             </div>
+
             <div class="col-3">
               <app-input-date
                 :model="store.dateDisplay.tgl"
@@ -92,6 +93,15 @@
             </div>
             <div class="col-6">
               <app-input label="Supllier" disable v-model="store.form.suplier" />
+            </div>
+            <div class="col-3">
+              <q-select
+                outlined
+                dense
+                label="Pembayaran"
+                v-model="store.form.pembayaran"
+                :options="['', 'Cash', 'Cash Tempo', 'Hutang']"
+              />
             </div>
           </div>
           <q-separator class="q-mt-sm" />
@@ -261,12 +271,14 @@ function onSubmit(val) {
   // console.log('val', val)
   if (store.form.nofaktur === '') {
     notifError('No Faktur Tidak Boleh Kosong...!!!')
+  } else if (store.form.pembayaran === '') {
+    notifError('Pembayaran Tidak Boleh Kosong...!!!')
   } else {
     store.form.id = val?.id
     store.form.idx = val?.idx
     store.form.motif = val?.motif
     store.form.kdbarang = val?.kdbarang
-    store.form.jumlahorder = val?.jumlahpo
+    store.form.jumlahorder = olahUang(val?.jumlahpo)
     store.form.jumlahpo = olahUang(val?.sisajumlahbelumditerima)
     store.form.jumlah_datang_b = olahUang(val?.sisajumlahbelumditerimax)
     store.form.jumlahpo_k = val?.jumlahpo_k
@@ -276,17 +288,23 @@ function onSubmit(val) {
     store.form.hargafaktur = val?.hargapo
     store.form.hargaasli = olahUang(val?.hargafix)
     store.form.jumlahbarangrusak = olahUang(val?.itemrusak)
-    store.form.totalditerimabias = val?.totalditerimabias
+    store.form.totalditerimabias = olahUang(val?.totalditerimabias)
     store.form.totalpenerimaanall =
-      parseFloat(store.form.jumlah_datang_b) + parseFloat(store.form.totalditerimabias)
+      parseFloat(olahUang(store.form.jumlah_datang_b)) +
+      parseFloat(olahUang(store.form.totalditerimabias))
 
-    if (parseFloat(store.form.jumlahorder) === parseFloat(store.form.totalpenerimaanall)) {
+    // console.log('store.form.totalpenerimaanall', store.form.totalpenerimaanall)
+
+    if (
+      parseFloat(olahUang(store.form.jumlahorder)) ===
+      parseFloat(olahUang(store.form.totalpenerimaanall))
+    ) {
       store.form.flagingx = '1'
     } else {
       store.form.flagingx = null
     }
 
-    if (parseFloat(store.form.jumlahorder) < parseFloat(store.form.totalpenerimaanall)) {
+    if (parseFloat(olahUang(store.form.jumlahorder)) < parseFloat(store.form.totalpenerimaanall)) {
       notifError('Jumlah yang Anda Masukkan Melebihi jumlah pesanan...!!!')
     } else {
       store.save()
@@ -322,7 +340,7 @@ const lists = computed(() => {
 })
 
 function kurangisisabarangdatang(item) {
-  item.sisajumlahbelumditerima = item.sisajumlahbelumditerimax - item.itemrusak
+  item.sisajumlahbelumditerima = olahUang(item.sisajumlahbelumditerimax) - olahUang(item.itemrusak)
 }
 
 function cetakData() {
