@@ -54,7 +54,7 @@ export const useAdminOrderPenjualanStore = defineStore('admin-transaksi-order-pe
     },
 
     loadMore(index, done) {
-      console.log(index, done);
+      // console.log(index, done);
       
       this.isError = false
       this.params.page = index
@@ -82,7 +82,73 @@ export const useAdminOrderPenjualanStore = defineStore('admin-transaksi-order-pe
           })
       })
     },
+
+    async onUpdateRincian(payload){
+      // console.log(payload);
+
+      const order_id = payload.order_id
+      const rincian_id = payload?.id
+      try {
+        const resp = await api.post('/v1/orderpenjualan/update-rincian', payload)
+        console.log('update rincian', resp);
+
+        const it = this.items?.find(x=>x.id === order_id) || null
+        const rincianx = it?.rincians?.find(y=>y.id === rincian_id)
+
+
+        rincianx['jumlah'] = payload?.jumlah
+        rincianx['satuan'] = payload?.satuan
+        rincianx['subtotal'] = payload?.subtotal
+
+        it['total_harga'] = payload?.total_harga_order
+        
+      } catch (error) {
+        console.log('update rincian', error);
+        
+      } 
+    },
+
+    async onDeleteRincian(payload){
+      console.log('from store', payload);
+      
+      const order_id = payload.order_id
+      const rincian_id = payload?.id
+
+      try {
+          const resp = await api.post('/v1/orderpenjualan/delete-rincian', payload)
+          console.log('delete rincian', resp);
+
+          const it = this.items?.find(x=>x.id === order_id) || null
+          const rincianx = it?.rincians?.filter(y=>y.id !== rincian_id)
+          it.rincians = rincianx
+          it['total_harga'] = payload?.total_harga_order
+
+      } catch (error) {
+        console.log('delete rincian', error);
+      }
+    },
+
+    async onUpdateStatus(payload){
+      console.log('from store', payload);
+      
+      const order_id = payload.order_id
+      const status = payload?.status_order
+
+      try {
+          const resp = await api.post('/v1/orderpenjualan/update-status', payload)
+          console.log('update-status', resp);
+
+          const it = this.items?.find(x=>x.id === order_id) || null
+          it['status_order'] = status
+
+      } catch (error) {
+        console.log('update-status', error);
+      }
+    }
   },
+
+  
+
 })
 
 if (import.meta.hot) {
