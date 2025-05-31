@@ -135,22 +135,24 @@
                                   item?.stok_kecil <= item?.minim_stok,
                               }
                         "
-                        >Stok Sekarang:
+                        >Stok Sekarang :
                         <span
-                          v-if="Math.floor(item.stok_besar / (item?.isi > 0 ? item?.isi : 1)) >= 0"
-                          >{{ Math.floor(item.stok_besar / (item?.isi > 0 ? item?.isi : 1)) }}
+                          v-if="Math.floor(item.stok_kecil / (item?.isi > 0 ? item?.isi : 1)) >= 0"
+                        >
+                          {{ Math.floor(item.stok_kecil / (item?.isi > 0 ? item?.isi : 1)) }}
                           {{ item?.satuan_b }}
                         </span>
                         <span
+                          class="q-px-xs"
                           v-if="
-                            Math.floor(item.stok_besar / (item?.isi > 0 ? item?.isi : 1)) > 0 &&
-                            item?.stok_besar % (item?.isi > 0 ? item?.isi : 1) > 0
+                            Math.floor(item.stok_kecil / (item?.isi > 0 ? item?.isi : 1)) > 0 &&
+                            item?.stok_kecil % (item?.isi > 0 ? item?.isi : 1) > 0
                           "
                         >
                           lebih
                         </span>
-                        <span v-if="item?.stok_besar % (item?.isi > 0 ? item?.isi : 1) > 0"
-                          >{{ item?.stok_besar % (item?.isi > 0 ? item?.isi : 1) }}
+                        <span v-if="item?.stok_kecil % (item?.isi > 0 ? item?.isi : 1) > 0">
+                          {{ item?.stok_kecil % (item?.isi > 0 ? item?.isi : 1) }}
                           {{ item?.satuan_k }}
                         </span>
                       </q-badge>
