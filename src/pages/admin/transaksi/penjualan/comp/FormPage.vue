@@ -39,7 +39,7 @@
         ref="refSelectBarang"
         v-model="store.barang"
         url="v1/transaksi/penjualan/list-barang"
-        :option-label="opt=> opt.namabarang + ' ' + (opt?.stok===null ? '' : '(stok '+opt?.stok.jumlah_k+ '  '+ opt?.stok.satuan_k+' )') "
+        :option-label="opt=> opt?.barang?.namabarang+' - Seri '+ opt?.motif + ' - ' + (opt?.jumlah_k===0 ? '' : '(stok '+opt?.jumlah_k+ '  '+ opt?.satuan_k+' )') "
         :option-value="opt=> opt"
         label="Cari barang"
         :filter-min="3"
@@ -50,7 +50,7 @@
       />
     </div>
     <div class="col-auto" style="width: 15%;">
-      <app-input ref="refJumlahB" v-model="store.form.jumlahB" :label="'Jumlah ('+ (store?.barang?.stok?.satuan_b??'')+')'"  :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      <app-input ref="refJumlahB" v-model="store.form.jumlahB" :label="'Jumlah ('+ (store?.barang?.satuan_b??'')+')'"  :autofocus="false" @keyup.enter.stop="onEnterinput()"
       @clear=setNol(strJumlahB) @update:model-value="(val)=>{
         const _removedZeros = val?.replace(/^0+/, '')
 
@@ -60,7 +60,7 @@
       />
     </div>
     <div class="col-auto" style="width: 15%;">
-      <app-input ref="refJumlah" v-model="store.form.jumlahK" :label="'Jumlah ('+ (store?.barang?.stok?.satuan_k??'')+')'"  :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      <app-input ref="refJumlah" v-model="store.form.jumlahK" :label="'Jumlah ('+ (store?.barang?.satuan_k??'')+')'"  :autofocus="false" @keyup.enter.stop="onEnterinput()"
        @clear=setNol(strJumlah) @update:model-value="(val)=>{
         const _removedZeros = val?.replace(/^0+/, '')
         store.setForm('jumlahK',_removedZeros)
@@ -72,10 +72,18 @@
       <app-input-rp currency outlined v-model="store.form.isi" label="isi" :autofocus="false" readonly  />
     </div>
     <div class="col-auto" style="width: 10%;">
-      <app-input-rp currency outlined v-model="store.form.jumlah" :label="'(Stok'+ (store?.barang?.stok?.jumlah_k??0)+')'" :autofocus="false" readonly  />
+      <app-input-rp currency outlined v-model="store.form.jumlah" :label="'(Stok'+ (store?.barang?.jumlah_k??0)+')'" :autofocus="false" readonly  />
     </div>
     <div class="col-auto" style="width: 15%;">
-      <app-input-rp currency v-model="store.form.harga_jual" label="Harga Jual" outlined :autofocus="false" @keyup.enter.stop="onEnterinput()" @clear="()=>{
+      <app-input-rp v-if="store.form.jumlahB>0 && store.form.jumlahK<=0" currency v-model="store.form.hargaJualB" label="Harga Jual" outlined :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      @update:model-value="(val)=>{
+        const jual=olahUang(val)
+        store.setForm('harga_jual',jual/store.form.isi)
+      console.log('gede', jual,store.form.harga_jual);
+
+    }" />
+      <app-input-rp v-else currency v-model="store.form.harga_jual" label="Harga Jual" outlined :autofocus="false" @keyup.enter.stop="onEnterinput()"
+      @clear="()=>{
       store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
     }" />
     </div>
@@ -84,6 +92,7 @@
   </div>
 </template>
 <script setup>
+import { olahUang } from 'src/modules/utils'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
 
@@ -105,11 +114,13 @@ function selected(val){
     store.barang=val
     console.log('store', store.barang);
 
-    store.setForm('kodebarang',store?.barang?.kodebarang)
-    if(!store.form.sales_id) store.setForm('harga_jual',isNaN(store?.barang?.hargajual1)?0:parseFloat(store?.barang?.hargajual1))
-    else store.setForm('harga_jual',isNaN(store?.barang?.hargajual2)?0:parseFloat(store?.barang?.hargajual2))
-    store.setForm('harga_beli',isNaN(store?.barang?.stok?.harga_beli_k)?0:parseFloat(store?.barang?.stok?.harga_beli_k))
-    store.setForm('isi',isNaN(store?.barang?.stok?.isi)?(parseFloat(store?.barang?.isi)):parseFloat(store?.barang?.stok?.isi))
+    store.setForm('kodebarang',store?.barang?.barang?.kodebarang)
+    if(!store.form.sales_id) store.setForm('harga_jual',isNaN(store?.barang?.barang?.hargajual1)?0:parseFloat(store?.barang?.barang?.hargajual1))
+    else store.setForm('harga_jual',isNaN(store?.barang?.barang?.hargajual2)?0:parseFloat(store?.barang?.barang?.hargajual2))
+    store.setForm('harga_beli',isNaN(store?.barang?.harga_beli_k)?0:parseFloat(store?.barang?.harga_beli_k))
+    store.setForm('isi',isNaN(store?.barang?.isi)?(parseFloat(store?.barang?.barang?.isi)):parseFloat(store?.barang?.isi))
+    store.setForm('motif',store?.barang?.motif ?? '')
+    store.setForm('hargaJualB',olahUang(store.form.harga_jual) * store.form.isi)
     console.log('form', store.form);
   }
   setTimeout(() => {

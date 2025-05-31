@@ -20,6 +20,7 @@ export const useFormPengembalianStore = defineStore('pengembalian-form-store', {
         id: d.id,
         barang_id: d.master_barang.id,
         kodebarang: d.kodebarang,
+        motif: d.motif,
         master_barang: d.master_barang,
         jumlah: d.jumlah,
         qty_retur: 0,
@@ -49,6 +50,7 @@ export const useFormPengembalianStore = defineStore('pengembalian-form-store', {
           details: validDetails.map(d => ({
             barang_id: d.barang_id,
             kodebarang: d.kodebarang,
+            motif: d.motif,
             qty: d.qty_retur,
             keterangan_rusak: d.keterangan
           }))

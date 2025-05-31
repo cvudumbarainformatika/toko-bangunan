@@ -111,13 +111,13 @@
                           )
                         }}
                       </div>
-                      <div class="col-auto">{{ item?.status }}</div>
+                      <div class="col-auto">{{ statusFlag(item?.flag) }}</div>
                     </div>
                   </q-item-label>
                   <q-item-label caption>
                     <div class="row">
-                      <div class="col-3">{{ item?.pelanggan?.nama }}</div>
-                      <div class="col-5 q-ml-sm">{{ item?.keterangan?.alamat }}</div>
+                      <div class="col-3">{{ item?.pelanggan?.nama??item?.keterangan?.nama }}</div>
+                      <div class="col-5 q-ml-sm">{{ item?.pelanggan?.alamat??item?.keterangan?.alamat }}</div>
                     </div>
                   </q-item-label>
                 </q-item-section>
@@ -252,5 +252,44 @@ function subtotal(item, detail) {
   }
 
   return subtotal - diskon - (returTotal || 0)
+}
+
+function statusFlag(flag) {
+  let status = ''
+  switch (flag) {
+    case null:
+      status = 'Draft'
+      break
+    case '1':
+      status = 'Pesanan Sales'
+      break
+    case '2':
+      status = 'Belum Ada Cicilan'
+      break
+    case '3':
+      status = 'Proses Cicilan'
+      break
+    case '4':
+      status = 'Dibawa Sales'
+      break
+    case '5':
+      status = 'Lunas'
+      break
+    case '6':
+      status = 'Batal'
+      break
+    case '7':
+      status = 'Down Payment (DP)'
+      break
+    case '8':
+      status = 'Tempo'
+      break
+
+    default:
+      break
+  }
+  // console.log('status', status, flag);
+
+  return status
 }
 </script>

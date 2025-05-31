@@ -27,7 +27,7 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
       { label: 'Lunas', value: '5' },
       { label: 'Belum Lunas', value: 'piutang' },
       { label: 'Draft', value: 'draft' },
-      // { label: 'Pesanan Sales', value: '1' },
+      { label: 'Tempo', value: '8' },
       { label: 'Down Payment (DP)', value: '7' },
       { label: 'Belum Ada Cicilan', value: '2' },
       { label: 'Proses Cicilan', value: '3' },

@@ -215,6 +215,12 @@ const detailColumns = [
     align: 'left'
   },
   {
+    name: 'motif',
+    label: 'Seri',
+    field: 'motif',
+    align: 'left'
+  },
+  {
     name: 'qty',
     label: 'Qty',
     field: 'qty',

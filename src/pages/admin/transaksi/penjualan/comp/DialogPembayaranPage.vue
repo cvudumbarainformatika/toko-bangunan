@@ -150,7 +150,7 @@
                         Kurang bayar
                       </div>
                     </template>
-                    <template v-if="store.formPembayaran.flag == '7'">
+                    <template v-if="['7','8'].includes(store.formPembayaran.flag) ">
                       <app-input-rp
                         ref="refBayar"
                         class="col-6"
@@ -158,6 +158,7 @@
                         outlined
                         currency
                         label="Bayar"
+                        valid
                         @update:model-value="updateBayar"
                         :disable="store.loadingPembayaran"
                       />
@@ -219,7 +220,8 @@ const storelist = useListPenjualanStore()
 const optionCaraBayar = ref([
   { label: 'Lunas', value: '5' },
   { label: 'Down Payment (DP)', value: '7' },
-  { label: 'Kredit', value: '2' },
+  { label: 'Tempo', value: '8' },
+  { label: 'Hutang', value: '2' },
 ])
 const refPelanggan = ref(null)
 function validasi(){
@@ -227,7 +229,7 @@ function validasi(){
 
   if(!store.formPembayaran.flag) return notifError('Pilihan Pembayaran Belum dipilih')
   else if (!store?.item?.sales_id && store.formPembayaran.flag == '2') return notifError('Pembayaran Secara Kredit Harus Memilih Sales')
-  else if ((!store?.formPembayaran?.pelanggan_id && !store.formPembayaran.dataPelanggan?.nama) && ['2','7'].includes(store.formPembayaran.flag)) return notifError('Harus ada data pelanggan')
+  else if ((!store?.formPembayaran?.pelanggan_id && !store.formPembayaran.dataPelanggan?.nama) && ['2','7','8'].includes(store.formPembayaran.flag)) return notifError('Harus ada data pelanggan')
 
   else valid = true
 

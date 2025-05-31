@@ -127,7 +127,8 @@
                           <div class="col-3">{{ item?.no_penjualan }}</div>
                           <div class="col-2 q-ml-sm">{{ formatDouble(item?.total) }}</div>
                           <div class="col-2 q-ml-sm">{{ formatDouble(item?.total_diskon) }}</div>
-                          <div class="col-2 q-ml-sm">{{ statusFlag(item?.flag) }}</div>
+                          <div class="col-2 q-ml-sm">{{ statusFlag(item) }}</div>
+                          <div v-if="item?.tempo" class="col-2 q-ml-sm"> {{ dateFullFormat(item?.tempo) }} <span class="f-10 text-italic">(tempo)</span></div>
                         </div>
                       </q-item-label>
                       <q-item-label lines="1">
@@ -169,6 +170,14 @@
                           tooltip="Pembayaran"
                           color="blue"
                           @click="emits('bayar', item)"
+                        />
+                        <app-btn
+                          v-if="['2','3','4','7','8'].includes(item?.flag)"
+                          class="q-mr-xs"
+                          icon="event_available"
+                          tooltip="Tanggal Tempo Pembayaran"
+                          color="primary"
+                          @click="emits('tempo', item)"
                         />
                         <app-btn-cetak
                           v-if="item?.flag !== null"
@@ -298,7 +307,7 @@
 <script setup>
 // import { useQuasar } from 'quasar'
 import { formatDouble } from 'src/modules/formatter'
-import { humanDate, jamTnpDetik } from 'src/modules/utils'
+import { dateFullFormat, humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
 import { useAppStore } from 'src/stores/app'
 import { computed, defineAsyncComponent, onBeforeMount, ref, shallowRef } from 'vue'
@@ -312,7 +321,7 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['add', 'edit', 'useNota', 'bayar'])
+const emits = defineEmits(['add', 'edit', 'useNota', 'bayar','tempo'])
 
 // const $q = useQuasar()
 onBeforeMount(() => {
@@ -331,36 +340,46 @@ function lihatCetak(item) {
   console.log('itemCetak di list', store.itemCetak)
 }
 
-function statusFlag(flag) {
+function statusFlag(item) {
+  const flag=item?.flag
+  const tempo=item?.tempo
   let status = ''
-  switch (flag) {
-    case null:
-      status = 'Draft'
-      break
-    case '1':
-      status = 'Pesanan Sales'
-      break
-    case '2':
-      status = 'Belum Ada Cicilan'
-      break
-    case '3':
-      status = 'Proses Cicilan'
-      break
-    case '4':
-      status = 'Dibawa Sales'
-      break
-    case '5':
-      status = 'Lunas'
-      break
-    case '6':
-      status = 'Batal'
-      break
-    case '7':
-      status = 'Down Payment (DP)'
-      break
+  if(!tempo && ['2','7','8'].includes(flag)){
+    status = 'Belum Dikirim'
+  }else{
+    switch (flag) {
+      case null:
+        status = 'Draft'
+        break
+      case '1':
+        status = 'Pesanan Sales'
+        break
+      case '2':
+        status = 'Belum Ada Cicilan'
+        break
+      case '3':
+        status = 'Proses Cicilan'
+        break
+      case '4':
+        status = 'Dibawa Sales'
+        break
+      case '5':
+        status = 'Lunas'
+        break
+      case '6':
+        status = 'Batal'
+        break
+      case '7':
+        status = 'Down Payment (DP)'
+        break
+      case '8':
+        status = 'Tempo'
+        break
 
-    default:
-      break
+      default:
+        break
+    }
+
   }
   // console.log('status', status, flag);
 

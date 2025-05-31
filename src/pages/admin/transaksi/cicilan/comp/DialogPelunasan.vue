@@ -10,7 +10,7 @@
   >
     <q-card style="min-width: 550px">
       <q-card-section class="row items-center q-pb-none">
-        <div class="text-h6">Pelunasan Down Payment</div>
+        <div class="text-h6">Pelunasan Down Payment dan Tempo</div>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup @click="store.isOpenDP = false" />
       </q-card-section>

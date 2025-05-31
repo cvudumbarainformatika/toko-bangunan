@@ -58,10 +58,10 @@ export default defineConfig((ctx) => {
       env: {
         API: ctx?.dev
           ? // ? 'https://api.jangurkeramik.my.id'
-            'http://localhost/newtokobangunan/belakang-toko/public'
-          : //  'http://belakang-toko.test'
-            // 'http://localhost:8182'
-            'https://api.jangurkeramik.my.id',
+            // 'http://localhost/newtokobangunan/belakang-toko/public'
+            // 'http://belakang-toko.test'
+            'http://localhost:8182'
+          :  'https://api.jangurkeramik.my.id',
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -116,6 +116,7 @@ export default defineConfig((ctx) => {
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
+      lang: 'id', // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),

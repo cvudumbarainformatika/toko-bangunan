@@ -16,10 +16,18 @@
   </div>
     <div v-for="detail in store.item?.detail" :key="detail?.id">
       <div class="row items-center q-pa-sm">
-        <div class="col-3">{{detail?.master_barang?.namabarang }}</div>
-          <div class="col-1 text-right">{{formatDouble(detail?.jumlah)}}</div>
-          <div class="col-1 text-right">{{detail?.master_barang?.satuan_k}}</div>
-          <div class="col-2 text-right">{{formatDouble(detail?.harga_jual)}}</div>
+        <div class="col-3">{{detail?.master_barang?.namabarang +' '+detail?.motif}}</div>
+          <template v-if="parseFloat(detail.jumlah) % parseFloat(detail?.isi) == 0">
+            <div class="col-1 text-right">{{formatDouble(Math.floor(parseFloat(detail?.jumlah)/ parseFloat(detail.isi)))}}</div>
+            <div class="col-1 text-right">{{detail?.master_barang?.satuan_b}}</div>
+            <div class="col-2 text-right">{{formatDouble(parseFloat(detail?.harga_jual)* parseFloat(detail?.isi))}}</div>
+          </template>
+          <template v-else>
+            <div class="col-1 text-right">{{formatDouble(detail?.jumlah)}}</div>
+            <div class="col-1 text-right">{{detail?.master_barang?.satuan_k}}</div>
+            <div class="col-2 text-right">{{formatDouble(detail?.harga_jual)}}</div>
+          </template>
+
           <div class="col-2 text-right">{{formatDouble(detail?.diskon)}}</div>
           <div class="col-2 text-right">{{formatDouble(detail?.subtotal)}}</div>
           <div class="col-1 text-right">

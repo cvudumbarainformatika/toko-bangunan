@@ -187,7 +187,7 @@
                           <div class="col-3 text-weight-bold">
                             Pelanggan: {{ item?.pelanggan?.nama }}
                           </div>
-                          <div class="col-2 q-ml-sm">Sales : {{ item?.sales?.nama }}</div>
+                          <div class="col-2 q-ml-sm">{{ item?.sales?.nama }}</div>
                           <div v-if="item?.cicilan?.length > 0" class="col-2 q-ml-sm">
                             Total cicilan :
                             {{
@@ -196,13 +196,14 @@
                               )
                             }}
                           </div>
+                          <div v-if="item?.flag!='5' && item?.tempo" class="col-2 f-10 text-italic">(tempo : {{ dateFullFormat(item?.tempo) }})</div>
                         </div>
                       </q-item-label>
                     </q-item-section>
                     <q-item-section v-if="hoveredId === item?.id" side>
                       <div class="flex q-gutter-sm">
                         <app-btn
-                          v-if="item?.flag == '2' || item?.flag == '3'"
+                          v-if="(item?.flag == '2' || item?.flag == '3') && item?.tempo"
                           icon="card_travel"
                           color="orange"
                           tooltip="Di bawa Sales"
@@ -231,7 +232,7 @@
                           :disable="item?.loading"
                         />
                         <app-btn
-                          v-if="['7']?.includes(item?.flag)"
+                          v-if="['7', '8']?.includes(item?.flag) && item?.tempo"
                           class="q-mr-xs text-black"
                           icon="price_check"
                           tooltip="Pelunasan"
@@ -363,7 +364,7 @@
 <script setup>
 // import { useQuasar } from 'quasar'
 import { formatDouble } from 'src/modules/formatter'
-import { humanDate, jamTnpDetik } from 'src/modules/utils'
+import { dateFullFormat, humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
 import { useAppStore } from 'src/stores/app'
 import { computed, ref } from 'vue'
@@ -411,6 +412,9 @@ function statusFlag(flag) {
       break
     case '7':
       status = 'Down Payment (DP)'
+      break
+    case '8':
+      status = 'Tempo'
       break
 
     default:
