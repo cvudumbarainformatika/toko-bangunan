@@ -7,20 +7,23 @@ import {onMounted} from 'vue'
 import { socket } from 'src/modules/sockets'
 
 import { useAdminOrderPenjualanStore } from 'src/stores/admin/transaksi/orderpenjualan/list'
+import { useAppStore } from 'src/stores/app/index'
 
 const storeOrderPenjualan = useAdminOrderPenjualanStore()
+const auth = useAppStore()
 
 
 onMounted(() => {
   // console.log('dari ngurusi socket ...');
   
-  joinkeOrderPenjualan()
+  joinkeOrderPenjualan(auth.user?.id)
 
 });
 
-function joinkeOrderPenjualan(){
+function joinkeOrderPenjualan(userId){
   socket.on('connect', () => {
     console.log('[SOCKET] Connected:', socket.id)
+    socket.emit('register',userId) // ⬅️ ini harus lihat socket.on di server, jika namanya mboh, maka emit nya mboh ('order-penjualan') ini nama roomnya
     socket.emit('join-room', 'order-penjualan') // ⬅️ ini harus lihat socket.on di server, jika namanya mboh, maka emit nya mboh ('order-penjualan') ini nama roomnya
     console.log('[SOCKET] join emitted ke order-penjualan');
   })
