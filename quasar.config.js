@@ -19,7 +19,7 @@ export default defineConfig((ctx) => {
       'global-components',
       'other-components',
       'MyDirective',
-      'router',
+      'router'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
@@ -62,6 +62,10 @@ export default defineConfig((ctx) => {
             // 'http://belakang-toko.test'
             'http://localhost:8182'
           :  'https://api.jangurkeramik.my.id',
+        
+        WS: ctx.dev
+          ? 'http://localhost:6001'
+          : 'http://27.112.78.135:6001'
       },
       // rawDefine: {}
       // ignorePublicFolder: true,

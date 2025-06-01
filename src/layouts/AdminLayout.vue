@@ -98,6 +98,8 @@
           </div>
         </div>
       </q-page>
+
+      <NgurusiSocket />
     </q-page-container>
 
     <!-- <q-footer bordered class="bg-grey-8 text-white">
@@ -106,6 +108,7 @@
         <div>Kanan</div>
       </div>
     </q-footer> -->
+
   </q-layout>
 </template>
 
@@ -123,6 +126,7 @@ import { watch } from 'vue'
 const LeftMenu = defineAsyncComponent(() => import('./comp/LeftMenu.vue'))
 const SubLeftMenu = defineAsyncComponent(() => import('./comp/SubLeftMenu.vue'))
 const AppCounter = defineAsyncComponent(() => import('src/components/app/AppCounter.vue'))
+const NgurusiSocket = defineAsyncComponent(() => import('./comp/NgurusiSocket.vue'))
 
 const refLeftMenu = ref(null)
 

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog persistent backdrop-filter="blur(4px)" @before-show="lihatStep">
+  <q-dialog persistent backdrop-filter="blur(4px)">
 
     <q-card flat round class="q-px-md fit column rounded-borders" style="min-width: 90vw; max-width: 90vw; min-height: 90vh; max-height:90vh;">
       <q-card-section class="col-auto q-pb-sm q-px-sm">
@@ -17,7 +17,10 @@
               </div>
               <div class="flex items-center q-gutter-sm">
                 <div>
-                  <app-btn :label="pelabelan" @click="lanjutkanStep"/>
+                  <app-btn v-if="parseInt(order?.status_order) < 9" :label="pelabelan" @click="lanjutkanStep"
+                    :loading="loading"
+                    :disable="loading || parseInt(order?.status_order) === 3"
+                  />
                 </div>
               </div>
             </div> 
@@ -44,19 +47,19 @@
                   </q-step>
 
                   <q-step
-                    :name="2"
+                    :name="3"
                     title="DISETUJUI"
                     caption="Menunggu Pembayaran"
                     icon="credit_card"
-                    :done="step > 2"
+                    :done="step > 3"
                   >
                   </q-step>
                   <q-step
-                    :name="3"
+                    :name="4"
                     title="DIKIRIM"
                     caption="Dan Order Selesai"
                     icon="local_shipping"
-                    :done="step > 3"
+                    :done="step > 4"
                   >
                   </q-step>
 
@@ -253,7 +256,7 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { ref, defineAsyncComponent } from 'vue'
+import { ref, defineAsyncComponent, computed } from 'vue'
 import { formatRp } from 'src/modules/formatter'
 
 
@@ -263,20 +266,24 @@ const props = defineProps({
   order:{
     type:Object,
     default:null
+  },
+  loading:{
+    type:Boolean,
+    default:false
   }
 })
 
 const emit = defineEmits(['updateRincian', 'deleteRincian', 'updateStatus'])
 
 const $q = useQuasar()
-const step = ref(1)
+// const step = ref(1)
 const stepper = ref(null)
 const hoveredId = ref(null)
 const edittedItem = ref(null)
 const edittedIndex = ref(null)
 const openEdit = ref(false)
 
-const pelabelan = ref('Lanjutkan Status')
+// const pelabelan = ref('Lanjutkan Status')
 
 // console.log('order', props.order);
 function edit(index, item){
@@ -354,6 +361,26 @@ function simpanEdit(){
 
 }
 
+const step = computed({
+  get: () => parseInt(props.order.status_order),
+  set: (value) => parseInt(value),
+})
+
+const pelabelan = computed(()=> {
+  if (step.value < 3) {
+    return 'Setujui Draft'
+  } else if(step.value === 3){
+    return 'Menunggu Pembayaran'
+  } else if (step.value === 4){
+    return 'Kirim Pesanan'
+  } else if (step.value > 4 && step.value < 9) {
+    return 'Compleet'
+  } else {
+    return 'Di batalkan'
+  }
+})
+
+// eslint-disable-next-line no-unused-vars
 function lihatStep(){
   const tap = parseInt(props.order?.status_order) || 0
 
@@ -378,11 +405,6 @@ function lihatStep(){
   }
 
   step.value = tap
-
-  
-
-
-  // console.log('step', tap, stepper.value);
   
 }
 
@@ -391,10 +413,13 @@ function lanjutkanStep(){
   console.log('lanjutka step');
   let status = props?.order?.status_order
   if (step.value === 1) {
-    step.value = 2
-    status = '3'
-  } else if (step.value === 2){
     step.value = 3
+    status = '3'
+  } else if (step.value === 3){
+    step.value = 3 // gak boleh lanjut nunggu pembayaran
+    status = '3'
+  } else if (step.value === 4){
+    step.value = 5 // dikirim
     status = '5'
   }
 

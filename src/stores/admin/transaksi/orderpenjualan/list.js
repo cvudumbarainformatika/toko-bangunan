@@ -9,6 +9,7 @@ export const useAdminOrderPenjualanStore = defineStore('admin-transaksi-order-pe
   state: () => ({
     meta: null,
     items: [],
+    item:null,
     isError: false,
     loading: false,
     dialogFilter: false,
@@ -22,6 +23,7 @@ export const useAdminOrderPenjualanStore = defineStore('admin-transaksi-order-pe
       tahun: date.formatDate(Date.now(), 'YYYY'),
     },
     expand: false,
+    loadingStatus:false
     
   }),
   // persist: true,
@@ -85,7 +87,7 @@ export const useAdminOrderPenjualanStore = defineStore('admin-transaksi-order-pe
 
     async onUpdateRincian(payload){
       // console.log(payload);
-
+      this.loadingStatus=true
       const order_id = payload.order_id
       const rincian_id = payload?.id
       try {
@@ -105,11 +107,15 @@ export const useAdminOrderPenjualanStore = defineStore('admin-transaksi-order-pe
       } catch (error) {
         console.log('update rincian', error);
         
-      } 
+      } finally {
+        this.loadingStatus=false
+      }
     },
 
     async onDeleteRincian(payload){
       console.log('from store', payload);
+
+      this.loadingStatus=true
       
       const order_id = payload.order_id
       const rincian_id = payload?.id
@@ -125,10 +131,13 @@ export const useAdminOrderPenjualanStore = defineStore('admin-transaksi-order-pe
 
       } catch (error) {
         console.log('delete rincian', error);
+      } finally {
+        this.loadingStatus=false
       }
     },
 
     async onUpdateStatus(payload){
+      this.loadingStatus=true
       console.log('from store', payload);
       
       const order_id = payload.order_id
@@ -143,6 +152,8 @@ export const useAdminOrderPenjualanStore = defineStore('admin-transaksi-order-pe
 
       } catch (error) {
         console.log('update-status', error);
+      } finally{
+        this.loadingStatus=false
       }
     }
   },

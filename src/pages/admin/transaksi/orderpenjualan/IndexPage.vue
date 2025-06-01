@@ -4,7 +4,7 @@
       v-if="isList"
       @add="
         () => {
-          item = null
+          storeList.item = null
           isList = true
         }
       "
@@ -12,7 +12,7 @@
         (data) => {
           console.log('from emit',data);
           
-          item = data
+          storeList.item = data
           isList = true
           openDialogOrder=true
         }
@@ -20,7 +20,7 @@
     />
 
     <!-- <FormPage v-else :data="item" @back="isList = true" /> -->
-    <DialogOrderPenjualan v-model="openDialogOrder" :order="item" 
+    <DialogOrderPenjualan v-model="openDialogOrder" :order="storeList.item" :loading="storeList.loadingStatus"
       @update-rincian="onUpdateRincian"
       @delete-rincian="onDeleteRincian" 
       @update-status="onUpdateStatus"
@@ -38,7 +38,6 @@ const ListPage = defineAsyncComponent(() => import('./comp/ListPage.vue'))
 const DialogOrderPenjualan = defineAsyncComponent(()=> import('./comp/DialogOrderPenjualan.vue'))
 
 const isList = ref(true)
-const item = ref(null)
 const openDialogOrder = ref(false)
 
 const storeList = useAdminOrderPenjualanStore()

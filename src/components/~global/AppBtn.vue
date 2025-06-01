@@ -6,6 +6,7 @@
       :color="color"
       :dense="dense"
       :loading="loading"
+      :disabled="disable"
       >
       <div class="flex items-center" :class="{' q-px-md': label}">
         <div v-if="icon" :class="{'q-mr-sm': label}"><q-icon :name="icon" size="1.5em"  /></div>
@@ -39,6 +40,10 @@ defineProps({
     default: null
   },
   loading: {
+    type: Boolean,
+    default: false
+  },
+  disable: {
     type: Boolean,
     default: false
   },
