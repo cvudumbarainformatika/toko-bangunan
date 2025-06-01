@@ -64,8 +64,8 @@ export default defineConfig((ctx) => {
           :  'https://api.jangurkeramik.my.id',
         
         WS: ctx.dev
-          ? 'http://localhost:6001'
-          : 'http://27.112.78.135:6001'
+          ? 'https://socket.jangurkeramik.my.id'
+          : 'https://socket.jangurkeramik.my.id'
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
