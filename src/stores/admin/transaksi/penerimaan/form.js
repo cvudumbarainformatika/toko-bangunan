@@ -14,6 +14,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         nopenerimaan: '',
         noorder: '',
         nofaktur: '',
+        pembayaran: '',
         kdsuplier: '',
         suplier: '',
         jumlahpo: 0,
