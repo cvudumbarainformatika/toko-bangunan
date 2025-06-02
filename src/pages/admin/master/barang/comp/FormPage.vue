@@ -148,6 +148,9 @@
                         //untuk hapus o dipean angka pake ini yaa
                         const _removedZeros = val?.replace(/^0+/, '')
                         if (val > 1) store.form.isi = _removedZeros
+                        const isix = val
+                        store.form.hargajual1 = olahUang(store.form.hargajual1besar) / isix
+                        store.form.hargajual2 = olahUang(store.form.hargajual2besar) / isix
                       }
                     "
                   />
@@ -171,7 +174,7 @@
                     :valid="store.form.kategori !== 'Keramik'"
                   />
 
-                  <app-input
+                  <!-- <app-input
                     class="col-6"
                     v-model="store.form.hargajual1"
                     label="Harga Pengguna"
@@ -183,8 +186,26 @@
                         if (val > 1) store.form.hargajual1 = _removedZeros
                       }
                     "
+                  /> -->
+
+                  <app-input-rp
+                    class="col-6"
+                    currency
+                    v-model="store.form.hargajual1besar"
+                    :label="HargaPengguna"
+                    outlined
+                    :autofocus="false"
+                    @update:model-value="
+                      (val) => {
+                        const _removedZeros = val?.replace(/^0+/, '')
+                        if (val > 1) store.form.hargajual1besar = _removedZeros
+                        const jual = olahUang(val)
+                        store.setForm('hargajual1', jual / store.form.isi)
+                      }
+                    "
                   />
-                  <app-input
+
+                  <!-- <app-input
                     class="col-6"
                     v-model="store.form.hargajual2"
                     label="Harga untuk Toko"
@@ -194,6 +215,23 @@
                         //untuk hapus o dipean angka pake ini yaa
                         const _removedZeros = val?.replace(/^0+/, '')
                         if (val > 1) store.form.hargajual2 = _removedZeros
+                      }
+                    "
+                  /> -->
+
+                  <app-input-rp
+                    class="col-6"
+                    currency
+                    v-model="store.form.hargajual2besar"
+                    :label="HargaToko"
+                    outlined
+                    :autofocus="false"
+                    @update:model-value="
+                      (val) => {
+                        const _removedZeros = val?.replace(/^0+/, '')
+                        if (val > 1) store.form.hargajual2besar = _removedZeros
+                        const jual = olahUang(val)
+                        store.setForm('hargajual2', jual / store.form.isi)
                       }
                     "
                   />
@@ -248,6 +286,7 @@ import { useAdminMasterSatuanSelectStore } from 'src/stores/admin/master/satuan/
 import { computed, onMounted, ref } from 'vue'
 import { pathImg } from 'src/boot/axios'
 import { notifError } from 'src/modules/notifs'
+import { olahUang } from 'src/modules/utils'
 
 const emits = defineEmits(['back'])
 const $q = useQuasar()
@@ -274,11 +313,26 @@ onMounted(() => {
   selectSatuan.getDataAll()
   selectBrand.getDataAll()
 })
-// function validKeterangan() {
-//   if (props.valid) {
-//     return store.form.kategori !== 'Keramik'
-//   }
-// }
+
+const HargaKecil1 = computed(() => {
+  return new Intl.NumberFormat('id-ID', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(store.form.hargajual1)
+})
+const HargaPengguna = computed(() => {
+  return `Harga Pengguna  (Harga Satuan Kecil = ${HargaKecil1.value})`
+})
+
+const HargaKecil2 = computed(() => {
+  return new Intl.NumberFormat('id-ID', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(store.form.hargajual2)
+})
+const HargaToko = computed(() => {
+  return `Harga untuk Toko  (Harga Satuan Kecil = ${HargaKecil2.value})`
+})
 
 const fileRef = ref([])
 function imgClick() {

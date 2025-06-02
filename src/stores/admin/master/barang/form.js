@@ -2,6 +2,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useAdminMasterBarangStore } from './list'
 import { notifError, notifSuccess } from 'src/modules/notifs'
+import { olahUang } from 'src/modules/utils'
 
 export const useAdminFormMasterBarangStore = defineStore('admin-form-master-barang-store', {
   state: () => ({
@@ -19,6 +20,8 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
       kategori: null,
       hargajual1: 0,
       hargajual2: 0,
+      hargajual1besar: 0,
+      hargajual2besar: 0,
       hargabeli: 0,
       minim_stok: 20,
       ukuran: null,
@@ -47,10 +50,15 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
         this.form.isi = 1
         this.form.hargajual1 = 0
         this.form.hargajual2 = 0
+        this.form.hargajual1besar = 0
+        this.form.hargajual2besar = 0
         this.form.hargabeli = 0
         this.form.minim_stok = 20
         this.form.rincians = [] // Reset rincians gambar
       }
+    },
+    setForm(key, val) {
+      this.form[key] = val
     },
 
     async save(add) {
@@ -63,6 +71,9 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
       for (const key in this.form) {
         if (key !== 'rincians' && this.form[key] !== null) {
           formData.append(key, this.form[key])
+        }
+        if (key == 'hargajual1besar' || key == 'hargajual2besar') {
+          formData.append(key, olahUang(this.form[key]))
         }
       }
       // Jika kodebarang tidak ada, kirim sebagai null

@@ -35,9 +35,9 @@ export const useProfilStore = defineStore('profil-toko-store', {
         this.profilData = data.result || data
 
         // Debugging
-        console.log('Data profil:', this.profilData)
-        console.log('Foto path:', this.profilData?.foto)
-        console.log('Foto URL:', this.fotoProfil)
+        // console.log('Data profil:', this.profilData)
+        // console.log('Foto path:', this.profilData?.foto)
+        // console.log('Foto URL:', this.fotoProfil)
       } catch (error) {
         console.error('Error fetching profil:', error)
       } finally {

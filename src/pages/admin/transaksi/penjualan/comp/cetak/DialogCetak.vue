@@ -3,7 +3,7 @@
     <q-card style="min-width: 80vw; max-width: 180vw; height: 600px">
       <q-layout view="lHh Lpr lFf" container class="rounded-borders">
         <q-header>
-          <q-bar class="bg-black text-white">
+          <q-bar class="bg-black text-white q-py-sm">
             <div>CETAK DATA ORDER BARANG</div>
             <q-space />
 
@@ -13,7 +13,175 @@
           </q-bar>
         </q-header>
         <q-page-container>
-          <div id="printMe">
+          <q-card class="row flex-center content-center q-px-md q-py-md">
+            <div class="q-pr-md">Pilih Printer</div>
+            <div>
+              <q-btn-toggle
+                v-model="opsiprint"
+                no-caps
+                rounded
+                unelevated
+                toggle-color="yellow-9"
+                color="white"
+                text-color="brown-8"
+                :options="[
+                  { label: 'Thermal', value: 'one' },
+                  { label: 'Matrix', value: 'two' },
+                ]"
+              />
+            </div>
+          </q-card>
+
+          <div id="printThermal" v-show="opsiprint === 'one'" class="row flex-center q-py-md">
+            <div v-if="profil.fotoProfil" class="col" style="min-width: 50mm; max-width: 100mm">
+              <div class="row justify-center">
+                <q-img
+                  :src="profil.fotoProfil"
+                  style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover"
+                  spinner-color="primary"
+                />
+              </div>
+              <div
+                class="row full-width text-center text-bold flex-center"
+                style="font-size: large"
+              >
+                {{ profil.profilData.namatoko }}
+              </div>
+              <div class="row full-width text-center flex-center">
+                {{ profil.profilData.alamat }}
+              </div>
+              <div class="row full-width text-center flex-center" style="font-size: small">
+                Telp : {{ profil.profilData.telepon }}
+              </div>
+              <div class="row q-pb-xs full-width text-center flex-center" style="font-size: small">
+                Email : {{ profil.profilData.email }}
+              </div>
+              <div class="q-pt-xs" style="border-top-style: solid; border-width: 1px"></div>
+              <div class="row text-bold full-width">
+                <span class="col-auto">Penjualan </span>
+                <span>: {{ store.itemCetak?.no_penjualan }}</span>
+              </div>
+              <div class="row full-width">
+                <span class="col-auto">Sales </span>
+                <span>: {{ store.itemCetak?.sales?.nama }}</span>
+              </div>
+              <div class="row full-width">
+                <span class="col-auto">Tanggal </span>
+                <span>: {{ dateDbFormat(store.itemCetak?.tgl) }}</span>
+              </div>
+              <div class="row full-width">
+                <span class="col-auto">Pelanggan </span>
+                <span
+                  >:
+                  {{
+                    !store.itemCetak?.pelanggan
+                      ? store.itemCetak?.keterangan?.nama
+                      : store.itemCetak?.pelanggan?.nama
+                  }}</span
+                >
+              </div>
+              <div class="row full-width">
+                <span class="col-3">Telepon</span>
+                <span
+                  >:
+                  {{
+                    !store.itemCetak?.pelanggan
+                      ? store.itemCetak?.keterangan?.tlp
+                      : store.itemCetak?.pelanggan?.telepon
+                  }}</span
+                >
+              </div>
+              <div class="row q-pb-xs full-width">
+                <span class="col-3">Alamat</span>
+                <span
+                  >:
+                  {{
+                    !store.itemCetak?.pelanggan
+                      ? store.itemCetak?.keterangan?.alamat
+                      : store.itemCetak?.pelanggan?.alamat
+                  }}</span
+                >
+              </div>
+              <div class="q-pt-xs" style="border-top-style: dashed; border-width: 1px"></div>
+              <div v-for="(item, n) in store.itemCetak?.detail" :key="n">
+                <div class="row full-width text-bold">
+                  <span class="col">{{ item.master_barang?.namabarang }}</span>
+                </div>
+                <div class="row full-width" style="font-size: small">
+                  <template v-if="parseFloat(item.jumlah) % parseFloat(item?.isi) == 0">
+                    <span>
+                      *
+                      {{
+                        formatDouble(Math.floor(parseFloat(item?.jumlah) / parseFloat(item.isi)))
+                      }}
+                      {{ item?.master_barang?.satuan_b }}
+                    </span>
+                    <span class="q-px-xs"> X </span>
+                    <span v-if="parseFloat(item.jumlah) % parseFloat(item?.isi) == 0">
+                      {{ formatDouble(parseFloat(item?.harga_jual) * parseFloat(item?.isi)) }}
+                      <template v-if="item?.diskon !== 0">
+                        - disc {{ formatDouble(item.diskon) }}</template
+                      >
+                    </span>
+                    <q-space />
+                    <span> = {{ formatRpDouble(item.subtotal) }} </span>
+                  </template>
+                  <template v-else>
+                    <span>
+                      * {{ formatDouble(item?.jumlah) }} {{ item?.master_barang?.satuan_k }}
+                    </span>
+                    <span class="q-px-xs"> X </span>
+                    <span v-if="parseFloat(item.jumlah) % parseFloat(item?.isi) !== 0">
+                      {{ formatDouble(item?.harga_jual) }}
+                      <template v-if="item?.diskon !== 0">
+                        - disc {{ formatDouble(item.diskon) }}</template
+                      >
+                    </span>
+                    <q-space />
+                    <span> = {{ formatRpDouble(item.subtotal) }}</span>
+                  </template>
+                </div>
+              </div>
+              <div class="q-pt-xs" style="border-top-style: dashed; border-width: 1px"></div>
+              <div class="row full-width">
+                <span class="col-auto">Total </span>
+                <q-space />
+                <span> {{ formatRpDouble(store.itemCetak?.total) }}</span>
+              </div>
+              <div class="row full-width">
+                <span class="col-auto">Bayar </span>
+                <q-space />
+                <span> {{ formatRpDouble(hitungBayar()) }}</span>
+              </div>
+              <div class="row full-width">
+                <span v-if="store.itemCetak?.flag === '5'" class="col-auto">Kembalian </span>
+                <span v-else class="col-auto">Kekurangan </span>
+                <q-space />
+                <span> {{ formatRpDouble(hitungSisa()) }}</span>
+              </div>
+              <div class="row flex-center full-width q-pt-sm">
+                <template v-if="store.itemCetak?.flag === '5'">
+                  <span class="text-bold" style="font-size: medium">
+                    LUNAS ({{ store.itemCetak?.cara_bayar }})
+                  </span>
+                </template>
+                <template v-else>
+                  <span class="text-bold" style="font-size: medium">
+                    PEMBAYARAN DP ({{ store.itemCetak?.cara_bayar }})</span
+                  >
+                </template>
+              </div>
+              <div class="row full-width q-pb-md text-center flex-center">
+                Terima Kasih Atas Pembelian Anda
+              </div>
+              <div style="border-bottom-style: solid; border-width: 1px"></div>
+              <div class="row full-width text-center flex-start">
+                <span class="q-pl-sm"> - by Udumbara Informatika -</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="printReguler" v-show="opsiprint === 'two'">
             <div class="row full-width justify-between">
               <div class="flex-start content-center" style="width: 60%">
                 <div class="row q-px-md q-py-md">
@@ -87,7 +255,7 @@
               </div>
             </div>
             <div class="full-width justify-center">
-              <q-separator />
+              <div style="border-bottom-style: solid; border-width: 1px"></div>
               <div class="text-center text-bold q-pt-sm" style="font-size: medium">
                 NOTA PENJAUALAN
               </div>
@@ -98,7 +266,7 @@
                       <th>NO</th>
                       <th>NAMA BARANG</th>
                       <th>QTY</th>
-                      <th>HARGA BELI</th>
+                      <th>HARGA</th>
                       <th>DISKON</th>
                       <th>JUMLAH</th>
                     </tr>
@@ -108,9 +276,36 @@
                       <td class="text-center">{{ n + 1 }}</td>
                       <td>{{ item.master_barang?.namabarang }}</td>
                       <td class="text-center">
-                        {{ item.jumlah }} {{ item?.master_barang?.satuan_k }}
+                        <template v-if="parseFloat(item.jumlah) % parseFloat(item?.isi) == 0">
+                          <div class="col-1 text-right">
+                            {{
+                              formatDouble(
+                                Math.floor(parseFloat(item?.jumlah) / parseFloat(item.isi)),
+                              )
+                            }}
+                            {{ item?.master_barang?.satuan_b }}
+                          </div>
+                        </template>
+                        <template v-else>
+                          <div class="col-1 text-right">
+                            {{ formatDouble(item?.jumlah) }} {{ item?.master_barang?.satuan_k }}
+                          </div>
+                        </template>
                       </td>
-                      <td class="text-right">{{ formatRpDouble(item.harga_jual) }}</td>
+                      <td class="text-right">
+                        <template v-if="parseFloat(item.jumlah) % parseFloat(item?.isi) == 0">
+                          <div class="col-2 text-right">
+                            {{
+                              formatRpDouble(parseFloat(item?.harga_jual) * parseFloat(item?.isi))
+                            }}
+                          </div>
+                        </template>
+                        <template v-else>
+                          <div class="col-2 text-right">
+                            {{ formatRpDouble(item?.harga_jual) }}
+                          </div>
+                        </template>
+                      </td>
                       <td class="text-right">{{ formatRpDouble(item.diskon) }}</td>
                       <td class="text-right">{{ formatRpDouble(item.subtotal) }}</td>
                     </tr>
@@ -150,7 +345,7 @@
                         </div>
                       </td>
                       <td class="text-bold text-right">
-                        {{ formatRpDouble(store.itemCetak?.bayar) }}
+                        {{ formatRpDouble(hitungBayar()) }}
                       </td>
                     </tr>
                     <tr>
@@ -159,23 +354,33 @@
                           <div class="flex-start">
                             <span hidden></span>
                           </div>
-                          <div class="text-bold flex-end q-pl-sm">KEMBALIAN</div>
+                          <template v-if="store.itemCetak?.flag === '5'">
+                            <div class="text-bold flex-end q-pl-sm">KEMBALIAN</div>
+                          </template>
+                          <template v-else>
+                            <div class="text-bold flex-end q-pl-sm">KEKURANGAN</div>
+                          </template>
                         </div>
                       </td>
                       <td class="text-bold text-right">
-                        {{ formatRpDouble(store.itemCetak?.kembali) }}
+                        {{ formatRpDouble(hitungSisa()) }}
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            <div class="row justify-between full-width q-pt-md">
-              <div class="col flex-start content-center text-center">
-                <div class="invisible">.</div>
-                <div class="hidden">.</div>
-                <div style="height: 50px"></div>
-                <!-- <div>{{ store.item?.suplier?.nama }}</div> -->
+            <div class="row justify-between full-width q-pt-md q-pb-md">
+              <div class="col flex-start text-left q-pl-md">
+                <div class="content-center">
+                  Keterangan :
+                  <template v-if="store.itemCetak?.flag === '5'">
+                    <span class="text-bold q-pl-md" style="font-size: large"> LUNAS </span>
+                  </template>
+                  <template v-else>
+                    <span class="text-bold q-pl-md" style="font-size: large"> PEMBAYARAN DP </span>
+                  </template>
+                </div>
               </div>
               <div class="col flex-end content-center text-center">
                 <div>Probolinggo, {{ dateFullFormat(store.itemCetak?.tgl) }}</div>
@@ -184,6 +389,12 @@
                 <div>{{ profil.profilData.pemilik }}</div>
               </div>
             </div>
+            <div style="border-bottom-style: solid; border-width: 1px"></div>
+            <div class="row full-width text-center flex-start">
+              <span class="q-pl-sm">
+                - by Udumbara Informatika - | cvudumbarainformatika@gmail.com</span
+              >
+            </div>
           </div>
         </q-page-container>
 
@@ -191,7 +402,26 @@
           <q-card-section class="q-pa-none bg-black text-white">
             <div class="q-pa-md row justify-end items-end">
               <div class="items-end">
-                <q-btn v-print="printObj" unelevated color="dark" round size="sm" icon="print">
+                <q-btn
+                  v-if="opsiprint === 'one'"
+                  v-print="printObj"
+                  unelevated
+                  color="dark"
+                  round
+                  size="sm"
+                  icon="print"
+                >
+                  <q-tooltip :offset="[10, 10]"> Print </q-tooltip>
+                </q-btn>
+                <q-btn
+                  v-else
+                  v-print="printReg"
+                  unelevated
+                  color="dark"
+                  round
+                  size="sm"
+                  icon="print"
+                >
                   <q-tooltip :offset="[10, 10]"> Print </q-tooltip>
                 </q-btn>
               </div>
@@ -204,16 +434,18 @@
 </template>
 
 <script setup>
+// import { useQuasar } from 'quasar'
 import { dateDbFormat, dateFullFormat, formatRpDouble } from 'src/modules/formatter'
-import { terbilangRupiah } from 'src/modules/utils'
+import { formatDouble, terbilangRupiah } from 'src/modules/utils'
 import { useProfilStore } from 'src/stores/admin/profil'
-// import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 // import { usePrint } from 'vue3-print-nb'
 
+// const $q = useQuasar()
 const profil = useProfilStore()
 const store = useListPenjualanStore()
+const opsiprint = ref('one')
 
 onMounted(async () => {
   if (!profil.profilData) {
@@ -221,25 +453,57 @@ onMounted(async () => {
   }
 })
 
-const printed = ref(false)
-const printObj = {
-  id: 'printMe',
-  popTitle: 'Printed from ' + profil.profilData?.namatoko + ' app',
+function hitungBayar() {
+  if (store.itemCetak?.flag === '5') {
+    return store.itemCetak?.total
+  } else {
+    return parseInt(store.itemCetak?.bayar)
+  }
+}
+function hitungSisa() {
+  if (store.itemCetak?.flag === '5') {
+    return (
+      parseInt(store.itemCetak?.total) -
+      (parseInt(store.itemCetak?.bayar) - parseInt(store.itemCetak?.kembali))
+    )
+  } else {
+    return parseInt(store.itemCetak?.total) - parseInt(store.itemCetak?.bayar)
+  }
+}
 
+const printed = ref(false)
+
+const printObj = computed(() => ({
+  id: 'printThermal',
+  popTitle: 'by Udumbara Informatika',
   beforeOpenCallback() {
     printed.value = true
     console.log('wait...')
   },
-
   openCallback() {
     console.log('opened')
   },
-
   closeCallback() {
     printed.value = false
     console.log('closePrint')
   },
-}
+}))
+
+const printReg = computed(() => ({
+  id: 'printReguler',
+  popTitle: 'by Udumbara Informatika',
+  beforeOpenCallback() {
+    printed.value = true
+    console.log('wait...')
+  },
+  openCallback() {
+    console.log('opened')
+  },
+  closeCallback() {
+    printed.value = false
+    console.log('closePrint')
+  },
+}))
 </script>
 
 <style>
