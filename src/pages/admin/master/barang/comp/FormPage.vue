@@ -331,7 +331,7 @@ const HargaKecil2 = computed(() => {
   }).format(store.form.hargajual2)
 })
 const HargaToko = computed(() => {
-  return `Harga Pengguna  (Harga Satuan Kecil = ${HargaKecil2.value})`
+  return `Harga untuk Toko  (Harga Satuan Kecil = ${HargaKecil2.value})`
 })
 
 const fileRef = ref([])
