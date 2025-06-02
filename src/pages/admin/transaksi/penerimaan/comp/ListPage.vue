@@ -128,10 +128,23 @@
                       >
                     </q-item-label>
                   </q-item-section>
+
                   <q-item-section v-if="hoveredId === item?.id" side>
                     <div class="flex q-gutter-sm">
                       <app-btn-edit-list @click="lihatdetail(item)" />
-                      <app-btn-delete-list />
+                      <q-btn
+                        v-if="item?.kunci !== '1'"
+                        color="red"
+                        icon="delete_forever"
+                        size="sm"
+                        padding="sm"
+                        round
+                        dense
+                        :loading="storePenerimaanH.loadingdeleteall"
+                        @click="hapusall(item?.id, item?.nopenerimaan, item?.noorder)"
+                      >
+                        <q-tooltip>Hapus Data</q-tooltip>
+                      </q-btn>
                     </div>
                   </q-item-section>
                   <q-item-section v-else side top>
@@ -157,6 +170,7 @@
 </template>
 
 <script setup>
+import { useQuasar } from 'quasar'
 import { formatRpDouble, humanDate, jamTnpDetik } from 'src/modules/formatter'
 import { useAdminListTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/list'
 import { useAppStore } from 'src/stores/app'
@@ -170,6 +184,7 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 const app = useAppStore()
 const emits = defineEmits(['add', 'edit'])
+const $q = useQuasar()
 
 // onMounted(() => {
 //   Promise.all([storeOrderH.getList()])
@@ -223,6 +238,26 @@ function ambiltanggalaja(val) {
   // Fallback: jika format tidak dikenali, tampilkan tanggal hari ini
   console.warn('Format tanggal tidak valid:', val)
   return new Date().getDate()
+}
+
+function hapusall(id, nopenerimaan, noorder) {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true,
+  })
+    .onOk(() => {
+      // console.log('OK')
+      storePenerimaanH.hapusall(id, nopenerimaan, noorder)
+    })
+    .onCancel(() => {
+      // console.log('Cancel')
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    })
 }
 defineExpose({ lihatdetail })
 

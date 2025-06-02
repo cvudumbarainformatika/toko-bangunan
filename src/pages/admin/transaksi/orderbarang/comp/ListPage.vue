@@ -147,7 +147,7 @@
                         :loading="store.loadingdeleteall"
                         @click="store.hapusall(item?.id, item?.noorder)"
                       >
-                        <q-tooltip>Kunci Data</q-tooltip>
+                        <q-tooltip>Hapus Data</q-tooltip>
                       </q-btn>
                       <!-- <app-btn-vpn_key @click="lihatCetak(item)" /> -->
                       <!-- <app-btn-cetak @click="lihatCetak(item)" /> -->

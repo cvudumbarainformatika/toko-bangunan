@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifError, notifSuccess } from 'src/modules/notifs'
 
 export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
   'admin-list-transaksi-penerimaanbarang-store',
@@ -10,6 +11,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
       items: [],
       isError: false,
       loading: false,
+      loadingdeleteall: false,
       params: {
         q: null,
         page: 0,
@@ -133,6 +135,33 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
           else this.items.unshift(hasil)
         })
         // this.items = hasilglobal.sort(({ tgl: a }, { tgl: b }) => b - a)
+      },
+      async hapusall(id, nopenerimaan, noorder) {
+        this.loadingdeleteall = true
+
+        const payload = {
+          id,
+          nopenerimaan,
+          noorder,
+          from: this.params.from,
+          to: this.params.to,
+          q: this.params.q,
+          per_page: String(this.params.per_page),
+        }
+        try {
+          const resp = await api.post('/v1/transaksi/penerimaan/hapusall', payload)
+          console.log(resp)
+          if (resp.status === 200) {
+            // this.olahdata(resp?.data?.data)
+            this.getList()
+            notifSuccess('Data berhasil dihapus')
+            this.loadingdeleteall = false
+          }
+        } catch (err) {
+          console.log('sasasx', err)
+          notifError(err?.response?.data?.message)
+          this.loadingdeleteall = false
+        }
       },
     },
   },

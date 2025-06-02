@@ -195,7 +195,7 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
           from: arr.params.from,
           to: arr.params.to,
           q: arr.params.q,
-          per_page: String(arr.params.per_page),
+          per_page: parseInt(arr.params.per_page),
         }
         try {
           const resp = await api.post('/v1/transaksi/orderpembelian/hapusall', payload)
@@ -203,7 +203,8 @@ export const useAdminFormTransaksiOrderBarangStore = defineStore(
           if (resp.status === 200) {
             console.log('sasa', arr.this)
 
-            arr.olahdata(resp?.data?.data, 2)
+            // arr.olahdata(resp?.data?.data, 2)
+            arr.getList()
             notifSuccess('Data berhasil dihapus')
             this.loadingdeleteall = false
           }
