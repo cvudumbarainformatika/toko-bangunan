@@ -121,13 +121,14 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
             tgl: x?.updated_at,
             kdsuplier: x?.kdsupllier,
             kunci: x?.kunci,
-            suplier: x?.suplier?.nama,
+            suplier: x?.nama,
             total: total,
             totalfix: totalfix,
             rinci: x?.rinci,
             orderan_h: x?.orderheder,
+            jenis_pembayaran: x?.jenis_pembayaran,
           }
-          // console.log('hasil', hasil)
+          console.log('hasilccccc', hasil)
           // hasilglobal.push(hasil)
           const index = this.items.findIndex((q) => q.id === x?.id)
 

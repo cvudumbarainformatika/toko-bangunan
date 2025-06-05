@@ -107,7 +107,7 @@
                     }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1">No. Order : {{ item?.noorder }}</q-item-label>
+                    <q-item-label lines="1">No. Order : {{ item?.noorder }} </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold">-- {{ item?.suplier?.nama }}</span>
                       <span

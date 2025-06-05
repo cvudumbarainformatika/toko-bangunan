@@ -120,6 +120,9 @@
                           No. Order : {{ item?.noorder }}
                         </q-badge></span
                       >
+                      <span class="text-weight-bold">
+                        || Jenis Pembayaran : {{ item?.jenis_pembayaran }}</span
+                      >
                       <span
                         class="text-weight-bold"
                         :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
