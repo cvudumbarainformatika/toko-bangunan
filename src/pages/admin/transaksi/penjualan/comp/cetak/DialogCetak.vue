@@ -106,7 +106,8 @@
               <div v-for="(item, n) in store.itemCetak?.detail" :key="n">
                 <div class="row full-width text-bold">
                   <span class="col"
-                    >{{ item.master_barang?.namabarang }} Motif {{ item?.motif }}</span
+                    >{{ item.master_barang?.namabarang }}
+                    <template v-if="item?.motif"> Seri {{ item?.motif }}</template></span
                   >
                 </div>
                 <div class="row full-width" style="font-size: small">
@@ -289,7 +290,10 @@
                   <tbody>
                     <tr v-for="(item, n) in store.itemCetak?.detail" :key="n">
                       <td class="text-center">{{ n + 1 }}</td>
-                      <td>{{ item.master_barang?.namabarang }} Motif {{ item.motif }}</td>
+                      <td>
+                        {{ item.master_barang?.namabarang }}
+                        <template v-if="item?.motif"> Seri {{ item?.motif }}</template>
+                      </td>
                       <td class="text-center">
                         <template v-if="parseFloat(item.jumlah) % parseFloat(item?.isi) == 0">
                           <div class="col-1 text-right">
