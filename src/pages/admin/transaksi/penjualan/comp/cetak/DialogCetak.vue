@@ -105,7 +105,10 @@
               <div class="q-pt-xs" style="border-top-style: dashed; border-width: 1px"></div>
               <div v-for="(item, n) in store.itemCetak?.detail" :key="n">
                 <div class="row full-width text-bold">
-                  <span class="col">{{ item.master_barang?.namabarang }}</span>
+                  <span class="col"
+                    >{{ item.master_barang?.namabarang }}
+                    <template v-if="item?.motif"> Seri {{ item?.motif }}</template></span
+                  >
                 </div>
                 <div class="row full-width" style="font-size: small">
                   <template v-if="parseFloat(item.jumlah) % parseFloat(item?.isi) == 0">
@@ -165,9 +168,20 @@
                     LUNAS ({{ store.itemCetak?.cara_bayar }})
                   </span>
                 </template>
-                <template v-else>
+                <template v-else-if="store.itemCetak?.flag === '2'">
+                  <span class="text-bold" style="font-size: medium"> HUTANG</span>
+                </template>
+                <template v-else-if="store.itemCetak?.flag === '7'">
                   <span class="text-bold" style="font-size: medium">
                     PEMBAYARAN DP ({{ store.itemCetak?.cara_bayar }})</span
+                  >
+                </template>
+                <template v-else-if="store.itemCetak?.flag === '8'">
+                  <span class="text-bold" style="font-size: medium">
+                    TEMPO
+                    <template v-if="store.itemCetak?.tempo"
+                      >sampai Tanggal {{ dateFullFormat(store.itemCetak?.tempo) }}</template
+                    ></span
                   >
                 </template>
               </div>
@@ -176,7 +190,9 @@
               </div>
               <div style="border-bottom-style: solid; border-width: 1px"></div>
               <div class="row full-width text-center flex-start">
-                <span class="q-pl-sm"> - by Udumbara Informatika -</span>
+                <span class="text-center">
+                  created by CV UdumbaraInformatika cvudumbarainformatika@gmail.com</span
+                >
               </div>
             </div>
           </div>
@@ -274,7 +290,10 @@
                   <tbody>
                     <tr v-for="(item, n) in store.itemCetak?.detail" :key="n">
                       <td class="text-center">{{ n + 1 }}</td>
-                      <td>{{ item.master_barang?.namabarang }}</td>
+                      <td>
+                        {{ item.master_barang?.namabarang }}
+                        <template v-if="item?.motif"> Seri {{ item?.motif }}</template>
+                      </td>
                       <td class="text-center">
                         <template v-if="parseFloat(item.jumlah) % parseFloat(item?.isi) == 0">
                           <div class="col-1 text-right">
@@ -375,10 +394,25 @@
                 <div class="content-center">
                   Keterangan :
                   <template v-if="store.itemCetak?.flag === '5'">
-                    <span class="text-bold q-pl-md" style="font-size: large"> LUNAS </span>
+                    <span class="text-bold q-pl-md" style="font-size: large">
+                      LUNAS ({{ store.itemCetak?.cara_bayar }})</span
+                    >
                   </template>
-                  <template v-else>
-                    <span class="text-bold q-pl-md" style="font-size: large"> PEMBAYARAN DP </span>
+                  <template v-else-if="store.itemCetak?.flag === '2'">
+                    <span class="text-bold q-pl-md" style="font-size: large"> HUTANG </span>
+                  </template>
+                  <template v-else-if="store.itemCetak?.flag === '7'">
+                    <span class="text-bold q-pl-md" style="font-size: large">
+                      PEMBAYARAN DP ({{ store.itemCetak?.cara_bayar }})</span
+                    >
+                  </template>
+                  <template v-else-if="store.itemCetak?.flag === '8'">
+                    <span class="text-bold q-pl-md" style="font-size: large">
+                      TEMPO
+                      <template v-if="store.itemCetak?.tempo"
+                        >sampai Tanggal {{ dateFullFormat(store.itemCetak?.tempo) }}</template
+                      ></span
+                    >
                   </template>
                 </div>
               </div>
@@ -392,7 +426,7 @@
             <div style="border-bottom-style: solid; border-width: 1px"></div>
             <div class="row full-width text-center flex-start">
               <span class="q-pl-sm">
-                - by Udumbara Informatika - | cvudumbarainformatika@gmail.com</span
+                created by -CV UdumbaraInformatika- | cvudumbarainformatika@gmail.com</span
               >
             </div>
           </div>
