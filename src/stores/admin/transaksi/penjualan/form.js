@@ -43,7 +43,9 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
     },
     formTempo:{
       id: null,
-      tempo: null
+      tempo: null,
+      tgl_kirim: null,
+      jml_tempo:30
     },
     dispTempo: null,
     noNota: null,
@@ -94,7 +96,9 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
     resetTempo(){
       this.formTempo = {
         id: null,
-        tempo: null
+        tempo: null,
+        tgl_kirim: null,
+        jml_tempo:30
       }
       this.dispTempo = null
       this.item = null

@@ -131,12 +131,13 @@ function bayar(item) {
   store.formPembayaran.no_penjualan = item?.no_penjualan
 }
 function tempo(item) {
-  const nextMth=date.addToDate(Date.now(),{month:1})
-  console.log('tempo', item);
+  store.formTempo.jml_tempo=30
+  const nextMth=date.addToDate(Date.now(),{day:store.formTempo.jml_tempo})
 
+  store.formTempo.tgl_kirim = date.formatDate(Date.now(), 'YYYY-MM-DD')
+  store.dispTempo = date.formatDate(Date.now(), 'DD MMMM YYYY')
   store.formTempo.tempo = date.formatDate(nextMth, 'YYYY-MM-DD')
   store.formTempo.id=item.id
-  store.dispTempo = date.formatDate(nextMth, 'DD MMMM YYYY')
   store.item=item
   store.openDialogTempo = true
   setTimeout(() => {
