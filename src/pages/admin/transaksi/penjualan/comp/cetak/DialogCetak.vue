@@ -58,17 +58,19 @@
               </div>
               <div class="q-pt-xs" style="border-top-style: solid; border-width: 1px"></div>
               <div class="row text-bold full-width">
-                <span class="col-auto">Penjualan </span>
-                <span>: {{ store.itemCetak?.no_penjualan }}</span>
+                <span
+                  >No: {{ store.itemCetak?.no_penjualan }},
+                  {{ dateFullFormat(store.itemCetak?.tgl) }}</span
+                >
               </div>
               <div class="row full-width">
                 <span class="col-auto">Sales </span>
                 <span>: {{ store.itemCetak?.sales?.nama }}</span>
               </div>
-              <div class="row full-width">
+              <!-- <div class="row full-width">
                 <span class="col-auto">Tanggal </span>
                 <span>: {{ dateDbFormat(store.itemCetak?.tgl) }}</span>
-              </div>
+              </div> -->
               <div class="row full-width">
                 <span class="col-auto">Pelanggan </span>
                 <span
@@ -79,8 +81,16 @@
                       : store.itemCetak?.pelanggan?.nama
                   }}</span
                 >
+                <span
+                  >, telp
+                  {{
+                    !store.itemCetak?.pelanggan
+                      ? store.itemCetak?.keterangan?.tlp
+                      : store.itemCetak?.pelanggan?.telepon
+                  }}</span
+                >
               </div>
-              <div class="row full-width">
+              <!-- <div class="row full-width">
                 <span class="col-3">Telepon</span>
                 <span
                   >:
@@ -90,9 +100,9 @@
                       : store.itemCetak?.pelanggan?.telepon
                   }}</span
                 >
-              </div>
+              </div> -->
               <div class="row q-pb-xs full-width">
-                <span class="col-3">Alamat</span>
+                <span class="col-auto">Alamat</span>
                 <span
                   >:
                   {{
@@ -102,6 +112,7 @@
                   }}</span
                 >
               </div>
+
               <div class="q-pt-xs" style="border-top-style: dashed; border-width: 1px"></div>
               <div v-for="(item, n) in store.itemCetak?.detail" :key="n">
                 <div class="row full-width text-bold">
@@ -162,7 +173,10 @@
                 <q-space />
                 <span> {{ formatRpDouble(hitungSisa()) }}</span>
               </div>
-              <div class="row flex-center full-width q-pt-sm">
+              <div class="row flex-center full-width">
+                <div class="col-12 text-center text-bold">
+                  <span v-if="store.opendialogCetakkedua === true"> Bukan Cetakan Pertama</span>
+                </div>
                 <template v-if="store.itemCetak?.flag === '5'">
                   <span class="text-bold" style="font-size: medium">
                     LUNAS ({{ store.itemCetak?.cara_bayar }})
@@ -179,17 +193,20 @@
                 <template v-else-if="store.itemCetak?.flag === '8'">
                   <span class="text-bold" style="font-size: medium">
                     TEMPO
-                    <template v-if="store.itemCetak?.tempo"
-                      >sampai Tanggal {{ dateFullFormat(store.itemCetak?.tempo) }}</template
-                    ></span
+                    <template v-if="store.itemCetak?.tempo">
+                      <span style="font-size: medium"
+                        >{{ store.itemCetak?.jml_tempo }}hari, sampai
+                        {{ dateFullFormat(store.itemCetak?.tempo) }}</span
+                      >
+                    </template></span
                   >
                 </template>
               </div>
-              <div class="row full-width q-pb-md text-center flex-center">
+              <div class="row full-width q-pb-sm text-center flex-center" style="font-size: small">
                 Terima Kasih Atas Pembelian Anda
               </div>
               <div style="border-bottom-style: solid; border-width: 1px"></div>
-              <div class="row full-width text-center flex-start">
+              <div class="row full-width text-center flex-start" style="font-size: small">
                 <span class="text-center">
                   created by CV UdumbaraInformatika cvudumbarainformatika@gmail.com</span
                 >
@@ -394,26 +411,32 @@
                 <div class="content-center">
                   Keterangan :
                   <template v-if="store.itemCetak?.flag === '5'">
-                    <span class="text-bold q-pl-md" style="font-size: large">
+                    <span class="text-bold q-pl-sm" style="font-size: large">
                       LUNAS ({{ store.itemCetak?.cara_bayar }})</span
                     >
                   </template>
                   <template v-else-if="store.itemCetak?.flag === '2'">
-                    <span class="text-bold q-pl-md" style="font-size: large"> HUTANG </span>
+                    <span class="text-bold q-pl-sm" style="font-size: large"> HUTANG </span>
                   </template>
                   <template v-else-if="store.itemCetak?.flag === '7'">
-                    <span class="text-bold q-pl-md" style="font-size: large">
+                    <span class="text-bold q-pl-sm" style="font-size: large">
                       PEMBAYARAN DP ({{ store.itemCetak?.cara_bayar }})</span
                     >
                   </template>
                   <template v-else-if="store.itemCetak?.flag === '8'">
-                    <span class="text-bold q-pl-md" style="font-size: large">
+                    <span class="text-bold q-pl-sm" style="font-size: large">
                       TEMPO
-                      <template v-if="store.itemCetak?.tempo"
-                        >sampai Tanggal {{ dateFullFormat(store.itemCetak?.tempo) }}</template
-                      ></span
+                      <template v-if="store.itemCetak?.tempo">
+                        <span style="font-size: medium"
+                          >{{ store.itemCetak?.jml_tempo }}hari, sampai
+                          {{ dateFullFormat(store.itemCetak?.tempo) }}</span
+                        >
+                      </template></span
                     >
                   </template>
+                  <div class="col-12 q-pl-md q-pt-sm text-bold">
+                    <span v-if="store.opendialogCetakkedua === true"> Bukan Cetakan Pertama</span>
+                  </div>
                 </div>
               </div>
               <div class="col flex-end content-center text-center">
