@@ -7,22 +7,23 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
     isError: false,
     loading: false,
     opendialogCetak: false,
+    opendialogCetakkedua: false,
     items: [],
     meta: null,
     params: {
       q: null,
       page: 1,
       per_page: 10,
-      from:date.formatDate(Date.now(), 'YYYY-MM-01'),
+      from: date.formatDate(Date.now(), 'YYYY-MM-01'),
       to: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      flag:'semua'
+      flag: 'semua',
     },
     dateDisplay: {
       from: date.formatDate(Date.now(), '01 MMMM YYYY'),
       to: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     },
     itemCetak: [],
-    flagOptions:[
+    flagOptions: [
       { label: 'Semua', value: 'semua' },
       { label: 'Lunas', value: '5' },
       { label: 'Belum Lunas', value: 'piutang' },
@@ -33,11 +34,10 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
       { label: 'Proses Cicilan', value: '3' },
       { label: 'Dibawa Sales', value: '4' },
       { label: 'Batal', value: '6' },
-    ]
+    ],
   }),
   actions: {
     async getList() {
-
       this.params.page = 1
       this.isError = false
       this.loading = true
@@ -53,7 +53,7 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
 
         // Don't reset items array here, let the component handle it
         if (data?.meta.current_page == 1) {
-          console.log('get list if',data?.meta.current_page );
+          console.log('get list if', data?.meta.current_page)
           this.items = data?.data || []
         }
 
@@ -90,23 +90,23 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
         this.loading = false
       }
     },
-     loadMore(index, done) {
-      console.log('load more', index);
+    loadMore(index, done) {
+      console.log('load more', index)
 
-        this.isError = false
-        this.params.page = index
-        const params = {
-          params: this.params,
-        }
+      this.isError = false
+      this.params.page = index
+      const params = {
+        params: this.params,
+      }
 
-        return new Promise((resolve) => {
+      return new Promise((resolve) => {
         api
           .get('/v1/transaksi/penjualan/list', params)
           .then(({ data }) => {
             // console.log('list penjualan', data)
             this.meta = data?.meta
 
-            if(index>1){
+            if (index > 1) {
               this.items.push(...data.data)
             }
             done()

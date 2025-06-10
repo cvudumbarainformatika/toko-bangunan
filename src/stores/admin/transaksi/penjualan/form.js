@@ -41,9 +41,11 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
         alamat: '',
       },
     },
-    formTempo:{
+    formTempo: {
       id: null,
-      tempo: null
+      tempo: null,
+      tgl_kirim: null,
+      jml_tempo: 30,
     },
     dispTempo: null,
     noNota: null,
@@ -91,20 +93,22 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
         },
       }
     },
-    resetTempo(){
+    resetTempo() {
       this.formTempo = {
         id: null,
-        tempo: null
+        tempo: null,
+        tgl_kirim: null,
+        jml_tempo: 30,
       }
       this.dispTempo = null
       this.item = null
-      this.openDialogTempo=false
+      this.openDialogTempo = false
     },
     async simpanDetail() {
       this.loading = true
       if (this.noNota !== null) this.setForm('nota', this.noNota)
       const keys = Object.keys(this.form)
-      const form={}
+      const form = {}
       keys.forEach((key) => {
         if (key == 'harga_jual') form[key] = olahUang(this.form[key])
         else if (key == 'diskon') form[key] = olahUang(this.form[key])
@@ -177,13 +181,12 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
     simpanPembayaran() {
       this.loadingPembayaran = true
       const keys = Object.keys(this.formPembayaran)
-      const form={}
+      const form = {}
       keys.forEach((key) => {
-
-        if (key=='bayar') form[key] = olahUang(this.formPembayaran[key])
-        else if (key=='total') form[key] = olahUang(this.formPembayaran[key])
-        else if (key=='kembali') form[key] = olahUang(this.formPembayaran[key])
-          else form[key] = this.formPembayaran[key]
+        if (key == 'bayar') form[key] = olahUang(this.formPembayaran[key])
+        else if (key == 'total') form[key] = olahUang(this.formPembayaran[key])
+        else if (key == 'kembali') form[key] = olahUang(this.formPembayaran[key])
+        else form[key] = this.formPembayaran[key]
       })
       // return
 
@@ -213,26 +216,26 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
           })
       })
     },
-    simpanTempo(){
-      this.loadingTempo=true
+    simpanTempo() {
+      this.loadingTempo = true
       return new Promise((resolve) => {
         api
-        .post('v1/transaksi/penjualan/simpan-tempo', this.formTempo)
-        .then((resp) => {
-          this.loadingTempo = false
-          const data= resp?.data
-          notifSuccess(data.message)
-          const index=this.list.items.findIndex(i=>i.id==data?.data?.id)
-          if(index>=0) this.list.items[index].tempo=data?.data?.tempo
-          this.resetTempo()
-          resolve(resp)
-        })
-        .catch(() => {
-          this.loadingTempo = false
-
-        })
+          .post('v1/transaksi/penjualan/simpan-tempo', this.formTempo)
+          .then((resp) => {
+            this.loadingTempo = false
+            const data = resp?.data
+            notifSuccess(data.message)
+            const index = this.list.items.findIndex((i) => i.id == data?.data?.id)
+            if (index >= 0) this.list.items[index].tempo = data?.data?.tempo
+            this.list.itemCetak = this.list.items
+            this.resetTempo()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingTempo = false
+          })
       })
-    }
+    },
   },
 })
 

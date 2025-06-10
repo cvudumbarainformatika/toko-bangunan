@@ -24,12 +24,14 @@
                     <app-input-date
                       :model="store.dispTempo"
                       class="col-12"
-                      label="Tanggal Jatuh Tempo"
+                      label="Tanggal Kirim"
                       outlined
                       dense
                       @set-display="store.dispTempo = $event"
-                      @db-model="store.formTempo.tempo = $event"
+                      @db-model="updateKirim"
                     />
+                    <app-input v-model="store.formTempo.jml_tempo" label="Jumlah Tempo ( hari )" class="col-12" @update:model-value="updateJml" />
+                    <div class="col-12 f-12">Tanggal Jatuh Tempo {{dateFullFormat( store.formTempo?.tempo)}}</div>
 
                     <div class="col-12">
                       <q-separator class="q-my-md" />
@@ -54,7 +56,7 @@
 </q-dialog>
 </template>
 <script setup>
-import { useQuasar } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import { dateFullFormat } from 'src/modules/formatter'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
 import { computed } from 'vue'
@@ -68,5 +70,24 @@ const isMobile = computed(() => {
 function onSubmit(){
   console.log('submit tempo', store.formTempo);
   store.simpanTempo()
+}
+function updateKirim(val){
+  console.log('set anu', val);
+  store.formTempo.tgl_kirim = val
+  updateTempo()
+}
+function updateJml(val){
+  const _removedZeros = val?.replace(/^0+/, '')
+  const jml=parseInt(_removedZeros)
+  console.log('set anu', val);
+  store.formTempo.jml_tempo = !isNaN(jml)?jml:0
+  updateTempo()
+}
+function updateTempo(){
+  const kirim=new Date(store.formTempo.tgl_kirim)
+  const nextMth=date.addToDate(kirim,{day:store.formTempo.jml_tempo})
+  store.formTempo.tempo = date.formatDate(nextMth, 'YYYY-MM-DD')
+  console.log('update tempo', store.formTempo);
+
 }
 </script>
