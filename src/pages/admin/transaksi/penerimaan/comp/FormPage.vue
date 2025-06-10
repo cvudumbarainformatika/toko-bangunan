@@ -29,7 +29,7 @@ const props = defineProps({
   },
 })
 onMounted(() => {
-  console.log('penerimaan', props?.data?.nopenerimaan)
+  console.log('penerimaan', props?.data)
   if (
     props?.data?.nopenerimaan === '' ||
     props?.data?.nopenerimaan === null ||
@@ -39,6 +39,7 @@ onMounted(() => {
     store.form.nofaktur = ''
     store.form.noorder = ''
     store.form.suplier = ''
+    store.form.pembayaran = ''
     store.rinci = []
   } else {
     store.form.noorder = props?.data?.noorder
@@ -47,6 +48,7 @@ onMounted(() => {
     store.form.nofaktur = props?.data?.nofaktur
     store.rinci = props?.data?.orderan_h?.rinci
     store.form.kunci = props?.data?.kunci
+    store.form.pembayaran = props?.data?.jenis_pembayaran
     store.hiden = true
   }
 })

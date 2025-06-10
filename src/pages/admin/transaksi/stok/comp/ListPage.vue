@@ -54,7 +54,9 @@
                   </q-item-section>
                   <q-item-section>
                     <q-item-label lines="1">
-                      <span class="text-weight-bold">Nama Barang : {{ item?.namabarang }}</span>
+                      <span class="text-weight-bold"
+                        >Nama Barang : {{ item?.namabarang }} Motif : {{ item?.motif }}</span
+                      >
                       <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
                       <span class="text-weight-bold">
                         || Keterangan : 1 {{ item?.satuan_b }} ({{ item?.isi }}
@@ -72,8 +74,24 @@
                         class="text-weight-bold"
                         :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
                       >
-                        Jumlah : {{ item?.jumlah_b }} {{ item?.satuan_b }}</span
-                      >
+                        Jumlah :
+                        <span v-if="Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0"
+                          >{{ Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) }}
+                          {{ item?.satuan_b }}</span
+                        >
+                        <span
+                          v-if="
+                            Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1)) > 0 &&
+                            item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0
+                          "
+                        >
+                          lebih
+                        </span>
+                        <span v-if="item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) > 0"
+                          >{{ item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1) }}
+                          {{ item?.satuan_k }}</span
+                        >
+                      </span>
                       <span
                         v-if="item?.isi > 1"
                         :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"

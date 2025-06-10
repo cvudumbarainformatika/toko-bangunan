@@ -230,6 +230,7 @@
             </transition-group>
             <q-separator class="q-mt-sm" />
           </q-list>
+          <div class="q-mt-xl"></div>
         </q-card-section>
       </q-card>
     </div>
