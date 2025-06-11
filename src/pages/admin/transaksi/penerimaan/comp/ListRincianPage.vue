@@ -35,6 +35,7 @@
               <transition-group name="list">
                 <q-item v-for="(item, n) in lists" :key="n" class="list-move">
                   <q-item-section>
+                    <!-- <div class="row full-width">{{ n + 1 }}.</div> -->
                     <div class="row full-width">
                       <div class="col-12">
                         <span class="text-weight-medium"

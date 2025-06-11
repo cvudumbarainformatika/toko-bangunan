@@ -89,7 +89,7 @@
               :initial-index="storePenerimaanH.params.page"
             >
               <q-intersection
-                v-for="(item, x) in storePenerimaanH.items"
+                v-for="(item, x) in lists"
                 :key="x"
                 transition="fade"
                 class="example-item"
@@ -196,6 +196,14 @@ const $q = useQuasar()
 // function lihatdetail(item) {
 //   emits('edit', item)
 // }
+
+const lists = computed(() => {
+  const arr = storePenerimaanH.items
+  //console.log('arr', arr)
+  return arr?.sort((a, b) => {
+    return b.id - a.id
+  })
+})
 
 const lihatdetail = (item) => {
   emits('edit', item)

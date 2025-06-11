@@ -17,6 +17,7 @@
                       @update:model-value="
                         (e) => {
                           infiniteScroll.reset()
+                          store.getList()
                           // storePenerimaanH.getList()
                         }
                       "
