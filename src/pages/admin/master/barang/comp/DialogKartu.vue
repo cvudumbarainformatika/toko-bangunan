@@ -16,7 +16,7 @@
               <app-input
                 v-model="store.params.x"
                 prepend-icon="search"
-                label="Telusuri Nomer Transaksi, Seri"
+                label="Telusuri Seri"
                 style="min-width: 350px"
                 :debounce="300"
                 @update:model-value="
