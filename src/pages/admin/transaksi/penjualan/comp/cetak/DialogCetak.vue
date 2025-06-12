@@ -195,7 +195,7 @@
                     TEMPO
                     <template v-if="store.itemCetak?.tempo">
                       <span style="font-size: medium"
-                        >{{ store.itemCetak?.jml_tempo }}hari, sampai
+                        >{{ store.itemCetak?.jml_tempo }} hari, sampai
                         {{ dateFullFormat(store.itemCetak?.tempo) }}</span
                       >
                     </template></span
@@ -428,7 +428,7 @@
                       TEMPO
                       <template v-if="store.itemCetak?.tempo">
                         <span style="font-size: medium"
-                          >{{ store.itemCetak?.jml_tempo }}hari, sampai
+                          >{{ store.itemCetak?.jml_tempo }} hari, sampai
                           {{ dateFullFormat(store.itemCetak?.tempo) }}</span
                         >
                       </template></span

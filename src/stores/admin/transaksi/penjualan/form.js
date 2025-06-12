@@ -227,7 +227,8 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
             notifSuccess(data.message)
             const index = this.list.items.findIndex((i) => i.id == data?.data?.id)
             if (index >= 0) this.list.items[index].tempo = data?.data?.tempo
-            this.list.itemCetak = this.list.items
+            this.list.itemCetak.jml_tempo = data?.data?.jml_tempo
+            console.log('jadi tempo', this.list.itemCetak)
             this.resetTempo()
             resolve(resp)
           })
