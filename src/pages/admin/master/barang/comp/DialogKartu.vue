@@ -12,6 +12,21 @@
             </q-btn>
           </q-bar>
           <q-card-section :class="app?.dark ? 'bg-black text-white' : 'bg-white text-black'">
+            <div class="col q-gutter-sm q-px-md">
+              <app-input
+                v-model="store.params.x"
+                prepend-icon="search"
+                label="Telusuri Nomer Transaksi, Seri"
+                style="min-width: 350px"
+                :debounce="300"
+                @update:model-value="
+                  (e) => {
+                    store.getList()
+                    console.log('item cari', store.kartuStok?.transaksi)
+                  }
+                "
+              />
+            </div>
             <div class="row q-gutter-sm q-px-md q-py-md">
               <app-select
                 v-model="store.params.bulan"

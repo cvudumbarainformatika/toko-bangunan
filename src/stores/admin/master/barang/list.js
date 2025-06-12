@@ -13,6 +13,7 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
     dialogKartu: false,
     image: '',
     params: {
+      x: null,
       q: null,
       page: 0,
       per_page: 15,

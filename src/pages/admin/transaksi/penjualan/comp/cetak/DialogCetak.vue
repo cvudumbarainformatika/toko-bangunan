@@ -511,18 +511,11 @@ onMounted(async () => {
 })
 
 function hitungBayar() {
-  if (store.itemCetak?.flag === '5') {
-    return store.itemCetak?.total
-  } else {
-    return parseInt(store.itemCetak?.bayar)
-  }
+  return parseInt(store.itemCetak?.bayar)
 }
 function hitungSisa() {
   if (store.itemCetak?.flag === '5') {
-    return (
-      parseInt(store.itemCetak?.total) -
-      (parseInt(store.itemCetak?.bayar) - parseInt(store.itemCetak?.kembali))
-    )
+    return parseInt(store.itemCetak?.bayar) - parseInt(store.itemCetak?.total)
   } else {
     return parseInt(store.itemCetak?.total) - parseInt(store.itemCetak?.bayar)
   }
