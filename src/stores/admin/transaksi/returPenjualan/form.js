@@ -1,6 +1,6 @@
 import { acceptHMRUpdate, defineStore } from "pinia"
 import { api } from "src/boot/axios"
-import { notifSuccess } from "src/modules/notifs"
+import { notifError, notifSuccess } from "src/modules/notifs"
 import { useListReturPenjualanStore } from "./list"
 import { useListTransaksiReturPenjualanStore } from "./retur"
 
@@ -58,6 +58,7 @@ export const useFormReturPenjualanStore = defineStore('form_retur-penjualan-stor
         item.loading = false
         this.isError = true
         this.message = error?.response?.data?.message
+        notifError(error?.response?.data?.message)
         console.log('error submit retur penjualan', error)
         throw error
       }

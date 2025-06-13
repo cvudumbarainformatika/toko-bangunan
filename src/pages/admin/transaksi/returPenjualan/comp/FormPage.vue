@@ -83,7 +83,7 @@
       <div v-if="store.noRetur" class="row justify-end q-mr-sm">
         <div class="col-2">
           <app-btn
-            label="Selesai dan kurangi stok"
+            label="Selesai dan tambah stok"
             color="primary"
             @click="
               () => {
