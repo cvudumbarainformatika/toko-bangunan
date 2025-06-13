@@ -157,21 +157,11 @@
                       class="row q-pa-sm q-gutter-y-sm"
                     >
                       <div class="col-5">
+
                         {{
                           detail?.master_barang?.namabarang ??
                           '' +
-                            ' '  + (detail?.motif ? detail?.motif + ' ':'') +
-                            (detail?.master_barang?.brand === null
-                              ? ''
-                              : (detail?.master_barang?.brand ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.seri === null
-                              ? ''
-                              : (detail?.master_barang?.seri ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.ukuran === null
-                              ? ''
-                              : (detail?.master_barang?.ukuran ?? ''))
+                            ' '  + (detail?.motif ? detail?.motif + ' ':'')
                         }}
                       </div>
                       <div class="col-1 text-right">{{ formatDouble(detail?.jumlah) }}</div>
@@ -182,12 +172,12 @@
                       <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
                       <div class="col-1 text-right">
                         {{
-                          formatDouble(
+                          item?.header_retur?.length >0?formatDouble(
                             item?.header_retur
                               ?.flatMap((m) => m.detail)
                               .filter((m) => m.kodebarang === detail?.kodebarang)
                               ?.reduce((acc, it) => acc + it.subtotal, 0),
-                          )
+                          ):0
                         }}
                       </div>
                       <div class="col-2 text-right">{{ formatDouble(subtotal(item, detail)) }}</div>

@@ -327,20 +327,8 @@
                     >
                       <div class="col-5">
                         {{
-                          detail?.master_barang?.namabarang ??
-                          '' +
-                            ' '   + (detail?.motif ? detail?.motif + ' ':'') +
-                            (detail?.master_barang?.brand === null
-                              ? ''
-                              : (detail?.master_barang?.brand ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.seri === null
-                              ? ''
-                              : (detail?.master_barang?.seri ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.ukuran === null
-                              ? ''
-                              : (detail?.master_barang?.ukuran ?? ''))
+                          (detail?.master_barang?.namabarang ?? '') +
+                            ' '   + (detail?.motif ? detail?.motif + ' ':'')
                         }}
                       </div>
                       <div class="col-1 text-right">{{ formatDouble(detail?.jumlah) }}</div>
