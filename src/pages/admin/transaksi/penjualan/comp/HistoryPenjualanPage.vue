@@ -220,7 +220,7 @@
                       <div class="col-5">
                         {{
                           detail?.master_barang?.namabarang +
-                          ' ' +
+                          ' ' + (detail?.motif ?detail?.motif + ' ':'')  +
                           (item?.flag != null
                             ? ''
                             : detail?.master_barang?.stok === null
@@ -255,7 +255,7 @@
                         <div class="col-5">
                           {{
                             detail?.master_barang?.namabarang +
-                            ' ' +
+                            ' ' + (detail?.motif ?detail?.motif + ' ':'') +
                             (item?.flag != null
                               ? ''
                               : detail?.master_barang?.stok === null
