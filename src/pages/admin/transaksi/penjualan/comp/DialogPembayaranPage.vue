@@ -220,8 +220,8 @@ const storelist = useListPenjualanStore()
 const optionCaraBayar = ref([
   { label: 'Lunas', value: '5' },
   { label: 'Down Payment (DP)', value: '7' },
-  { label: 'Tempo', value: '8' },
-  { label: 'Hutang', value: '2' },
+  { label: 'Tempo', value: '2' },
+  // { label: 'Hutang', value: '2' },
 ])
 const refPelanggan = ref(null)
 function validasi(){

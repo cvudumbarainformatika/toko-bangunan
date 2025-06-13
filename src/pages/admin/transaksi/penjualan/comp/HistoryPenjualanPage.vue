@@ -375,9 +375,9 @@ function statusFlag(item) {
       case '7':
         status = 'Down Payment (DP)'
         break
-      case '8':
-        status = 'Tempo'
-        break
+      // case '8':
+      //   status = 'Tempo'
+      //   break
 
       default:
         break
