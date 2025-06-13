@@ -58,17 +58,19 @@
               </div>
               <div class="q-pt-xs" style="border-top-style: solid; border-width: 1px"></div>
               <div class="row text-bold full-width">
-                <span class="col-auto">Penjualan </span>
-                <span>: {{ store.itemCetak?.no_penjualan }}</span>
+                <span
+                  >No: {{ store.itemCetak?.no_penjualan }},
+                  {{ dateFullFormat(store.itemCetak?.tgl) }}</span
+                >
               </div>
               <div class="row full-width">
                 <span class="col-auto">Sales </span>
                 <span>: {{ store.itemCetak?.sales?.nama }}</span>
               </div>
-              <div class="row full-width">
+              <!-- <div class="row full-width">
                 <span class="col-auto">Tanggal </span>
                 <span>: {{ dateDbFormat(store.itemCetak?.tgl) }}</span>
-              </div>
+              </div> -->
               <div class="row full-width">
                 <span class="col-auto">Pelanggan </span>
                 <span
@@ -79,8 +81,16 @@
                       : store.itemCetak?.pelanggan?.nama
                   }}</span
                 >
+                <span
+                  >, telp
+                  {{
+                    !store.itemCetak?.pelanggan
+                      ? store.itemCetak?.keterangan?.tlp
+                      : store.itemCetak?.pelanggan?.telepon
+                  }}</span
+                >
               </div>
-              <div class="row full-width">
+              <!-- <div class="row full-width">
                 <span class="col-3">Telepon</span>
                 <span
                   >:
@@ -90,9 +100,9 @@
                       : store.itemCetak?.pelanggan?.telepon
                   }}</span
                 >
-              </div>
+              </div> -->
               <div class="row q-pb-xs full-width">
-                <span class="col-3">Alamat</span>
+                <span class="col-auto">Alamat</span>
                 <span
                   >:
                   {{
@@ -102,6 +112,7 @@
                   }}</span
                 >
               </div>
+
               <div class="q-pt-xs" style="border-top-style: dashed; border-width: 1px"></div>
               <div v-for="(item, n) in store.itemCetak?.detail" :key="n">
                 <div class="row full-width text-bold">
@@ -162,7 +173,7 @@
                 <q-space />
                 <span> {{ formatRpDouble(hitungSisa()) }}</span>
               </div>
-              <div class="row flex-center full-width q-pt-sm">
+              <div class="row flex-center full-width">
                 <template v-if="store.itemCetak?.flag === '5'">
                   <span class="text-bold" style="font-size: medium">
                     LUNAS ({{ store.itemCetak?.cara_bayar }})
@@ -179,17 +190,30 @@
                 <template v-else-if="store.itemCetak?.flag === '8'">
                   <span class="text-bold" style="font-size: medium">
                     TEMPO
-                    <template v-if="store.itemCetak?.tempo"
-                      >sampai Tanggal {{ dateFullFormat(store.itemCetak?.tempo) }}</template
-                    ></span
+                    <template v-if="store.itemCetak?.tempo">
+                      <span style="font-size: medium"
+                        >{{ store.itemCetak?.jml_tempo }} hari, sampai
+                        {{ dateFullFormat(store.itemCetak?.tempo) }}</span
+                      >
+                    </template></span
                   >
                 </template>
               </div>
-              <div class="row full-width q-pb-md text-center flex-center">
+              <div class="row full-width text-center flex-center" style="font-size: small">
                 Terima Kasih Atas Pembelian Anda
               </div>
+              <div class="col-12 text-center text-bold q-pb-sm">
+                <span
+                  v-if="store.opendialogCetakkedua === true"
+                  class="text-bold"
+                  style="font-size: large"
+                >
+                  COPY PRINT</span
+                >
+                <span v-else class="text-bold" style="font-size: large"> ORIGINAL PRINT</span>
+              </div>
               <div style="border-bottom-style: solid; border-width: 1px"></div>
-              <div class="row full-width text-center flex-start">
+              <div class="row full-width text-center flex-start" style="font-size: small">
                 <span class="text-center">
                   created by CV UdumbaraInformatika cvudumbarainformatika@gmail.com</span
                 >
@@ -222,59 +246,96 @@
                   </div>
                 </div>
               </div>
-              <div class="col flex-end q-pl-xl q-py-md">
-                <div class="row full-width">
-                  <span class="col-3">Nomor Penjaualan</span>
-                  <span>: {{ store.itemCetak?.no_penjualan }}</span>
-                </div>
-                <div class="row full-width">
-                  <span class="col-3">Sales</span>
-                  <span>: {{ store.itemCetak?.sales?.nama }}</span>
-                </div>
-                <div class="row full-width">
-                  <span class="col-3">Tanggal</span>
-                  <span>: {{ dateDbFormat(store.itemCetak?.tgl) }}</span>
-                </div>
-                <div class="row full-width">
-                  <span class="col-3">Pelanggan</span>
-                  <span
-                    >:
-                    {{
-                      !store.itemCetak?.pelanggan
-                        ? store.itemCetak?.keterangan?.nama
-                        : store.itemCetak?.pelanggan?.nama
-                    }}</span
-                  >
-                </div>
-                <div class="row full-width">
-                  <span class="col-3">Telepon</span>
-                  <span
-                    >:
-                    {{
-                      !store.itemCetak?.pelanggan
-                        ? store.itemCetak?.keterangan?.tlp
-                        : store.itemCetak?.pelanggan?.telepon
-                    }}</span
-                  >
-                </div>
-                <div class="row full-width">
-                  <span class="col-3">Alamat</span>
-                  <span
-                    >:
-                    {{
-                      !store.itemCetak?.pelanggan
-                        ? store.itemCetak?.keterangan?.alamat
-                        : store.itemCetak?.pelanggan?.alamat
-                    }}</span
-                  >
-                </div>
+              <div class="col flex-end q-pl-xl q-py-md content-center text-center">
+                <span class="text-bold" style="font-size: xx-large">FAKTUR</span>
               </div>
             </div>
             <div class="full-width justify-center">
               <div style="border-bottom-style: solid; border-width: 1px"></div>
-              <div class="text-center text-bold q-pt-sm" style="font-size: medium">
-                NOTA PENJAUALAN
+              <div class="row full-width justify-between q-px-md">
+                <div class="col flex-start content-center">
+                  <div class="row full-width">
+                    <span class="col-3">Pelanggan</span>
+                    <span
+                      >:
+                      {{
+                        !store.itemCetak?.pelanggan
+                          ? store.itemCetak?.keterangan?.nama
+                          : store.itemCetak?.pelanggan?.nama
+                      }}</span
+                    >
+                  </div>
+                  <div class="row full-width">
+                    <span class="col-3">Telepon</span>
+                    <span
+                      >:
+                      {{
+                        !store.itemCetak?.pelanggan
+                          ? store.itemCetak?.keterangan?.tlp
+                          : store.itemCetak?.pelanggan?.telepon
+                      }}</span
+                    >
+                  </div>
+                  <div class="row full-width">
+                    <span class="col-3">Alamat</span>
+                    <span
+                      >:
+                      {{
+                        !store.itemCetak?.pelanggan
+                          ? store.itemCetak?.keterangan?.alamat
+                          : store.itemCetak?.pelanggan?.alamat
+                      }}</span
+                    >
+                  </div>
+                </div>
+                <div class="col flex-end q-pl-xl q-py-md">
+                  <div class="row full-width">
+                    <span class="col-3">Nomor Penjaualan</span>
+                    <span>: {{ store.itemCetak?.no_penjualan }}</span>
+                  </div>
+                  <div class="row full-width">
+                    <span class="col-3">Sales</span>
+                    <span>: {{ store.itemCetak?.sales?.nama }}</span>
+                  </div>
+                  <div class="row full-width">
+                    <span class="col-3">Tanggal</span>
+                    <span>: {{ dateFullFormat(store.itemCetak?.tgl) }}</span>
+                  </div>
+                  <div class="row full-width">
+                    <span class="col-3">Pembayaran</span>
+                    <span
+                      >:
+                      <template v-if="store.itemCetak?.flag === '5'">
+                        <span class="text-bold" style="font-size: large">
+                          LUNAS ({{ store.itemCetak?.cara_bayar }})</span
+                        >
+                      </template>
+                      <template v-else-if="store.itemCetak?.flag === '2'">
+                        <span class="text-bold" style="font-size: large"> HUTANG </span>
+                      </template>
+                      <template v-else-if="store.itemCetak?.flag === '7'">
+                        <span class="text-bold" style="font-size: large">
+                          PEMBAYARAN DP ({{ store.itemCetak?.cara_bayar }})</span
+                        >
+                      </template>
+                      <template v-else-if="store.itemCetak?.flag === '8'">
+                        <span class="text-bold" style="font-size: large">
+                          CASH TEMPO
+                          <template v-if="store.itemCetak?.tempo">
+                            <span style="font-size: medium"
+                              >{{ store.itemCetak?.jml_tempo }} hari, sampai
+                              {{ dateFullFormat(store.itemCetak?.tempo) }}</span
+                            >
+                          </template></span
+                        >
+                      </template>
+                    </span>
+                  </div>
+                </div>
               </div>
+              <!-- <div class="text-center text-bold q-pt-sm" style="font-size: medium">
+                NOTA PENJAUALAN
+              </div> -->
               <div class="q-px-md q-pt-sm">
                 <table class="full-width">
                   <thead>
@@ -389,31 +450,37 @@
                 </table>
               </div>
             </div>
-            <div class="row justify-between full-width q-pt-md q-pb-md">
+            <div class="row justify-between full-width q-pt-md">
               <div class="col flex-start text-left q-pl-md">
                 <div class="content-center">
                   Keterangan :
-                  <template v-if="store.itemCetak?.flag === '5'">
-                    <span class="text-bold q-pl-md" style="font-size: large">
-                      LUNAS ({{ store.itemCetak?.cara_bayar }})</span
-                    >
-                  </template>
-                  <template v-else-if="store.itemCetak?.flag === '2'">
-                    <span class="text-bold q-pl-md" style="font-size: large"> HUTANG </span>
-                  </template>
-                  <template v-else-if="store.itemCetak?.flag === '7'">
-                    <span class="text-bold q-pl-md" style="font-size: large">
-                      PEMBAYARAN DP ({{ store.itemCetak?.cara_bayar }})</span
-                    >
-                  </template>
-                  <template v-else-if="store.itemCetak?.flag === '8'">
-                    <span class="text-bold q-pl-md" style="font-size: large">
-                      TEMPO
-                      <template v-if="store.itemCetak?.tempo"
-                        >sampai Tanggal {{ dateFullFormat(store.itemCetak?.tempo) }}</template
-                      ></span
-                    >
-                  </template>
+                  <span>Terimakasih Telah Berkunjung, Semoga Sehat Selalu.</span>
+                </div>
+              </div>
+              <div class="col flex-end content-center text-center">
+                <span
+                  v-if="store.opendialogCetakkedua === true"
+                  class="custom-border text-bold q-pa-sm"
+                  style="font-size: large"
+                >
+                  COPY PRINT</span
+                >
+                <span v-else class="custom-border text-bold q-pa-sm" style="font-size: large">
+                  ORIGINAL PRINT</span
+                >
+              </div>
+            </div>
+            <div class="row justify-between full-width q-pt-md q-pb-xl">
+              <div class="col flex-start content-center text-center">
+                <div class="invisible">.</div>
+                <div>Penerima/Pembeli</div>
+                <div style="height: 50px"></div>
+                <div>
+                  {{
+                    !store.itemCetak?.pelanggan
+                      ? store.itemCetak?.keterangan?.nama
+                      : store.itemCetak?.pelanggan?.nama
+                  }}
                 </div>
               </div>
               <div class="col flex-end content-center text-center">
@@ -469,7 +536,7 @@
 
 <script setup>
 // import { useQuasar } from 'quasar'
-import { dateDbFormat, dateFullFormat, formatRpDouble } from 'src/modules/formatter'
+import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { formatDouble, terbilangRupiah } from 'src/modules/utils'
 import { useProfilStore } from 'src/stores/admin/profil'
 import { useListPenjualanStore } from 'src/stores/admin/transaksi/penjualan/list'
@@ -488,18 +555,11 @@ onMounted(async () => {
 })
 
 function hitungBayar() {
-  if (store.itemCetak?.flag === '5') {
-    return store.itemCetak?.total
-  } else {
-    return parseInt(store.itemCetak?.bayar)
-  }
+  return parseInt(store.itemCetak?.bayar)
 }
 function hitungSisa() {
   if (store.itemCetak?.flag === '5') {
-    return (
-      parseInt(store.itemCetak?.total) -
-      (parseInt(store.itemCetak?.bayar) - parseInt(store.itemCetak?.kembali))
-    )
+    return parseInt(store.itemCetak?.bayar) - parseInt(store.itemCetak?.total)
   } else {
     return parseInt(store.itemCetak?.total) - parseInt(store.itemCetak?.bayar)
   }
@@ -548,5 +608,9 @@ td {
   border: 1px solid black;
   border-collapse: collapse;
   padding: 5px;
+}
+
+.custom-border {
+  border: 1px solid black; /* Contoh: border 1px solid hitam */
 }
 </style>

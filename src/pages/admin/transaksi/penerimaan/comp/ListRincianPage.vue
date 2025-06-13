@@ -35,18 +35,21 @@
               <transition-group name="list">
                 <q-item v-for="(item, n) in lists" :key="n" class="list-move">
                   <q-item-section>
+                    <!-- <div class="row full-width">{{ n + 1 }}.</div> -->
                     <div class="row full-width">
-                      <div class="col-12">
+                      <div class="col-11">
+                        <span class="text-grey-8">{{ n + 1 }}. </span>
                         <span class="text-weight-medium"
                           >{{ item?.mbarang?.namabarang }} Seri {{ item?.motif }}</span
                         >
                         <span class="text-grey-8"> ({{ item?.kdbarang }})</span>
                       </div>
                       <div class="col-2">
+                        <span class="q-mr-md"> </span>
                         <span class="text-weight-medium">
                           {{ item?.jumlah_b }} {{ item?.satuan_b }}</span
                         >
-                        <span class="text-grey-8" v-if="item?.isi !== '1'">
+                        <span class="text-grey-7" v-if="item?.isi !== '1'">
                           ({{ item?.jumlah_k }} {{ item?.satuan_k }})</span
                         >
                       </div>

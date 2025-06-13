@@ -118,6 +118,7 @@
                   <q-item-section>
                     <div class="row q-gutter-xs">
                       <div class="col-12">
+                        <span class="text-grey-8">{{ n + 1 }}. </span>
                         <span class="text-weight-medium">{{ item?.mbarang?.namabarang }}</span>
                         <span class="text-grey-8"> ({{ item?.kdbarang }})</span
                         ><span class="text-lime"> || Isi {{ item?.isi }} {{ item?.satuan_k }}</span>
@@ -125,6 +126,7 @@
                     </div>
                     <div class="row q-gutter-xs">
                       <div class="col-3">
+                        <span class="q-mr-md"> </span>
                         <span class="text-weight-medium">
                           {{ item?.jumlahpo }} {{ item?.satuan_b }}</span
                         >
@@ -217,6 +219,13 @@
                       </div>
                     </div>
                   </q-item-section>
+                  <!-- <q-item-section top side>
+                    <div class="text-grey-8">
+                      <div>
+                        <div class="colspan-2">{{ n + 1 }}.</div>
+                      </div>
+                    </div>
+                  </q-item-section> -->
                   <!-- <q-item-section top side v-if="props?.data?.kunci != '1'">
                     <app-btn
                       :loading="store.loading && store.form.id === item.id"
@@ -230,6 +239,7 @@
             </transition-group>
             <q-separator class="q-mt-sm" />
           </q-list>
+          <div class="q-mt-xl"></div>
         </q-card-section>
       </q-card>
     </div>

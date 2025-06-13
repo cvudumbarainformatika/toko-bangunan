@@ -134,8 +134,9 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
 
           if (index >= 0) this.items[index] = hasil
           else this.items.unshift(hasil)
+          console.log('this.items', this.items)
         })
-        // this.items = hasilglobal.sort(({ tgl: a }, { tgl: b }) => b - a)
+        // this.items.sort(({ tgl: a }, { tgl: b }) => b - a)
       },
       async hapusall(id, nopenerimaan, noorder) {
         this.loadingdeleteall = true
