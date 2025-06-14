@@ -176,18 +176,19 @@
               <div class="row flex-center full-width">
                 <template v-if="store.itemCetak?.flag === '5'">
                   <span class="text-bold" style="font-size: medium">
-                    LUNAS ({{ store.itemCetak?.cara_bayar }})
+                    LUNAS
+                    <template v-if="store.itemCetak?.cara_bayar"
+                      >({{ store.itemCetak?.cara_bayar }})</template
+                    >
                   </span>
                 </template>
-                <template v-else-if="store.itemCetak?.flag === '2'">
-                  <span class="text-bold" style="font-size: medium"> HUTANG</span>
-                </template>
-                <template v-else-if="store.itemCetak?.flag === '7'">
-                  <span class="text-bold" style="font-size: medium">
-                    PEMBAYARAN DP ({{ store.itemCetak?.cara_bayar }})</span
-                  >
-                </template>
-                <template v-else-if="store.itemCetak?.flag === '8'">
+                <template
+                  v-else-if="
+                    store.itemCetak?.flag === '2' ||
+                    store.itemCetak?.flag === '3' ||
+                    store.itemCetak?.flag === '4'
+                  "
+                >
                   <span class="text-bold" style="font-size: medium">
                     TEMPO
                     <template v-if="store.itemCetak?.tempo">
@@ -198,6 +199,25 @@
                     </template></span
                   >
                 </template>
+                <template v-else-if="store.itemCetak?.flag === '7'">
+                  <span class="text-bold" style="font-size: medium">
+                    PEMBAYARAN DP
+                    <template v-if="store.itemCetak?.cara_bayar"
+                      >({{ store.itemCetak?.cara_bayar }})</template
+                    ></span
+                  >
+                </template>
+                <!-- <template v-else-if="store.itemCetak?.flag === '8'">
+                  <span class="text-bold" style="font-size: medium">
+                    TEMPO
+                    <template v-if="store.itemCetak?.tempo">
+                      <span style="font-size: medium"
+                        >{{ store.itemCetak?.jml_tempo }} hari, sampai
+                        {{ dateFullFormat(store.itemCetak?.tempo) }}</span
+                      >
+                    </template></span
+                  >
+                </template> -->
               </div>
               <div class="row full-width text-center flex-center" style="font-size: small">
                 Terima Kasih Atas Pembelian Anda
@@ -307,18 +327,45 @@
                       >:
                       <template v-if="store.itemCetak?.flag === '5'">
                         <span class="text-bold" style="font-size: large">
-                          LUNAS ({{ store.itemCetak?.cara_bayar }})</span
+                          LUNAS
+                          <template v-if="store.itemCetak?.cara_bayar"
+                            >({{ store.itemCetak?.cara_bayar }})</template
+                          ></span
                         >
                       </template>
-                      <template v-else-if="store.itemCetak?.flag === '2'">
-                        <span class="text-bold" style="font-size: large"> HUTANG </span>
+                      <template
+                        v-else-if="
+                          store.itemCetak?.flag === '2' ||
+                          store.itemCetak?.flag === '3' ||
+                          store.itemCetak?.flag === '4'
+                        "
+                      >
+                        <span class="text-bold" style="font-size: medium">
+                          TEMPO
+                          <template v-if="store.itemCetak?.tempo">
+                            <span style="font-size: medium"
+                              >{{ store.itemCetak?.jml_tempo }} hari, sampai
+                              {{ dateFullFormat(store.itemCetak?.tempo) }}</span
+                            >
+                          </template>
+                        </span>
                       </template>
                       <template v-else-if="store.itemCetak?.flag === '7'">
                         <span class="text-bold" style="font-size: large">
-                          PEMBAYARAN DP ({{ store.itemCetak?.cara_bayar }})</span
-                        >
+                          PEMBAYARAN DP
+                          <template v-if="store.itemCetak?.cara_bayar"
+                            >({{ store.itemCetak?.cara_bayar }})
+                          </template>
+
+                          <template v-if="store.itemCetak?.tempo">
+                            <span class="row" style="font-size: medium"
+                              >{{ store.itemCetak?.jml_tempo }} hari, sampai
+                              {{ dateFullFormat(store.itemCetak?.tempo) }}
+                            </span>
+                          </template>
+                        </span>
                       </template>
-                      <template v-else-if="store.itemCetak?.flag === '8'">
+                      <!-- <template v-else-if="store.itemCetak?.flag === '8'">
                         <span class="text-bold" style="font-size: large">
                           CASH TEMPO
                           <template v-if="store.itemCetak?.tempo">
@@ -328,7 +375,7 @@
                             >
                           </template></span
                         >
-                      </template>
+                      </template> -->
                     </span>
                   </div>
                 </div>
