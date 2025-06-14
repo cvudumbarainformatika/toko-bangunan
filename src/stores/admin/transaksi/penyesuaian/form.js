@@ -4,6 +4,7 @@ import { api } from 'src/boot/axios'
 import { useListTransaksiPenyesuaianStore } from './list'
 import { notifSuccess } from 'src/modules/notifs'
 import { date } from 'quasar'
+import { useSelectStockStore } from './select'
 
 export const useFormTransaksiPenyesuaianStore = defineStore(
   'admin-form-transaksi-penyesuaian-store',
@@ -15,7 +16,10 @@ export const useFormTransaksiPenyesuaianStore = defineStore(
         stok_id: null,
         kdbarang: null,
         namabarang: null,
+        motif: null,
+        stoksekarang: 0,
         jumlah_k: 0,
+        jumlahakhir: 0,
         tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
         keterangan: null,
       },
@@ -70,12 +74,6 @@ export const useFormTransaksiPenyesuaianStore = defineStore(
       },
 
       jumlahBaru(val) {
-        // Validasi tambahkurang
-        // if (![1, 2].includes(val)) {
-        //   console.warn('Nilai tambahkurang tidak valid, harus 1 atau 2')
-        //   return
-        // }
-
         if (!['Bertambah', 'Berkurang'].includes(val)) {
           console.warn('Nilai keterangan tidak valid, harus "Bertambah" atau "Berkurang"')
           return
@@ -84,6 +82,7 @@ export const useFormTransaksiPenyesuaianStore = defineStore(
         // Terapkan aturan positif/negatif
         this.form.jumlah_k =
           val === 'Berkurang' ? -Math.abs(this.form.jumlah_k) : Math.abs(this.form.jumlah_k)
+        this.updateStokAkhir()
       },
 
       updateJumlahK(value) {
@@ -100,6 +99,27 @@ export const useFormTransaksiPenyesuaianStore = defineStore(
         if (this.form.keterangan) {
           this.jumlahBaru(this.form.keterangan)
         }
+        this.updateStokAkhir()
+      },
+
+      updateStokAkhir() {
+        const select = useSelectStockStore()
+        const itemx = select.items?.find((x) => x.id === this.form.stok_id)
+
+        if (!itemx) {
+          this.form.jumlahakhir = 0
+          return
+        }
+
+        const isi = itemx?.isi > 0 ? itemx.isi : 1
+        const jumlahTotal = (parseInt(itemx.jumlah_k) || 0) + (this.form.jumlah_k || 0)
+        const stokAkhir = Math.floor(jumlahTotal / isi)
+        const sisaAkhir = jumlahTotal % isi
+
+        this.form.jumlahakhir =
+          sisaAkhir === 0
+            ? `${stokAkhir} ${itemx.satuan_b}`
+            : `${stokAkhir} ${itemx.satuan_b} lebih ${sisaAkhir} ${itemx.satuan_k}`
       },
 
       async save(add) {

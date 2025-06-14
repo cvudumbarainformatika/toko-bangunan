@@ -250,6 +250,7 @@ const dialogImage = ref(null)
 const $q = useQuasar()
 onBeforeMount(() => {
   store.params.minim_stok = 0
+  store.params.x = null
   store.params.bulan = date.formatDate(Date.now(), 'MM')
   store.params.tahun = date.formatDate(Date.now(), 'YYYY')
   store.getList()

@@ -35,7 +35,7 @@
                 </div>
               </div>
             </q-item-label>
-            <q-separator inset="item" />
+            <q-separator />
           </div>
 
           <div ref="scrollTarget" class="col full-height scroll">
@@ -65,7 +65,9 @@
                   <q-item-section>
                     <q-item-label lines="1">
                       <span class="text-weight-bold"> {{ item?.nopenyesuaian }} ||</span>
-                      <span class="text-yellow-7"> Nama Barang : {{ item?.namabarang }}</span>
+                      <span class="text-yellow-7">
+                        Nama Barang : {{ item?.namabarang }} {{ item?.motif }}</span
+                      >
                     </q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"
@@ -85,7 +87,7 @@
                     <q-item-label caption>{{ jamTnpDetik(item?.created_at) }}</q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-separator inset="item" />
+                <q-separator />
               </q-intersection>
 
               <template v-slot:loading>

@@ -61,7 +61,9 @@
                   >
                     <q-item-section>
                       <q-item-label lines="1">
-                        <span class="text-weight-bold"> {{ item?.namabarang }}</span>
+                        <span class="text-weight-bold">
+                          {{ item?.namabarang }} Seri {{ item?.motif }}</span
+                        >
                         <span class="text-yellow-7"> || Kode : {{ item?.kdbarang }}</span>
                       </q-item-label>
                       <q-item-label caption lines="2">
@@ -139,7 +141,19 @@ onMounted(async () => {
 function pilihitem(item) {
   store.form.kdbarang = item.kdbarang
   store.form.namabarang = item.namabarang
+  store.form.motif = item.motif
   store.form.stok_id = item.id
+
+  const stok = Math.floor(item.jumlah_k / (item?.isi > 0 ? item?.isi : 1))
+  const sisa = item?.jumlah_k % (item?.isi > 0 ? item?.isi : 1)
+
+  store.form.stoksekarang =
+    sisa === 0
+      ? `${stok} ${item.satuan_b}`
+      : `${stok} ${item.satuan_b} lebih ${sisa} ${item.satuan_k}`
+
+  console.log('stok', stok, sisa)
+
   store.dialogBarang = false
 }
 </script>

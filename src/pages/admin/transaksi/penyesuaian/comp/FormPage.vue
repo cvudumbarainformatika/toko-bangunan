@@ -14,68 +14,87 @@
       <q-card flat class="col full-height">
         <q-form class="full-height" @submit="onSubmit">
           <q-card-section class="full-height q-pa-lg scroll">
-            <div class="row q-col-gutter-md">
-              <div :class="`col-${isMobile ? 12 : 12}`" class="row q-col-gutter-md justify-center">
-                <app-input-date
-                  :model="store.dateDisplay.tgl"
-                  class="col-2"
-                  label="Tanggal"
-                  outlined
-                  @set-model="
-                    (val) => {
-                      store.dateDisplay.tgl = val
-                    }
-                  "
-                  @db-model="
-                    (val) => {
-                      store.form.tgl = val
-                    }
-                  "
-                />
-                <div class="col-auto">
-                  <app-btn
-                    icon="add"
-                    class="text-yellow-8"
-                    color="grey-10"
-                    tooltip="Pilih Barang"
-                    @click="pilihbarang"
+            <div class="row q-col-gutter-md justify-around">
+              <div :class="`col-${isMobile ? 12 : 10}`" class="row q-col-gutter-md justify-center">
+                <div class="full-width q-gutter-md">
+                  <app-input-date
+                    :model="store.dateDisplay.tgl"
+                    class="col-12"
+                    label="Tanggal"
+                    outlined
+                    @set-model="
+                      (val) => {
+                        store.dateDisplay.tgl = val
+                      }
+                    "
+                    @db-model="
+                      (val) => {
+                        store.form.tgl = val
+                      }
+                    "
                   />
-                </div>
-                <app-input
-                  class="col-4"
-                  readonly
-                  v-model="store.form.namabarang"
-                  label="Pilih Barang (Klik
-                  Tombol Tambah)"
-                  :valid="{ required: false }"
-                />
+                  <div class="row q-gutter-x-md content-center">
+                    <div>
+                      <app-btn
+                        icon="add"
+                        class="text-yellow-8"
+                        color="grey-10"
+                        tooltip="Pilih Barang"
+                        @click="pilihbarang"
+                      />
+                    </div>
 
-                <app-select
-                  class="col-2"
-                  v-model="store.form.keterangan"
-                  label="Bertambah / Berkurang"
-                  :options="store.tambahkurang"
-                  option-label="label"
-                  option-value="label"
-                  @update:model-value="store.jumlahBaru"
-                />
-                <app-input
-                  class="col-2"
-                  v-model="store.form.jumlah_k"
-                  label="Jumlah Penyesuaian"
-                  :valid="{ required: false }"
-                  @update:model-value="store.updateJumlahK"
-                />
-                <div class="col-12">
-                  <q-separator class="q-my-md" />
-                  <app-btn
-                    :loading="store.loading"
-                    type="submit"
-                    :dense="false"
-                    label="Simpan"
-                    color="grey-10"
-                    class="text-yellow-9"
+                    <app-input
+                      class="col"
+                      readonly
+                      v-model="store.form.namabarang"
+                      label="Pilih Barang (Klik Tombol Tambah)"
+                      :valid="{ required: false }"
+                    />
+                    <app-input class="col-2" readonly v-model="store.form.motif" label="Seri" />
+                  </div>
+
+                  <app-input
+                    class="col-12"
+                    readonly
+                    v-model="store.form.stoksekarang"
+                    label="Stok Sebelum Penyesuaian"
                   />
+
+                  <app-select
+                    class="col-12"
+                    v-model="store.form.keterangan"
+                    label="Bertambah / Berkurang"
+                    :options="store.tambahkurang"
+                    option-label="label"
+                    option-value="label"
+                    @update:model-value="store.jumlahBaru"
+                  />
+                  <app-input
+                    class="col-12"
+                    v-model="store.form.jumlah_k"
+                    label="Jumlah Penyesuaian"
+                    :valid="{ required: false }"
+                    @update:model-value="store.updateJumlahK"
+                  />
+                  <app-input
+                    class="col-12"
+                    readonly
+                    v-model="store.form.jumlahakhir"
+                    label="Stok Akhir"
+                    @update:model-value="store.updateStokAkhir"
+                  />
+                  <div class="col-12">
+                    <q-separator class="q-my-md" />
+                    <app-btn
+                      :loading="store.loading"
+                      type="submit"
+                      :dense="false"
+                      label="Simpan"
+                      color="grey-10"
+                      class="text-yellow-9"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
