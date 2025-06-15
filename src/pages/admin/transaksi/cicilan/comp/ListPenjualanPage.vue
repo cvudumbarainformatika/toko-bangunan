@@ -191,7 +191,7 @@
                       <q-item-label lines="1">
                         <div class="row">
                           <div class="col-3 text-weight-bold">
-                            Pelanggan: {{ item?.pelanggan?.nama }}
+                            Pelanggan: {{ item?.pelanggan?.nama??item?.keterangan?.nama }}
                           </div>
                           <div class="col-2 q-ml-sm">{{ item?.sales?.nama }}</div>
                           <div v-if="item?.cicilan?.length > 0" class="col-2 q-ml-sm">
@@ -202,7 +202,6 @@
                               )
                             }}
                           </div>
-
                         </div>
                       </q-item-label>
                       <q-item-label v-if="item?.flag!='5' && item?.tempo" lines="1">
