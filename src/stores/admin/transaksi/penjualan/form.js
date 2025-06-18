@@ -114,6 +114,7 @@ export const useFromPenjualanStore = defineStore('from-penjualan-store', {
         else if (key == 'diskon') form[key] = olahUang(this.form[key])
         else if (key == 'harga_beli') form[key] = olahUang(this.form[key])
         else if (key == 'bayar') form[key] = olahUang(this.form[key])
+        else if (key == 'jumlah') form[key] = olahUang(this.form[key])
         else form[key] = this.form[key]
       })
       await api
