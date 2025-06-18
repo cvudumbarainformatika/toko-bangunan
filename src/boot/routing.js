@@ -30,6 +30,7 @@ export default defineBoot(({ router, store }) => {
           return false
         }
       }
+      next()
       return true
     }
 
