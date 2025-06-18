@@ -2,8 +2,8 @@
   <template v-if="isList=='listPenjualan'">
   <Suspense>
     <list-penjualan-page @list="()=>isList='list'" @form="(val)=>{
-        console.log('form', val);
-        form.item=val
+        // console.log('form', val);
+        // form.item=val
         form.setForm(val)
         isList='form'
       }"/>

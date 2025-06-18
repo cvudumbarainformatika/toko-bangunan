@@ -25,9 +25,15 @@ export const useFormReturPenjualanStore = defineStore('form_retur-penjualan-stor
       console.log('set Form', item);
       this.item={...item}
       this.item?.detail?.forEach(d=>{
-          d.retur=item?.detail_retur.filter(f=>f.kodebarang===d.kodebarang && f.status === '')?.reduce((acc,cur)=>acc+cur.jumlah,0)
-          const sudahRetur=item?.detail_retur.filter(f=>f.kodebarang===d.kodebarang && f.status !== '')?.reduce((acc,cur)=>acc+cur.jumlah,0)
+
+
+          d.retur=item?.detail_retur.filter(f=>f.kodebarang===d.kodebarang && f.detail_penjualan_id===d.id && f.status === '')?.reduce((acc,cur)=>acc+cur.jumlah,0)
+
+          const sudahRetur=item?.detail_retur.filter(f=>f.kodebarang===d.kodebarang && f.detail_penjualan_id===d.id && f.status !== '')?.reduce((acc,cur)=>acc+cur.jumlah,0)
+
           d.sisa=d.jumlah-sudahRetur-d.retur
+          // console.log('d',d);
+
         })
         this.noRetur=item?.draft_retur?.no_retur??''
 
@@ -49,8 +55,8 @@ export const useFormReturPenjualanStore = defineStore('form_retur-penjualan-stor
         if(indexRetur>=0){
           this.retur.items[indexRetur]=ret
         }else this.retur.items.unshift(ret)
-        this.setForm(pj)
         this.resetForm()
+        this.setForm(pj)
         this.noRetur=resp?.data?.noretur
         notifSuccess(resp?.data?.message)
         return resp

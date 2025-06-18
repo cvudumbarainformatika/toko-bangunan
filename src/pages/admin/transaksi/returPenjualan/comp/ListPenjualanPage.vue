@@ -189,7 +189,7 @@
                           item?.header_retur?.length >0?formatDouble(
                             item?.header_retur
                               ?.flatMap((m) => m.detail)
-                              .filter((m) => m.kodebarang === detail?.kodebarang)
+                              .filter((m) => m.kodebarang === detail?.kodebarang && m.detail_penjualan_id===detail?.id)
                               ?.reduce((acc, it) => acc + it.subtotal, 0),
                           ):0
                         }}
@@ -239,7 +239,7 @@ function detailRetur(item, detail) {
   if (item?.header_retur?.length > 0) {
     total = item?.header_retur
       ?.flatMap((m) => m?.detail)
-      .filter((f) => f?.kodebarang === detail?.kodebarang)
+      .filter((f) => f?.kodebarang === detail?.kodebarang&&f?.detail_penjualan_id===detail?.id)
       ?.reduce((total, item) => total + item?.jumlah, 0)
   }
   return total || 0
@@ -253,7 +253,7 @@ function subtotal(item, detail) {
   if (item?.header_retur?.length > 0) {
     returTotal = item?.header_retur
       ?.flatMap((m) => m?.detail)
-      .filter((f) => f?.kodebarang === detail?.kodebarang)
+      .filter((f) => f?.kodebarang === detail?.kodebarang&&f?.detail_penjualan_id===detail?.id)
       ?.reduce((total, item) => total + item?.subtotal, 0)
   }
 

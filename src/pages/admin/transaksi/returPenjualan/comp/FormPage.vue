@@ -40,7 +40,7 @@
                 (val) => {
                   const _removedZeros = isNaN(parseInt(val)) ? 0 : parseInt(val)
                   const sudahRetur = store.item?.detail_retur
-                    .filter((f) => f.kodebarang === item.kodebarang && f.status !== '')
+                    .filter((f) => f.kodebarang === item.kodebarang && f.detail_penjualan_id===item.id  && f.status !== '')
                     ?.reduce((acc, cur) => acc + cur.jumlah, 0)
                     item.sisa=item.jumlah-sudahRetur
                     // console.log('sudahRetur',sudahRetur, item?.sisa , _removedZeros);
