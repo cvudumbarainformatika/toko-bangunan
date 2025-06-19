@@ -26,6 +26,7 @@
                 v-model="store.form.nofaktur"
                 style="width: 100%"
                 :valid="{ required: false }"
+                :disable="store.form.nopenerimaan !== ''"
               />
             </div>
 
@@ -36,6 +37,7 @@
                 style="min-width: 150px"
                 outlined
                 :debounce="300"
+                :disable="store.form.nopenerimaan !== ''"
                 @set-model="
                   (val) => {
                     store.dateDisplay.tgl = val
@@ -101,6 +103,7 @@
                 label="Pembayaran"
                 v-model="store.form.pembayaran"
                 :options="['', 'Cash', 'Cash Tempo', 'Hutang']"
+                :disable="store.form.nopenerimaan !== ''"
                 @update:model-value="updatePembayaran()"
               />
             </div>

@@ -120,8 +120,15 @@
                           No. Order : {{ item?.noorder }}
                         </q-badge></span
                       >
-                      <span class="text-weight-bold">
+                      <span class="text-weight-bold" v-if="item?.jenis_pembayaran === 'Cash'">
                         || Jenis Pembayaran : {{ item?.jenis_pembayaran }}</span
+                      >
+                      <span class="text-weight-bold" v-if="item?.jenis_pembayaran !== 'Cash'">
+                        || Jenis Pembayaran : {{ item?.jenis_pembayaran }} || Tgl Jatuh Tempo :
+                        {{ humanDate(item?.tgljatuhtempo) }} ({{
+                          item?.jumlahharitempo
+                        }}
+                        hari)</span
                       >
                       <span
                         class="text-weight-bold"

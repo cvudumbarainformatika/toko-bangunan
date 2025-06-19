@@ -29,7 +29,7 @@ const props = defineProps({
   },
 })
 onMounted(() => {
-  console.log('penerimaan', props?.data)
+  // console.log('penerimaan', props?.data)
   if (
     props?.data?.nopenerimaan === '' ||
     props?.data?.nopenerimaan === null ||
