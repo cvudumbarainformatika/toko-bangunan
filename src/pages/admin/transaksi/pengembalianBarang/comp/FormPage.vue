@@ -57,7 +57,7 @@
               <div class="row q-pa-sm bg-primary text-white text-weight-bold q-col-gutter-x-sm">
                 <div class="col-5">Barang</div>
                 <div class="col-2 text-right">Jumlah Beli</div>
-                <div class="col-2 text-right">Jumlah Retur</div>
+                <div class="col-2 text-right">Jumlah Rusak</div>
                 <div class="col-3">Keterangan</div>
               </div>
 

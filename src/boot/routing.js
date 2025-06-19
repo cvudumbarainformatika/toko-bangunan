@@ -30,6 +30,7 @@ export default defineBoot(({ router, store }) => {
           return false
         }
       }
+      next()
       return true
     }
 
@@ -46,6 +47,7 @@ export default defineBoot(({ router, store }) => {
 
       // Check token expiration if you have expiry data
       if (!checkTokenExpiration()) {
+        next()
         return
       }
     } else if (token && to.path === '/auth') {

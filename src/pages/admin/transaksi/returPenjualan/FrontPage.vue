@@ -2,8 +2,8 @@
   <template v-if="isList=='listPenjualan'">
   <Suspense>
     <list-penjualan-page @list="()=>isList='list'" @form="(val)=>{
-        console.log('form', val);
-        form.item=val
+        // console.log('form', val);
+        // form.item=val
         form.setForm(val)
         isList='form'
       }"/>
@@ -68,7 +68,12 @@ function selesai(data){
   if(index>=0){
     list.items[index]=data?.pj
   }
-  console.log('selesai front', data, index);
+  const indexret=retur.items.findIndex(i=>i.id==data?.data.id)
+  if(indexret>=0){
+    retur.items[indexret]=data?.data
+  }
+  isList.value='list'
+  // console.log('selesai front', data, index);
 
 }
 function listSelesai(val){

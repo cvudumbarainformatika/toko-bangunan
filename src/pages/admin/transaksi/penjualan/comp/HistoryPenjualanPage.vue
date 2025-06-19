@@ -128,7 +128,10 @@
                           <div class="col-2 q-ml-sm">{{ formatDouble(item?.total) }}</div>
                           <div class="col-2 q-ml-sm">{{ formatDouble(item?.total_diskon) }}</div>
                           <div class="col-2 q-ml-sm">{{ statusFlag(item) }}</div>
-                          <div v-if="item?.tempo" class="col-2 q-ml-sm"> {{ dateFullFormat(item?.tempo) }} <span class="f-10 text-italic">(tempo)</span></div>
+                          <div v-if="item?.tempo" class="col-2 q-ml-sm">
+                            {{ dateFullFormat(item?.tempo) }}
+                            <span class="f-10 text-italic">(tempo)</span>
+                          </div>
                         </div>
                       </q-item-label>
                       <q-item-label lines="1">
@@ -172,7 +175,7 @@
                           @click="emits('bayar', item)"
                         />
                         <app-btn
-                          v-if="['2','3','4','7','8'].includes(item?.flag)"
+                          v-if="['2', '3', '4', '7', '8'].includes(item?.flag)"
                           class="q-mr-xs"
                           icon="event_available"
                           tooltip="Tanggal Tempo Pembayaran"
@@ -220,7 +223,7 @@
                       <div class="col-5">
                         {{
                           detail?.master_barang?.namabarang +
-                          ' ' +
+                          ' ' + (detail?.motif ?detail?.motif + ' ':'')  +
                           (item?.flag != null
                             ? ''
                             : detail?.master_barang?.stok === null
@@ -255,7 +258,7 @@
                         <div class="col-5">
                           {{
                             detail?.master_barang?.namabarang +
-                            ' ' +
+                            ' ' + (detail?.motif ?detail?.motif + ' ':'') +
                             (item?.flag != null
                               ? ''
                               : detail?.master_barang?.stok === null
@@ -301,7 +304,7 @@
       </div> -->
     </div>
   </div>
-  <DialogCetak v-model="store.opendialogCetak" />
+  <DialogCetak v-model="store.opendialogCetakkedua" />
 </template>
 
 <script setup>
@@ -321,7 +324,7 @@ const infiniteScroll = ref(null)
 const hoveredId = ref(null)
 // const items = ref([ {}, {}, {}, {}, {}, {}, {},{},{},{},{}, {} ])
 
-const emits = defineEmits(['add', 'edit', 'useNota', 'bayar','tempo'])
+const emits = defineEmits(['add', 'edit', 'useNota', 'bayar', 'tempo'])
 
 // const $q = useQuasar()
 onBeforeMount(() => {
@@ -336,17 +339,17 @@ function reload() {
 }
 function lihatCetak(item) {
   store.itemCetak = item
-  store.opendialogCetak = true
+  store.opendialogCetakkedua = true
   console.log('itemCetak di list', store.itemCetak)
 }
 
 function statusFlag(item) {
-  const flag=item?.flag
-  const tempo=item?.tempo
+  const flag = item?.flag
+  const tempo = item?.tempo
   let status = ''
-  if(!tempo && ['2','7','8'].includes(flag)){
+  if (!tempo && ['2', '7', '8'].includes(flag)) {
     status = 'Belum Dikirim'
-  }else{
+  } else {
     switch (flag) {
       case null:
         status = 'Draft'
@@ -372,14 +375,13 @@ function statusFlag(item) {
       case '7':
         status = 'Down Payment (DP)'
         break
-      case '8':
-        status = 'Tempo'
-        break
+      // case '8':
+      //   status = 'Tempo'
+      //   break
 
       default:
         break
     }
-
   }
   // console.log('status', status, flag);
 

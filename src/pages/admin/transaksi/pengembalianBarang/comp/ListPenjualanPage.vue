@@ -114,7 +114,7 @@
                       <div class="col-auto">{{ statusFlag(item?.flag) }}</div>
                     </div>
                   </q-item-label>
-                  <q-item-label caption>
+                  <q-item-label  lines="1">
                     <div class="row">
                       <div class="col-3">{{ item?.pelanggan?.nama??item?.keterangan?.nama }}</div>
                       <div class="col-5 q-ml-sm">{{ item?.pelanggan?.alamat??item?.keterangan?.alamat }}</div>
@@ -139,9 +139,9 @@
               </template>
 
               <q-separator />
-              <q-card class="q-ma-sm" :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }">
+              <q-card class="q-ma-xs" :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }">
                 <q-card-section>
-                  <div class="row q-pa-sm">
+                  <div class="row q-pa-xs">
                     <div class="col-5">Barang</div>
                     <div class="col-1 text-right">Jumlah</div>
                     <div class="col-1 text-right">Jumlah Retur</div>
@@ -154,24 +154,14 @@
                     <div
                       v-for="detail in item?.detail"
                       :key="detail?.id"
-                      class="row q-pa-sm q-gutter-y-sm"
+                      class="row  q-gutter-y-sm"
                     >
                       <div class="col-5">
+
                         {{
                           detail?.master_barang?.namabarang ??
                           '' +
-                            ' ' +
-                            (detail?.master_barang?.brand === null
-                              ? ''
-                              : (detail?.master_barang?.brand ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.seri === null
-                              ? ''
-                              : (detail?.master_barang?.seri ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.ukuran === null
-                              ? ''
-                              : (detail?.master_barang?.ukuran ?? ''))
+                            ' '  + (detail?.motif ? detail?.motif + ' ':'')
                         }}
                       </div>
                       <div class="col-1 text-right">{{ formatDouble(detail?.jumlah) }}</div>
@@ -182,12 +172,12 @@
                       <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
                       <div class="col-1 text-right">
                         {{
-                          formatDouble(
+                          item?.header_retur?.length >0?formatDouble(
                             item?.header_retur
                               ?.flatMap((m) => m.detail)
                               .filter((m) => m.kodebarang === detail?.kodebarang)
                               ?.reduce((acc, it) => acc + it.subtotal, 0),
-                          )
+                          ):0
                         }}
                       </div>
                       <div class="col-2 text-right">{{ formatDouble(subtotal(item, detail)) }}</div>
@@ -281,9 +271,9 @@ function statusFlag(flag) {
     case '7':
       status = 'Down Payment (DP)'
       break
-    case '8':
-      status = 'Tempo'
-      break
+    // case '8':
+    //   status = 'Tempo'
+    //   break
 
     default:
       break

@@ -89,47 +89,53 @@
               :offset="150"
               :initial-index="store.params.page"
             >
-              <q-item>
-                <q-item-section>
-                  <q-item-label lines="1">
-                    <div class="row text-weight-bold q-col-gutter-x-sm">
-                      <div class="col-auto" style="width: calc(100% / 7)">No Penjualan</div>
-                      <div class="col-auto" style="width: calc(100% / 7)">Total</div>
-                      <div class="col-auto" style="width: calc(100% / 7)">DP / Pembayaran</div>
-                      <div class="col-auto" style="width: calc(100% / 7)">
-                        Total Diskon<span class="text-italic f-10 q-ml-xs">(jika ada)</span>
-                      </div>
-                      <div class="col-auto" style="width: calc(100% / 7)">
-                        Total Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span>
-                      </div>
-                      <div class="col-auto" style="width: calc(100% / 7)">
-                        Total - Diskon - Retur
-                        <span class="text-italic f-10 q-ml-xs">(jika ada)</span>
-                      </div>
-                      <div class="col-auto text-right" style="width: calc(100% / 7)">Status</div>
-                    </div>
-                  </q-item-label>
-                  <q-item-label lines="1">
-                    <div class="row text-weight-bold">
-                      <div class="col-3 text-weight-bold">Nama Pelanggan</div>
-                      <div class="col-2 q-ml-sm">Nama Sales</div>
-                      <div class="col-2 q-ml-sm">
-                        Total cicilan <span class="text-italic f-10 q-ml-xs">(jika ada)</span>
-                      </div>
-                    </div>
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side top>
-                  <q-item-label caption>Tanngal</q-item-label>
-                  <q-item-label caption>Jam</q-item-label>
-                </q-item-section>
-              </q-item>
+              <!-- <q-item> -->
+                <q-expansion-item expand-icon-toggle>
+                  <template v-slot:header>
+                    <q-item-section>
+                      <q-item-label lines="1">
+                        <div class="row text-weight-bold q-col-gutter-x-sm">
+                          <div class="col-auto" style="width: calc(100% / 7)">No Penjualan</div>
+                          <div class="col-auto" style="width: calc(100% / 7)">Total</div>
+                          <div class="col-auto" style="width: calc(100% / 7)">DP / Pembayaran</div>
+                          <div class="col-auto" style="width: calc(100% / 7)">
+                            Total Diskon<span class="text-italic f-10 q-ml-xs">(jika ada)</span>
+                          </div>
+                          <div class="col-auto" style="width: calc(100% / 7)">
+                            Total Retur <span class="text-italic f-10 q-ml-xs">(jika ada)</span>
+                          </div>
+                          <div class="col-auto" style="width: calc(100% / 7)">
+                            Total - Diskon - Retur
+                            <span class="text-italic f-10 q-ml-xs">(jika ada)</span>
+                          </div>
+                          <div class="col-auto text-right" style="width: calc(100% / 7)">Status</div>
+                        </div>
+                      </q-item-label>
+                      <q-item-label lines="1">
+                        <div class="row text-weight-bold">
+                          <div class="col-3 text-weight-bold">Nama Pelanggan</div>
+                          <div class="col-2 q-ml-sm">Nama Sales</div>
+                          <div class="col-2 q-ml-sm">
+                            Total cicilan <span class="text-italic f-10 q-ml-xs">(jika ada)</span>
+                          </div>
+                        </div>
+                      </q-item-label>
+                    </q-item-section>
+                    <q-item-section side top>
+                      <q-item-label caption>Tanngal</q-item-label>
+                      <q-item-label caption>Jam</q-item-label>
+                    </q-item-section>
+
+                  </template>
+                </q-expansion-item>
+              <!-- </q-item> -->
               <q-separator />
               <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade">
                 <q-expansion-item
                   v-model="item.expand"
                   clickable
                   v-ripple
+                  expand-icon-toggle
                   @mouseover="hoveredId = item?.id"
                   @mouseleave="hoveredId = null"
                   :class="{ 'bg-grey-8 text-white': hoveredId === item?.id }"
@@ -185,7 +191,7 @@
                       <q-item-label lines="1">
                         <div class="row">
                           <div class="col-3 text-weight-bold">
-                            Pelanggan: {{ item?.pelanggan?.nama }}
+                            Pelanggan: {{ item?.pelanggan?.nama??item?.keterangan?.nama }}
                           </div>
                           <div class="col-2 q-ml-sm">{{ item?.sales?.nama }}</div>
                           <div v-if="item?.cicilan?.length > 0" class="col-2 q-ml-sm">
@@ -196,7 +202,21 @@
                               )
                             }}
                           </div>
-                          <div v-if="item?.flag!='5' && item?.tempo" class="col-2 f-10 text-italic">(tempo : {{ dateFullFormat(item?.tempo) }})</div>
+                        </div>
+                      </q-item-label>
+                      <q-item-label v-if="item?.flag!='5' && item?.tempo" lines="1">
+                        <div class="row f-10 text-italic">
+                          <div  class="col-2 "/>
+                          <div  class="col-4 ">
+                            tempo : {{ dateFullFormat(item?.tempo) }} <span v-if="item?.jml_tempo" class="q-ml-xs"> || {{ item?.jml_tempo }} hari</span>
+                          </div>
+
+                            <div v-if="item?.tgl_kirim" class="col-4">
+                              tgl kirim : {{ dateFullFormat(item?.tgl_kirim) }} ||  umur nota : {{ umurNota(item) }} hari
+                            </div>
+                            <div v-if="item?.tgl_kirim && item?.jml_tempo" class="col-2">
+                               {{ item?.jml_tempo - umurNota(item) }} hari lagi
+                            </div>
                         </div>
                       </q-item-label>
                     </q-item-section>
@@ -306,20 +326,8 @@
                     >
                       <div class="col-5">
                         {{
-                          detail?.master_barang?.namabarang ??
-                          '' +
-                            ' ' +
-                            (detail?.master_barang?.brand === null
-                              ? ''
-                              : (detail?.master_barang?.brand ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.seri === null
-                              ? ''
-                              : (detail?.master_barang?.seri ?? '')) +
-                            ' ' +
-                            (detail?.master_barang?.ukuran === null
-                              ? ''
-                              : (detail?.master_barang?.ukuran ?? ''))
+                          (detail?.master_barang?.namabarang ?? '') +
+                            ' '   + (detail?.motif ? detail?.motif + ' ':'')
                         }}
                       </div>
                       <div class="col-1 text-right">{{ formatDouble(detail?.jumlah) }}</div>
@@ -363,6 +371,7 @@
 
 <script setup>
 // import { useQuasar } from 'quasar'
+import { date } from 'quasar'
 import { formatDouble } from 'src/modules/formatter'
 import { dateFullFormat, humanDate, jamTnpDetik } from 'src/modules/utils'
 import { useListCicilanPenjualanStore } from 'src/stores/admin/transaksi/cicilan/list'
@@ -384,6 +393,12 @@ function reload() {
   store.items = []
   store.getList()
   infiniteScroll.value?.reset()
+}
+function umurNota(item){
+  const kirim=new Date(item?.tgl_kirim)
+  const skr=new Date()
+  const diff=date.getDateDiff(skr,kirim,  'days')
+  return diff>0?diff:0
 }
 
 function statusFlag(flag) {
@@ -413,9 +428,9 @@ function statusFlag(flag) {
     case '7':
       status = 'Down Payment (DP)'
       break
-    case '8':
-      status = 'Tempo'
-      break
+    // case '8':
+    //   status = 'Tempo'
+    //   break
 
     default:
       break

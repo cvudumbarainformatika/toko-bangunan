@@ -158,9 +158,10 @@
                   >
                     <div class="col-5">Barang</div>
                     <div class="col-1 text-right">Jumlah</div>
-                    <div class="col-1 text-right">Satuan</div>
-                    <div class="col-2 text-right">Harga</div>
+                    <div class="col-1 text-right">Jumlah Retur</div>
+                    <div class="col-1 text-right">Harga</div>
                     <div class="col-1 text-right">Diskon</div>
+                    <div class="col-1 text-right">Retur</div>
                     <div class="col-2 text-right">Subtotal</div>
                   </div>
                   <template v-if="item?.flag != null">
@@ -169,27 +170,31 @@
                       <div
                         class="row q-px-sm"
                         :class="app?.dark ? 'bg-grey-9' : 'bg-grey-3 text-black'"
-                      >
-                        <div class="col-5">
-                          {{
-                            detail?.master_barang?.namabarang +
-                            ' ' +
-                            (item?.flag != null
-                              ? ''
-                              : detail?.master_barang?.stok === null
-                                ? ''
-                                : '(stok ' +
-                                  detail?.master_barang?.stok.jumlah_k +
-                                  '  ' +
-                                  detail?.master_barang?.stok.satuan_k +
-                                  ' )')
-                          }}
-                        </div>
-                        <div class="col-1 text-right">{{ detail?.jumlah }}</div>
-                        <div class="col-1 text-right">{{ detail?.master_barang?.satuan_k }}</div>
-                        <div class="col-2 text-right">{{ formatDouble(detail?.harga_jual) }}</div>
-                        <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
-                        <div class="col-2 text-right">{{ formatDouble(detail?.subtotal) }}</div>
+                      ><div class="col-5">
+
+                        {{
+                          detail?.master_barang?.namabarang ??
+                          '' +
+                            ' '  + (detail?.motif ? detail?.motif + ' ':'')
+                        }}
+                      </div>
+                      <div class="col-1 text-right">{{ formatDouble(detail?.jumlah) }}</div>
+                      <div class="col-1 text-right">
+                        {{ formatDouble(detailRetur(item, detail)) }}
+                      </div>
+                      <div class="col-1 text-right">{{ formatDouble(detail?.harga_jual) }}</div>
+                      <div class="col-1 text-right">{{ formatDouble(detail?.diskon) }}</div>
+                      <div class="col-1 text-right">
+                        {{
+                          item?.header_retur?.length >0?formatDouble(
+                            item?.header_retur
+                              ?.flatMap((m) => m.detail)
+                              .filter((m) => m.kodebarang === detail?.kodebarang && m.detail_penjualan_id===detail?.id)
+                              ?.reduce((acc, it) => acc + it.subtotal, 0),
+                          ):0
+                        }}
+                      </div>
+                      <div class="col-2 text-right">{{ formatDouble(subtotal(item, detail)) }}</div>
                       </div>
                     </div>
                   </template>
@@ -229,6 +234,31 @@ function reload() {
   infiniteScroll.value?.reset()
 }
 
+function detailRetur(item, detail) {
+  let total = 0
+  if (item?.header_retur?.length > 0) {
+    total = item?.header_retur
+      ?.flatMap((m) => m?.detail)
+      .filter((f) => f?.kodebarang === detail?.kodebarang&&f?.detail_penjualan_id===detail?.id)
+      ?.reduce((total, item) => total + item?.jumlah, 0)
+  }
+  return total || 0
+}
+
+function subtotal(item, detail) {
+  const subtotal = detail?.subtotal ?? 0
+  const diskon = detail?.diskon ?? 0
+  let returTotal = 0
+
+  if (item?.header_retur?.length > 0) {
+    returTotal = item?.header_retur
+      ?.flatMap((m) => m?.detail)
+      .filter((f) => f?.kodebarang === detail?.kodebarang&&f?.detail_penjualan_id===detail?.id)
+      ?.reduce((total, item) => total + item?.subtotal, 0)
+  }
+
+  return subtotal - diskon - (returTotal || 0)
+}
 function statusFlag(flag) {
   let status = ''
   switch (flag) {
@@ -256,9 +286,9 @@ function statusFlag(flag) {
     case '7':
       status = 'Down Payment (DP)'
       break
-    case '8':
-      status = 'Tempo'
-      break
+    // case '8':
+    //   status = 'Tempo'
+    //   break
 
     default:
       break

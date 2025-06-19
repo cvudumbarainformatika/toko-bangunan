@@ -76,7 +76,7 @@
             </div>
             <div class="row">
               <div class="col-4">Tanggal</div>
-              <div class="col-8">: {{ selectedItem.tanggal }}</div>
+              <div class="col-8">: {{ dateFull(selectedItem.tanggal) }}</div>
             </div>
             <div class="row">
               <div class="col-4">Status</div>
@@ -151,6 +151,7 @@
 import { ref } from 'vue'
 import { useListPengembalianStore } from 'src/stores/admin/transaksi/pengembalianBarang/list'
 import { useFormPengembalianStore } from 'src/stores/admin/transaksi/pengembalianBarang/form'
+import { dateFull } from 'src/modules/formatter'
 
 // Store
 const list = useListPengembalianStore()

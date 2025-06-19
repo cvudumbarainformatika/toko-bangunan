@@ -6,6 +6,8 @@ export const useListTransaksiReturPenjualanStore = defineStore('list-transaksi-r
   state: () => ({
     isError: false,
     loading: false,
+    items:[],
+    meta:{},
     params: {
       q:null,
       page: 0,

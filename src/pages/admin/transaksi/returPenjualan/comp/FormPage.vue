@@ -40,7 +40,7 @@
                 (val) => {
                   const _removedZeros = isNaN(parseInt(val)) ? 0 : parseInt(val)
                   const sudahRetur = store.item?.detail_retur
-                    .filter((f) => f.kodebarang === item.kodebarang && f.status !== '')
+                    .filter((f) => f.kodebarang === item.kodebarang && f.detail_penjualan_id===item.id  && f.status !== '')
                     ?.reduce((acc, cur) => acc + cur.jumlah, 0)
                     item.sisa=item.jumlah-sudahRetur
                     // console.log('sudahRetur',sudahRetur, item?.sisa , _removedZeros);
@@ -83,7 +83,7 @@
       <div v-if="store.noRetur" class="row justify-end q-mr-sm">
         <div class="col-2">
           <app-btn
-            label="Selesai dan kurangi stok"
+            label="Selesai dan tambah stok"
             color="primary"
             @click="
               () => {
