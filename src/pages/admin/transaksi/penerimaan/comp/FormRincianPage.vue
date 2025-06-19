@@ -91,7 +91,7 @@
                 <app-btn-cetak @click="cetakData()" />
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-3">
               <app-input label="Supllier" disable v-model="store.form.suplier" />
             </div>
             <div class="col-3">
@@ -101,6 +101,37 @@
                 label="Pembayaran"
                 v-model="store.form.pembayaran"
                 :options="['', 'Cash', 'Cash Tempo', 'Hutang']"
+                @update:model-value="updatePembayaran()"
+              />
+            </div>
+            <div class="col-2" v-if="store.form.pembayaran !== 'Cash'">
+              <app-input
+                label="Jumlah Hari Tempo"
+                v-model="store.form.jumlahharitempo"
+                type="number"
+                input-class="text-right"
+                :clearable="false"
+                @update:model-value="updateJumlahHariTempo()"
+              />
+            </div>
+            <div class="col-2" v-if="store.form.pembayaran !== 'Cash'">
+              <app-input-date
+                :model="store.dateDisplay.tgljthtempo"
+                label="Tgl Jatuh Tempo"
+                style="min-width: 150px"
+                outlined
+                disable
+                :debounce="300"
+                @set-model="
+                  (val) => {
+                    store.dateDisplay.tgljthtempo = val
+                  }
+                "
+                @db-model="
+                  (val) => {
+                    store.form.tgljthtempo = val
+                  }
+                "
               />
             </div>
           </div>
@@ -355,6 +386,25 @@ function kurangisisabarangdatang(item) {
 
 function cetakData() {
   store.dialogCetak = true
+}
+
+function updatePembayaran() {
+  if (store.form.pembayaran === 'Cash') {
+    store.form.jumlahharitempo = 0
+    updateJumlahHariTempo()
+  }
+}
+
+function updateJumlahHariTempo() {
+  const hari = parseInt(store.form.jumlahharitempo)
+  const tgl = new Date(store.form.tgl)
+  tgl.setDate(tgl.getDate() + hari)
+  store.form.tgljthtempo = tgl.toISOString().split('T')[0]
+  store.dateDisplay.tgljthtempo = tgl.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  })
 }
 
 if (props?.data) {

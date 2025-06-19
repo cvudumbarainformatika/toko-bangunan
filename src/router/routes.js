@@ -42,7 +42,8 @@ const routes = [
       {
         path: '/admin/transaksi/orderbarang',
         component: () => import('pages/admin/transaksi/orderbarang/IndexPage.vue'),
-      },      {
+      },
+      {
         path: '/admin/transaksi/penerimaan',
         component: () => import('pages/admin/transaksi/penerimaan/IndexPage.vue'),
       },
@@ -77,6 +78,10 @@ const routes = [
       {
         path: '/admin/transaksi/order-penjualan',
         component: () => import('pages/admin/transaksi/orderpenjualan/IndexPage.vue'),
+      },
+      {
+        path: '/admin/transaksi/pembayaran-hutang',
+        component: () => import('pages/admin/transaksi/pembayaranhutang/IndexPage.vue'),
       },
 
       // // Laporan

@@ -39,7 +39,9 @@ onMounted(() => {
     store.form.nofaktur = ''
     store.form.noorder = ''
     store.form.suplier = ''
-    store.form.pembayaran = ''
+    store.form.pembayaran = 'Cash'
+    store.form.jumlahharitempo = 0
+    store.form.tgljthtempo = ''
     store.rinci = []
   } else {
     store.form.noorder = props?.data?.noorder
@@ -49,6 +51,8 @@ onMounted(() => {
     store.rinci = props?.data?.orderan_h?.rinci
     store.form.kunci = props?.data?.kunci
     store.form.pembayaran = props?.data?.jenis_pembayaran
+    store.form.jumlahharitempo = props?.data?.jumlahharitempo
+    store.form.tgljthtempo = props?.data?.tgljatuhtempo
     store.hiden = true
   }
 })

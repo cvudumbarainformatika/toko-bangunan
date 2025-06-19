@@ -15,6 +15,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         noorder: '',
         nofaktur: '',
         pembayaran: '',
+        jumlahharitempo: 0,
         kdsuplier: '',
         suplier: '',
         jumlahpo: 0,
@@ -22,6 +23,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
         id: '',
         kunci: null,
         tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        tgljthtempo: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       },
       rinci: [],
       loading: false,
@@ -32,6 +34,7 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
       dataprops: [],
       dateDisplay: {
         tgl: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+        tgljthtempo: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       },
       tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
     }),
