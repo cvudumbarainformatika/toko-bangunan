@@ -84,11 +84,11 @@ const routes = [
         component: () => import('pages/admin/transaksi/pembayaranhutang/IndexPage.vue'),
       },
 
-      // // Laporan
-      // {
-      //   path: '/admin/laporan/kartustok',
-      //   component: () => import('pages/admin/laporan/kartustok/IndexPage.vue'),
-      // },
+      // Laporan
+      {
+        path: '/admin/laporan/penerimaan',
+        component: () => import('pages/admin/laporan/penerimaan/IndexPage.vue'),
+      },
 
       // Settings
       {
