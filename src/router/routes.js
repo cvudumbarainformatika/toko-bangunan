@@ -89,6 +89,10 @@ const routes = [
         path: '/admin/laporan/penerimaan',
         component: () => import('pages/admin/laporan/penerimaan/IndexPage.vue'),
       },
+      {
+        path: '/admin/laporan/penjualan',
+        component: () => import('pages/admin/laporan/lap_penjualan/IndexPage.vue'),
+      },
 
       // Settings
       {
