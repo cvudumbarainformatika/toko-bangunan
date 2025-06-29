@@ -26,7 +26,7 @@ export const useAdminListTransaksiStokBarangStore = defineStore(
 
     actions: {
       async getList() {
-        console.log('get master barang')
+        // console.log('get master barang')
         this.items = []
         this.params.page = 1
         this.isError = false

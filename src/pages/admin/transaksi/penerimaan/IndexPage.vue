@@ -21,8 +21,6 @@
 </template>
 
 <script setup>
-// import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
-// import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
 import { defineAsyncComponent, ref } from 'vue'
 const ListPage = defineAsyncComponent(() => import('./comp/ListPage.vue'))
@@ -32,9 +30,6 @@ const isList = ref(true)
 
 const storepenerimaan = useAdminFormTransaksiPenerimaanBarangStore()
 storepenerimaan.itemPenerimaan = []
-// const soterorder = useAdminListTransaksiOrderBarangStore()
-// const storeorder = useAdminListTransaksiOrderBarangStore()
-// storeorder.getorderanfix()
 </script>
 
 <style scoped></style>

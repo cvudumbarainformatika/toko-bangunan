@@ -8,9 +8,12 @@ export const useAdminListTransaksiPembayaranHutangStore = defineStore(
     state: () => ({
       meta: null,
       items: [],
+      itemsbynotrans: [],
       isError: false,
       loading: false,
       loadingdeleteall: false,
+      nopembayaran: '',
+      rinci: [],
       params: {
         q: null,
         page: 0,
@@ -31,7 +34,7 @@ export const useAdminListTransaksiPembayaranHutangStore = defineStore(
     actions: {
       async getList() {
         this.items = []
-        console.log('ini list pembayaran hutang')
+        // console.log('ini list pembayaran hutang')
         this.params.page = 1
         this.isError = false
         this.loading = true
@@ -63,9 +66,9 @@ export const useAdminListTransaksiPembayaranHutangStore = defineStore(
 
         return new Promise((resolve) => {
           api
-            .get('/v1/transaksi/penerimaan/getpenerimaan', params)
+            .get('/v1/transaksi/pembayaranhutang/list', params)
             .then(({ data }) => {
-              console.log('heder order barang', data)
+              console.log('heder order barangxxxxxxxxx', data)
               this.meta = data
               this.olahdata(data?.data)
               //this.items.push(...data.data)
@@ -81,33 +84,34 @@ export const useAdminListTransaksiPembayaranHutangStore = defineStore(
       },
 
       olahdata(val) {
-        console.log('asli', val)
+        console.log('aslipembayaran hutang', val)
         // const hasilglobal = []
         val?.forEach((x) => {
-          const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
-          const totalfix = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotalfix), 0)
+          const totalhutang = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.total), 0)
           const hasil = {
             id: x?.id,
-            nopenerimaan: x?.nopenerimaan,
-            nofaktur: x?.nofaktur,
-            noorder: x?.noorder,
-            tgl: x?.updated_at,
+            notrans: x?.notrans,
+            tgl: x?.tgl_bayar,
             kdsuplier: x?.kdsupllier,
-            kunci: x?.kunci,
-            suplier: x?.nama,
-            total: total,
-            totalfix: totalfix,
+            supplier: x?.supplier?.nama,
+            totalhutang: totalhutang,
             rinci: x?.rinci,
-            orderan_h: x?.orderheder,
-            jenis_pembayaran: x?.jenis_pembayaran,
+            jenis_pembayaran: x?.cara_bayar,
+            keterangan: x?.keterangan,
           }
           console.log('hasilccccc', hasil)
           // hasilglobal.push(hasil)
+          console.log('this.itemsa', this.items)
           const index = this.items.findIndex((q) => q.id === x?.id)
-
-          if (index >= 0) this.items[index] = hasil
-          else this.items.unshift(hasil)
-          console.log('this.items', this.items)
+          console.log('index', index)
+          if (index >= 0) {
+            console.log('aaaa')
+            this.items[index] = hasil
+            console.log('this.itemsb', this.items)
+          } else {
+            console.log('bbbbbbbbb')
+            this.items.unshift(hasil)
+          }
         })
         // this.items.sort(({ tgl: a }, { tgl: b }) => b - a)
       },

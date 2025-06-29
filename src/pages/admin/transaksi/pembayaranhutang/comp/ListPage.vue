@@ -103,13 +103,17 @@
                 >
                   <q-item-section avatar>
                     <q-avatar color="yellow-9" text-color="white">{{
-                      ambiltanggalaja(item.tglorder)
+                      ambiltanggalaja(item.tgl)
                     }}</q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label lines="1">No. Order : {{ item?.noorder }} </q-item-label>
+                    <q-item-label lines="1"
+                      >No. Pembayaran Hutang : {{ item?.notrans }} || Cara Bayar :
+                      {{ item?.jenis_pembayaran }} || Keterangan :
+                      {{ item?.keterangan }}
+                    </q-item-label>
                     <q-item-label caption lines="2">
-                      <span class="text-weight-bold">-- {{ item?.suplier?.nama }}</span>
+                      <span class="text-weight-bold">-- {{ item?.supplier }}</span>
                       <span
                         class="text-weight-bold"
                         :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
@@ -154,8 +158,8 @@
                     </div>
                   </q-item-section>
                   <q-item-section v-else side top>
-                    <q-item-label caption>{{ humanDate(item?.tglorder) }}</q-item-label>
-                    <q-item-label caption>{{ jamTnpDetik(item?.tglorder) }}</q-item-label>
+                    <q-item-label caption>{{ humanDate(item?.tgl) }}</q-item-label>
+                    <!-- <q-item-label caption>{{ jamTnpDetik(item?.tgl) }}</q-item-label> -->
                   </q-item-section>
                 </q-item>
                 <q-separator inset="item" />
@@ -178,12 +182,17 @@
 </template>
 
 <script setup>
-import { formatRpDouble, humanDate, jamTnpDetik } from 'src/modules/utils'
+import { formatRpDouble, humanDate } from 'src/modules/utils'
 
 import { useAdminListTransaksiPembayaranHutangStore } from 'src/stores/admin/transaksi/pembayaranhutang/list'
+import { useAppStore } from 'src/stores/app'
+import { computed, ref } from 'vue'
 
-// const search = ref(null)
+const hoveredId = ref(null)
 const storelist = useAdminListTransaksiPembayaranHutangStore()
+const scrollTarget = ref(null)
+const infiniteScroll = ref(null)
+const app = useAppStore()
 
 const emits = defineEmits(['add', 'edit'])
 
@@ -191,11 +200,45 @@ const lihatdetail = (item) => {
   emits('edit', item)
 }
 
-// const refreshList = async () => {
-//   // Reset infinite scroll
-//   infiniteScroll.value.reset()
-//   await storelist.getList()
-// }
+const refreshList = async () => {
+  // Reset infinite scroll
+  infiniteScroll.value.reset()
+  await storelist.getList()
+}
+
+function ambiltanggalaja(val) {
+  // Periksa apakah val adalah string (format ISO atau format lain)
+  if (typeof val === 'string') {
+    // Konversi string ke objek Date
+    const dateObj = new Date(val)
+    // Periksa apakah konversi berhasil (valid date)
+    if (!isNaN(dateObj.getTime())) {
+      return dateObj.getDate()
+    }
+  }
+
+  // Jika val sudah berupa objek Date
+  if (val instanceof Date && !isNaN(val.getTime())) {
+    return val.getDate()
+  }
+
+  // Fallback: jika format tidak dikenali, tampilkan tanggal hari ini
+  console.warn('Format tanggal tidak valid:', val)
+  return new Date().getDate()
+}
+
+// eslint-disable-next-line no-unused-vars
+const next = computed(() => {
+  let page = false
+
+  if (storelist.meta?.next_page_url) {
+    page = true
+  }
+
+  return page
+})
+
+defineExpose({ lihatdetail })
 </script>
 <style lang="scss" scoped>
 .example-item {

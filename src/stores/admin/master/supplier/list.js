@@ -6,6 +6,7 @@ export const useAdminMasterSupplierStore = defineStore('admin-master-supplier-st
   state: () => ({
     meta: null,
     items: [],
+    itemsall: [],
     isError: false,
     loading: false,
     params: {
