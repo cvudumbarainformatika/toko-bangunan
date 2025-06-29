@@ -118,9 +118,9 @@
                         class="text-weight-bold"
                         :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"
                       >
-                        || TOTAL ORDERAN : </span
+                        || TOTAL Pembayaran Hutang : </span
                       ><q-badge outline :color="app?.dark ? 'yellow-3' : 'orange-9'">{{
-                        formatRpDouble(item?.total)
+                        formatRpDouble(item?.totalhutang)
                       }}</q-badge>
                     </q-item-label>
                   </q-item-section>

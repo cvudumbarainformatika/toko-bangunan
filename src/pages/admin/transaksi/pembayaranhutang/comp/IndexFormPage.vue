@@ -96,6 +96,18 @@
             </q-td>
           </q-tr>
         </template>
+        <template v-slot:body-cell-aksi="props">
+          <q-td :props="props">
+            <q-btn
+              :loadingrincian="props.row._deleting"
+              icon="delete"
+              color="red"
+              flat
+              dense
+              @click="hapusData(props.row)"
+            />
+          </q-td>
+        </template>
       </q-table>
     </div>
   </div>
@@ -108,7 +120,7 @@ import { useAdminFormTransaksiPembayaranHutangStore } from 'src/stores/admin/tra
 import DialogListHutang from './DialogListHutang.vue'
 import { notifError } from 'src/modules/notifs'
 import { computed, onMounted } from 'vue'
-import { date } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import { formatRpDouble } from 'src/modules/utils'
 import { useAdminListTransaksiPembayaranHutangStore } from 'src/stores/admin/transaksi/pembayaranhutang/list'
 
@@ -117,6 +129,8 @@ const emits = defineEmits(['back'])
 const storeform = useAdminFormTransaksiPembayaranHutangStore()
 const storelist = useAdminListTransaksiPembayaranHutangStore()
 const storesupllier = useAdminMasterSupplierStore()
+
+const $q = useQuasar()
 
 const props = defineProps({
   data: {
@@ -132,6 +146,7 @@ const semuaRinci = computed(() => {
     noorder: item.penerimaan?.noorder || '-',
     nofaktur: item.penerimaan?.nofaktur || '-',
     total: Number(item.total) || 0,
+    _deleting: false, // ← ini tambahan
   }))
 })
 
@@ -146,6 +161,12 @@ const columns = [
     field: 'total',
     align: 'right',
     format: (val) => formatRpDouble(val),
+  },
+  {
+    name: 'aksi',
+    label: 'Aksi',
+    field: 'aksi',
+    align: 'center',
   },
 ]
 
@@ -164,6 +185,35 @@ function carihutang() {
     storeform.basic = true
     storeform.listhutang()
   }
+}
+
+function hapusData(item) {
+  // const arr = storelist.rinci.filter((x) => x.id !== item.id)
+  // storelist.rinci = arr
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true,
+  })
+    .onOk(async () => {
+      // console.log('OK')
+      item._deleting = true
+      try {
+        await storelist.deleteData(item.id, storeform.form.nopembayaran)
+      } catch (e) {
+        console.log('del Pembayaran Hutang error', e)
+      } finally {
+        item._deleting = false // reset loading
+      }
+    })
+    .onCancel(() => {
+      // console.log('Cancel')
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    })
 }
 
 onMounted(() => {

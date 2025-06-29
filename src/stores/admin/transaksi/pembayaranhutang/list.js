@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifError, notifSuccess } from 'src/modules/notifs'
 
 export const useAdminListTransaksiPembayaranHutangStore = defineStore(
   'admin-list-transaksi-pembayaranhutang-store',
@@ -12,6 +13,7 @@ export const useAdminListTransaksiPembayaranHutangStore = defineStore(
       isError: false,
       loading: false,
       loadingdeleteall: false,
+      loadingrincian: false,
       nopembayaran: '',
       rinci: [],
       params: {
@@ -114,6 +116,27 @@ export const useAdminListTransaksiPembayaranHutangStore = defineStore(
           }
         })
         // this.items.sort(({ tgl: a }, { tgl: b }) => b - a)
+      },
+      async deleteData(id, notrans) {
+        this.loadingrincian = true
+        this.items = this.items.filter((item) => item.id !== id)
+        const params = { id, notrans }
+        try {
+          const resp = await api.post(`/v1/transaksi/pembayaranhutang/hapusrincian`, params)
+          // console.log(resp)
+          if (resp.status === 200) {
+            const newArr = this.rinci?.filter((item) => item?.id !== id)
+            this.rinci = newArr
+            this.olahdata(resp?.data?.data)
+
+            notifSuccess('Data berhasil dihapus')
+            this.loadingrincian = false
+          }
+        } catch (error) {
+          console.log('del Pembayaran Hutang error', error)
+          this.loadingrincian = false
+          notifError('Terjadi Kesalahan')
+        }
       },
     },
   },
