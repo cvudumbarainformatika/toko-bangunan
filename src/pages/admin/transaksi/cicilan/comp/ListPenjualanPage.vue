@@ -80,15 +80,15 @@
             <q-separator />
           </div>
 
-          <div ref="scrollTarget" class="col full-height">
+          <div ref="scrollTarget" id="scrltrgt" class="col full-height">
             <q-infinite-scroll
               @load="store.loadMore"
               ref="infiniteScroll"
               :disable="store?.isError || store?.meta?.next_page_url === null"
-              :scroll-target="scrollTarget"
               :offset="150"
               :initial-index="store.params.page"
-            >
+              >
+              <!-- scroll-target="#scrltrgt" -->
               <!-- <q-item> -->
                 <q-expansion-item expand-icon-toggle>
                   <template v-slot:header>
@@ -130,7 +130,7 @@
                 </q-expansion-item>
               <!-- </q-item> -->
               <q-separator />
-              <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade">
+              <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade" class="example-item">
                 <q-expansion-item
                   v-model="item.expand"
                   clickable

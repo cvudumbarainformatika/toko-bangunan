@@ -44,6 +44,10 @@ export const useListCicilanPenjualanStore = defineStore('list-cicilan-penjualan-
       }
     },
     loadMore(index, done) {
+      if (index === 1) {
+        done() // Jangan load ulang page 1, karena sudah di-getList()
+        return
+        }
       this.isError = false
       this.params.page = index
       const params = {

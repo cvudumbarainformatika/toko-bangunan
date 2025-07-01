@@ -91,6 +91,10 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
       }
     },
     loadMore(index, done) {
+      if (index === 1) {
+        done() // Jangan load ulang page 1, karena sudah di-getList()
+        return
+        }
       console.log('load more', index)
 
       this.isError = false
@@ -106,11 +110,12 @@ export const useListPenjualanStore = defineStore('list-penjualan-store', {
             // console.log('list penjualan', data)
             this.meta = data?.meta
 
-            if (index > 1) {
-              this.items.push(...data.data)
-            }
+            this.items.push(...data.data)
+            // if (index > 1) {
+            // }
+            // this.isError = true
+            resolve(data)
             done()
-            resolve()
           })
           .catch(() => {
             this.isError = true

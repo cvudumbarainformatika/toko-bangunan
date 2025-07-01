@@ -40,18 +40,22 @@ export const useListReturPenjualanStore = defineStore('list_retur-penjualan-stor
       }
     },
     loadMore(index, done) {
+      if (index === 1) {
+        done() // Jangan load ulang page 1, karena sudah di-getList()
+        return
+        }
       this.isError = false
       this.params.page = index
       const params = {
         params: this.params
       }
 
-      console.log('load more', index);
+      console.log('load more rtr', index);
 
       return new Promise((resolve) => {
         api.get('/v1/transaksi/retur/list-penjualan', params)
           .then(({data}) => {
-            console.log('list retur penjualan',data);
+            // console.log('list retur penjualan',data);
             this.meta = data?.meta
             this.items.push(...data.data)
             done()
