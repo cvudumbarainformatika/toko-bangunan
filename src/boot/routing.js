@@ -22,13 +22,13 @@ export default defineBoot(({ router, store }) => {
         const lastActive = new Date(activeTime)
         const now = new Date()
         const hoursDiff = (now - lastActive) / (1000 * 60 * 60)
-
+        return hoursDiff > 24
         // Token expired after 24 hours of inactivity
-        if (hoursDiff > 24) {
-          app.logout()
-          next({ path: '/auth' })
-          return false
-        }
+        // if (hoursDiff > 24) {
+        //   app.logout()
+        //   next({ path: '/auth' })
+        //   return false
+        // }
       }
       next()
       return true
@@ -46,8 +46,14 @@ export default defineBoot(({ router, store }) => {
       }
 
       // Check token expiration if you have expiry data
-      if (!checkTokenExpiration()) {
-        next()
+      // if (!checkTokenExpiration()) {
+      // next()
+      //   return
+      // }
+
+      if (checkTokenExpiration()) {
+        app.logout()
+        next({ path: '/auth' })
         return
       }
     } else if (token && to.path === '/auth') {
