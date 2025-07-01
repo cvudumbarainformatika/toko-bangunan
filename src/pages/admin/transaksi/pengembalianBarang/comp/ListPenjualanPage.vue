@@ -198,72 +198,6 @@
           </q-infinite-scroll>
         </div>
         </q-list>
-        <!-- <div class="row items-center q-mb-sm">
-          <div class="text-h6">List Penjualan</div>
-          <q-space />
-          <div class="row items-center q-gutter-x-sm">
-            <app-input-date
-              :model="list.dateDisplay.from"
-              label="Dari"
-              style="min-width: 150px"
-              outlined
-              :debounce="300"
-              @set-model="
-                (val) => {
-                  list.dateDisplay.from = val
-                }
-              "
-              @db-model="
-                (val) => {
-                  list.params.from = val
-                  reload()
-                }
-              "
-            />
-            <app-input-date
-              :model="list.dateDisplay.to"
-              label="Sampai"
-              style="min-width: 150px"
-              outlined
-              :debounce="300"
-              @set-model="
-                (val) => {
-                  list.dateDisplay.to = val
-                }
-              "
-              @db-model="
-                (val) => {
-                  list.params.to = val
-                  reload()
-                }
-              "
-            />
-            <app-input
-              v-model="list.params.q"
-              prepend-icon="search"
-              label="Telusuri"
-              style="min-width: 250px"
-              :debounce="300"
-              @update:model-value="() => reload()"
-            />
-            <app-btn
-              round
-              color="grey-10"
-              class="text-yellow-8"
-              icon="refresh"
-              dense
-              tooltip="Refresh"
-              @click="reload()"
-            />
-
-            <app-btn
-              icon="list"
-              tooltip="List Pengembalian"
-              color="primary"
-              @click="$emit('list')"
-            />
-          </div>
-        </div> -->
 
 
       </div>
@@ -294,13 +228,13 @@ function reload() {
   list.getList()
 }
 function loadMore(index, done) {
-const el = scrollTarget?.value
-  if (el) {
-    console.log('scrollTop:', el.scrollTop)
-    console.log('scrollHeight:', el.scrollHeight)
-    console.log('clientHeight:', el.clientHeight)
-    console.log('offset trigger:', el.scrollHeight - el.scrollTop - el.clientHeight)
-  }
+// const el = scrollTarget?.value
+//   if (el) {
+//     console.log('scrollTop:', el.scrollTop)
+//     console.log('scrollHeight:', el.scrollHeight)
+//     console.log('clientHeight:', el.clientHeight)
+//     console.log('offset trigger:', el.scrollHeight - el.scrollTop - el.clientHeight)
+//   }
   list.loadMore(index, done)
 
 
