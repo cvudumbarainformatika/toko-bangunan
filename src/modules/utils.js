@@ -170,7 +170,7 @@ const olahUang = (val) => {
     for (let i = 0; i < array.length; i++) {
       data += array[i]
     }
-    // console.log('olah uang return', parseFloat(data))
+    console.log('olah uang return',array.length,array, parseFloat(data))
     return parseFloat(data)
   } else {
     return val

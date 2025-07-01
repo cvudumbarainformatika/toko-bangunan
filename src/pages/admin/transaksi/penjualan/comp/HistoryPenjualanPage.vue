@@ -102,16 +102,17 @@
             <q-separator />
           </div>
 
-          <div ref="scrollTarget" class="col full-height">
+          <div ref="scrollTarget" id="scrtrgt" class="col full-height" style="height: 600px; overflow-y: auto;">
             <q-infinite-scroll
-              @load="store.loadMore"
+              @load="loadMore"
               ref="infiniteScroll"
               :disable="store?.isError || store?.meta?.next_page_url === null"
               :offset="150"
+              debounce="500"
               :initial-index="store.params.page"
-            >
-              <!-- :scroll-target="scrollTarget" -->
-              <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade">
+              >
+              <!-- scroll-target="#scrtrgt" -->
+              <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade" class="example-item">
                 <q-expansion-item
                   v-model="item.expand"
                   clickable
@@ -336,6 +337,21 @@ function reload() {
   store.items = []
   infiniteScroll.value?.reset()
   store.getList()
+}
+function loadMore(index, done) {
+  // const el = scrollTarget?.value
+  // if (el) {
+  //   console.log('scrollTop:', el.scrollTop)
+  //   console.log('scrollHeight:', el.scrollHeight)
+  //   console.log('clientHeight:', el.clientHeight)
+  //   console.log('offset trigger:', el.scrollHeight - el.scrollTop - el.clientHeight)
+  // }
+  store.loadMore(index, done)
+  // ?.then(()=>{
+  //   // console.log('load ms',infiniteScroll.value, index);
+  //   // infiniteScroll.value?.updateScrollTarget()
+  // })
+
 }
 function lihatCetak(item) {
   store.itemCetak = item

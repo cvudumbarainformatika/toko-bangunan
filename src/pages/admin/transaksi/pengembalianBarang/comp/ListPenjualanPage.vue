@@ -81,12 +81,14 @@
 
       <q-separator />
 
-      <q-card-section class="col">
+      <q-card-section id="scrltrgt" class="col full-height"  style="height: 600px; overflow-y: auto;">
         <q-infinite-scroll
-          class="full-height"
-          @load="list.loadMore"
+          @load="loadMore"
           ref="infiniteScroll"
           :disable="list.loading || list.isError || !list.meta?.next_page_url"
+          :offset="150"
+          debounce="500"
+          :initial-index="list.params.page"
         >
           <q-intersection v-for="(item, i) in list.items" :key="i" transition="fade">
             <q-expansion-item
@@ -217,6 +219,12 @@ function reload() {
   list.items = []
   infiniteScroll.value?.reset()
   list.getList()
+}
+function loadMore(index, done) {
+
+  list.loadMore(index, done)
+
+
 }
 function detailRetur(item, detail) {
   let total = 0

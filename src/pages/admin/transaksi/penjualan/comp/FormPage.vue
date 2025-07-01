@@ -79,7 +79,7 @@
       @update:model-value="(val)=>{
         const jual=olahUang(val)
         store.setForm('harga_jual',jual/store.form.isi)
-      console.log('gede', jual,store.form.harga_jual);
+        console.log('gede', jual,store.form.harga_jual);
 
     }" />
       <app-input-rp v-else currency v-model="store.form.harga_jual" label="Harga Jual" outlined :autofocus="false" @keyup.enter.stop="onEnterinput()"
@@ -115,13 +115,19 @@ function selected(val){
     console.log('store', store.barang);
 
     store.setForm('kodebarang',store?.barang?.barang?.kodebarang)
-    if(!store.form.sales_id) store.setForm('harga_jual',isNaN(store?.barang?.barang?.hargajual1)?0:parseFloat(store?.barang?.barang?.hargajual1))
-    else store.setForm('harga_jual',isNaN(store?.barang?.barang?.hargajual2)?0:parseFloat(store?.barang?.barang?.hargajual2))
-    store.setForm('harga_beli',isNaN(store?.barang?.harga_beli_k)?0:parseFloat(store?.barang?.harga_beli_k))
+    const harju1=isNaN(store?.barang?.barang?.hargajual1)?0:Math.ceil(parseFloat(store?.barang?.barang?.hargajual1))
+    const harju2=isNaN(store?.barang?.barang?.hargajual2)?0:Math.ceil(parseFloat(store?.barang?.barang?.hargajual2))
+    const harbel=isNaN(store?.barang?.barang?.harga_beli_k)?0:Math.ceil(parseFloat(store?.barang?.barang?.harga_beli_k))
+    if(!store.form.sales_id) store.setForm('harga_jual',harju1)
+    else store.setForm('harga_jual',harju2)
+    store.setForm('harga_beli',harbel)
     store.setForm('isi',isNaN(store?.barang?.isi)?(parseFloat(store?.barang?.barang?.isi)):parseFloat(store?.barang?.isi))
     store.setForm('motif',store?.barang?.motif ?? '')
-    store.setForm('hargaJualB',olahUang(store.form.harga_jual) * store.form.isi)
-    console.log('form', store.form);
+
+    const harju=olahUang(store.form.harga_jual)
+
+    store.setForm('hargaJualB', harju* store.form.isi)
+    console.log('form', store.form, harju);
   }
   setTimeout(() => {
     refSelectBarang.value?.refAuto?.validate()
@@ -135,6 +141,7 @@ function setJumlah(){
   const jumB=((isNaN(parseFloat(store.form.jumlahB))?0:parseFloat(store.form.jumlahB)) * isi)
   const jumK= (isNaN(parseFloat(store.form.jumlahK))?0:parseFloat(store.form.jumlahK))
   const jumlah= jumB + jumK
+  console.log('set jumlah', store.form,olahUang(store.form.harga_jual));
 
   store.setForm('jumlah',jumlah)
 }

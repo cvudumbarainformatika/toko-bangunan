@@ -55,7 +55,7 @@ export default defineBoot(({ router, store }) => {
       next({ path: '/' })
       return
     }
-    next()
+    else next()
   })
 
   router.onError((error, to) => {

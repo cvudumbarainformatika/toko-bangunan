@@ -85,16 +85,16 @@
             </q-item-label>
             <q-separator />
           </div>
-          <div ref="scrollTarget" class="col full-height">
+          <div ref="scrollTarget" id="scrltrgt" class="col full-height">
             <q-infinite-scroll
-              @load="store.loadMore"
+              @load="loadMore"
               ref="infiniteScroll"
               :disable="store?.isError || store?.meta?.next_page_url === null"
-              :scroll-target="scrollTarget"
               :offset="150"
               :initial-index="store.params.page"
-            >
-              <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade">
+              >
+              <!-- scroll-target="#scrltrgt" -->
+              <q-intersection v-for="(item, i) in store.items" :key="i" transition="fade" class="example-item">
                 <q-expansion-item
                   v-model="item.expand"
                   clickable
@@ -233,7 +233,12 @@ function reload() {
   store.getList()
   infiniteScroll.value?.reset()
 }
+function loadMore(index, done) {
 
+  store.loadMore(index, done)
+
+
+}
 function detailRetur(item, detail) {
   let total = 0
   if (item?.header_retur?.length > 0) {
@@ -298,3 +303,9 @@ function statusFlag(flag) {
   return status
 }
 </script>
+<style lang="scss" scoped>
+.example-item {
+  height: 56px;
+}
+</style>
+
