@@ -8,30 +8,19 @@ export default defineBoot(({ router, store }) => {
   const app = useAppStore(store)
 
   router.beforeEach((to, from, next) => {
-    // const isAuth = app?.auth
-    //console.log('auth from store', isAuth)
     const token = storage.getLocalToken()
     const user = storage.getUser()
     const requireAuth = to.matched.some((route) => route.meta.requireAuth)
-    // console.log('requireAuthauth from store', requireAuth)
 
-    // Check token expiration
-    const checkTokenExpiration = () => {
+    const isTokenExpired = () => {
       const activeTime = localStorage.getItem('activeTime')
       if (activeTime) {
         const lastActive = new Date(activeTime)
         const now = new Date()
         const hoursDiff = (now - lastActive) / (1000 * 60 * 60)
         return hoursDiff > 24
-        // Token expired after 24 hours of inactivity
-        // if (hoursDiff > 24) {
-        //   app.logout()
-        //   next({ path: '/auth' })
-        //   return false
-        // }
       }
-      next()
-      return true
+      return false
     }
 
     if (token && user && !app.auth) {
@@ -40,35 +29,20 @@ export default defineBoot(({ router, store }) => {
 
     if (requireAuth) {
       if (!token || !user) {
-        // No token or user, redirect to login
         next({ path: '/auth' })
         return
       }
 
-      // Check token expiration if you have expiry data
-      // if (!checkTokenExpiration()) {
-      // next()
-      //   return
-      // }
-
-      if (checkTokenExpiration()) {
+      if (isTokenExpired()) {
         app.logout()
         next({ path: '/auth' })
         return
       }
     } else if (token && to.path === '/auth') {
-      // If authenticated and trying to access login page
       next({ path: '/' })
       return
     }
-    else next()
-  })
 
-  router.onError((error, to) => {
-    if (error.message.includes('Failed to fetch dynamically imported module')) {
-      window.location = to.fullPath
-    }
+    next()
   })
-
-  console.groupEnd()
 })
