@@ -58,9 +58,7 @@
           @update:model-value="
             (val) => {
               refseles = val
-              const cari = getsales.sales.find((x) => x.id === refseles)
-              console.log('val', cari)
-              store.sales = cari.nama
+              store.sales = null
             }
           "
         />
@@ -75,9 +73,6 @@
           @update:model-value="
             (val) => {
               refjnsbayar = val
-              const cari = optionCaraBayar.find((x) => x.value === refjnsbayar)
-              console.log('val', cari)
-              store.jnsbayar = cari.label
             }
           "
         />
@@ -92,6 +87,18 @@
             @click="
               () => {
                 store.getdata()
+
+                if (store.params.sales != null || store.params.jnsbayar != null) {
+                  const cari = getsales.sales.find((x) => x.id === store.params.sales)
+                  store.sales = cari.nama
+
+                  const caribyr = optionCaraBayar.find((x) => x.value === store.params.jnsbayar)
+                  store.jnsbayar = caribyr.label
+                } else {
+                  store.sales = null
+                  store.jnsbayar = null
+                }
+
                 store.params.sales = null
                 store.params.jnsbayar = null
               }

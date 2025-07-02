@@ -61,6 +61,8 @@ export const useLaporanPenjualanStore = defineStore('laporan-penjualan-store', {
             console.log('getdata', data)
             this.items = data
             this.loading = false
+            this.params.sales = null
+            this.params.jnsbayar = null
             resolve(data)
           })
           .catch((err) => {

@@ -1,6 +1,20 @@
 <template>
   <div class="q-pa-sm full-width">
     <template v-if="store.items.length > 0">
+      <div v-if="store.sales" class="row full-width q-px-md justify-between">
+        <div class="col-auto flex-start text-bold q-pr-md">Sales</div>
+        <div class="col flex-end text-bold q-pr-md">: {{ store.sales }}</div>
+      </div>
+      <div v-if="store.jnsbayar" class="row full-width q-px-md justify-between">
+        <div class="col-auto flex-start text-bold q-pr-md">Pembayaran</div>
+        <div class="col flex-end text-bold q-pr-md">: {{ store.jnsbayar }}</div>
+      </div>
+      <div class="row full-width q-px-md q-pb-sm justify-between">
+        <div class="col-auto flex-start text-bold q-pr-md">Total Penjualan</div>
+        <div class="col flex-end text-bold q-pr-md">
+          : Rp. {{ formattanpaRp(totalPenjualan()) }}
+        </div>
+      </div>
       <q-markup-table style="width: 100%" wrap-cells>
         <thead>
           <tr class="text-bold text-center bg-yellow-8" style="border-bottom: solid">
@@ -162,6 +176,11 @@ import { dateDbFormat, dateFullFormat, formattanpaRp } from 'src/modules/utils'
 import { useLaporanPenjualanStore } from 'src/stores/admin/laporan/lap_penjualan/list'
 
 const store = useLaporanPenjualanStore()
+
+function totalPenjualan() {
+  const total = store.items.map((x) => parseFloat(x.total)).reduce((a, b) => a + b, 0)
+  return total
+}
 </script>
 <style scoped>
 @media print {

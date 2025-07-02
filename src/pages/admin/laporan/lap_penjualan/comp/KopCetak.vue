@@ -43,29 +43,12 @@
   </div> -->
   <!-- </div> -->
   <!-- <div class="row full-width"> -->
-  <div v-if="store.sales" class="row full-width q-px-md justify-between">
-    <div class="col-auto flex-start text-bold q-pr-md">Sales</div>
-    <div class="col flex-end text-bold q-pr-md">: {{ store.sales }}</div>
-  </div>
-  <div v-if="store.jnsbayar" class="row full-width q-px-md justify-between">
-    <div class="col-auto flex-start text-bold q-pr-md">Pembayaran</div>
-    <div class="col flex-end text-bold q-pr-md">: {{ store.jnsbayar }}</div>
-  </div>
-  <div class="row full-width q-px-md justify-between">
-    <div class="col-auto flex-start text-bold q-pr-md">Total Penjualan</div>
-    <div class="col flex-end text-bold q-pr-md">: Rp. {{ formattanpaRp(totalPenjualan()) }}</div>
-  </div>
+
   <!-- </div> -->
 </template>
 <script setup>
-import { formattanpaRp } from 'src/modules/utils'
 import { useLaporanPenjualanStore } from 'src/stores/admin/laporan/lap_penjualan/list'
 import { useProfilStore } from 'src/stores/admin/profil'
 const profil = useProfilStore()
 const store = useLaporanPenjualanStore()
-
-function totalPenjualan() {
-  const total = store.items.map((x) => parseFloat(x.total)).reduce((a, b) => a + b, 0)
-  return total
-}
 </script>

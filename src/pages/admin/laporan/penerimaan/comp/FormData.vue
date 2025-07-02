@@ -55,6 +55,11 @@
           option-label="nama"
           option-value="kodesupl"
           :valid="store.params.supplier === ''"
+          @update:model-value="
+            (e) => {
+              store.supplier = null
+            }
+          "
         />
         <app-select
           label="Berdasar Jenis Bayar"
@@ -62,6 +67,11 @@
           :options="['', 'Cash', 'Cash Tempo', 'Hutang']"
           :valid="store.params.jnsbayar === ''"
           onfocus="this.select()"
+          @update:model-value="
+            (e) => {
+              store.jnsbayar = null
+            }
+          "
         />
         <div>
           <app-btn
@@ -74,6 +84,17 @@
             @click="
               () => {
                 store.getdata()
+                if (store.params.supplier != null || store.params.jnsbayar != null) {
+                  store.jnsbayar = store.params.jnsbayar
+                  const as = storesupllier.itemsall.find(
+                    (x) => x.kodesupl === store.params.supplier,
+                  )
+                  store.supplier = as.nama
+                } else {
+                  store.supplier = null
+                  store.jnsbayar = null
+                }
+
                 store.params.supplier = null
                 store.params.jnsbayar = null
               }
@@ -102,6 +123,8 @@ const DialogCetak = shallowRef(defineAsyncComponent(() => import('./DialogCetak.
 const store = useLaporanPenerimaanStore()
 const storesupllier = useAdminMasterSupplierStore()
 
+// const refsupplier = ref(null)
+// const refjnsbayar = ref(null)
 function cetakData() {
   store.dialogCetak = true
 }
