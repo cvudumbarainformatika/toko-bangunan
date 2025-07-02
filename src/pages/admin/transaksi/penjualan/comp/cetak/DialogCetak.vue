@@ -310,7 +310,7 @@
                 </div>
                 <div class="col flex-end q-pl-xl q-py-md">
                   <div class="row full-width">
-                    <span class="col-3">Nomor Penjaualan</span>
+                    <span class="col-3">Nomor Penjualan</span>
                     <span>: {{ store.itemCetak?.no_penjualan }}</span>
                   </div>
                   <div class="row full-width">
@@ -381,7 +381,7 @@
                 </div>
               </div>
               <!-- <div class="text-center text-bold q-pt-sm" style="font-size: medium">
-                NOTA PENJAUALAN
+                NOTA PENJUALAN
               </div> -->
               <div class="q-px-md q-pt-sm">
                 <table class="full-width">
