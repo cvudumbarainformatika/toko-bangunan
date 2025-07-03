@@ -34,30 +34,11 @@
       {{ store.dateDisplay.from }} - {{ store.dateDisplay.to }}
     </span>
   </div>
-  <!-- <div class="row full-width"> -->
-  <!-- <div class="row full-width q-px-md justify-between">
-    <div class="col-2 flex-start text-bold q-pr-md">Periode Penerimaan</div>
-    <div class="col flex-end text-bold q-pr-md">
-      : {{ store.dateDisplay.from }} - {{ store.dateDisplay.to }}
-    </div>
-  </div> -->
-  <!-- </div> -->
-  <!-- <div class="row full-width"> -->
-  <div class="row full-width q-px-md justify-between">
-    <div class="col-auto flex-start text-bold q-pr-md">Total Penerimaan</div>
-    <div class="col flex-end text-bold q-pr-md">: Rp. {{ formattanpaRp(totalPenerimaan()) }}</div>
-  </div>
-  <!-- </div> -->
 </template>
 <script setup>
-import { formattanpaRp } from 'src/modules/utils'
+// import { formattanpaRp } from 'src/modules/utils'
 import { useLaporanPenerimaanStore } from 'src/stores/admin/laporan/penerimaan/list'
 import { useProfilStore } from 'src/stores/admin/profil'
 const profil = useProfilStore()
 const store = useLaporanPenerimaanStore()
-
-function totalPenerimaan() {
-  const total = store.items.map((x) => parseFloat(x.total)).reduce((a, b) => a + b, 0)
-  return total
-}
 </script>

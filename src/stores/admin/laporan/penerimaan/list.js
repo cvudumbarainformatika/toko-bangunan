@@ -20,7 +20,8 @@ export const useLaporanPenerimaanStore = defineStore('laporan-penerimaan-store',
     },
     loading: false,
     dialogCetak: false,
-
+    supplier: null,
+    jnsbayar: null,
     items: [],
   }),
 
@@ -58,6 +59,8 @@ export const useLaporanPenerimaanStore = defineStore('laporan-penerimaan-store',
             console.log('getdata', data)
             this.items = data
             this.loading = false
+            this.params.supplier = null
+            this.params.jnsbayar = null
             resolve(data)
           })
           .catch((err) => {
