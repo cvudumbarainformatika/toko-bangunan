@@ -6,6 +6,7 @@ export const useAdminMasterPelangganStore = defineStore('admin-master-pelanggan-
   state: () => ({
     meta: null,
     items: [],
+    itemsall: [],
     inisial: [],
     isError: false,
     loading: false,
@@ -34,6 +35,25 @@ export const useAdminMasterPelangganStore = defineStore('admin-master-pelanggan-
         console.log('get Pelanggan', data)
         this.meta = data
         this.items = data?.data
+        this.loading = false
+        // this.items = data
+      } catch (error) {
+        console.log(error)
+        this.isError = true
+        this.loading = false
+      }
+    },
+
+    async getListall() {
+      // console.log('get master barang page', this.params.page);
+      this.params.page = 1
+      this.isError = false
+      this.loading = true
+      try {
+        const { data } = await api.get('/v1/master/pelanggan/listpelangganall')
+        console.log('get Pelanggan', data)
+        this.meta = data
+        this.itemsall = data
         this.loading = false
         // this.items = data
       } catch (error) {

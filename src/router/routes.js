@@ -83,6 +83,10 @@ const routes = [
         path: '/admin/transaksi/pembayaran-hutang',
         component: () => import('pages/admin/transaksi/pembayaranhutang/IndexPage.vue'),
       },
+      {
+        path: '/admin/transaksi/notasales',
+        component: () => import('pages/admin/transaksi/notasales/IndexPage.vue'),
+      },
 
       // Laporan
       {
