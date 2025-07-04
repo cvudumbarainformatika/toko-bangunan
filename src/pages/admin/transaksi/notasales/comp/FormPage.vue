@@ -91,7 +91,7 @@
         <template v-slot:body-cell-aksi="props">
           <q-td :props="props">
             <q-btn
-              :loadingrincian="props.row._deleting"
+              :loading="loadingItem[props.row.id]"
               icon="delete"
               color="red"
               flat
@@ -107,8 +107,8 @@
 </template>
 <script setup>
 import { notifError } from 'src/modules/notifs'
-import { computed, onMounted } from 'vue'
-import { date } from 'quasar'
+import { computed, onMounted, ref } from 'vue'
+import { date, useQuasar } from 'quasar'
 // import { formatRpDouble } from 'src/modules/utils'
 import { useAdminFormTransaksiNotaSalesStore } from 'src/stores/admin/transaksi/notasales/form'
 import { useAdminListTransaksiNotaSalesstore } from 'src/stores/admin/transaksi/notasales/list'
@@ -118,8 +118,12 @@ import { formatRpDouble } from 'src/modules/utils'
 
 const emits = defineEmits(['back'])
 
+const $q = useQuasar()
+
 const storeform = useAdminFormTransaksiNotaSalesStore()
 const storelist = useAdminListTransaksiNotaSalesstore()
+
+const loadingItem = ref({})
 
 // const $q = useQuasar()
 
@@ -159,7 +163,7 @@ const semuaRinci = computed(() => {
     sales: item?.hederpenjualan?.sales?.nama || '-',
     // terbayar: item.terbayar || '-',
     total: Number(item.total) || 0,
-    // _deleting: false, // ← ini tambahan
+    _deleting: false, // ← ini tambahan
   }))
 })
 
@@ -176,12 +180,12 @@ const columns = [
     align: 'right',
     format: (val) => formatRpDouble(val),
   },
-  // {
-  //   name: 'aksi',
-  //   label: 'Aksi',
-  //   field: 'aksi',
-  //   align: 'center',
-  // },
+  {
+    name: 'aksi',
+    label: 'Aksi',
+    field: 'aksi',
+    align: 'center',
+  },
 ]
 
 const totalJumlah = computed(() => {
@@ -199,34 +203,35 @@ function carinota() {
   }
 }
 
-// function hapusData(item) {
-//   // const arr = storelist.rinci.filter((x) => x.id !== item.id)
-//   // storelist.rinci = arr
-//   $q.dialog({
-//     dark: true,
-//     title: 'Peringatan',
-//     message: 'Apakah Data ini akan dihapus?',
-//     cancel: true,
-//     persistent: true,
-//   })
-//     .onOk(async () => {
-//       // console.log('OK')
-//       item._deleting = true
-//       try {
-//         await storelist.deleteData(item.id, storeform.form.notrans)
-//       } catch (e) {
-//         console.log('del Pembayaran Hutang error', e)
-//       } finally {
-//         item._deleting = false // reset loading
-//       }
-//     })
-//     .onCancel(() => {
-//       // console.log('Cancel')
-//     })
-//     .onDismiss(() => {
-//       // console.log('I am triggered on both OK and Cancel')
-//     })
-// }
+function hapusData(item) {
+  // const arr = storelist.rinci.filter((x) => x.id !== item.id)
+  // storelist.rinci = arr
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true,
+  })
+    .onOk(async () => {
+      // console.log('OK')
+      loadingItem.value[item.id] = true
+      console.log('OK', item._deleting)
+      try {
+        await storelist.deleteData(item.id, storeform.form.notrans, item.notaPenjualan)
+      } catch (e) {
+        console.log('del Pembayaran Hutang error', e)
+      } finally {
+        loadingItem.value[item.id] = false
+      }
+    })
+    .onCancel(() => {
+      // console.log('Cancel')
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    })
+}
 
 onMounted(() => {
   console.log('props.data', props.data)

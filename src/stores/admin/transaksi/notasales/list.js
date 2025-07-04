@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifError, notifSuccess } from 'src/modules/notifs'
 
 export const useAdminListTransaksiNotaSalesstore = defineStore(
   'admin-list-transaksi-notasales-store',
@@ -11,6 +12,7 @@ export const useAdminListTransaksiNotaSalesstore = defineStore(
       rinci: [],
       isError: false,
       loading: false,
+      loadinghapus: false,
       itemNotaSales: null,
       params: {
         q: null,
@@ -100,6 +102,27 @@ export const useAdminListTransaksiNotaSalesstore = defineStore(
           }
         })
         // this.items.sort(({ tgl: a }, { tgl: b }) => b - a)
+      },
+      async deleteData(id, notrans, notaPenjualan) {
+        // this.loadinghapus = true
+        this.items = this.items.filter((item) => item.id !== id)
+        const params = { id, notrans, notaPenjualan }
+        try {
+          const resp = await api.post(`/v1/transaksi/notasales/hapusrincian`, params)
+          // console.log(resp)
+          if (resp.status === 200) {
+            const newArr = this.rinci?.filter((item) => item?.id !== id)
+            this.rinci = newArr
+            this.olahdata(resp?.data?.data)
+
+            notifSuccess('Data berhasil dihapus')
+            // this.loadinghapus = false
+          }
+        } catch (error) {
+          console.log('del Pembayaran Hutang error', error)
+          // this.loadinghapus = false
+          notifError('Terjadi Kesalahan')
+        }
       },
     },
   },
