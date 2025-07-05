@@ -42,6 +42,7 @@ const storepegawai = useAdminMasterPegawaiStore()
 const storepelanggan = useAdminMasterPelangganStore()
 
 onMounted(() => {
+  storelist.itemNotaSales = null
   storepegawai.getList()
   storelist.getNotaSales()
   storepelanggan.getListall()

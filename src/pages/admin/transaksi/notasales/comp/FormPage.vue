@@ -57,7 +57,7 @@
           color="grey-10"
           class="text-yellow-8"
           icon="find_in_page"
-          @click="carinota()"
+          @click="carinota(storeform.form.keterangan)"
         />
       </div>
     </div>
@@ -192,14 +192,14 @@ const totalJumlah = computed(() => {
   return semuaRinci.value.reduce((sum, item) => sum + (parseFloat(item.total) || 0), 0)
 })
 
-function carinota() {
+function carinota(val) {
   if (storeform.form.kdsales === '') {
     return notifError('Maaf Sales Tidak Boleh Kosong...!!!')
   } else if (storeform.form.keterangan === '') {
     return notifError('Maaf Status Tidak Boleh Kosong...!!!')
   } else {
     storeform.basicpiutang = true
-    storeform.caripiutang()
+    storeform.caripiutang(val)
   }
 }
 
@@ -218,7 +218,12 @@ function hapusData(item) {
       loadingItem.value[item.id] = true
       console.log('OK', item._deleting)
       try {
-        await storelist.deleteData(item.id, storeform.form.notrans, item.notaPenjualan)
+        await storelist.deleteData(
+          item.id,
+          storeform.form.notrans,
+          item.notaPenjualan,
+          storeform.form.keterangan,
+        )
       } catch (e) {
         console.log('del Pembayaran Hutang error', e)
       } finally {
@@ -234,8 +239,7 @@ function hapusData(item) {
 }
 
 onMounted(() => {
-  console.log('props.data', props.data)
-  if (!props.data) return
+  // if (!props.data) return
   if (
     props?.data?.notrans === '' ||
     props?.data?.notrans === null ||
@@ -244,6 +248,8 @@ onMounted(() => {
     storeform.form.notrans = ''
     storeform.form.kdsales = ''
     storeform.form.keterangan = ''
+
+    storelist.rinci = []
   } else {
     storeform.form.notrans = props?.data?.notrans
     storeform.form.tgl = props?.data?.tgl

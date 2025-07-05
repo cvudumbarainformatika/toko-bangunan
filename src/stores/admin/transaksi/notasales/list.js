@@ -103,10 +103,10 @@ export const useAdminListTransaksiNotaSalesstore = defineStore(
         })
         // this.items.sort(({ tgl: a }, { tgl: b }) => b - a)
       },
-      async deleteData(id, notrans, notaPenjualan) {
+      async deleteData(id, notrans, notaPenjualan, keterangan) {
         // this.loadinghapus = true
         this.items = this.items.filter((item) => item.id !== id)
-        const params = { id, notrans, notaPenjualan }
+        const params = { id, notrans, notaPenjualan, keterangan }
         try {
           const resp = await api.post(`/v1/transaksi/notasales/hapusrincian`, params)
           // console.log(resp)

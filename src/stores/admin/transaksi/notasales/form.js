@@ -69,13 +69,19 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
           this.loading = false
         }
       },
-      async caripiutang() {
+      async caripiutang(val) {
         this.itemspiutang = []
         this.allItemspiutang = []
         this.loadingcarinota = true
+        const params = {
+          params: {
+            kdsales: this.form.kdsales,
+            keterangan: val,
+          },
+        }
         try {
-          const { data } = await api.get('/v1/transaksi/notasales/caripiutang')
-          console.log('asdasdasdasd', data)
+          const { data } = await api.get('/v1/transaksi/notasales/caripiutang', params)
+          // console.log('asdasdasdasd', data)
           this.itemspiutang = data
           this.allItemspiutang = data
           this.loadingcarinota = false
