@@ -53,13 +53,16 @@
                         {{ humanDate(item?.tgl_kirim) }}
                       </div>
                     </div>
-
                     <div class="row">
                       <div class="col-5">Pelanggan</div>
                       <div class="col-1">:</div>
                       <div class="col-6 text-weight-bold">{{ item?.pelanggan?.nama }}</div>
                     </div>
-
+                    <div class="row">
+                      <div class="col-5">Alamat</div>
+                      <div class="col-1">:</div>
+                      <div class="col-6 text-weight-bold">{{ item?.pelanggan?.alamat }}</div>
+                    </div>
                     <div class="row">
                       <div class="col-5">Sales</div>
                       <div class="col-1">:</div>

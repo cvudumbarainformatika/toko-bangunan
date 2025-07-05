@@ -82,7 +82,7 @@
 
         <template v-slot:bottom-row>
           <q-tr>
-            <q-td colspan="5" class="text-right text-weight-bold text-red"> Total </q-td>
+            <q-td colspan="6" class="text-right text-weight-bold text-red"> Total </q-td>
             <q-td class="text-right text-weight-bold text-red">
               {{ formatRpDouble(totalJumlah) }}
             </q-td>
@@ -160,6 +160,7 @@ const semuaRinci = computed(() => {
     notaPenjualan: item.notaPenjualan,
     tgljatuhtempo: item.tgljatuhtempo || '-',
     pelanggan: item?.hederpenjualan?.pelanggan?.nama || '-',
+    alamat: item?.hederpenjualan?.pelanggan?.alamat || '-',
     sales: item?.hederpenjualan?.sales?.nama || '-',
     // terbayar: item.terbayar || '-',
     total: Number(item.total) || 0,
@@ -171,6 +172,7 @@ const columns = [
   { name: 'no', label: 'No.', field: 'no', align: 'left' },
   { name: 'notaPenjualan', label: 'No. Penjualan', field: 'notaPenjualan', align: 'left' },
   { name: 'pelanggan', label: 'Pelanggan', field: 'pelanggan', align: 'left' },
+  { name: 'alamat', label: 'Alamat', field: 'alamat', align: 'left' },
   { name: 'tgljatuhtempo', label: 'Tgl Jatuh Tempo', field: 'tgljatuhtempo', align: 'left' },
   { name: 'sales', label: 'Sales', field: 'sales', align: 'left' },
   {
