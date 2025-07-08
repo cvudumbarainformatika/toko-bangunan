@@ -50,7 +50,8 @@
           :disable="storeform.form.notrans !== ''"
         />
       </div>
-      <div class="col-auto">
+
+      <div class="col-auto" v-if="storeform.form.kunci !== '1'">
         <app-btn
           size="md"
           :dense="false"
@@ -58,6 +59,17 @@
           class="text-yellow-8"
           icon="find_in_page"
           @click="carinota(storeform.form.keterangan)"
+        />
+      </div>
+      <div class="col-auto">
+        <app-btn
+          size="md"
+          :dense="false"
+          color="grey-10"
+          class="text-yellow-8"
+          icon="vpn_key"
+          :loading="storeform.loadingkunci"
+          @click="kunci(storeform.form.notrans)"
         />
       </div>
     </div>
@@ -240,6 +252,14 @@ function hapusData(item) {
     })
 }
 
+function kunci(value) {
+  if (storeform.form.kunci === '1') {
+    return notifError('Maaf Data ini Sudah Dikunci...!!')
+  } else {
+    storeform.kunci(value)
+  }
+}
+
 onMounted(() => {
   // if (!props.data) return
   if (
@@ -250,11 +270,12 @@ onMounted(() => {
     storeform.form.notrans = ''
     storeform.form.kdsales = ''
     storeform.form.keterangan = ''
-
+    storeform.form.kunci = ''
     storelist.rinci = []
   } else {
     storeform.form.notrans = props?.data?.notrans
     storeform.form.tgl = props?.data?.tgl
+    storeform.form.kunci = props?.data?.kunci
     storeform.dateDisplay.tgl = date.formatDate(props?.data?.tgl, 'DD MMMM YYYY')
     const kdsales = parseInt(props?.data?.kdsales)
     const sales = props.pegawai.find((f) => f?.id === kdsales)

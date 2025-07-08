@@ -1,6 +1,6 @@
 <template>
   <q-dialog v-model="storeform.basicpiutang" transition-show="rotate" transition-hide="rotate">
-    <q-card style="width: 100vw">
+    <q-card style="width: 200vw">
       <q-card-section>
         <div class="text-h6 q-mb-sm">
           <span class="text-weight-bold text-yellow-8">
@@ -82,27 +82,67 @@
                     </div>
 
                     <div class="row q-pr-sm text-weight-bold">
-                      <div class="col-6 text-red">
+                      <div class="col-3 text-red text-center">
                         Total Hutang {{ formatRpDouble(item?.total) }}
                       </div>
-                      <div class="col-6 text-yellow">
-                        Terbayar {{ formatRpDouble(item?.total) }}
+                      <div class="col-3 text-yellow text-center">
+                        Terbayar
+                        {{
+                          item?.cicilan?.length > 0 ? formatRpDouble(item?.cicilan[0]?.jumlah) : 0
+                        }}
+                      </div>
+                      <div class="col-3 text-green text-center">
+                        Sisa
+                        {{ formatRpDouble(item?.total - item?.cicilan[0]?.jumlah) }}
                       </div>
                     </div>
-                    <!-- <div class="row q-pr-sm text-weight-bold">
+                    <div
+                      class="row q-pr-sm text-weight-bold"
+                      v-if="storeform.form.keterangan === 'Dikembalikan'"
+                    >
                       <div class="col-12 text-red">
-                        <AppInputRp
-                          label="Utang Yang Akan Dibayar"
-                          dense
-                          outlined
-                          v-model="item.yangakandibayar"
-                          currency
-                        />
+                        <div class="row q-gutter-sm">
+                          <!-- <div class="col-4">
+                            <q-toggle v-model="item.bayar" label="Bayar" />
+                          </div> -->
+                          <div class="col-3">
+                            <AppInputRp
+                              label="Piutang Yang Akan Dibayar"
+                              dense
+                              outlined
+                              v-model="item.yangakandibayar"
+                              currency
+                              v-if="item.bayar"
+                            />
+                          </div>
+                          <div class="col-3">
+                            <q-select
+                              label="Cara Bayar"
+                              dense
+                              outlined
+                              v-model="item.carabayarrinci"
+                              :options="['Cash', 'Transfer']"
+                              v-if="item.bayar"
+                            />
+                          </div>
+                          <div class="col-4">
+                            <q-input
+                              label="Keterangan"
+                              dense
+                              outlined
+                              v-model="item.keteranganrinci"
+                              v-if="item.bayar"
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div> -->
+                    </div>
                   </q-item-section>
                   <q-separator vertical />
                   <q-item-section side>
+                    <div>
+                      <q-toggle v-model="item.bayar" />
+                    </div>
                     <div class="q-gutter-sm">
                       <q-btn
                         :loading="
@@ -155,6 +195,13 @@ function onSubmit(item) {
   storeform.form.tgljatuhtempo = item?.tempo
   storeform.form.total = olahUang(item?.total)
   storeform.form.lamatempo = item?.jml_tempo
+  storeform.form.yangakandibayar = olahUang(item?.yangakandibayar)
+  storeform.form.pelanggan_id = item?.pelanggan?.id
+  storeform.form.cicilan = olahUang(item?.cicilan)
+  storeform.form.bayar = item?.bayar
+  storeform.form.terbayar = olahUang(item?.cicilan[0]?.jumlah)
+  storeform.form.carabayarrinci = item?.carabayarrinci
+  storeform.form.keteranganrinci = item?.keteranganrinci
 
   //storeform.form.terbayar = olahUang(item?.terbayar)
   // const sisahutang = olahUang(item?.sisajumlahbelumditerimax)

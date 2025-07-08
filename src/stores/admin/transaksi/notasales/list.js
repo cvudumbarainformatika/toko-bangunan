@@ -82,6 +82,7 @@ export const useAdminListTransaksiNotaSalesstore = defineStore(
             tgl: x?.tgl,
             kdsales: x?.kdsales,
             sales: x?.nama,
+            kunci: x?.kunci,
             totalhutang: totalhutang,
             rinci: x?.rinci,
             lamatempo: x?.lamatempo,
@@ -121,7 +122,7 @@ export const useAdminListTransaksiNotaSalesstore = defineStore(
         } catch (error) {
           console.log('del Pembayaran Hutang error', error)
           // this.loadinghapus = false
-          notifError('Terjadi Kesalahan')
+          notifError(error?.response?.data?.message)
         }
       },
     },

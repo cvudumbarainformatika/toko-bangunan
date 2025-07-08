@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifSuccess } from 'src/modules/notifs'
+import { notifError, notifSuccess } from 'src/modules/notifs'
 import { useAdminListTransaksiNotaSalesstore } from './list'
 
 export const useAdminFormTransaksiNotaSalesStore = defineStore(
@@ -13,6 +13,7 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
       basicpiutang: false,
       loadingcarinota: false,
       loadingsimpan: false,
+      loadingkunci: false,
       items: [],
       itemspiutang: [],
       allItemspiutang: [],
@@ -25,8 +26,15 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
         tgljatuhtempo: '',
         lamatempo: 0,
         total: 0,
-        terbayar: 0,
+        yangakandibayar: 0,
+        pelanggan_id: '',
         tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        cicilan: 0,
+        kunci: '',
+        bayar: false,
+        terbayar: 0,
+        carabayarrinci: '',
+        keteranganrinci: '',
       },
       dateDisplay: {
         tgl: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -82,7 +90,13 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
         try {
           const { data } = await api.get('/v1/transaksi/notasales/caripiutang', params)
           // console.log('asdasdasdasd', data)
-          this.itemspiutang = data
+          this.itemspiutang = data.map((item) => ({
+            ...item,
+            bayar: false, // toggle bayar
+            yangakandibayar: 0, // nilai input bayar
+            carabayarrinci: 'Cash',
+            keteranganrinci: '',
+          }))
           this.allItemspiutang = data
           this.loadingcarinota = false
         } catch (error) {
@@ -110,6 +124,25 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
         } catch (error) {
           console.log(error)
           this.loadingsimpan = false
+        }
+      },
+      async kunci(value) {
+        this.loadingkunci = true
+        const param = { notrans: value }
+        try {
+          const { data } = await api.post('/v1/transaksi/notasales/kunci', param)
+          this.form.kunci = data?.result[0]?.kunci
+          // const notrans = data?.notapenjualan
+          // const arr = this.itemspiutang.filter((item) => item.no_penjualan !== notrans)
+          // this.itemspiutang = arr
+          const list = useAdminListTransaksiNotaSalesstore()
+          list.olahdata(data?.result[0])
+          notifSuccess('Data berhasil Dikunci')
+          this.loadingkunci = false
+        } catch (error) {
+          console.log(error)
+          notifError(error?.response?.data?.message)
+          this.loadingkunci = false
         }
       },
     },
