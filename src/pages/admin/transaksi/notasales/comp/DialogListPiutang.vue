@@ -121,7 +121,7 @@
                               dense
                               outlined
                               v-model="item.carabayarrinci"
-                              :options="['Cash', 'Transfer']"
+                              :options="['', 'Cash', 'Transfer']"
                               v-if="item.bayar"
                             />
                           </div>
@@ -140,8 +140,11 @@
                   </q-item-section>
                   <q-separator vertical />
                   <q-item-section side>
-                    <div>
-                      <q-toggle v-model="item.bayar" />
+                    <div v-if="storeform.form.keterangan === 'Dikembalikan'">
+                      <q-toggle
+                        v-model="item.bayar"
+                        @update:model-value="(val) => reset(val, item)"
+                      />
                     </div>
                     <div class="q-gutter-sm">
                       <q-btn
@@ -224,5 +227,13 @@ function caribypelanggan(val) {
   const hasil = storeform.allItemspiutang.filter((f) => f.pelanggan?.kodeplgn === val.kodeplgn)
 
   storeform.itemspiutang = hasil
+}
+
+function reset(val, item) {
+  if (val === false) {
+    item.yangakandibayar = 0
+    item.carabayarrinci = ''
+    item.keteranganrinci = ''
+  }
 }
 </script>
