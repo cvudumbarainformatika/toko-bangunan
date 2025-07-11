@@ -37,6 +37,10 @@ const routes = [
         path: '/admin/master/barang',
         component: () => import('pages/admin/master/barang/IndexPage.vue'),
       },
+      {
+        path: '/admin/master/beban',
+        component: () => import('pages/admin/master/beban/IndexPage.vue'),
+      },
 
       //Transaksi
       {
@@ -86,6 +90,10 @@ const routes = [
       {
         path: '/admin/transaksi/notasales',
         component: () => import('pages/admin/transaksi/notasales/IndexPage.vue'),
+      },
+      {
+        path: '/admin/transaksi/bebanpengeluaran',
+        component: () => import('pages/admin/transaksi/bebanpengeluaran/IndexPage.vue'),
       },
 
       // Laporan

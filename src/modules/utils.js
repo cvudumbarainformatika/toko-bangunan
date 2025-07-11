@@ -170,7 +170,7 @@ const olahUang = (val) => {
     for (let i = 0; i < array.length; i++) {
       data += array[i]
     }
-    console.log('olah uang return',array.length,array, parseFloat(data))
+    console.log('olah uang return', array.length, array, parseFloat(data))
     return parseFloat(data)
   } else {
     return val
@@ -229,6 +229,20 @@ function terbilangRupiah(nilai) {
   }
   return penyimpanan
 }
+const formatDenganRp = (value) => {
+  if (value !== null && value !== '') {
+    const numValue = Number(value)
+    const formattedValue = Math.abs(numValue)
+      .toFixed(2)
+      .replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,')
+
+    if (numValue < 0) {
+      return `(Rp. ${formattedValue})`
+    }
+    return `Rp. ${formattedValue}`
+  }
+  return ''
+}
 export {
   dateFull,
   dateFilter,
@@ -258,4 +272,5 @@ export {
   getNewLine,
   terbilangRupiah,
   waitLoad,
+  formatDenganRp,
 }
