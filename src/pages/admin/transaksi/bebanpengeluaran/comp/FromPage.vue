@@ -17,7 +17,7 @@
             <div class="row q-col-gutter-md justify-around">
               <div :class="`col-${isMobile ? 12 : 6}`" class="row q-col-gutter-md">
                 <app-input-date
-                  :disable="store.form.notrans !== ''"
+                  :disable="store.form.notrans !== '' && store.form.notrans !== null"
                   :model="store.dateDisplay.tgl"
                   class="col-12"
                   label="Tanggal"
@@ -38,7 +38,7 @@
                   v-model="store.form.keterangan"
                   label="Keterangan"
                   :valid="{ required: false }"
-                  :disable="store.form.notrans !== ''"
+                  :disable="store.form.notrans !== '' && store.form.notrans !== null"
                 />
 
                 <div class="col-12">

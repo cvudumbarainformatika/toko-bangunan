@@ -46,6 +46,17 @@ export const useFormTransaksiBebanStore = defineStore('form-trans-beban-store', 
         }
       }
     },
+    initForm() {
+      this.form.notrans = null
+      this.form.tgl = date.formatDate(Date.now(), 'YYYY-MM-DD')
+      this.form.keterangan = null
+      this.form.flaging = null
+      this.form.volume = 0
+      this.form.satuan = null
+      this.form.nominal = 0
+      this.form.subtotal = 0
+      this.rincian = []
+    },
     async saveData() {
       this.loading = true
       return new Promise((resolve, reject) => {
@@ -75,7 +86,7 @@ export const useFormTransaksiBebanStore = defineStore('form-trans-beban-store', 
             // }
             const ambil = arr.items.find((s) => s.notrans === this.form.notrans)
             this.rincian = ambil.rincian
-            console.log('rincians ulalaaaa', this.rincian)
+            // console.log('rincians ulalaaaa', this.rincian)
             this.loading = false
             notifSuccess(resp.message)
             // this.resetformrinci()
@@ -131,8 +142,15 @@ export const useFormTransaksiBebanStore = defineStore('form-trans-beban-store', 
         api
           .post('/v1/transaksi/beban/deletedata', row)
           .then((resp) => {
-            console.log('ksksks', resp)
-            this.rincian = resp?.data?.data
+            console.log('resp delete', resp)
+            this.rincian = !resp?.data?.data ? [] : resp.data?.data
+            // if (
+            //   !resp?.data?.data ||
+            //   !Array.isArray(resp?.data?.data) ||
+            //   resp?.data?.data.length === 0
+            // ) {
+            //   return (this.rincian = [])
+            // }
             const arr = useListTransaksiBebanStore()
             arr.getList()
             // const data = resp.data?.data[0]
@@ -142,8 +160,10 @@ export const useFormTransaksiBebanStore = defineStore('form-trans-beban-store', 
             // } else {
             //   arr.items.unshift(data)
             // }
+            console.log('this.form', this.form)
+            console.log('this.rincian', this.rincian)
             this.loadingHapus = false
-            notifSuccess(resp?.message)
+            notifSuccess(resp?.data?.message)
             resolve(resp)
           })
           .catch((err) => {

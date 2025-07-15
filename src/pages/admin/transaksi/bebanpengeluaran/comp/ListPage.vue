@@ -162,15 +162,12 @@ const hoveredId = ref(null)
 
 const emits = defineEmits(['add', 'edit'])
 
-console.log('store', store.items)
 onBeforeMount(() => {
-  // Promise.all([
-  //   store.getList(null)
-  // ])
+  Promise.all([store.getList(null)])
 })
 const edit = (item) => {
   emits('edit', item)
-  // console.log('itemxxxx', item)
+  console.log('edit', item)
   formdata.rincian = item.rincian
   formdata.form.notrans = item.notrans
 }

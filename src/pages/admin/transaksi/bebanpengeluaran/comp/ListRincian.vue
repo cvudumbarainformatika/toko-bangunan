@@ -3,7 +3,7 @@
     <q-card-section class="q-px-md q-py-xs bg-grey-9 text-white col-auto full-width">
       <div class="row items-center justify-between">
         <div class="text-weight-bold">
-          Rincian Pengeluaran || Nomor : {{ store?.form?.notrans ?? '-' }}
+          Rincian Pengeluaran || Nomor : {{ store.form?.notrans ?? '-' }}
           <!-- <span class="text-yellow-8"> TOTAL {{ formatRpDouble(totalrinci()) }} </span> -->
         </div>
       </div>
@@ -102,7 +102,12 @@ function del(item) {
         // nopenerimaan: store.form.noserahterima,
       }
       console.log('payload', payload)
-      store.deleteData(payload)
+      store.deleteData(payload).then(() => {
+        if (store.rincian?.length === 0) {
+          store.initForm()
+          console.log('notrans', store.form.notrans)
+        }
+      })
     })
     .onCancel(() => {
       // console.log('Cancel')
@@ -127,10 +132,12 @@ function del(item) {
 
 function totalrinci() {
   const arr = store.rincian
-  const total = arr.map((x) => parseFloat(x.subtotal)).reduce((a, b) => a + b, 0)
-
-  console.log('arr', arr)
-  return total
+  if (!arr || !Array.isArray(arr) || arr.length === 0) {
+    return 0
+  }
+  return arr
+    .map((x) => parseFloat(x.subtotal) || 0) // Tambahkan fallback jika subtotal bukan angka
+    .reduce((a, b) => a + b, 0)
 }
 
 // const listDataitem = ref(null)
