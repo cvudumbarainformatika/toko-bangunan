@@ -14,10 +14,13 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
       loadingcarinota: false,
       loadingsimpan: false,
       loadingkunci: false,
+      opendialogCetak: false,
+      opendialogCetakkedua: false,
       items: [],
       itemspiutang: [],
       allItemspiutang: [],
       rinci: [],
+      itemCetak: [],
       form: {
         notrans: '',
         kdsales: '',

@@ -183,12 +183,14 @@
 
 <script setup>
 import { formatRpDouble, humanDate } from 'src/modules/utils'
+import { useAdminFormTransaksiNotaSalesStore } from 'src/stores/admin/transaksi/notasales/form'
 import { useAdminListTransaksiNotaSalesstore } from 'src/stores/admin/transaksi/notasales/list'
 import { useAppStore } from 'src/stores/app'
 import { computed, ref } from 'vue'
 
 const hoveredId = ref(null)
 const storelist = useAdminListTransaksiNotaSalesstore()
+const storeform = useAdminFormTransaksiNotaSalesStore()
 const scrollTarget = ref(null)
 const infiniteScroll = ref(null)
 const app = useAppStore()
@@ -197,6 +199,8 @@ const emits = defineEmits(['add', 'edit'])
 
 const lihatdetail = (item) => {
   emits('edit', item)
+  storeform.itemCetak = item
+  // console.log('itemcetak xx', storeform.itemCetak)
 }
 
 const refreshList = async () => {

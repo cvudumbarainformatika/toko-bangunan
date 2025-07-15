@@ -72,6 +72,9 @@
           @click="kunci(storeform.form.notrans)"
         />
       </div>
+      <div class="col-auto" v-if="storeform.form.kunci === '1'">
+        <app-btn-cetak class="q-mr-xs" @click="lihatCetak()"></app-btn-cetak>
+      </div>
     </div>
     <div class="full-width text-center"><q-separator class="q-mt-sm" /></div>
     <div class="full-width">
@@ -116,10 +119,13 @@
     </div>
   </div>
   <DialogListPiutang v-if="props.pelanggan.length" :pelanggan="props.pelanggan" />
+
+  <DialogCetak v-if="storeform.opendialogCetak === true" v-model="storeform.opendialogCetak" />
+  <DialogCetak v-else v-model="storeform.opendialogCetakkedua" />
 </template>
 <script setup>
 import { notifError } from 'src/modules/notifs'
-import { computed, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import { date, useQuasar } from 'quasar'
 // import { formatRpDouble } from 'src/modules/utils'
 import { useAdminFormTransaksiNotaSalesStore } from 'src/stores/admin/transaksi/notasales/form'
@@ -127,7 +133,7 @@ import { useAdminListTransaksiNotaSalesstore } from 'src/stores/admin/transaksi/
 
 import DialogListPiutang from './DialogListPiutang.vue'
 import { formatRpDouble } from 'src/modules/utils'
-
+const DialogCetak = shallowRef(defineAsyncComponent(() => import('./cetak/DialogCetak.vue')))
 const emits = defineEmits(['back'])
 
 const $q = useQuasar()
@@ -217,6 +223,13 @@ function carinota(val) {
   }
 }
 
+function lihatCetak() {
+  const namasales = sales.value.find((f) => f?.id === storeform.form.kdsales)
+  storeform.opendialogCetakkedua = true
+  storeform.itemCetak = storelist.items.find((x) => x.notrans === storeform.form.notrans)
+  storeform.itemCetak.sales = namasales.nama
+}
+
 function hapusData(item) {
   // const arr = storelist.rinci.filter((x) => x.id !== item.id)
   // storelist.rinci = arr
@@ -256,7 +269,11 @@ function kunci(value) {
   if (storeform.form.kunci === '1') {
     return notifError('Maaf Data ini Sudah Dikunci...!!')
   } else {
-    storeform.kunci(value)
+    storeform.kunci(value).then(() => {
+      // if (res?.status == 200) {
+      storeform.opendialogCetak = true
+      // }
+    })
   }
 }
 
@@ -279,7 +296,7 @@ onMounted(() => {
     storeform.dateDisplay.tgl = date.formatDate(props?.data?.tgl, 'DD MMMM YYYY')
     const kdsales = parseInt(props?.data?.kdsales)
     const sales = props.pegawai.find((f) => f?.id === kdsales)
-    // console.log('sales', sales)
+
     storeform.form.kdsales = sales?.id ?? null
 
     // console.log('storeform.form.kdsales', storeform.form.kdsales)
