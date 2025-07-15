@@ -105,6 +105,10 @@ const routes = [
         path: '/admin/laporan/penjualan',
         component: () => import('pages/admin/laporan/lap_penjualan/IndexPage.vue'),
       },
+      {
+        path: '/admin/laporan/pengeluaran',
+        component: () => import('pages/admin/laporan/lap_pengeluaran/IndexPage.vue'),
+      },
 
       // Settings
       {
