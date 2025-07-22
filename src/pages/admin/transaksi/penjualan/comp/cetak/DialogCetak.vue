@@ -4,7 +4,7 @@
       <q-layout view="lHh Lpr lFf" container class="rounded-borders">
         <q-header>
           <q-bar class="bg-black text-white q-py-sm">
-            <div>CETAK DATA ORDER BARANG</div>
+            <div>CETAK DATA PENJUALAN BARANG</div>
             <q-space />
 
             <q-btn dense flat icon="close" v-close-popup>
