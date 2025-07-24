@@ -101,7 +101,7 @@
                       <td>{{ dateFullFormat(item.tgljatuhtempo) }}</td>
                       <td>{{ item.hederpenjualan?.sales?.nama }}</td>
                       <td class="text-right">{{ formatDenganRp(item.total) }}</td>
-                      <td></td>
+                      <td>{{ item.keteranganrinci }}</td>
                     </tr>
                     <tr>
                       <td colspan="6" class="text-center text-bold">TOTAL</td>
