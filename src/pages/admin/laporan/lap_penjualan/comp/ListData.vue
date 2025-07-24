@@ -72,7 +72,7 @@
               <td class="text-bold text-right q-px-sm">
                 <div class="row full-width justify-between">
                   <div class="col-auto flex-start">Rp.</div>
-                  <div class="flex-end text-right">{{ formattanpaRp(item.total) }}</div>
+                  <div class="flex-end text-right">{{ formattanpaRp(item.totaldenganretur) }}</div>
                 </div>
               </td>
             </tr>
@@ -178,7 +178,7 @@ import { useLaporanPenjualanStore } from 'src/stores/admin/laporan/lap_penjualan
 const store = useLaporanPenjualanStore()
 
 function totalPenjualan() {
-  const total = store.items.map((x) => parseFloat(x.total)).reduce((a, b) => a + b, 0)
+  const total = store.items.map((x) => parseFloat(x.totaldenganretur)).reduce((a, b) => a + b, 0)
   return total
 }
 </script>
