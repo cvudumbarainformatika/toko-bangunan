@@ -307,6 +307,6 @@ function statusFlag(flag) {
 
 <style lang="scss" scoped>
 .example-item {
-  height: 56px;
+  min-height: 56px;
 }
 </style>
