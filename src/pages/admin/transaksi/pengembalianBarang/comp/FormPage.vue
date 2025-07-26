@@ -68,7 +68,7 @@
                 :key="item.id"
                 class="row q-pa-sm items-center q-col-gutter-x-sm"
               >
-                <div class="col-4">{{ item.master_barang?.namabarang   }} {{ item?.motif ? ' (' + item?.motif + ') ':'' }}</div>
+                <div class="col-4">{{ item.master_barang?.namabarang   }} {{ item?.motif && item?.motif!=='-' ? ' (' + item?.motif + ') ':'' }}</div>
                 <div class="col-1">{{ item.master_barang?.satuan_k }}</div>
                 <div class="col-2 text-right">{{ item.jumlah }}</div>
                 <div class="col-2 text-right">
