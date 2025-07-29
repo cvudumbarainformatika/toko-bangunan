@@ -34,6 +34,12 @@
                   />
                 </q-td>
               </template>
+              <!-- Tanggal Column -->
+              <template #body-cell-tanggal="props">
+                <q-td :props="props">
+                  <div>{{ dateFull(props.value) }}</div>
+                </q-td>
+              </template>
 
               <!-- Actions Column -->
               <template #body-cell-actions="props">
