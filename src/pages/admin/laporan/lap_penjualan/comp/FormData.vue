@@ -121,12 +121,15 @@
 <script setup>
 import { useLaporanPenjualanStore } from 'src/stores/admin/laporan/lap_penjualan/list'
 import { useFromPenjualanStore } from 'src/stores/admin/transaksi/penjualan/form'
-import { defineAsyncComponent, ref, shallowRef } from 'vue'
+import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 
 const DialogCetak = shallowRef(defineAsyncComponent(() => import('./DialogCetak.vue')))
 const store = useLaporanPenjualanStore()
 const getsales = useFromPenjualanStore()
 
+onMounted(() => {
+  store.getdata()
+})
 getsales.getSales()
 function cetakData() {
   store.dialogCetak = true
