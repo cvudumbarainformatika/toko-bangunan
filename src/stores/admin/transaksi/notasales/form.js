@@ -92,10 +92,10 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
         }
         try {
           const { data } = await api.get('/v1/transaksi/notasales/caripiutang', params)
-          // console.log('asdasdasdasd', data)
+          console.log('asdasdasdasd', data)
           this.itemspiutang = data.map((item) => ({
             ...item,
-            bayar: false, // toggle bayar
+            // bayar: false, // toggle bayar
             yangakandibayar: 0, // nilai input bayar
             carabayarrinci: 'Cash',
             keteranganrinci: '',

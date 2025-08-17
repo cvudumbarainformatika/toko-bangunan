@@ -83,19 +83,24 @@
 
                     <div class="row q-pr-sm text-weight-bold">
                       <div class="col-3 text-red text-center">
-                        Total Hutang {{ formatRpDouble(item?.total) }}
+                        Total Nota <br />
+                        {{ formatRpDouble(item?.total) }}
                       </div>
                       <div class="col-3 text-yellow text-center">
-                        Terbayar
+                        Terbayar <br />
                         {{
                           item?.cicilan?.length > 0 ? formatRpDouble(item?.cicilan[0]?.jumlah) : 0
                         }}
                       </div>
                       <div class="col-3 text-green text-center">
-                        Sisa
+                        Sisa <br />
                         {{
                           formatRpDouble(
-                            item?.total - (item?.cicilan.length > 0 ? item?.cicilan[0]?.jumlah : 0),
+                            item?.total -
+                              (item?.cicilan.length > 0 ? item?.cicilan[0]?.jumlah : 0) -
+                              item?.nilairetur -
+                              item?.bayar -
+                              item?.total_diskon,
                           )
                         }}
                       </div>

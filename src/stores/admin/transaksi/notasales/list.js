@@ -28,15 +28,18 @@ export const useAdminListTransaksiNotaSalesstore = defineStore(
     }),
     actions: {
       async getNotaSales() {
+        this.items = []
+        this.params.page = 1
+        this.isError = false
         this.loading = true
         const params = {
           params: this.params,
         }
         try {
-          const res = await api.get('/v1/transaksi/notasales/list', params)
+          const { data } = await api.get('/v1/transaksi/notasales/list', params)
           // console.log('sasasasa', res.data.data)
-          this.meta = res.data.meta
-          this.olahdata(res.data?.data)
+          this.meta = data
+          this.olahdata(data?.data)
           this.loading = false
         } catch (error) {
           console.log(error)
@@ -72,7 +75,7 @@ export const useAdminListTransaksiNotaSalesstore = defineStore(
       },
 
       olahdata(val) {
-        // console.log('aslipembayaran hutang', val)
+        console.log('aslipembayaran hutang', val)
         // const hasilglobal = []
         val?.forEach((x) => {
           const totalhutang = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.total), 0)
@@ -96,9 +99,9 @@ export const useAdminListTransaksiNotaSalesstore = defineStore(
           if (index >= 0) {
             console.log('aaaa')
             this.items[index] = hasil
-            // console.log('this.itemsb', this.items)
+            console.log('this.itemsb', this.items)
           } else {
-            // console.log('bbbbbbbbb')
+            console.log('bbbbbbbbb')
             this.items.unshift(hasil)
           }
         })
