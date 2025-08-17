@@ -126,7 +126,7 @@ export const useAdminDashboardStore = defineStore('admin-dashboard-store', {
       try {
         const { data } = await api.get('/v1/dasboard/penjualanbulanan')
         const datax = data
-        console.log('datax', datax)
+        console.log('datax', datax.data)
         if (datax && datax.data && Array.isArray(datax.data)) {
           // Inisialisasi array untuk tahun saat ini dan tahun sebelumnya
           const currentYearData = Array(12).fill(0)
