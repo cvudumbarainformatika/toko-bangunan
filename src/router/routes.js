@@ -113,6 +113,14 @@ const routes = [
         path: '/admin/laporan/pengeluaran',
         component: () => import('pages/admin/laporan/lap_pengeluaran/IndexPage.vue'),
       },
+      {
+        path: '/admin/laporan/aruskas',
+        component: () => import('pages/admin/laporan/aruskas/IndexPage.vue'),
+      },
+      {
+        path: '/admin/laporan/labarugi',
+        component: () => import('pages/admin/laporan/labarugi/IndexPage.vue'),
+      },
 
       // Settings
       {

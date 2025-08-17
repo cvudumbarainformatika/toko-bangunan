@@ -148,6 +148,9 @@ const jamTnpDetik = (val) => {
 const dateOnly = (val) => {
   return date.formatDate(val, 'DD')
 }
+const monthOnly = (val) => {
+  return date.formatDate(val, 'MMMM')
+}
 const dayName = (val) => {
   return date.formatDate(val, 'dddd')
 }
@@ -255,6 +258,7 @@ export {
   tglJamFormat,
   formatJam,
   dateOnly,
+  monthOnly,
   jamTnpDetik,
   dateBOD,
   dateUnix,
