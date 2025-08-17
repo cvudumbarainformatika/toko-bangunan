@@ -103,9 +103,9 @@ export const useAdminListTransaksiPembayaranPiutangStore = defineStore(
             jenis_pembayaran: x?.cara_bayar,
             keterangan: x?.keterangan,
           }
-          console.log('hasilccccc', hasil)
+          // console.log('hasilccccc', hasil)
           // hasilglobal.push(hasil)
-          console.log('this.itemsa', this.items)
+          // console.log('this.itemsa', this.items)
           const index = this.items.findIndex((q) => q.id === x?.id)
           // console.log('index', index)
           if (index >= 0) {

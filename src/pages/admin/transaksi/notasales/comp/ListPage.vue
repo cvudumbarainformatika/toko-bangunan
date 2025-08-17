@@ -206,7 +206,7 @@ const lihatdetail = (item) => {
 const refreshList = async () => {
   // Reset infinite scroll
   infiniteScroll.value.reset()
-  await storelist.getList()
+  await storelist.getNotaSales()
 }
 
 function ambiltanggalaja(val) {
