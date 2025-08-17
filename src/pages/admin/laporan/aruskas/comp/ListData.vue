@@ -43,14 +43,14 @@
             <td class="text-bold">Arus Kas Bersih</td>
             <td class="text-bold text-right">{{ formattanpaRp(store.items?.kenaikan_kas) }}</td>
           </tr>
-          <tr class="">
+          <!-- <tr class="">
             <td class="text-bold">Saldo Awal</td>
             <td class="text-bold text-right">{{ formattanpaRp(store.items?.saldo_awal) }}</td>
           </tr>
           <tr class="">
             <td class="text-bold">Saldo Akhir</td>
             <td class="text-bold text-right">{{ formattanpaRp(store.items?.saldo_akhir) }}</td>
-          </tr>
+          </tr> -->
         </tbody>
       </q-markup-table>
     </template>
