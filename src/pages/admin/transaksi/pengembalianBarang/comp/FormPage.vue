@@ -55,7 +55,8 @@
 
               <!-- Header -->
               <div class="row q-pa-sm bg-primary text-white text-weight-bold q-col-gutter-x-sm">
-                <div class="col-5">Barang</div>
+                <div class="col-4">Barang</div>
+                <div class="col-1">Satuan</div>
                 <div class="col-2 text-right">Jumlah Beli</div>
                 <div class="col-2 text-right">Jumlah Rusak</div>
                 <div class="col-3">Keterangan</div>
@@ -67,7 +68,8 @@
                 :key="item.id"
                 class="row q-pa-sm items-center q-col-gutter-x-sm"
               >
-                <div class="col-5">{{ item.master_barang?.namabarang }}</div>
+                <div class="col-4">{{ item.master_barang?.namabarang   }} {{ item?.motif && item?.motif!=='-' ? ' (' + item?.motif + ') ':'' }}</div>
+                <div class="col-1">{{ item.master_barang?.satuan_k }}</div>
                 <div class="col-2 text-right">{{ item.jumlah }}</div>
                 <div class="col-2 text-right">
                   <q-input

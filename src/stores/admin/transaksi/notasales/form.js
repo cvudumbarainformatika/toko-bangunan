@@ -100,6 +100,8 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
             carabayarrinci: 'Cash',
             keteranganrinci: '',
           }))
+
+          console.log('this.itemspiutang', this.itemspiutang)
           this.allItemspiutang = data
           this.loadingcarinota = false
         } catch (error) {
@@ -125,7 +127,7 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
           notifSuccess('Data berhasil disimpan')
           this.loadingsimpan = false
         } catch (error) {
-          console.log(error)
+          notifError(error?.response?.data?.message)
           this.loadingsimpan = false
         }
       },
@@ -138,8 +140,15 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
           // const notrans = data?.notapenjualan
           // const arr = this.itemspiutang.filter((item) => item.no_penjualan !== notrans)
           // this.itemspiutang = arr
+          // console.log('data kunci', data?.result)
           const list = useAdminListTransaksiNotaSalesstore()
-          list.olahdata(data?.result[0])
+          list.olahdata(data?.result)
+          this.itemCetak = data?.result[0]
+          this.itemCetak.totalhutang = data?.result[0]?.rinci.reduce(
+            (a, b) => parseFloat(a) + parseFloat(b.total),
+            0,
+          )
+          // console.log('data ssssskunci', this.itemCetak)
           notifSuccess('Data berhasil Dikunci')
           this.loadingkunci = false
         } catch (error) {

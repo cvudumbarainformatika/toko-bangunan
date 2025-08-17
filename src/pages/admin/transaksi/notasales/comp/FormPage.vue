@@ -224,6 +224,7 @@ function carinota(val) {
 }
 
 function lihatCetak() {
+  // console.log('lihat cetak', storeform.itemCetak)
   const namasales = sales.value.find((f) => f?.id === storeform.form.kdsales)
   storeform.opendialogCetakkedua = true
   storeform.itemCetak = storelist.items.find((x) => x.notrans === storeform.form.notrans)
@@ -272,6 +273,7 @@ function kunci(value) {
     storeform.kunci(value).then(() => {
       // if (res?.status == 200) {
       storeform.opendialogCetak = true
+      // console.log('cetaaaks', storeform.itemCetak)
       // }
     })
   }

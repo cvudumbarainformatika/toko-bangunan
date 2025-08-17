@@ -93,7 +93,11 @@
                       </div>
                       <div class="col-3 text-green text-center">
                         Sisa
-                        {{ formatRpDouble(item?.total - item?.cicilan[0]?.jumlah) }}
+                        {{
+                          formatRpDouble(
+                            item?.total - (item?.cicilan.length > 0 ? item?.cicilan[0]?.jumlah : 0),
+                          )
+                        }}
                       </div>
                     </div>
                     <div

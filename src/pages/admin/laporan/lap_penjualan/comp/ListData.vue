@@ -10,19 +10,20 @@
         <div class="col flex-end text-bold q-pr-md">: {{ store.jnsbayar }}</div>
       </div>
       <div class="row full-width q-px-md q-pb-sm justify-between">
-        <div class="col-auto flex-start text-bold q-pr-md">Total Penjualan</div>
+        <div class="col-auto flex-start text-bold q-pr-md">Total Penjualan Setelah Retur</div>
         <div class="col flex-end text-bold q-pr-md">
           : Rp. {{ formattanpaRp(totalPenjualan()) }}
         </div>
       </div>
       <q-markup-table style="width: 100%" wrap-cells>
         <thead>
-          <tr class="text-bold text-center bg-yellow-8" style="border-bottom: solid">
+          <tr class="text-bold bg-yellow-8" style="border-bottom: solid">
             <td>NO PENJUALAN</td>
             <td>TANGGAL TRANSAKSI</td>
             <td>PELANGGAN</td>
             <td>JENIS PEMBAYARAN</td>
-            <td>NILAI PENJUALAN</td>
+            <td class="text-right">NILAI PENJUALAN</td>
+            <td class="text-right">NILAI DENGAN RETUR</td>
           </tr>
         </thead>
 
@@ -75,33 +76,39 @@
                   <div class="flex-end text-right">{{ formattanpaRp(item.total) }}</div>
                 </div>
               </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <div class="row justify-between q-px-sm">
-                  <span class="text-bold flex-start"> RINCIAN </span>
-                  <span class="text-bold flex-end"> NAMA BARANG </span>
+              <td class="text-bold text-right q-px-sm">
+                <div class="row full-width justify-between">
+                  <div class="col-auto flex-start">Rp.</div>
+                  <div class="flex-end text-right">{{ formattanpaRp(item.totaldenganretur) }}</div>
                 </div>
               </td>
-              <td class="text-bold text-right">JUMLAH</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row justify-between q-px-sm">
+                  <div class="col-4 text-bold flex-start">RINCIAN</div>
+                  <div class="col text-right text-bold flex-end">NAMA BARANG</div>
+                </div>
+              </td>
+              <td class="text-bold text-right">JUMLAH BARANG</td>
               <td class="text-bold text-right">HARGA BARANG</td>
-              <td class="text-bold text-right">TOTAL</td>
+              <td class="text-bold text-right">DISKON || RETUR</td>
+              <td class="text-bold text-right">TOTAL PENJUALAN</td>
+              <td class="text-bold text-right">TOTAL DENGAN RETUR</td>
             </tr>
             <template v-if="item.detail && item.detail?.length > 0">
               <template v-for="rincian in item.detail" :key="rincian">
                 <tr>
                   <!-- <td class="text-right text-bold q-px-sm">{{ rincian.namabarang }}</td> -->
-                  <td colspan="2">
-                    <div class="text-right q-px-sm">
+                  <td style="vertical-align: top; max-width: 40%">
+                    <div class="text-right">
                       {{ rincian.namabarang }}
                       (seri {{ rincian.motif }})
                     </div>
-                    <div class="text-right q-px-sm">
-                      Jumlah Barang Rusak: {{ rincian.jumlah_rusak_b }} {{ rincian.satuan_b }}
-                    </div>
                   </td>
-                  <td>
-                    <div class="text-right q-px-sm">
+                  <td style="vertical-align: top">
+                    <div class="text-right">
+                      Penjualan :
                       <span
                         v-if="
                           Math.floor(rincian.jumlah / (rincian?.isi > 0 ? rincian?.isi : 1)) >= 0
@@ -121,21 +128,62 @@
                         {{ rincian?.satuan_k }}</span
                       >
                     </div>
+                    <div v-if="rincian.nilai_retur" class="text-right">
+                      Retur :
+                      <span
+                        v-if="
+                          Math.floor(
+                            rincian.jumlah_retur / (rincian?.isi > 0 ? rincian?.isi : 1),
+                          ) >= 0
+                        "
+                        >{{
+                          Math.floor(rincian.jumlah_retur / (rincian?.isi > 0 ? rincian?.isi : 1))
+                        }}
+                        {{ rincian?.satuan_b }}</span
+                      >
+                      <span
+                        v-if="
+                          Math.floor(rincian.jumlah_retur / (rincian?.isi > 0 ? rincian?.isi : 1)) >
+                            0 && rincian?.jumlah_retur % (rincian?.isi > 0 ? rincian?.isi : 1) > 0
+                        "
+                      >
+                      </span>
+                      <span
+                        v-if="rincian?.jumlah_retur % (rincian?.isi > 0 ? rincian?.isi : 1) > 0"
+                      >
+                        Lebih {{ rincian?.jumlah_retur % (rincian?.isi > 0 ? rincian?.isi : 1) }}
+                        {{ rincian?.satuan_k }}</span
+                      >
+                    </div>
                   </td>
-                  <td class="q-px-sm">
+                  <td style="vertical-align: top">
+                    <div class="flex-end text-right">
+                      Rp.
+                      {{ formattanpaRp(Math.floor(rincian.harga_jual * rincian?.isi)) }}
+                    </div>
+                  </td>
+                  <td style="vertical-align: top">
+                    <div class="flex-end text-right">
+                      <div v-if="rincian.diskon">disc. Rp. {{ formattanpaRp(rincian.diskon) }}</div>
+                    </div>
+                    <div v-if="rincian.nilai_retur" class="flex-end text-right">
+                      Nilai Retur : Rp.
+                      {{ formattanpaRp(Math.floor(rincian.nilai_retur)) }}
+                    </div>
+                  </td>
+                  <td style="vertical-align: top">
                     <div class="row justify-between">
                       <div class="col-auto flex-start">Rp.</div>
-                      <div class="flex-end text-right q-pr-sm">
-                        {{ formattanpaRp(Math.floor(rincian.harga_jual * rincian?.isi)) }}
+                      <div class="flex-end text-right">
+                        {{ formattanpaRp(rincian.subtotal) }}
                       </div>
                     </div>
-                    <div v-if="rincian.diskon">disc. Rp. {{ formattanpaRp(rincian.diskon) }}</div>
                   </td>
-                  <td class="q-px-sm">
+                  <td style="vertical-align: top">
                     <div class="row justify-between">
                       <div class="col-auto flex-start">Rp.</div>
-                      <div class="flex-end text-right q-pr-sm">
-                        {{ formattanpaRp(rincian.subtotal) }}
+                      <div class="flex-end text-right">
+                        {{ formattanpaRp(Math.floor(rincian.subtotal - rincian?.nilai_retur)) }}
                       </div>
                     </div>
                   </td>
@@ -178,7 +226,7 @@ import { useLaporanPenjualanStore } from 'src/stores/admin/laporan/lap_penjualan
 const store = useLaporanPenjualanStore()
 
 function totalPenjualan() {
-  const total = store.items.map((x) => parseFloat(x.total)).reduce((a, b) => a + b, 0)
+  const total = store.items.map((x) => parseFloat(x.totaldenganretur)).reduce((a, b) => a + b, 0)
   return total
 }
 </script>

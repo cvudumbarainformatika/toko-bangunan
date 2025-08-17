@@ -117,12 +117,14 @@
 <script setup>
 import { useLaporanPenerimaanStore } from 'src/stores/admin/laporan/penerimaan/list'
 import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
-import { defineAsyncComponent, shallowRef } from 'vue'
+import { defineAsyncComponent, onMounted, shallowRef } from 'vue'
 
 const DialogCetak = shallowRef(defineAsyncComponent(() => import('./DialogCetak.vue')))
 const store = useLaporanPenerimaanStore()
 const storesupllier = useAdminMasterSupplierStore()
-
+onMounted(() => {
+  store.getdata()
+})
 // const refsupplier = ref(null)
 // const refjnsbayar = ref(null)
 function cetakData() {

@@ -43,11 +43,11 @@
               </div>
               <div
                 class="row full-width text-center text-bold flex-center"
-                style="font-size: large"
+                style="font-size: medium"
               >
                 {{ profil.profilData.namatoko }}
               </div>
-              <div class="row full-width text-center flex-center">
+              <div class="row full-width text-center flex-center" style="font-size: small">
                 {{ profil.profilData.alamat }}
               </div>
               <div class="row full-width text-center flex-center" style="font-size: small">
@@ -57,15 +57,15 @@
                 Email : {{ profil.profilData.email }}
               </div>
               <div class="q-pt-xs" style="border-top-style: solid; border-width: 1px"></div>
-              <div class="row text-bold full-width">
+              <div class="row text-bold full-width" style="font-size: small">
                 <span
                   >No: {{ store.itemCetak?.no_penjualan }},
                   {{ dateFullFormat(store.itemCetak?.tgl) }}</span
                 >
               </div>
-              <div class="row full-width">
-                <span class="col-auto">Sales </span>
-                <span>: {{ store.itemCetak?.sales?.nama }}</span>
+              <div class="row full-width" style="font-size: small">
+                <span style="font-size: small">Sales </span>
+                <span style="font-size: small">: {{ store.itemCetak?.sales?.nama }}</span>
               </div>
               <!-- <div class="row full-width">
                 <span class="col-auto">Tanggal </span>
@@ -102,8 +102,8 @@
                 >
               </div> -->
               <div class="row q-pb-xs full-width">
-                <span class="col-auto">Alamat</span>
-                <span
+                <span style="font-size: small" class="col-auto">Alamat</span>
+                <span style="font-size: small"
                   >:
                   {{
                     !store.itemCetak?.pelanggan
@@ -189,10 +189,10 @@
                     store.itemCetak?.flag === '4'
                   "
                 >
-                  <span class="text-bold" style="font-size: medium">
+                  <span class="text-bold" style="font-size: small">
                     TEMPO
                     <template v-if="store.itemCetak?.tempo">
-                      <span style="font-size: medium"
+                      <span style="font-size: small"
                         >{{ store.itemCetak?.jml_tempo }} hari, sampai
                         {{ dateFullFormat(store.itemCetak?.tempo) }}</span
                       >
@@ -200,7 +200,7 @@
                   >
                 </template>
                 <template v-else-if="store.itemCetak?.flag === '7'">
-                  <span class="text-bold" style="font-size: medium">
+                  <span class="text-bold" style="font-size: small">
                     PEMBAYARAN DP
                     <template v-if="store.itemCetak?.cara_bayar"
                       >({{ store.itemCetak?.cara_bayar }})</template
@@ -226,7 +226,7 @@
                 <span
                   v-if="store.opendialogCetakkedua === true"
                   class="text-bold"
-                  style="font-size: large"
+                  style="font-size: medium"
                 >
                   COPY PRINT</span
                 >
@@ -241,40 +241,44 @@
             </div>
           </div>
 
-          <div id="printReguler" v-show="opsiprint === 'two'">
-            <div class="row full-width justify-between">
-              <div class="flex-start content-center" style="width: 60%">
-                <div class="row q-px-md q-py-md">
-                  <div class="q-pr-md" v-if="profil.fotoProfil">
-                    <q-img
-                      :src="profil.fotoProfil"
-                      style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover"
-                      spinner-color="primary"
-                    />
-                  </div>
-                  <div class="col content-center">
-                    <div class="text-bold" style="font-size: x-large">
-                      {{ profil.profilData.namatoko }}
+          <div id="printReguler" v-show="opsiprint === 'two'" class="print-container">
+            <div class="print-header">
+              <div class="row full-width justify-between">
+                <div class="flex-start content-center" style="width: 60%">
+                  <div class="row q-px-md q-py-xs">
+                    <div class="q-pr-md" v-if="profil.fotoProfil">
+                      <q-img
+                        :src="profil.fotoProfil"
+                        style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover"
+                        spinner-color="primary"
+                      />
                     </div>
-                    <div>
-                      {{ profil.profilData.alamat }}
-                    </div>
-                    <div>
-                      <span class="q-pr-sm">Telp : {{ profil.profilData.telepon }}</span>
-                      <span>Email : {{ profil.profilData.email }} </span>
+                    <div class="col content-center">
+                      <div class="text-bold" style="font-size: large">
+                        {{ profil.profilData.namatoko }}
+                      </div>
+                      <div style="font-size: small">
+                        {{ profil.profilData.alamat }}
+                      </div>
+                      <div style="font-size: small">
+                        <span class="q-pr-sm">Telp : {{ profil.profilData.telepon }}</span>
+                      </div>
+                      <div style="font-size: small">
+                        <span>Email : {{ profil.profilData.email }} </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col flex-end q-pl-xl q-py-md content-center text-center">
-                <span class="text-bold" style="font-size: xx-large">FAKTUR</span>
+                <div class="col flex-end q-pl-xl q-py-xs content-center text-center">
+                  <span class="text-bold" style="font-size: large">FAKTUR</span>
+                </div>
               </div>
             </div>
-            <div class="full-width justify-center">
-              <div style="border-bottom-style: solid; border-width: 1px"></div>
-              <div class="row full-width justify-between q-px-md">
+            <div class="justify-center">
+              <div style="border-bottom-style: solid; border-width: 1px" />
+              <div class="row justify-between q-px-md">
                 <div class="col flex-start content-center">
-                  <div class="row full-width">
+                  <div class="row" style="font-size: small">
                     <span class="col-3">Pelanggan</span>
                     <span
                       >:
@@ -285,7 +289,7 @@
                       }}</span
                     >
                   </div>
-                  <div class="row full-width">
+                  <div class="row full-width" style="font-size: small">
                     <span class="col-3">Telepon</span>
                     <span
                       >:
@@ -296,7 +300,7 @@
                       }}</span
                     >
                   </div>
-                  <div class="row full-width">
+                  <div class="row full-width" style="font-size: small">
                     <span class="col-3">Alamat</span>
                     <span
                       >:
@@ -308,25 +312,25 @@
                     >
                   </div>
                 </div>
-                <div class="col flex-end q-pl-xl q-py-md">
+                <div class="col flex-end q-pl-xl q-py-xs" style="font-size: small">
                   <div class="row full-width">
-                    <span class="col-3">Nomor Penjualan</span>
+                    <span class="col-4">Nomor Penjualan</span>
                     <span>: {{ store.itemCetak?.no_penjualan }}</span>
                   </div>
                   <div class="row full-width">
-                    <span class="col-3">Sales</span>
+                    <span class="col-4">Sales</span>
                     <span>: {{ store.itemCetak?.sales?.nama }}</span>
                   </div>
                   <div class="row full-width">
-                    <span class="col-3">Tanggal</span>
+                    <span class="col-4">Tanggal</span>
                     <span>: {{ dateFullFormat(store.itemCetak?.tgl) }}</span>
                   </div>
                   <div class="row full-width">
-                    <span class="col-3">Pembayaran</span>
+                    <span class="col-4">Pembayaran</span>
                     <span
                       >:
                       <template v-if="store.itemCetak?.flag === '5'">
-                        <span class="text-bold" style="font-size: large">
+                        <span class="text-bold" style="font-size: small">
                           LUNAS
                           <template v-if="store.itemCetak?.cara_bayar"
                             >({{ store.itemCetak?.cara_bayar }})</template
@@ -340,10 +344,10 @@
                           store.itemCetak?.flag === '4'
                         "
                       >
-                        <span class="text-bold" style="font-size: medium">
+                        <span class="text-bold" style="font-size: small">
                           TEMPO
                           <template v-if="store.itemCetak?.tempo">
-                            <span style="font-size: medium"
+                            <span style="font-size: small"
                               >{{ store.itemCetak?.jml_tempo }} hari, sampai
                               {{ dateFullFormat(store.itemCetak?.tempo) }}</span
                             >
@@ -351,14 +355,14 @@
                         </span>
                       </template>
                       <template v-else-if="store.itemCetak?.flag === '7'">
-                        <span class="text-bold" style="font-size: large">
+                        <span class="text-bold" style="font-size: small">
                           PEMBAYARAN DP
                           <template v-if="store.itemCetak?.cara_bayar"
                             >({{ store.itemCetak?.cara_bayar }})
                           </template>
 
                           <template v-if="store.itemCetak?.tempo">
-                            <span class="row" style="font-size: medium"
+                            <span class="row" style="font-size: small"
                               >{{ store.itemCetak?.jml_tempo }} hari, sampai
                               {{ dateFullFormat(store.itemCetak?.tempo) }}
                             </span>
@@ -383,10 +387,11 @@
               <!-- <div class="text-center text-bold q-pt-sm" style="font-size: medium">
                 NOTA PENJUALAN
               </div> -->
-              <div class="q-px-md q-pt-sm">
-                <table class="full-width">
+
+              <div class="q-px-md">
+                <table class="full-width" style="font-size: small">
                   <thead>
-                    <tr class="text-center">
+                    <tr class="text-center" style="font-size: small; height: min-content">
                       <th>NO</th>
                       <th>NAMA BARANG</th>
                       <th>QTY</th>
@@ -496,52 +501,51 @@
                   </tbody>
                 </table>
               </div>
-            </div>
-            <div class="row justify-between full-width q-pt-md">
+              <!-- <div class="row justify-between full-width"> -->
               <div class="col flex-start text-left q-pl-md">
-                <div class="content-center">
-                  Keterangan :
+                <div class="content-center" style="font-size: small">
                   <span>Terimakasih Telah Berkunjung, Semoga Sehat Selalu.</span>
                 </div>
               </div>
-              <div class="col flex-end content-center text-center">
-                <span
-                  v-if="store.opendialogCetakkedua === true"
-                  class="custom-border text-bold q-pa-sm"
-                  style="font-size: large"
-                >
-                  COPY PRINT</span
-                >
-                <span v-else class="custom-border text-bold q-pa-sm" style="font-size: large">
-                  ORIGINAL PRINT</span
-                >
-              </div>
-            </div>
-            <div class="row justify-between full-width q-pt-md q-pb-xl">
-              <div class="col flex-start content-center text-center">
-                <div class="invisible">.</div>
-                <div>Penerima/Pembeli</div>
-                <div style="height: 50px"></div>
-                <div>
-                  {{
-                    !store.itemCetak?.pelanggan
-                      ? store.itemCetak?.keterangan?.nama
-                      : store.itemCetak?.pelanggan?.nama
-                  }}
+              <!-- <div class="col flex-end content-center text-center">
+                  <span
+                    v-if="store.opendialogCetakkedua === true"
+                    class="custom-border text-bold q-pa-sm"
+                    style="font-size: large"
+                  >
+                    COPY PRINT</span
+                  >
+                  <span v-else class="custom-border text-bold q-pa-sm" style="font-size: large">
+                    ORIGINAL PRINT</span
+                  >
+                </div> -->
+              <!-- </div> -->
+              <div class="row justify-between full-width q-pt-xs q-pb-sm" style="font-size: small">
+                <div class="col flex-start content-center text-center">
+                  <div class="invisible">.</div>
+                  <div>Penerima/Pembeli</div>
+                  <div style="height: 30px"></div>
+                  <div>
+                    {{
+                      !store.itemCetak?.pelanggan
+                        ? store.itemCetak?.keterangan?.nama
+                        : store.itemCetak?.pelanggan?.nama
+                    }}
+                  </div>
+                </div>
+                <div class="col flex-end content-center text-center">
+                  <div>Probolinggo, {{ dateFullFormat(store.itemCetak?.tgl) }}</div>
+                  <div>{{ profil.profilData.namatoko }}</div>
+                  <div style="height: 30px"></div>
+                  <div>{{ profil.profilData.pemilik }}</div>
                 </div>
               </div>
-              <div class="col flex-end content-center text-center">
-                <div>Probolinggo, {{ dateFullFormat(store.itemCetak?.tgl) }}</div>
-                <div>{{ profil.profilData.namatoko }}</div>
-                <div style="height: 50px"></div>
-                <div>{{ profil.profilData.pemilik }}</div>
+              <div style="border-bottom-style: solid; border-width: 1px" />
+              <div class="row full-width text-center flex-start" style="font-size: x-small">
+                <span class="q-pl-sm">
+                  created by CV UdumbaraInformatika | cvudumbarainformatika@gmail.com</span
+                >
               </div>
-            </div>
-            <div style="border-bottom-style: solid; border-width: 1px"></div>
-            <div class="row full-width text-center flex-start">
-              <span class="q-pl-sm">
-                created by -CV UdumbaraInformatika- | cvudumbarainformatika@gmail.com</span
-              >
             </div>
           </div>
         </q-page-container>
@@ -654,10 +658,41 @@ th,
 td {
   border: 1px solid black;
   border-collapse: collapse;
-  padding: 5px;
+  padding: 0px 5px 0px 5px;
 }
 
 .custom-border {
   border: 1px solid black; /* Contoh: border 1px solid hitam */
+}
+
+@media print {
+  #printReguler {
+    width: 24cm;
+    max-height: 13.8cm;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* Ensure header appears on each page */
+  .print-header {
+    position: relative;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Hide non-printable elements */
+  .q-dialog,
+  .q-card,
+  .q-bar,
+  .q-btn,
+  .q-footer {
+    display: none !important;
+  }
+
+  /* Ensure only printReguler is printed */
+  #printReguler {
+    display: block !important;
+  }
 }
 </style>
