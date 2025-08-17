@@ -95,6 +95,10 @@ const routes = [
         path: '/admin/transaksi/bebanpengeluaran',
         component: () => import('pages/admin/transaksi/bebanpengeluaran/IndexPage.vue'),
       },
+      {
+        path: '/admin/transaksi/pembayaran-piutang',
+        component: () => import('pages/admin/transaksi/pembayaranpiutang/IndexPage.vue'),
+      },
 
       // Laporan
       {
