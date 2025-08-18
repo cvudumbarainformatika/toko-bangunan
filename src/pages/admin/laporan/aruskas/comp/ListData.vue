@@ -1,5 +1,5 @@
 <template>
-  <div class="row full-width justify-center">
+  <div class="row full-width justify-center q-pt-md q-pb-md">
     <template v-if="store.items">
       <div class="col-12 text-center q-pb-md">
         <div class="text-bold">LAPORAN ARUS KAS</div>

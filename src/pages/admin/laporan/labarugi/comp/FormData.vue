@@ -63,18 +63,19 @@
   <div class="col q-py-md full-width">
     <q-separator />
   </div>
-  <div v-if="store.items.length > 0" class="row justify-end q-pr-md">
+  <div v-if="store.items" class="row justify-end q-pr-md">
     <q-btn icon="print" class="text-yellow-8" color="grey-10" round dense @click="cetakData()"
       ><q-tooltip>Cetak</q-tooltip></q-btn
     >
   </div>
-  <!-- <DialogCetak v-model="store.dialogCetak" /> -->
+  <DialogCetak v-model="store.dialogCetak" />
 </template>
 <script setup>
 import { useLaporanLabaRugi } from 'src/stores/admin/laporan/labarugi/storedata'
+import { defineAsyncComponent, shallowRef } from 'vue'
 import { onMounted } from 'vue'
 
-// const DialogCetak = shallowRef(defineAsyncComponent(() => import('./DialogCetak.vue')))
+const DialogCetak = shallowRef(defineAsyncComponent(() => import('./DialogCetak.vue')))
 const store = useLaporanLabaRugi()
 onMounted(() => {
   store.getdata()
