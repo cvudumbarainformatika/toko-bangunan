@@ -88,9 +88,7 @@
                       </div>
                       <div class="col-3 text-yellow text-center">
                         Terbayar <br />
-                        {{
-                          item?.cicilan?.length > 0 ? formatRpDouble(item?.cicilan[0]?.jumlah) : 0
-                        }}
+                        {{ formatRpDouble(item?.terbayarx + item?.dp) }}
                       </div>
                       <div class="col-3 text-green text-center">
                         Sisa <br />
@@ -151,7 +149,7 @@
                   <q-item-section side>
                     <div v-if="storeform.form.keterangan === 'Dikembalikan'">
                       <q-toggle
-                        v-model="item.bayar"
+                        v-model="item.bayarx"
                         @update:model-value="(val) => reset(val, item)"
                       />
                     </div>

@@ -95,10 +95,12 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
           console.log('asdasdasdasd', data)
           this.itemspiutang = data.map((item) => ({
             ...item,
-            // bayar: false, // toggle bayar
+            bayarx: false, // toggle bayar
             yangakandibayar: 0, // nilai input bayar
             carabayarrinci: 'Cash',
             keteranganrinci: '',
+            terbayarx: item?.cicilan.length > 0 ? item?.cicilan[0]?.jumlah : 0,
+            dp: item?.bayar,
           }))
 
           console.log('this.itemspiutang', this.itemspiutang)
