@@ -71,11 +71,11 @@
   <DialogCetak v-model="store.dialogCetak" />
 </template>
 <script setup>
-import { useLaporanArusKas } from 'src/stores/admin/laporan/aruskas/storedata'
+import { useLaporanHutangPiutang } from 'src/stores/admin/laporan/hutangpiutang/storedata'
 import { defineAsyncComponent, onMounted, shallowRef } from 'vue'
 
 const DialogCetak = shallowRef(defineAsyncComponent(() => import('./DialogCetak.vue')))
-const store = useLaporanArusKas()
+const store = useLaporanHutangPiutang()
 onMounted(() => {
   store.getdata()
   store.generateTahuns()

@@ -1,5 +1,5 @@
 <template>
-  <div class="row full-width justify-center">
+  <div class="row full-width justify-center q-pt-md q-pb-md">
     <template v-if="store.items">
       <div class="col-12 text-center q-pb-md">
         <div class="text-bold">LAPORAN ARUS KAS</div>
@@ -43,14 +43,14 @@
             <td class="text-bold">Arus Kas Bersih</td>
             <td class="text-bold text-right">{{ formattanpaRp(store.items?.kenaikan_kas) }}</td>
           </tr>
-          <tr class="">
+          <!-- <tr class="">
             <td class="text-bold">Saldo Awal</td>
             <td class="text-bold text-right">{{ formattanpaRp(store.items?.saldo_awal) }}</td>
           </tr>
           <tr class="">
             <td class="text-bold">Saldo Akhir</td>
             <td class="text-bold text-right">{{ formattanpaRp(store.items?.saldo_akhir) }}</td>
-          </tr>
+          </tr> -->
         </tbody>
       </q-markup-table>
     </template>

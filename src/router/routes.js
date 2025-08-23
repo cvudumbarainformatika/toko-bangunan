@@ -121,6 +121,10 @@ const routes = [
         path: '/admin/laporan/labarugi',
         component: () => import('pages/admin/laporan/labarugi/IndexPage.vue'),
       },
+      {
+        path: '/admin/laporan/hutangpiutang',
+        component: () => import('pages/admin/laporan/hutangpiutang/IndexPage.vue'),
+      },
 
       // Settings
       {
