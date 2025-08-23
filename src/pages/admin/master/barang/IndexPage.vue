@@ -10,7 +10,6 @@
       "
       @edit="
         (data) => {
-
           item = data
           isList = false
         }
