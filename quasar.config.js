@@ -19,7 +19,7 @@ export default defineConfig((ctx) => {
       'global-components',
       'other-components',
       'MyDirective',
-      'router'
+      'router',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
@@ -59,13 +59,11 @@ export default defineConfig((ctx) => {
         API: ctx?.dev
           ? // ? 'https://api.jangurkeramik.my.id'
             // 'http://localhost/newtokobangunan/belakang-toko/public'
-            // 'http://belakang-toko.test'
-            'http://localhost:8182'
-          :  'https://api.jangurkeramik.my.id',
-        
-        WS: ctx.dev
-          ? 'https://socket.jangurkeramik.my.id'
-          : 'https://socket.jangurkeramik.my.id'
+            'http://belakang-toko.test'
+          : // 'http://localhost:8182'
+            'https://api.jangurkeramik.my.id',
+
+        WS: ctx.dev ? 'https://socket.jangurkeramik.my.id' : 'https://socket.jangurkeramik.my.id',
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
