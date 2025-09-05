@@ -109,9 +109,6 @@
                     >
                       <div class="col-12 text-red">
                         <div class="row q-gutter-sm">
-                          <!-- <div class="col-4">
-                            <q-toggle v-model="item.bayar" label="Bayar" />
-                          </div> -->
                           <div class="col-3">
                             <AppInputRp
                               label="Piutang Yang Akan Dibayar"
@@ -119,7 +116,7 @@
                               outlined
                               v-model="item.yangakandibayar"
                               currency
-                              v-if="item.bayar"
+                              v-if="item.bayarx"
                             />
                           </div>
                           <div class="col-3">
@@ -129,7 +126,7 @@
                               outlined
                               v-model="item.carabayarrinci"
                               :options="['', 'Cash', 'Transfer']"
-                              v-if="item.bayar"
+                              v-if="item.bayarx"
                             />
                           </div>
                           <div class="col-4">
@@ -138,7 +135,7 @@
                               dense
                               outlined
                               v-model="item.keteranganrinci"
-                              v-if="item.bayar"
+                              v-if="item.bayarx"
                             />
                           </div>
                         </div>
@@ -237,6 +234,7 @@ function caribypelanggan(val) {
 }
 
 function reset(val, item) {
+  console.log('val', val, item)
   if (val === false) {
     item.yangakandibayar = 0
     item.carabayarrinci = ''
