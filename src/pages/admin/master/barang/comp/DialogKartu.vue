@@ -7,7 +7,8 @@
             <div>KARTU STOK BARANG</div>
             <q-space />
 
-            <q-btn dense flat icon="close" v-close-popup>
+            <!-- <q-btn dense flat icon="close" @click="close()" v-close-popup> -->
+            <q-btn dense flat icon="close" @click="close()">
               <q-tooltip>Close</q-tooltip>
             </q-btn>
           </q-bar>
@@ -306,6 +307,12 @@ function ambilData() {
   //   store.kartuStok = store.meta
   // }
   console.log('items', store.kartuStok)
+}
+
+const close = () => {
+  store.selectedKodebarang = null
+  store.getList()
+  store.dialogKartu = false
 }
 
 function totalDebit() {
