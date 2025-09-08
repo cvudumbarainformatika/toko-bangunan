@@ -112,12 +112,12 @@ function selected(val){
   const keys=Object.keys(val)
   if(keys?.length>0){
     store.barang=val
-    console.log('store', store.barang);
+    // console.log('store', store.barang);
 
     store.setForm('kodebarang',store?.barang?.barang?.kodebarang)
     const harju1=isNaN(store?.barang?.barang?.hargajual1)?0:Math.ceil(parseFloat(store?.barang?.barang?.hargajual1))
     const harju2=isNaN(store?.barang?.barang?.hargajual2)?0:Math.ceil(parseFloat(store?.barang?.barang?.hargajual2))
-    const harbel=isNaN(store?.barang?.barang?.harga_beli_k)?0:Math.ceil(parseFloat(store?.barang?.barang?.harga_beli_k))
+    const harbel=isNaN(store?.barang?.harga_beli_k)?0:Math.ceil(parseFloat(store?.barang?.harga_beli_k))
     if(!store.form.sales_id) store.setForm('harga_jual',harju1)
     else store.setForm('harga_jual',harju2)
     store.setForm('harga_beli',harbel)
@@ -131,7 +131,7 @@ function selected(val){
   }
   setTimeout(() => {
     refSelectBarang.value?.refAuto?.validate()
-    console.log('ref', refSelectBarang.value?.refAuto?.validate());
+    // console.log('ref', refSelectBarang.value?.refAuto?.validate());
 
   },100)
 

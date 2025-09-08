@@ -54,6 +54,17 @@ export const useAdminMasterPelangganStore = defineStore('admin-master-pelanggan-
         console.log('get Pelanggan', data)
         this.meta = data
         this.itemsall = data
+        const databaru = {
+          id: 0,
+          kodeplgn: '0',
+          nama: 'Non Pelanggan',
+          alamat: '',
+          telepon: '',
+          keterangan: '',
+          namabank: '',
+          norek: '',
+        }
+        this.itemsall.unshift(databaru)
         this.loading = false
         // this.items = data
       } catch (error) {

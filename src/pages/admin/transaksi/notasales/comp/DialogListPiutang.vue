@@ -7,20 +7,34 @@
             Piutang
             <span class="text-weight-bold text-red"> {{ formatRpDouble(totalall) }}</span></span
           >
-          <q-select
-            v-model="storeform.kdpelanggan"
-            dense
-            outlined
-            label="Pilih Pelanggan"
-            option-label="nama"
-            option-value="kodeplgn"
-            :options="[{ nama: 'Semua Pelanggan', kodeplgn: null }, ...props.pelanggan]"
-            @update:model-value="
-              (e) => {
-                caribypelanggan(e)
-              }
-            "
-          />
+          <div class="row q-gutter-xs">
+            <div class="col-6">
+              <app-select
+                v-model="storeform.kdpelanggan"
+                dense
+                outlined
+                label="Pilih Pelanggan"
+                option-label="nama"
+                option-value="kodeplgn"
+                clearable
+                :options="[{ nama: 'Semua Pelanggan', kodeplgn: null }, ...props.pelanggan]"
+                @update:model-value="
+                  (e) => {
+                    setkodepelanggan(e)
+                  }
+                "
+              />
+            </div>
+            <div class="col">
+              <q-input
+                v-model="storeform.nonota"
+                dense
+                outlined
+                label="Cari No. Nota..."
+                @update:model-value="(e) => setnonota(e)"
+              />
+            </div>
+          </div>
         </div>
         <q-separator />
       </q-card-section>
@@ -88,11 +102,23 @@
                       </div>
                       <div class="col-3 text-yellow text-center">
                         Terbayar <br />
-                        {{ formatRpDouble(item?.terbayarx + item?.dp) }}
+                        {{
+                          Number(item?.terbayarx || 0) + Number(item?.dp || 0) === 0
+                            ? formatRpDouble(0)
+                            : formatRpDouble(Number(item?.terbayarx || 0) + Number(item?.dp || 0))
+                        }}
+                        <!-- {{
+                          item?.terbayarx + item?.dp === '' ||
+                          item?.terbayarx + item?.dp === null ||
+                          item?.terbayarx + item?.dp === 0
+                            ? 0
+                            : formatRpDouble(item?.terbayarx + item?.dp)
+                        }} -->
                       </div>
                       <div class="col-3 text-green text-center">
                         Sisa <br />
-                        {{
+                        {{ formatRpDouble(item?.sisax) }}
+                        <!-- {{
                           formatRpDouble(
                             item?.total -
                               (item?.cicilan.length > 0 ? item?.cicilan[0]?.jumlah : 0) -
@@ -100,7 +126,7 @@
                               item?.bayar -
                               item?.total_diskon,
                           )
-                        }}
+                        }} -->
                       </div>
                     </div>
                     <div
@@ -190,7 +216,7 @@ const props = defineProps({
 })
 
 const totalall = computed(() => {
-  const total = storeform.itemspiutang.reduce((a, b) => a + parseFloat(b?.total ?? 0), 0)
+  const total = storeform.itemspiutang.reduce((a, b) => a + parseFloat(b?.sisax ?? 0), 0)
   return total
 })
 
@@ -222,15 +248,42 @@ function onSubmit(item) {
   // }
 }
 
-function caribypelanggan(val) {
-  if (!val || !val.kodeplgn) {
-    storeform.itemspiutang = storeform.allItemspiutang
+function setkodepelanggan(val) {
+  storeform.kdpelanggan = val
+  storeform.nonota = ''
+  caribypelanggan()
+}
+
+function setnonota(val) {
+  storeform.nonota = val
+  caribypelanggan()
+}
+
+function caribypelanggan() {
+  //console.log('storeform.kdpelanggan', storeform.kdpelanggan, storeform.nonota)
+  if (storeform.kdpelanggan === null) {
+    //console.log('pertama')
+    storeform.itemspiutang = storeform.allItemspiutang.filter((f) =>
+      f.no_penjualan.includes(storeform.nonota),
+    )
     return
+  } else if (storeform.kdpelanggan === '0') {
+    //console.log('kedua')
+    storeform.itemspiutang = storeform.allItemspiutang.filter(
+      (f) =>
+        (f.pelanggan_id === null || f.pelanggan_id === '') &&
+        f.no_penjualan.includes(storeform.nonota),
+    )
+    return
+  } else if (storeform.kdpelanggan !== null || storeform.kdpelanggan !== '0') {
+    //console.log('valasdasdasd')
+    const hasil = storeform.allItemspiutang.filter(
+      (f) =>
+        f.pelanggan?.kodeplgn === storeform.kdpelanggan &&
+        f.no_penjualan.includes(storeform.nonota),
+    )
+    storeform.itemspiutang = hasil
   }
-
-  const hasil = storeform.allItemspiutang.filter((f) => f.pelanggan?.kodeplgn === val.kodeplgn)
-
-  storeform.itemspiutang = hasil
 }
 
 function reset(val, item) {

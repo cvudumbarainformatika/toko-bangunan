@@ -42,6 +42,7 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
       dateDisplay: {
         tgl: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       },
+      nonota: '',
     }),
     actions: {
       async listnotapiutang() {
@@ -93,18 +94,26 @@ export const useAdminFormTransaksiNotaSalesStore = defineStore(
         try {
           const { data } = await api.get('/v1/transaksi/notasales/caripiutang', params)
           console.log('asdasdasdasd', data)
-          this.itemspiutang = data.map((item) => ({
+          const itemspiutang = data.map((item) => ({
             ...item,
             bayarx: false, // toggle bayar
             yangakandibayar: 0, // nilai input bayar
             carabayarrinci: 'Cash',
             keteranganrinci: '',
-            terbayarx: item?.cicilan.length > 0 ? item?.cicilan[0]?.jumlah : 0,
+            terbayarx: item?.cicilan[0]?.jumlah,
             dp: item?.bayar,
+            subtotal: item?.detail.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0),
+            sisax: Number(
+              (item?.detail.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0) ?? 0) -
+                (item?.cicilan[0]?.jumlah ?? 0) -
+                (item?.bayar ?? 0) -
+                (item?.nilairetur ?? 0),
+            ),
           }))
-
+          const hasil = itemspiutang.filter((item) => item.sisax > 0)
+          this.itemspiutang = hasil
           console.log('this.itemspiutang', this.itemspiutang)
-          this.allItemspiutang = data
+          this.allItemspiutang = hasil
           this.loadingcarinota = false
         } catch (error) {
           console.log(error)

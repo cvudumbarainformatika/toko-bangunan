@@ -75,11 +75,11 @@
               :disable="store?.isError || store?.meta?.next_page_url === null"
               :scroll-target="scrollTarget"
               :offset="150"
-              :initial-index="store.params.page"
+              :initial-index="1"
             >
               <q-intersection
-                v-for="(item, i) in store.items"
-                :key="i"
+                v-for="item in store.items"
+                :key="item.kodebarang"
                 transition="fade"
                 class="example-item"
               >
@@ -253,7 +253,7 @@ onBeforeMount(() => {
   store.params.x = null
   store.params.bulan = date.formatDate(Date.now(), 'MM')
   store.params.tahun = date.formatDate(Date.now(), 'YYYY')
-  store.getList()
+  // store.getList()
   // Promise.all([
   //   store.getList(null)
   // ])
@@ -318,6 +318,7 @@ const kartuStok = (item) => {
   store.selectedKodebarang = item?.kodebarang
   store.kartuStok.transaksi = store.cariTotalArray(item?.transaksi)
   store.dialogKartu = true
+  console.log('barang di select', store.selectedKodebarang)
 }
 // function loadMore(index, done) {
 //   store.params.page = index

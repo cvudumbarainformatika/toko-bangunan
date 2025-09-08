@@ -55,37 +55,24 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       this.expand = !this.expand
     },
     async getList() {
-      // console.log('get master barang page', this.params.page);
       this.params.page = 1
       this.isError = false
       this.loading = true
-      const params = {
-        params: this.params,
-      }
-      try {
-        const { data } = await api.get('/v1/master/barang/listbarang', params)
-        console.log('get master barang', data)
-        this.meta = data
-        this.items = data?.data
 
-        // Reset kartuStok jika tidak ada selectedKodebarang atau tidak ditemukan
-        if (this.selectedKodebarang) {
-          const arr = this.items.filter((x) => x.kodebarang === this.selectedKodebarang)
-          if (arr.length > 0) {
-            this.kartuStok = arr[0]
-            this.kartuStok.transaksi = this.cariTotalArray(this.kartuStok?.transaksi || [])
-            console.log('arr kartustok', this.kartuStok)
-          } else {
-            // Jika tidak ditemukan, reset kartuStok
-            this.kartuStok = null
-            console.log('Tidak ditemukan item dengan kodebarang:', this.selectedKodebarang)
-          }
-        } else {
-          this.kartuStok = null
-          console.log('selectedKodebarang belum diatur')
-        }
+      try {
+        const { data } = await api.get('/v1/master/barang/listbarang', {
+          params: {
+            ...this.params,
+            kodebarang: this.selectedKodebarang || null,
+          },
+        })
+        console.log('get master barang', data)
+
+        this.meta = data
+        this.items = data?.data || []
+
+        this.updateKartuStok()
         this.loading = false
-        // this.items = data
       } catch (error) {
         console.log(error)
         this.isError = true
@@ -93,34 +80,79 @@ export const useAdminMasterBarangStore = defineStore('admin-master-barang-store'
       }
     },
 
+    // loadMore(index, done) {
+    //   this.isError = false
+    //   this.params.page = index
+    //   const params = {
+    //     params: this.params,
+    //   }
+
+    //   console.log('load more', index)
+
+    //   return new Promise((resolve) => {
+    //     api
+    //       .get('/v1/master/barang/listbarang', params)
+    //       .then(({ data }) => {
+    //         console.log('get master barangxxxx', data.data)
+    //         this.meta = data
+    //         this.items.push(...data.data)
+
+    //         done()
+    //         resolve()
+    //       })
+    //       .catch(() => {
+    //         this.isError = true
+    //         done(true)
+    //         resolve()
+    //       })
+    //   })
+    // },
+
     loadMore(index, done) {
       this.isError = false
       this.params.page = index
-      const params = {
-        params: this.params,
-      }
 
-      console.log('load more', index)
+      api
+        .get('/v1/master/barang/listbarang', { params: this.params })
+        .then(({ data }) => {
+          this.meta = data
 
-      return new Promise((resolve) => {
-        api
-          .get('/v1/master/barang/listbarang', params)
-          .then(({ data }) => {
-            console.log('get master barangxxxx', data.data)
-            this.meta = data
-            this.items.push(...data.data)
+          if (index === 1) {
+            this.items = data.data
+          } else {
+            this.items = [...this.items, ...data.data]
+          }
 
-            done()
-            resolve()
-          })
-          .catch(() => {
-            this.isError = true
-            done(true)
-            resolve()
-          })
-      })
+          this.updateKartuStok()
+          done(!data.next_page_url)
+        })
+        .catch(() => {
+          this.isError = true
+          done(true)
+        })
     },
 
+    updateKartuStok() {
+      console.log('select barang', this.selectedKodebarang)
+
+      if (this.selectedKodebarang) {
+        const selected = this.items.find((x) => x.kodebarang === this.selectedKodebarang)
+
+        if (selected) {
+          this.kartuStok = {
+            ...selected,
+            transaksi: this.cariTotalArray(selected.transaksi || []),
+          }
+          console.log('arr kartustok', this.kartuStok)
+        } else {
+          this.kartuStok = null
+          console.log('Tidak ditemukan item dengan kodebarang:', this.selectedKodebarang)
+        }
+      } else {
+        this.kartuStok = null
+        console.log('selectedKodebarang belum diatur')
+      }
+    },
     async deleteItem(id) {
       this.items = this.items.filter((item) => item.id !== id)
       const params = { id }
