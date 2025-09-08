@@ -7,6 +7,15 @@
             {{ pelanggans?.nama }}
             <span class="text-weight-bold text-red"> {{ formatRpDouble(totalall) }}</span></span
           >
+          <br />
+          <span
+            ><app-input
+              v-model="storeform.carinota"
+              outlined
+              dense
+              label="Cari Nota...."
+              @keyup="cariNota()"
+          /></span>
         </div>
         <q-separator />
       </q-card-section>
@@ -25,7 +34,7 @@
           <q-list v-for="(item, n) in storeform.items" :key="n" separator>
             <q-form ref="refForm" class="column full-height full-width" @submit="onSubmit(item)">
               <transition-group name="list">
-                <q-item class="list-move">
+                <q-item class="list-move" :key="item.nopenjualan">
                   <q-item-section class="q-pl-sm">
                     <div class="row">
                       <div class="col-5">No. Penjualan</div>
@@ -119,21 +128,17 @@ const props = defineProps({
 })
 
 const pelanggans = computed(() => {
-  console.log('sasa', props.pelanggan)
+  // console.log('sasa', props.pelanggan)
   const wew = props.pelanggan.find((f) => f?.id === storeform.form.pelanggan_id)
   return wew
 })
 
 const totalall = computed(() => {
-  const total = storeform.items.reduce(
-    (a, b) => a + parseFloat(b?.sisajumlahbelumditerimax ?? 0),
-    0,
-  )
+  const total = storeform.items.reduce((a, b) => a + parseFloat(b?.yangakandibayar ?? 0), 0)
   return total
 })
 
 function onSubmit(item) {
-  console.log('item', item)
   storeform.form.nopenjualan = item?.nopenjualan
   storeform.form.total = olahUang(item?.yangakandibayar)
   const sisahutang = olahUang(item?.sisajumlahbelumditerimax)

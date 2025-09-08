@@ -114,7 +114,9 @@
                       {{ item?.keterangan }}
                     </q-item-label>
                     <q-item-label caption lines="2">
-                      <span class="text-weight-bold">-- {{ item?.pelanggan }}</span>
+                      <span class="text-weight-bold"
+                        >-- {{ item?.pelanggan ?? 'Non Pelanggan' }}</span
+                      >
                       <span
                         class="text-weight-bold"
                         :class="app?.dark ? 'text-yellow-3' : 'text-orange-9'"

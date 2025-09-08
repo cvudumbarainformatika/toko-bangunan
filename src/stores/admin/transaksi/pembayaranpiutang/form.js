@@ -27,6 +27,7 @@ export const useAdminFormTransaksiPembayaranPiutangStore = defineStore(
       dateDisplay: {
         tgl: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       },
+      carinota: '',
     }),
 
     actions: {
@@ -59,6 +60,7 @@ export const useAdminFormTransaksiPembayaranPiutangStore = defineStore(
           const tglpenjualan = new Date(x?.tgl).toISOString().split('T')[0]
           const dp = x?.bayar
           const diskon = x?.total_diskon
+          const retur = x?.header_retur[0]?.subtotal ?? 0
           const datahutang = {
             id: x?.id,
             nopenjualan: x?.no_penjualan,
@@ -68,11 +70,11 @@ export const useAdminFormTransaksiPembayaranPiutangStore = defineStore(
             tgljatuhtempo: x?.tempo,
             dp: dp,
             diskon: diskon,
-            totalnota: totalpiutang - diskon,
-            totalpiutang: totalpiutang - diskon - dp - totalpiutangterbayar,
+            totalnota: totalpiutang - retur,
+            totalpiutang: totalpiutang - retur - dp - totalpiutangterbayar,
             totalterbayang: totalpiutangterbayar + dp,
-            yangakandibayar: totalpiutang - diskon - dp - totalpiutangterbayar,
-            sisajumlahbelumditerimax: totalpiutang - diskon - dp - totalpiutangterbayar,
+            yangakandibayar: totalpiutang - retur - dp - totalpiutangterbayar,
+            sisajumlahbelumditerimax: totalpiutang - retur - dp - totalpiutangterbayar,
           }
           hasil.push(datahutang)
           // console.log('datahutangsa', datahutang)

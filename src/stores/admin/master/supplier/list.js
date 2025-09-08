@@ -31,7 +31,6 @@ export const useAdminMasterSupplierStore = defineStore('admin-master-supplier-st
       }
       try {
         const { data } = await api.get('/v1/master/supplier/list', params)
-        console.log('get Supplier', data)
         this.meta = data
         this.items = data?.data
         this.loading = false
@@ -90,7 +89,6 @@ export const useAdminMasterSupplierStore = defineStore('admin-master-supplier-st
       try {
         const { data } = await api.get('/v1/master/supplier/alllist')
         this.itemsall = data
-        console.log('sasa', this.itemsall)
         this.loading = false
         // this.items = data
       } catch (error) {
