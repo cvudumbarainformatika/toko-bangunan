@@ -47,25 +47,25 @@
               >
                 {{ profil.profilData.namatoko }}
               </div>
-              <div class="row full-width text-center flex-center" style="font-size: small">
+              <div class="row full-width text-center flex-center" style="">
                 {{ profil.profilData.alamat }}
               </div>
-              <div class="row full-width text-center flex-center" style="font-size: small">
+              <div class="row full-width text-center flex-center" style="">
                 Telp : {{ profil.profilData.telepon }}
               </div>
-              <div class="row q-pb-xs full-width text-center flex-center" style="font-size: small">
+              <div class="row q-pb-xs full-width text-center flex-center" style="">
                 Email : {{ profil.profilData.email }}
               </div>
               <div class="q-pt-xs" style="border-top-style: solid; border-width: 1px"></div>
-              <div class="row text-bold full-width" style="font-size: small">
+              <div class="row text-bold full-width" style="">
                 <span
                   >No: {{ store.itemCetak?.no_penjualan }},
                   {{ dateFullFormat(store.itemCetak?.tgl) }}</span
                 >
               </div>
-              <div class="row full-width" style="font-size: small">
-                <span style="font-size: small">Sales </span>
-                <span style="font-size: small">: {{ store.itemCetak?.sales?.nama }}</span>
+              <div class="row full-width" style="">
+                <span style="">Sales </span>
+                <span style="">: {{ store.itemCetak?.sales?.nama }}</span>
               </div>
               <!-- <div class="row full-width">
                 <span class="col-auto">Tanggal </span>
@@ -102,8 +102,8 @@
                 >
               </div> -->
               <div class="row q-pb-xs full-width">
-                <span style="font-size: small" class="col-auto">Alamat</span>
-                <span style="font-size: small"
+                <span style="" class="col-auto">Alamat</span>
+                <span style=""
                   >:
                   {{
                     !store.itemCetak?.pelanggan
@@ -121,7 +121,7 @@
                     <template v-if="item?.motif"> Seri {{ item?.motif }}</template></span
                   >
                 </div>
-                <div class="row full-width" style="font-size: small">
+                <div class="row full-width" style="">
                   <template v-if="parseFloat(item.jumlah) % parseFloat(item?.isi) == 0">
                     <span>
                       *
@@ -189,10 +189,10 @@
                     store.itemCetak?.flag === '4'
                   "
                 >
-                  <span class="text-bold" style="font-size: small">
+                  <span class="text-bold" style="">
                     TEMPO
                     <template v-if="store.itemCetak?.tempo">
-                      <span style="font-size: small"
+                      <span style=""
                         >{{ store.itemCetak?.jml_tempo }} hari, sampai
                         {{ dateFullFormat(store.itemCetak?.tempo) }}</span
                       >
@@ -200,7 +200,7 @@
                   >
                 </template>
                 <template v-else-if="store.itemCetak?.flag === '7'">
-                  <span class="text-bold" style="font-size: small">
+                  <span class="text-bold" style="">
                     PEMBAYARAN DP
                     <template v-if="store.itemCetak?.cara_bayar"
                       >({{ store.itemCetak?.cara_bayar }})</template
@@ -219,7 +219,7 @@
                   >
                 </template> -->
               </div>
-              <div class="row full-width text-center flex-center" style="font-size: small">
+              <div class="row full-width text-center flex-center" style="">
                 Terima Kasih Atas Pembelian Anda
               </div>
               <div class="col-12 text-center text-bold q-pb-sm">
@@ -257,13 +257,13 @@
                       <div class="text-bold" style="font-size: large">
                         {{ profil.profilData.namatoko }}
                       </div>
-                      <div style="font-size: small">
+                      <div>
                         {{ profil.profilData.alamat }}
                       </div>
-                      <div style="font-size: small">
+                      <div>
                         <span class="q-pr-sm">Telp : {{ profil.profilData.telepon }}</span>
                       </div>
-                      <div style="font-size: small">
+                      <div>
                         <span>Email : {{ profil.profilData.email }} </span>
                       </div>
                     </div>
@@ -278,7 +278,7 @@
               <div style="border-bottom-style: solid; border-width: 1px" />
               <div class="row justify-between q-px-md">
                 <div class="col flex-start content-center">
-                  <div class="row" style="font-size: small">
+                  <div class="row" style="">
                     <span class="col-3">Pelanggan</span>
                     <span
                       >:
@@ -289,7 +289,7 @@
                       }}</span
                     >
                   </div>
-                  <div class="row full-width" style="font-size: small">
+                  <div class="row full-width" style="">
                     <span class="col-3">Telepon</span>
                     <span
                       >:
@@ -300,7 +300,7 @@
                       }}</span
                     >
                   </div>
-                  <div class="row full-width" style="font-size: small">
+                  <div class="row full-width" style="">
                     <span class="col-3">Alamat</span>
                     <span
                       >:
@@ -312,7 +312,7 @@
                     >
                   </div>
                 </div>
-                <div class="col flex-end q-pl-xl q-py-xs" style="font-size: small">
+                <div class="col flex-end q-pl-xl q-py-xs" style="">
                   <div class="row full-width">
                     <span class="col-4">Nomor Penjualan</span>
                     <span>: {{ store.itemCetak?.no_penjualan }}</span>
@@ -330,7 +330,7 @@
                     <span
                       >:
                       <template v-if="store.itemCetak?.flag === '5'">
-                        <span class="text-bold" style="font-size: small">
+                        <span class="text-bold" style="">
                           LUNAS
                           <template v-if="store.itemCetak?.cara_bayar"
                             >({{ store.itemCetak?.cara_bayar }})</template
@@ -344,10 +344,10 @@
                           store.itemCetak?.flag === '4'
                         "
                       >
-                        <span class="text-bold" style="font-size: small">
+                        <span class="text-bold" style="">
                           TEMPO
                           <template v-if="store.itemCetak?.tempo">
-                            <span style="font-size: small"
+                            <span style=""
                               >{{ store.itemCetak?.jml_tempo }} hari, sampai
                               {{ dateFullFormat(store.itemCetak?.tempo) }}</span
                             >
@@ -355,14 +355,14 @@
                         </span>
                       </template>
                       <template v-else-if="store.itemCetak?.flag === '7'">
-                        <span class="text-bold" style="font-size: small">
+                        <span class="text-bold" style="">
                           PEMBAYARAN DP
                           <template v-if="store.itemCetak?.cara_bayar"
                             >({{ store.itemCetak?.cara_bayar }})
                           </template>
 
                           <template v-if="store.itemCetak?.tempo">
-                            <span class="row" style="font-size: small"
+                            <span class="row" style=""
                               >{{ store.itemCetak?.jml_tempo }} hari, sampai
                               {{ dateFullFormat(store.itemCetak?.tempo) }}
                             </span>
@@ -389,9 +389,9 @@
               </div> -->
 
               <div class="q-px-md">
-                <table class="full-width" style="font-size: small">
+                <table class="full-width" style="">
                   <thead>
-                    <tr class="text-center" style="font-size: small; height: min-content">
+                    <tr class="text-center" style="height: min-content">
                       <th>NO</th>
                       <th>NAMA BARANG</th>
                       <th>QTY</th>
@@ -520,7 +520,7 @@
                   >
                 </div> -->
               <!-- </div> -->
-              <div class="row justify-between full-width q-pt-xs q-pb-sm" style="font-size: small">
+              <div class="row justify-between full-width q-pt-xs q-pb-sm" style="">
                 <div class="col flex-start content-center text-center">
                   <div class="invisible">.</div>
                   <div>Penerima/Pembeli</div>
