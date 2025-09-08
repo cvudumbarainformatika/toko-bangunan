@@ -34,7 +34,7 @@ export const useAdminFormTransaksiPembayaranHutangStore = defineStore(
     actions: {
       async listhutang() {
         this.items = []
-        console.log('basic', this.basic)
+        // console.log('basic', this.basic)
         this.loadingcarihutang = true
         const params = { params: { kdsupplier: this.form.kdsuplier } }
         try {
@@ -50,7 +50,7 @@ export const useAdminFormTransaksiPembayaranHutangStore = defineStore(
       },
 
       olahdatahutang(val) {
-        console.log('val', val)
+        // console.log('val', val)
         const hasil = []
         val?.forEach((x) => {
           const totalhutang = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
@@ -58,7 +58,7 @@ export const useAdminFormTransaksiPembayaranHutangStore = defineStore(
             (a, b) => parseFloat(a) + parseFloat(b.totalbayar),
             0,
           )
-          console.log('totalhutang', totalhutang)
+          // console.log('totalhutang', totalhutang)
           const tglpenerimaan = new Date(x?.created_at).toISOString().split('T')[0]
           const datahutang = {
             id: x?.id,
@@ -82,7 +82,7 @@ export const useAdminFormTransaksiPembayaranHutangStore = defineStore(
           (a, b) => new Date(a.tglpenerimaan) - new Date(b.tglpenerimaan),
         )
         this.items = urut
-        console.log('datahutangxx', this.items)
+        // console.log('datahutangxx', this.items)
       },
       async simpan() {
         this.loadingsimpan = true
