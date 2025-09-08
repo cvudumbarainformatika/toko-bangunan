@@ -138,6 +138,10 @@ const totalall = computed(() => {
   return total
 })
 
+function cariNota() {
+  storeform.items = storeform.items.filter((f) => f.nopenjualan.includes(storeform.carinota))
+}
+
 function onSubmit(item) {
   storeform.form.nopenjualan = item?.nopenjualan
   storeform.form.total = olahUang(item?.yangakandibayar)

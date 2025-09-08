@@ -231,7 +231,7 @@ function onSubmit(item) {
   storeform.form.yangakandibayar = olahUang(item?.yangakandibayar)
   storeform.form.pelanggan_id = item?.pelanggan?.id
   storeform.form.cicilan = olahUang(item?.cicilan)
-  storeform.form.bayar = item?.bayar
+  storeform.form.bayar = item?.bayarx
   storeform.form.terbayar = olahUang(item?.cicilan[0]?.jumlah)
   storeform.form.carabayarrinci = item?.carabayarrinci
   storeform.form.keteranganrinci = item?.keteranganrinci
