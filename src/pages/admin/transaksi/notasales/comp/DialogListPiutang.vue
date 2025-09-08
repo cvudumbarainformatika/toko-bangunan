@@ -145,7 +145,7 @@
                               outlined
                               v-model="item.yangakandibayar"
                               currency
-                              v-if="item.bayar"
+                              v-if="item.bayarx"
                             />
                           </div>
                           <div class="col-3">
@@ -155,7 +155,7 @@
                               outlined
                               v-model="item.carabayarrinci"
                               :options="['', 'Cash', 'Transfer']"
-                              v-if="item.bayar"
+                              v-if="item.bayarx"
                             />
                           </div>
                           <div class="col-4">
@@ -164,7 +164,7 @@
                               dense
                               outlined
                               v-model="item.keteranganrinci"
-                              v-if="item.bayar"
+                              v-if="item.bayarx"
                             />
                           </div>
                         </div>
@@ -234,7 +234,7 @@ function onSubmit(item) {
   storeform.form.yangakandibayar = olahUang(item?.yangakandibayar)
   storeform.form.pelanggan_id = item?.pelanggan?.id
   storeform.form.cicilan = olahUang(item?.cicilan)
-  storeform.form.bayar = item?.bayar
+  storeform.form.bayar = item?.bayarx
   storeform.form.terbayar = olahUang(item?.cicilan[0]?.jumlah)
   storeform.form.carabayarrinci = item?.carabayarrinci
   storeform.form.keteranganrinci = item?.keteranganrinci
