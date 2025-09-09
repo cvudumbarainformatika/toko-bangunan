@@ -64,7 +64,7 @@ export const useAdminFormTransaksiPembayaranPiutangStore = defineStore(
           const datahutang = {
             id: x?.id,
             nopenjualan: x?.no_penjualan,
-            pelanggan: x?.pelanggan?.nama,
+            pelanggan: x?.pelanggan?.nama ?? x?.keterangan?.nama,
             tglpenjualan: tglpenjualan,
             jumlahharitempo: x?.jml_tempo,
             tgljatuhtempo: x?.tempo,
