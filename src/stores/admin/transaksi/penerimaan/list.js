@@ -36,7 +36,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
     actions: {
       async getList() {
         this.items = []
-        console.log('ini penerimaan')
+        // console.log('ini penerimaan')
         this.params.page = 1
         this.isError = false
         this.loading = true
@@ -45,7 +45,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
         }
         try {
           const { data } = await api.get('/v1/transaksi/penerimaan/getpenerimaan', params)
-          console.log('get master barang', data)
+          // console.log('get master barang', data)
           this.meta = data
           this.olahdata(data?.data)
           this.loading = false
@@ -70,7 +70,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
           api
             .get('/v1/transaksi/penerimaan/getpenerimaan', params)
             .then(({ data }) => {
-              console.log('heder order barang', data)
+              // console.log('heder order barang', data)
               this.meta = data
               this.olahdata(data?.data)
               //this.items.push(...data.data)
@@ -108,7 +108,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
         })
       },
       olahdata(val) {
-        console.log('asli', val)
+        // console.log('asli', val)
         // const hasilglobal = []
         val?.forEach((x) => {
           const total = x.rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
@@ -130,13 +130,13 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
             orderan_h: x?.orderheder,
             jenis_pembayaran: x?.jenis_pembayaran,
           }
-          console.log('hasilccccc', hasil)
+          // console.log('hasilccccc', hasil)
           // hasilglobal.push(hasil)
           const index = this.items.findIndex((q) => q.id === x?.id)
 
           if (index >= 0) this.items[index] = hasil
           else this.items.unshift(hasil)
-          console.log('this.items', this.items)
+          // console.log('this.items', this.items)
         })
         // this.items.sort(({ tgl: a }, { tgl: b }) => b - a)
       },
@@ -162,7 +162,7 @@ export const useAdminListTransaksiPenerimaanBarangStore = defineStore(
             this.loadingdeleteall = false
           }
         } catch (err) {
-          console.log('sasasx', err)
+          // console.log('sasasx', err)
           notifError(err?.response?.data?.message)
           this.loadingdeleteall = false
         }

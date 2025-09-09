@@ -94,7 +94,19 @@
               </div>
             </div>
             <div class="col-3">
-              <app-input label="Supllier" disable v-model="store.form.suplier" />
+              <!-- <app-input label="Supllier" disable v-model="store.form.suplier" /> -->
+              <q-select
+                outlined
+                dense
+                label="Supplier"
+                v-model="store.form.kdsuplier"
+                :options="storesupllier.itemsall"
+                option-label="nama"
+                option-value="kodesupl"
+                emit-value
+                map-options
+                disable
+              />
             </div>
             <div class="col-3">
               <q-select
@@ -143,7 +155,7 @@
         <q-card-section style="max-height: 80%" class="scroll">
           <q-list v-for="(item, n) in store.rinci" :key="n" class="full-width">
             <transition-group>
-              <q-item class="list-move">
+              <q-item class="list-move" :key="n">
                 <q-form
                   ref="refForm"
                   class="column full-height full-width"
@@ -286,23 +298,21 @@
 <script setup>
 import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
 import dialogcariorderanPage from './dialogcariorderanPage.vue'
-// import { computed } from 'vue'
 
 import { formatRpDouble, olahUang } from 'src/modules/formatter'
-// import { useAdminListTransaksiOrderBarangStore } from 'src/stores/admin/transaksi/orderbarang/list'
-
-// import AppSelectServer from 'src/components/~global/AppSelectServer.vue'
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
 
 import AppInputRp from 'src/components/~global/AppInputRp.vue'
 
 import { notifError } from 'src/modules/notifs'
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
+import { useAdminMasterSupplierStore } from 'src/stores/admin/master/supplier/list'
 
 const DialogCetakdata = defineAsyncComponent(() => import('./cetak/DialogCetak.vue'))
 
 const store = useAdminFormTransaksiPenerimaanBarangStore()
 const storeorder = useAdminListTransaksiOrderBarangStore()
+const storesupllier = useAdminMasterSupplierStore()
 const emits = defineEmits(['back'])
 const printdata = ref(null)
 
@@ -445,6 +455,7 @@ if (props?.data) {
 
   onMounted(() => {
     store.dataprops = penerimaan
+    storesupllier.getAllList()
   })
 }
 </script>

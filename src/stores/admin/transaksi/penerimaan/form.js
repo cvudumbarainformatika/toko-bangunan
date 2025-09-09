@@ -112,12 +112,8 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
           // console.log('fafafa', data)
           return new Promise((resolve) => {
             for (const key in this.form) {
-              // console.log(`${key}: ${this.form[key]}`);
-              // console.log(`${key}`);
               this.form[key] = data[key]
             }
-            // this.form.noorder = data?.noorder
-            // console.log('aaaaaaaaaaaa', this.form)
 
             resolve()
           })
@@ -126,9 +122,6 @@ export const useAdminFormTransaksiPenerimaanBarangStore = defineStore(
             // console.log(`${key}: ${this.form[key]}`);
             this.form[key] = null
           }
-          // this.form.isi = 1
-          // this.form.hargajual1 = 0
-          // this.form.hargajual2 = 0
         }
       },
       async deleteData(id, nopenerimaan, noorder, kdbarang) {
