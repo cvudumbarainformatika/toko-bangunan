@@ -11,6 +11,7 @@
       </div>
     </div>
   </div>
+  <pre>{{ data }}</pre>
 </template>
 <script setup>
 import { useAdminFormTransaksiPenerimaanBarangStore } from 'src/stores/admin/transaksi/penerimaan/form'
@@ -38,14 +39,14 @@ onMounted(() => {
     store.form.nopenerimaan = ''
     store.form.nofaktur = ''
     store.form.noorder = ''
-    store.form.suplier = ''
+    store.form.kdsuplier = ''
     store.form.pembayaran = 'Cash'
     store.form.jumlahharitempo = 0
     store.form.tgljthtempo = ''
     store.rinci = []
   } else {
     store.form.noorder = props?.data?.noorder
-    store.form.suplier = props?.data?.suplier
+    store.form.kdsuplier = props?.data?.kdsuplier
     store.form.nopenerimaan = props?.data?.nopenerimaan
     store.form.nofaktur = props?.data?.nofaktur
     store.rinci = props?.data?.orderan_h?.rinci
@@ -56,7 +57,6 @@ onMounted(() => {
     store.hiden = true
   }
 })
-console.log('get', props?.data)
 
 // const lists = computed(() => {
 //   const arr = props.data?.rinci
