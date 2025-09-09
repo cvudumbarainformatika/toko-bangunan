@@ -35,11 +35,16 @@
             <q-form ref="refForm" class="column full-height full-width" @submit="onSubmit(item)">
               <transition-group name="list">
                 <q-item class="list-move" :key="item.nopenjualan">
-                  <q-item-section class="q-pl-sm">
+                  <q-item-section class="q-pl-xs q-pr-xs">
                     <div class="row">
                       <div class="col-5">No. Penjualan</div>
                       <div class="col-1">:</div>
                       <div class="col-6">{{ item?.nopenjualan }}</div>
+                    </div>
+                    <div class="row">
+                      <div class="col-5">Pelanggan</div>
+                      <div class="col-1">:</div>
+                      <div class="col-6">{{ item?.pelanggan }}</div>
                     </div>
                     <div class="row">
                       <div class="col-5">Tgl Penerimaan</div>
@@ -104,6 +109,7 @@
                     </div>
                   </q-item-section>
                 </q-item>
+                <q-separator />
               </transition-group>
             </q-form>
           </q-list>
