@@ -155,6 +155,12 @@ const routes = [
     children: [{ path: '', component: () => import('pages/percobaan/IndexPage.vue') }],
   },
 
+  {
+    path: '/absensi',
+    component: () => import('layouts/absensi/AbsenLayout.vue'),
+    children: [{ path: '', component: () => import('pages/absensi/IndexPage.vue') }],
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {
