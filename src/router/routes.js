@@ -41,6 +41,10 @@ const routes = [
         path: '/admin/master/beban',
         component: () => import('pages/admin/master/beban/IndexPage.vue'),
       },
+      {
+        path: '/admin/master/harilibur',
+        component: () => import('pages/admin/master/harilibur/IndexPage.vue'),
+      },
 
       //Transaksi
       {
