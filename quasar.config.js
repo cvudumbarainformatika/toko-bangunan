@@ -62,6 +62,7 @@ export default defineConfig((ctx) => {
             // 'http://belakang-toko.test'
             'http://localhost:8182'
           : 'https://api.jangurkeramik.my.id',
+        //: 'http://api.jangur.net:8111', buat server
 
         WS: ctx.dev ? 'https://socket.jangurkeramik.my.id' : 'https://socket.jangurkeramik.my.id',
       },

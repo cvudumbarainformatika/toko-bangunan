@@ -41,6 +41,10 @@ const routes = [
         path: '/admin/master/beban',
         component: () => import('pages/admin/master/beban/IndexPage.vue'),
       },
+      {
+        path: '/admin/master/harilibur',
+        component: () => import('pages/admin/master/harilibur/IndexPage.vue'),
+      },
 
       //Transaksi
       {
@@ -153,6 +157,12 @@ const routes = [
     meta: { requireAuth: false },
     component: () => import('layouts/AuthLayout.vue'),
     children: [{ path: '', component: () => import('pages/percobaan/IndexPage.vue') }],
+  },
+
+  {
+    path: '/absensi',
+    component: () => import('layouts/absensi/AbsenLayout.vue'),
+    children: [{ path: '', component: () => import('pages/absensi/IndexPage.vue') }],
   },
 
   // Always leave this as last one,
