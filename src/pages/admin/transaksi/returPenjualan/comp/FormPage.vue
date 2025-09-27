@@ -14,9 +14,10 @@
         Nomor Retur Penjualan : {{ store.noRetur }}
       </div>
       <div class="row items-center q-pa-sm q-col-gutter-sm">
-        <div class="col-4">Nama Barang</div>
+        <div class="col-2">Nama Barang</div>
         <div class="col-1">Satuan</div>
         <div class="col-2">Jumlah</div>
+        <div class="col-2">Diskon</div>
         <div class="col-2">Retur</div>
         <div class="col-1 text-center">Max Retur</div>
         <div class="col-2 text-center">#</div>
@@ -24,9 +25,10 @@
       <q-separator />
       <div v-for="(item, index) in store.item?.detail" :key="index">
         <div class="row items-center q-pa-sm q-col-gutter-sm">
-          <div class="col-4">{{ item?.master_barang?.namabarang }}</div>
+          <div class="col-2">{{ item?.master_barang?.namabarang }}</div>
           <div class="col-1">{{ item?.master_barang?.satuan_k }}</div>
           <div class="col-2">{{ item?.jumlah }}</div>
+          <div class="col-2">{{ formatRpDouble(item?.diskon) }}</div>
           <div class="col-2">
             <app-input
               v-model="item.retur"
@@ -40,12 +42,17 @@
                 (val) => {
                   const _removedZeros = isNaN(parseInt(val)) ? 0 : parseInt(val)
                   const sudahRetur = store.item?.detail_retur
-                    .filter((f) => f.kodebarang === item.kodebarang && f.detail_penjualan_id===item.id  && f.status !== '')
+                    .filter(
+                      (f) =>
+                        f.kodebarang === item.kodebarang &&
+                        f.detail_penjualan_id === item.id &&
+                        f.status !== '',
+                    )
                     ?.reduce((acc, cur) => acc + cur.jumlah, 0)
-                    item.sisa=item.jumlah-sudahRetur
-                    // console.log('sudahRetur',sudahRetur, item?.sisa , _removedZeros);
+                  item.sisa = item.jumlah - sudahRetur
+                  // console.log('sudahRetur',sudahRetur, item?.sisa , _removedZeros);
                   if (_removedZeros <= item.sisa) {
-                    console.log('if ',_removedZeros <= item.sisa)
+                    console.log('if ', _removedZeros <= item.sisa)
                     item.retur = _removedZeros
                     item.sisa = item.jumlah - _removedZeros - sudahRetur
                   } else {
@@ -100,6 +107,7 @@
 </template>
 <script setup>
 import { notifError } from 'src/modules/notifs'
+import { formatRpDouble } from 'src/modules/utils'
 import { useFormReturPenjualanStore } from 'src/stores/admin/transaksi/returPenjualan/form'
 
 const emits = defineEmits(['back', 'selesai'])
@@ -111,6 +119,7 @@ function submit(item) {
   store.initForm('retur', item?.retur)
   store.initForm('harga_jual', item?.harga_jual)
   store.initForm('id', item?.id)
+  store.initForm('diskon', item?.diskon)
   store.submit(item)
   console.log('item', store.form, item)
 }
