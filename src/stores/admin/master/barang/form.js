@@ -23,6 +23,8 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
       hargajual1besar: 0,
       hargajual2besar: 0,
       hargabeli: 0,
+      bonus_hutang: 0,
+      bonus_cash: 0,
       minim_stok: 20,
       ukuran: null,
       rincians: [], // Array untuk menyimpan file gambar
@@ -36,10 +38,13 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
       if (data) {
         return new Promise((resolve) => {
           for (const key in this.form) {
-            this.form[key] = data[key]
+            if(key=='hargajual1'||key=='hargajual2') this.form[key] = parseFloat(data[key])
+              else this.form[key] = data[key]
           }
           this.form.kodebarang = data?.kodebarang
           this.form.rincians = data.rincians || []
+          this.form.hargajual1besar = parseFloat(data?.hargajual1) * data?.isi
+          this.form.hargajual2besar = parseFloat(data?.hargajual2) * data?.isi
           console.log(this.form)
           resolve()
         })
@@ -50,10 +55,10 @@ export const useAdminFormMasterBarangStore = defineStore('admin-form-master-bara
         this.form.isi = 1
         this.form.hargajual1 = 0
         this.form.hargajual2 = 0
-        this.form.hargajual1besar = 0
-        this.form.hargajual2besar = 0
         this.form.hargabeli = 0
         this.form.minim_stok = 20
+        this.form.bonus_hutang= 0,
+        this.form.bonus_cash= 0,
         this.form.rincians = [] // Reset rincians gambar
       }
     },

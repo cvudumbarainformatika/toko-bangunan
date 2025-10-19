@@ -248,6 +248,32 @@
                       }
                     "
                   />
+                  <app-input
+                    class="col-3"
+                    v-model="store.form.bonus_cash"
+                    label="Bonus Cash"
+                    :valid="{ number: true }"
+                    @update:model-value="
+                      (val) => {
+                        //untuk hapus o dipean angka pake ini yaa
+                        const _removedZeros = val?.replace(/^0+/, '')
+                        if (val > 1) store.form.bonus_cash = _removedZeros
+                      }
+                    "
+                  />
+                  <app-input
+                    class="col-3"
+                    v-model="store.form.bonus_hutang"
+                    label="Bonus Hutang"
+                    :valid="{ number: true }"
+                    @update:model-value="
+                      (val) => {
+                        //untuk hapus o dipean angka pake ini yaa
+                        const _removedZeros = val?.replace(/^0+/, '')
+                        if (val > 1) store.form.bonus_hutang = _removedZeros
+                      }
+                    "
+                  />
                   <div class="col-12">
                     <q-separator class="q-my-md" />
                     <app-btn
