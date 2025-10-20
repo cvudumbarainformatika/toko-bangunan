@@ -251,7 +251,7 @@
                   <app-input
                     class="col-3"
                     v-model="store.form.bonus_cash"
-                    label="Bonus Cash"
+                    label="Bonus Cash per satuan kecil"
                     :valid="{ number: true }"
                     @update:model-value="
                       (val) => {
@@ -264,7 +264,7 @@
                   <app-input
                     class="col-3"
                     v-model="store.form.bonus_hutang"
-                    label="Bonus Hutang"
+                    label="Bonus Hutang per satuan kecil"
                     :valid="{ number: true }"
                     @update:model-value="
                       (val) => {
